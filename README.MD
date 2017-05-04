@@ -2,7 +2,14 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-*World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Once setup is completed, chat flow can be fully controlled by non-devs.*
+World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Absolutely modular architechture, ability to add your own customizations and infinitely scalable. 
+
+Setup time less than 30 minutes. Edit content and flow without changing any code.
+Android & iOS available on request. 
+
+**Launching soon:**
+ 
+Ability to switch to an agent within the chat and switch back! (Hybrid chat), Web & Messenger SDK
 
 ## Components Overview
 
