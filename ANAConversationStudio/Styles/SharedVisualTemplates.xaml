@@ -1,0 +1,144 @@
+﻿<ResourceDictionary 
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
+    xmlns:NetworkModel="clr-namespace:ANAConversationStudio.Models"    
+    >
+
+    <BooleanToVisibilityConverter
+        x:Key="booleanToVisibilityConverter" 
+        />
+
+    <!-- The border brush for nodes. -->
+    <SolidColorBrush
+        x:Key="nodeBorderBrush"
+        Color="Black"
+        />
+
+    <!-- The fill brush for nodes. -->
+    <SolidColorBrush x:Key="nodeFillBrush" Color="#ccc" Opacity="0.8"/>
+    <!--<LinearGradientBrush
+        x:Key="nodeFillBrush"
+        StartPoint="0,0"
+        EndPoint="0,1"
+        >
+        <GradientStop Color="White" Offset="0" />
+        <GradientStop Color="#7FC9FF" Offset="0.6" />
+    </LinearGradientBrush>-->
+
+    <!-- The brush for connections. -->
+    <SolidColorBrush
+        x:Key="connectionBrush"
+        Color="Black"
+        />
+
+    <!-- The brush for connectors. -->
+    <SolidColorBrush
+        x:Key="connectorBackgroundBrush"
+        Color="White"
+        />
+
+    <!--
+    Define a style for 'NodeItem'.
+    
+    Binds 'X' and 'Y' in the view-model (the 'NodeViewModel' class)
+    to 'X' and 'Y' in the NodeItem class.
+    
+    This sets the position of the node within the Canvas.
+    -->
+    <Style TargetType="{x:Type NetworkUI:NodeItem}">
+        <Setter
+            Property="X"
+            Value="{Binding X}"
+            />
+        <Setter
+            Property="Y"
+            Value="{Binding Y}"
+            />
+        <Setter
+            Property="ZIndex"
+            Value="{Binding ZIndex}"
+            />
+        <Setter
+            Property="IsSelected"
+            Value="{Binding IsSelected}"
+            />
+    </Style>
+
+    <!-- 
+    A data-template that defines the UI for input connectors.
+    -->
+    <DataTemplate
+        x:Key="inputConnectorTemplate"
+        >
+        <Grid
+            Margin="0,2,0,0"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- The 'ConnectorItem' or anchor point for the connector. -->
+            <NetworkUI:ConnectorItem 
+                Grid.Column="0"
+                Width="15"
+                Height="15"
+                Cursor="Hand"                    
+                />
+
+            <!-- The name of the connector. -->
+            <TextBlock
+                Grid.Column="1"
+                Margin="5,0,0,0"
+                Text="{Binding Name}"
+                VerticalAlignment="Center"
+                />
+        </Grid>
+    </DataTemplate>
+
+    <!-- 
+    A data-template that defines the UI for output connectors.
+    -->
+    <DataTemplate
+        x:Key="outputConnectorTemplate"
+        >
+        <Grid
+            HorizontalAlignment="Right"
+            Margin="0,2,0,0"
+            >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <!-- The name of the connector. -->
+            <TextBlock
+                Grid.Column="0"
+                Text="{Binding Name}"
+                VerticalAlignment="Center"
+                Margin="0,0,5,0"
+                />
+
+            <Grid
+                Grid.Column="1"
+                Width="15"
+                Height="15"
+                Cursor="Hand"
+                >
+
+                <!-- The 'ConnectorItem' or anchor point for the connector. -->
+                <NetworkUI:ConnectorItem />
+
+                <!-- Show a black dot at the start of the arrow when connected. -->
+                <Ellipse
+                    Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}"
+                    Margin="3"
+                    Fill="{StaticResource connectionBrush}"
+                    IsHitTestVisible="False"
+                    />
+            </Grid>
+        </Grid>
+    </DataTemplate>
+
+</ResourceDictionary>

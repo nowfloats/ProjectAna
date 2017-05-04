@@ -1,0 +1,25 @@
+﻿<UserControl xmlns:my="using:Windows.UI.Xaml.Controls.Maps" 
+    x:Class="BoostWin10.UserControls.AddressEditor"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BoostWin10.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="300"
+    d:DesignWidth="400">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <my:MapControl x:Name="Map" />
+        <TextBox Grid.Row="1" Text="{Binding City}" Header="City" />
+        <TextBox Grid.Row="2" Text="{Binding Country}" Header="Country"/>
+
+        <TextBox Grid.Row="3" Text="{Binding StreetAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Street Address"/>
+    </Grid>
+</UserControl>

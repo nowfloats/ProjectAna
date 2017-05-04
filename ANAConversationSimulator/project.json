@@ -1,0 +1,23 @@
+﻿{
+  "dependencies": {
+    "Coding4Fun.Toolkit.Controls": "2.1.8",
+    "Microsoft.NETCore.UniversalWindowsPlatform": "5.3.2",
+    "Microsoft.Xaml.Behaviors.Uwp.Managed": "2.0.0",
+    "Newtonsoft.Json": "10.0.2",
+    "RichTextBlock.Html2Xaml": "1.2.0",
+    "System.ValueTuple": "4.3.0",
+    "Template10": "1.1.12",
+    "XamlAnimatedGif": "1.1.8"
+  },
+  "frameworks": {
+    "uap10.0": {}
+  },
+  "runtimes": {
+    "win10-arm": {},
+    "win10-arm-aot": {},
+    "win10-x86": {},
+    "win10-x86-aot": {},
+    "win10-x64": {},
+    "win10-x64-aot": {}
+  }
+}

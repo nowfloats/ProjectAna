@@ -1,0 +1,42 @@
+﻿<ContentDialog
+    x:Class="ANAConversationSimulator.UserControls.AddressDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Address"
+    HorizontalContentAlignment="Stretch"
+    PrimaryButtonText="Save"
+    SecondaryButtonText=""
+    xmlns:my="using:Windows.UI.Xaml.Controls.Maps" >
+
+    <ScrollViewer>
+        <Grid>
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <my:MapControl x:Name="Map" MapTapped="Map_MapTapped" Height="200"/>
+                <TextBox Grid.Row="1" Text="{Binding StreetAddress, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Header="Street Address"/>
+
+                <TextBox Grid.Row="2" Text="{Binding City}" IsReadOnly="True" Header="City" IsEnabled="False"/>
+                <TextBox Grid.Row="3" Text="{Binding Country}" IsReadOnly="True" Header="Country" IsEnabled="False"/>
+                <TextBox Grid.Row="4" Text="{Binding PinCode}" IsReadOnly="True" Header="Pincode" IsEnabled="False"/>
+            </Grid>
+            <Grid Visibility="{Binding IsLoading, Converter={StaticResource C4FB2V}}" d:IsHidden="True">
+                <Grid.Background>
+                    <SolidColorBrush Color="Black" Opacity="0.5"/>
+                </Grid.Background>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Loading.." Foreground="White"/>
+                    <ProgressRing HorizontalAlignment="Center" Width="70" Height="70" IsActive="{Binding IsLoading}"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+    </ScrollViewer>
+</ContentDialog>

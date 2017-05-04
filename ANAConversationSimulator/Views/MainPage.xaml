@@ -1,0 +1,92 @@
+<Page x:Class="ANAConversationSimulator.Views.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:controls="using:Template10.Controls"
+      xmlns:UIHelpers="using:ANAConversationSimulator.UIHelpers"
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+      xmlns:vm="using:ANAConversationSimulator.ViewModels" mc:Ignorable="d">
+    <Page.DataContext>
+        <vm:MainPageViewModel x:Name="ViewModel" />
+    </Page.DataContext>
+
+    <RelativePanel Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Background="{StaticResource NFYellowBrush}" FontFamily="Segoe UI Semilight" FontSize="24">
+            <controls:PageHeader.Content>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="ms-appx:///Assets/Square44x44Logo.png" Margin="0,5,0,5" Height="40"/>
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" />
+                </Grid>
+            </controls:PageHeader.Content>
+            <controls:PageHeader.SecondaryCommands>
+                <AppBarButton Click="{x:Bind ViewModel.Reset}" Label="Reset" />
+                <AppBarButton Click="{x:Bind ViewModel.UpdateAPI}" Label="Update APIs" />
+                <AppBarButton Click="{x:Bind ViewModel.ShowMemoryStack}" Label="Show Memory Stack" />
+            </controls:PageHeader.SecondaryCommands>
+        </controls:PageHeader>
+        <Grid x:Name="ContentGrid" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="pageHeader" Background="White">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+            </Grid.RowDefinitions>
+            <ScrollViewer Grid.Row="0" Margin="10,10,10,5" x:Name="ThreadScrollViewer" ScrollViewer.VerticalScrollBarVisibility="Hidden" >
+                <ItemsControl ItemsSource="{x:Bind ViewModel.ChatThread}" ItemTemplateSelector="{StaticResource ChatBubbleTemplateSelector}" >
+                    <ItemsControl.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition />
+                        </TransitionCollection>
+                    </ItemsControl.Transitions>
+                </ItemsControl>
+            </ScrollViewer>
+            <Grid Grid.Row="1" Margin="10,5,10,5" x:Name="ButtonsGrid" Height="auto">
+                <ItemsControl HorizontalAlignment="Center" ItemsSource="{x:Bind ViewModel.CurrentClickButtons}" ItemTemplateSelector="{StaticResource ChatButtonsTemplateSelector}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UIHelpers:AlignableWrapPanel Orientation="Horizontal" HorizontalContentAlignment="Center"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition />
+                        </TransitionCollection>
+                    </ItemsControl.Transitions>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="HorizontalAlignment" Value="Center"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+                            <Setter Property="Margin" Value="5"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            </Grid>
+            <Grid Background="{StaticResource PaleWhiteBrush}" Grid.Row="2" Margin="0" x:Name="TextInputGrid" VerticalAlignment="Center">
+                <ItemsControl HorizontalAlignment="Stretch" ItemsSource="{x:Bind ViewModel.CurrentTextInputButtons}" ItemTemplateSelector="{StaticResource ChatButtonsTemplateSelector}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsStackPanel Orientation="Vertical" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition />
+                        </TransitionCollection>
+                    </ItemsControl.Transitions>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="ContentPresenter">
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="Margin" Value="5"/>
+                            <Setter Property="Width" Value="auto"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                </ItemsControl>
+            </Grid>
+        </Grid>
+    </RelativePanel>
+</Page>
+
