@@ -17,11 +17,11 @@
     <EnableDotNetNativeCompatibleProfile>true</EnableDotNetNativeCompatibleProfile>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <PackageCertificateKeyFile>ConSim_TemporaryKey.pfx</PackageCertificateKeyFile>
+    <PackageCertificateKeyFile>ANAConversationSimulator_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
     <AppxBundle>Always</AppxBundle>
     <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
-    <PackageCertificateThumbprint>2F0D5E433290E726F147D9F3ABAEDB50FF90D751</PackageCertificateThumbprint>
+    <PackageCertificateThumbprint>79269D682B0F4FB0E4D0D43B63E2C6EFA2FA7219</PackageCertificateThumbprint>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
     <DebugSymbols>true</DebugSymbols>
@@ -126,7 +126,7 @@
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
     <Content Include="Config.json" />
     <Content Include="UIHelpers\HTML2XamlRichText\RichTextBlockHtml2Xaml.xslt" />
-    <None Include="ConSim_TemporaryKey.pfx" />
+    <None Include="ANAConversationSimulator_TemporaryKey.pfx" />
     <Content Include="Config-Sample.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
