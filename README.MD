@@ -5,7 +5,7 @@
 World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Absolutely modular architechture, ability to add your own customizations and infinitely scalable. 
 
 Setup time less than 30 minutes. Edit content and flow without changing any code.
-Android & iOS available on request. 
+Android & iOS SDK available on request. 
 
 **Launching soon:**
  
