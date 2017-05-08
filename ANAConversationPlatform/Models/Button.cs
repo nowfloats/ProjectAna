@@ -26,6 +26,7 @@
         public bool DefaultButton { get; set; } = false;
         public bool Hidden { get; set; }
         public string VariableValue { get; set; } = null;
+        public bool ConfirmInput { get; set; }
         public string PrefixText { get; set; } = null;
         public string PostfixText { get; set; } = null;
         public string PlaceholderText { get; set; } = null;

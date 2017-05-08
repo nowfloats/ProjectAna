@@ -21,6 +21,7 @@ namespace ANAConversationSimulator.Models.Chat
         public bool Hidden { get; set; }
         public string VariableValue { get; set; } = null;
         public string PlaceholderText { get; set; }
+        public bool ConfirmInput { get; set; }
         public string PrefixText { get; set; }
         public string PostfixText { get; set; }
 

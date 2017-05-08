@@ -162,6 +162,20 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private bool _ConfirmInput;
+        public bool ConfirmInput
+        {
+            get { return _ConfirmInput; }
+            set
+            {
+                if (_ConfirmInput != value)
+                {
+                    _ConfirmInput = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public override string ToString()
         {
             return Tag;
