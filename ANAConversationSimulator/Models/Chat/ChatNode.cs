@@ -13,24 +13,16 @@ namespace ANAConversationSimulator.Models.Chat
         public string HeaderText { get; set; } = null;
         public string Id { get; set; }
         public EmotionEnum Emotion { get; set; }
-        public int TimeoutInMs { get; set; } = 15000;
+        public int TimeoutInMs { get; set; }
         public NodeTypeEnum NodeType { get; set; } = NodeTypeEnum.Combination;
         public List<Section> Sections { get; set; } = new List<Section>();
         public List<Button> Buttons { get; set; } = new List<Button>();
-        public DisplayTypeEnum DisplayType { get; set; } = DisplayTypeEnum.Inline;
         public string VariableName { get; set; } = null;
         public string ApiMethod { get; set; } = null;
         public string ApiUrl { get; set; } = null;
         public string[] RequiredVariables { get; set; } = null;
         public string NextNodeId { get; set; } = null;
         public bool IsStartNode { get; set; }
-    }
-
-    public enum DisplayTypeEnum
-    {
-        Inline,
-        FullscreenButtonList,
-        FullscreenApiCall
     }
 
     public enum NodeTypeEnum

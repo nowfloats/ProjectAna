@@ -86,7 +86,7 @@ namespace ANAConversationStudio.Controls
             if (Item is BaseIdEntity)
                 (Item as BaseIdEntity)._id = ObjectId.GenerateNewId().ToString();
             if (Item is BaseEntity)
-                (Item as BaseEntity).Tag = "New " + Item.GetType().Name;
+                (Item as BaseEntity).Alias = "New " + Item.GetType().Name;
         }
 
         private void ItemCollectionChanged(object sender, ItemEventArgs e)

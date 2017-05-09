@@ -55,16 +55,16 @@ namespace ANAConversationStudio.Models
     }
     public class BaseEntity : BaseIdEntity
     {
-        private string _Tag;
+        private string _Alias;
         [Category("Important")]
-        public string Tag
+        public string Alias
         {
-            get { return _Tag; }
+            get { return _Alias; }
             set
             {
-                if (_Tag != value)
+                if (_Alias != value)
                 {
-                    _Tag = value;
+                    _Alias = value;
                     OnPropertyChanged();
                 }
             }
@@ -72,7 +72,7 @@ namespace ANAConversationStudio.Models
 
         public override string ToString()
         {
-            return Tag;
+            return Alias;
         }
     }
 

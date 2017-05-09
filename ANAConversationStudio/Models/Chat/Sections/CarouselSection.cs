@@ -16,7 +16,6 @@ namespace ANAConversationStudio.Models.Chat.Sections
                 CarouselList = new List<Carousel>();
             CarouselList.Add(carouselEntry);
         }
-
     }
 
     public class Carousel

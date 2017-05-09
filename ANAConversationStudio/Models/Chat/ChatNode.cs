@@ -121,7 +121,7 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
-        private int _TimeoutInMs = 15000;
+        private int _TimeoutInMs;
         public int TimeoutInMs
         {
             get { return _TimeoutInMs; }
@@ -144,20 +144,6 @@ namespace ANAConversationStudio.Models.Chat
                 if (_NodeType != value)
                 {
                     _NodeType = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private DisplayTypeEnum _DisplayType = DisplayTypeEnum.Inline;
-        public DisplayTypeEnum DisplayType
-        {
-            get { return _DisplayType; }
-            set
-            {
-                if (_DisplayType != value)
-                {
-                    _DisplayType = value;
                     OnPropertyChanged();
                 }
             }
@@ -218,16 +204,9 @@ namespace ANAConversationStudio.Models.Chat
                 foreach (Button item in e.NewItems)
                 {
                     item._id = ObjectId.GenerateNewId().ToString();
-                    item.Tag = "New Button";
+                    item.Alias = "New Button";
                 }
         }
-    }
-
-    public enum DisplayTypeEnum
-    {
-        Inline,
-        FullscreenButtonList,
-        FullscreenApiCall
     }
 
     public enum NodeTypeEnum

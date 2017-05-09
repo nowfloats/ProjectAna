@@ -45,7 +45,7 @@ namespace ANAConversationStudio.ViewModels
         public void Invalidate()
         {
             if (this.Button != null)
-                this.Name = string.IsNullOrWhiteSpace(this.Button.Tag) ? this.Button.ButtonType.ToString() : this.Button.Tag;
+                this.Name = string.IsNullOrWhiteSpace(this.Button.Alias) ? this.Button.ButtonType.ToString() : this.Button.Alias;
         }
 
         public Button Button { get; set; }

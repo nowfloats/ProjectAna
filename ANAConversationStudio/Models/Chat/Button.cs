@@ -178,7 +178,7 @@ namespace ANAConversationStudio.Models.Chat
 
         public override string ToString()
         {
-            return Tag;
+            return Alias;
         }
     }
     public enum ButtonTypeEnum

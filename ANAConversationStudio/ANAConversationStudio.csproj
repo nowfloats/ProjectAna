@@ -131,7 +131,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Controls\DerivedCollectionEditor.cs" />
+    <Compile Include="Controls\ChatNodeCollectionEditor.cs" />
     <Compile Include="Controls\ChatContentCollectionControl.cs" />
     <Compile Include="Controls\ChatNodeCollectionControl.cs" />
     <Compile Include="Helpers\MongoHelper.cs" />
