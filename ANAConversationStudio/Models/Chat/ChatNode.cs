@@ -5,9 +5,15 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json;
 
 namespace ANAConversationStudio.Models.Chat
 {
+    [CategoryOrder("Important", 1)]
+    [CategoryOrder("For NodeType ApiCall", 2)]
+    [CategoryOrder("Misc", 3)]
     public class ChatNode : INotifyPropertyChanged
     {
         public ChatNode()
@@ -15,6 +21,7 @@ namespace ANAConversationStudio.Models.Chat
             Buttons.CollectionChanged += ButtonsCollectionChanged;
         }
 
+        #region Important
         private string _Name;
         [Category("Important")]
         public string Name
@@ -63,37 +70,25 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private NodeTypeEnum _NodeType = NodeTypeEnum.Combination;
         [Category("Important")]
-        private string _VariableName;
-        public string VariableName
+        public NodeTypeEnum NodeType
         {
-            get { return _VariableName; }
+            get { return _NodeType; }
             set
             {
-                if (_VariableName != value)
+                if (_NodeType != value)
                 {
-                    _VariableName = value;
+                    _NodeType = value;
                     OnPropertyChanged();
                 }
             }
         }
+        #endregion
 
-        private ObservableCollection<string> _RequiredVariables;
-        [Category("Important")]
-        public ObservableCollection<string> RequiredVariables
-        {
-            get { return _RequiredVariables; }
-            set
-            {
-                if (_RequiredVariables != value)
-                {
-                    _RequiredVariables = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
+        #region Misc
         private string _Id;
+        [Category("Misc")]
         public string Id
         {
             get { return _Id; }
@@ -108,6 +103,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private bool _IsStartNode;
+        [Category("Misc")]
         public bool IsStartNode
         {
             get { return _IsStartNode; }
@@ -122,6 +118,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private int _TimeoutInMs;
+        [Category("Misc")]
         public int TimeoutInMs
         {
             get { return _TimeoutInMs; }
@@ -134,23 +131,44 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+        #endregion
 
-        private NodeTypeEnum _NodeType = NodeTypeEnum.Combination;
-        public NodeTypeEnum NodeType
+        #region For NodeType ApiCall
+        private string _VariableName;
+        [Category("For NodeType ApiCall")]
+        public string VariableName
         {
-            get { return _NodeType; }
+            get { return _VariableName; }
             set
             {
-                if (_NodeType != value)
+                if (_VariableName != value)
                 {
-                    _NodeType = value;
+                    _VariableName = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string _ApiMethod;
-        public string ApiMethod
+        private ObservableCollection<string> _RequiredVariables;
+        [Category("For NodeType ApiCall")]
+        public ObservableCollection<string> RequiredVariables
+        {
+            get { return _RequiredVariables; }
+            set
+            {
+                if (_RequiredVariables != value)
+                {
+                    _RequiredVariables = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private ApiMethodEnum? _ApiMethod;
+        [Category("For NodeType ApiCall")]
+        //[JsonConverter(typeof(StringEnumConverter))]
+        //[BsonRepresentation(BsonType.String)]
+        public ApiMethodEnum? ApiMethod
         {
             get { return _ApiMethod; }
             set
@@ -164,6 +182,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _ApiUrl;
+        [Category("For NodeType ApiCall")]
         public string ApiUrl
         {
             get { return _ApiUrl; }
@@ -178,6 +197,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
+        [Category("For NodeType ApiCall")]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -190,6 +210,7 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+        #endregion
 
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -209,9 +230,14 @@ namespace ANAConversationStudio.Models.Chat
         }
     }
 
+    public enum ApiMethodEnum
+    {
+        GET, POST, PUT, HEAD, DELETE, OPTIONS, CONNECT
+    }
+
     public enum NodeTypeEnum
     {
-        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, ApiCall, Combination
+        ApiCall, Combination
     };
 
     public enum EmotionEnum

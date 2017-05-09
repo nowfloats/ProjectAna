@@ -10,6 +10,7 @@ namespace ANAConversationStudio.Models
         protected void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private string __id;
+        [ReadOnly(true)]
         public string _id
         {
             get { return __id; }

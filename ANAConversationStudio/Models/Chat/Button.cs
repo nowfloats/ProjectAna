@@ -1,11 +1,16 @@
 ﻿using System.ComponentModel;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat
 {
+    [CategoryOrder("Important", 1)]
+    [CategoryOrder("For ButtonType Get[X]", 2)]
+    [CategoryOrder("Misc", 3)]
     public class Button : BaseEntity
     {
         public Button() { }
 
+        #region Important
         private ButtonTypeEnum _ButtonType = ButtonTypeEnum.NextNode;
         [Category("Important")]
         public ButtonTypeEnum ButtonType
@@ -21,49 +26,8 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
-        private string _DeepLinkUrl;
-        public string DeepLinkUrl
-        {
-            get { return _DeepLinkUrl; }
-            set
-            {
-                if (_DeepLinkUrl != value)
-                {
-                    _DeepLinkUrl = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _Url;
-        public string Url
-        {
-            get { return _Url; }
-            set
-            {
-                if (_Url != value)
-                {
-                    _Url = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private int? _BounceTimeout;
-        public int? BounceTimeout
-        {
-            get { return _BounceTimeout; }
-            set
-            {
-                if (_BounceTimeout != value)
-                {
-                    _BounceTimeout = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private string _NextNodeId;
+        [Category("Important")]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -76,36 +40,26 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+        #endregion
 
-        private bool _DefaultButton;
-        public bool DefaultButton
+        #region For ButtonType Get[X]
+        private string _PlaceholderText;
+        [Category("For ButtonType Get[X]")]
+        public string PlaceholderText
         {
-            get { return _DefaultButton; }
+            get { return _PlaceholderText; }
             set
             {
-                if (_DefaultButton != value)
+                if (_PlaceholderText != value)
                 {
-                    _DefaultButton = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private bool _Hidden;
-        public bool Hidden
-        {
-            get { return _Hidden; }
-            set
-            {
-                if (_Hidden != value)
-                {
-                    _Hidden = value;
+                    _PlaceholderText = value;
                     OnPropertyChanged();
                 }
             }
         }
 
         private string _VariableValue;
+        [Category("For ButtonType Get[X]")]
         public string VariableValue
         {
             get { return _VariableValue; }
@@ -120,6 +74,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _PrefixText;
+        [Category("For ButtonType Get[X]")]
         public string PrefixText
         {
             get { return _PrefixText; }
@@ -134,6 +89,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _PostfixText;
+        [Category("For ButtonType Get[X]")]
         public string PostfixText
         {
             get { return _PostfixText; }
@@ -147,22 +103,8 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
-        private string _PlaceholderText;
-        [Category("Important")]
-        public string PlaceholderText
-        {
-            get { return _PlaceholderText; }
-            set
-            {
-                if (_PlaceholderText != value)
-                {
-                    _PlaceholderText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         private bool _ConfirmInput;
+        [Category("For ButtonType Get[X]")]
         public bool ConfirmInput
         {
             get { return _ConfirmInput; }
@@ -175,6 +117,84 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+        #endregion
+
+        #region Misc
+        private string _DeepLinkUrl;
+        [Category("Misc")]
+        public string DeepLinkUrl
+        {
+            get { return _DeepLinkUrl; }
+            set
+            {
+                if (_DeepLinkUrl != value)
+                {
+                    _DeepLinkUrl = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Url;
+        [Category("Misc")]
+        public string Url
+        {
+            get { return _Url; }
+            set
+            {
+                if (_Url != value)
+                {
+                    _Url = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int? _BounceTimeout;
+        [Category("Misc")]
+        public int? BounceTimeout
+        {
+            get { return _BounceTimeout; }
+            set
+            {
+                if (_BounceTimeout != value)
+                {
+                    _BounceTimeout = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _DefaultButton;
+        [Category("Misc")]
+        public bool DefaultButton
+        {
+            get { return _DefaultButton; }
+            set
+            {
+                if (_DefaultButton != value)
+                {
+                    _DefaultButton = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private bool _Hidden;
+        [Category("Misc")]
+        public bool Hidden
+        {
+            get { return _Hidden; }
+            set
+            {
+                if (_Hidden != value)
+                {
+                    _Hidden = value;
+                    OnPropertyChanged();
+                }
+            }
+        } 
+        #endregion
 
         public override string ToString()
         {
