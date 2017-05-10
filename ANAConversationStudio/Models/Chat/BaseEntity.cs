@@ -27,6 +27,7 @@ namespace ANAConversationStudio.Models
     public class BaseIdTimeStampEntity : BaseIdEntity
     {
         private DateTime _CreatedOn;
+        [ReadOnly(true)]
         public DateTime CreatedOn
         {
             get { return _CreatedOn; }
@@ -41,6 +42,7 @@ namespace ANAConversationStudio.Models
         }
 
         private DateTime _UpdatedOn;
+        [ReadOnly(true)]
         public DateTime UpdatedOn
         {
             get { return _UpdatedOn; }

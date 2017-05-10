@@ -25,21 +25,6 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
-
-        private string _NextNodeId;
-        [Category("Important")]
-        public string NextNodeId
-        {
-            get { return _NextNodeId; }
-            set
-            {
-                if (_NextNodeId != value)
-                {
-                    _NextNodeId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
         #endregion
 
         #region For ButtonType Get[X]
@@ -193,7 +178,22 @@ namespace ANAConversationStudio.Models.Chat
                     OnPropertyChanged();
                 }
             }
-        } 
+        }
+
+        private string _NextNodeId;
+        [ReadOnly(true)]
+        public string NextNodeId
+        {
+            get { return _NextNodeId; }
+            set
+            {
+                if (_NextNodeId != value)
+                {
+                    _NextNodeId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         public override string ToString()
@@ -203,7 +203,6 @@ namespace ANAConversationStudio.Models.Chat
     }
     public enum ButtonTypeEnum
     {
-        None,
         PostText,
         OpenUrl,
         GetText,
@@ -218,6 +217,5 @@ namespace ANAConversationStudio.Models.Chat
         NextNode,
         DeepLink,
         GetAgent,
-        ApiCall
     }
 }

@@ -89,6 +89,7 @@ namespace ANAConversationStudio.Models.Chat
         #region Misc
         private string _Id;
         [Category("Misc")]
+        [ReadOnly(true)]
         public string Id
         {
             get { return _Id; }

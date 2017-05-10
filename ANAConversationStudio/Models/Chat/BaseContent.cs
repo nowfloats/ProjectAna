@@ -28,6 +28,7 @@ namespace ANAConversationStudio.Models
         }
 
         private string _NodeId;
+        [ReadOnly(true)]
         public string NodeId
         {
             get { return _NodeId; }
@@ -75,6 +76,7 @@ namespace ANAConversationStudio.Models
     public class SectionContent : BaseContent
     {
         private string _SectionId;
+        [ReadOnly(true)]
         public string SectionId
         {
             get { return _SectionId; }
@@ -227,8 +229,8 @@ namespace ANAConversationStudio.Models
     }
     public class ButtonContent : BaseContent
     {
-
         private string _ButtonId;
+        [ReadOnly(true)]
         public string ButtonId
         {
             get { return _ButtonId; }
@@ -237,20 +239,6 @@ namespace ANAConversationStudio.Models
                 if (_ButtonId != value)
                 {
                     _ButtonId = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _ButtonName;
-        public string ButtonName
-        {
-            get { return _ButtonName; }
-            set
-            {
-                if (_ButtonName != value)
-                {
-                    _ButtonName = value;
                     OnPropertyChanged();
                 }
             }

@@ -422,11 +422,20 @@ namespace ANAConversationStudio.Views
         /// </summary>
         private void networkControl_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
-            {
-                Point doubleClickPoint = e.GetPosition(networkControl);
-                zoomAndPanControl.AnimatedSnapTo(doubleClickPoint);
-            }
+            //Pan on double click disabled
+            //if ((Keyboard.Modifiers & ModifierKeys.Shift) == 0)
+            //{
+            //    Point doubleClickPoint = e.GetPosition(networkControl);
+            //    zoomAndPanControl.AnimatedSnapTo(doubleClickPoint);
+            //}
+
+            OpenNodeEditor();
+        }
+
+        private void OpenNodeEditor()
+        {
+            if (this.ViewModel.SelectedChatNode != null)
+                NodeEditorLayoutAnchorable.IsActive = true;
         }
 
         /// <summary>
@@ -699,6 +708,7 @@ namespace ANAConversationStudio.Views
         {
             Title += " " + Assembly.GetExecutingAssembly().GetName().Version;
             LoadSavedConnections();
+
             #region Overview Windows Commented
             //OverviewWindow overviewWindow = new OverviewWindow();
             //overviewWindow.Left = this.Left;
@@ -728,10 +738,21 @@ namespace ANAConversationStudio.Views
             if (networkControl.SelectedNode != null)
             {
                 var node = (networkControl.SelectedNode as NodeViewModel);
+                if (this.ViewModel.SelectedChatNode != null)
+                    this.ViewModel.SelectedChatNode.PropertyChanged -= SelectedChatNode_PropertyChanged; //Remove old event handler
+
                 this.ViewModel.SelectedChatNode = null;
                 this.ViewModel.SelectedChatNode = node.ChatNode;
+                this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
                 NodeCollectionControl = null;
             }
+        }
+
+        private void SelectedChatNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
+        {
+            var senderNode = sender as ChatNode;
+            if (e.PropertyName == nameof(ChatNode.IsStartNode)) //When is start node is changed
+                this.ViewModel.Network.Nodes.Select(x => x.ChatNode).Where(x => x.Id != senderNode.Id && x.IsStartNode).ToList().ForEach(x => x.IsStartNode = false);
         }
 
         private void SaveButtonClick(object sender, RoutedEventArgs e)

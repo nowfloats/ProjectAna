@@ -12,6 +12,7 @@ using Xceed.Wpf.Toolkit;
 using Xceed.Wpf.Toolkit.PropertyGrid;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using Xceed.Wpf.Toolkit.PropertyGrid.Editors;
+using System.Threading.Tasks;
 
 namespace ANAConversationStudio.Controls
 {
@@ -44,8 +45,8 @@ namespace ANAConversationStudio.Controls
             }
 
             _collectionControl.Loaded += _collectionControl_Loaded;
-            _collectionControl.ItemAdding += ItemAdding; ;
-            _collectionControl.ItemAdded += ItemCollectionChanged;
+            _collectionControl.ItemAdding += ItemAdding;
+            _collectionControl.ItemAdded += ItemAdded;
             _collectionControl.ItemDeleted += ItemCollectionChanged;
             _collectionControl.ItemMovedDown += ItemCollectionChanged;
             _collectionControl.ItemMovedUp += ItemCollectionChanged;
@@ -55,8 +56,29 @@ namespace ANAConversationStudio.Controls
             {
                 InvalidatePropertyGrid();
                 MainWindow.Current.NodeCollectionControl = _collectionControl;
+                if (MainWindow.Current.SectionButtonEditorLayoutAnchorable != null)
+                    MainWindow.Current.SectionButtonEditorLayoutAnchorable.IsActive = true;
             };
             base.ResolveValueBinding(_propertyItem);
+        }
+
+        private void ItemAdded(object sender, ItemEventArgs e)
+        {
+            InvalidateSource();
+            Task.Delay(1000).ContinueWith(async (s) =>
+            {
+                await App.Current.Dispatcher.InvokeAsync(() =>
+                {
+                    var editor = MainWindow.Current.ChatContentCollectionEditor;
+                    if (editor != null && editor.NewItemTypes?.Count > 0 && editor.Items.Count == 0)
+                    {
+                        var newItem = Activator.CreateInstance(editor.NewItemTypes.First());
+                        editor.PreProccessAddingItem(newItem);
+                        editor.Items.Add(newItem);
+                        editor.SelectedItem = newItem;
+                    }
+                });
+            });
         }
 
         private void _collectionControl_Loaded(object sender, RoutedEventArgs e)
@@ -68,6 +90,21 @@ namespace ANAConversationStudio.Controls
         private void PropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
         {
             InvalidateSource();
+
+            if ((e.Source as PropertyGrid).SelectedObject is BaseEntity bEntity && (e.OriginalSource is PropertyItem pItem))
+            {
+                if (pItem.PropertyName == nameof(bEntity.Alias)) //If name of the property changed is 'Alias'
+                {
+                    var editor = MainWindow.Current.ChatContentCollectionEditor;
+                    if (editor.SelectedItem != null) //copy alias to content only when 1 content is present
+                    {
+                        if (editor.SelectedItem is ButtonContent bContent && string.IsNullOrWhiteSpace(bContent.ButtonText))
+                            bContent.ButtonText = e.NewValue as string;
+                        else if (editor.SelectedItem is TextSectionContent txtContent && string.IsNullOrWhiteSpace(txtContent.SectionText))
+                            txtContent.SectionText = e.NewValue as string;
+                    }
+                }
+            }
         }
         private void InvalidatePropertyGrid()
         {

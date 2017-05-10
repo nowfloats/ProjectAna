@@ -65,49 +65,84 @@ namespace ANAConversationStudio.Controls
         public ChatContentCollectionControl()
         {
             ItemAdding += ItemAddingEventHandler;
-            ItemAdded += ItemAddedEventHandler;
-            ItemDeleted += ItemDeletedEventHandler;
+            //ItemAdded += ItemAddedEventHandler;
+            //ItemDeleted += ItemDeletedEventHandler;
+            Items.CollectionChanged += Items_CollectionChanged;
         }
 
-        private void ItemDeletedEventHandler(object sender, ItemEventArgs e)
+        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
-            var c = e.Item as BaseContent;
-            var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == c._id);
-            if (content != null)
-                MongoHelper.Current.Contents.Remove(content);
+            switch (e.Action)
+            {
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
+                    if (e.NewItems?.Count > 0)
+                    {
+                        var contentItem = e.NewItems.Cast<object>().First();
+                        MongoHelper.Current.Contents.Add(contentItem as BaseContent);
+                    }
+                    break;
+                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
+                    if (e.OldItems?.Count > 0)
+                    {
+                        var c = e.OldItems.Cast<object>().First() as BaseContent;
+                        var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == c._id);
+                        if (content != null)
+                            MongoHelper.Current.Contents.Remove(content);
+                    }
+                    break;
+                default:
+                    break;
+            }
         }
 
-        private void ItemAddedEventHandler(object sender, ItemEventArgs e)
-        {
-            MongoHelper.Current.Contents.Add(e.Item as BaseContent);
-        }
+        //private void ItemDeletedEventHandler(object sender, ItemEventArgs e)
+        //{
+        //    var c = e.Item as BaseContent;
+        //    var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == c._id);
+        //    if (content != null)
+        //        MongoHelper.Current.Contents.Remove(content);
+        //}
+
+        //private void ItemAddedEventHandler(object sender, ItemEventArgs e)
+        //{
+        //    MongoHelper.Current.Contents.Add(e.Item as BaseContent);
+        //}
 
         private void ItemAddingEventHandler(object sender, ItemAddingEventArgs e)
         {
-            var Item = e.Item;
-
-            if (Item is BaseIdEntity)
-                (Item as BaseIdEntity)._id = ObjectId.GenerateNewId().ToString();
-            if (Item is BaseEntity)
-                (Item as BaseEntity).Alias = "New " + Item.GetType().Name;
-
-            if (Item is BaseIdTimeStampEntity)
-            {
-                (Item as BaseIdTimeStampEntity).CreatedOn = DateTime.Now;
-                (Item as BaseIdTimeStampEntity).UpdatedOn = DateTime.Now;
-            }
-
-            if (Item is BaseContent && ParentChatNode != null)
-                (Item as BaseContent).NodeId = ParentChatNode.Id;
-
-            if ((Item is SectionContent || Item is ButtonContent) && ChatContentOwner != null)
-            {
-                if (ChatContentOwner is Section && Item is SectionContent)
-                    (Item as SectionContent).SectionId = (ChatContentOwner as Section)._id;
-                else if (ChatContentOwner is Button && Item is ButtonContent)
-                    (Item as ButtonContent).ButtonId = (ChatContentOwner as Button)._id;
-            }
+            PreProccessAddingItem(e.Item);
         }
 
+        public void PreProccessAddingItem(object item)
+        {
+            if (item is BaseIdEntity)
+                (item as BaseIdEntity)._id = ObjectId.GenerateNewId().ToString();
+            if (item is BaseEntity)
+                (item as BaseEntity).Alias = "New " + item.GetType().Name;
+
+            if (item is BaseIdTimeStampEntity)
+            {
+                (item as BaseIdTimeStampEntity).CreatedOn = DateTime.Now;
+                (item as BaseIdTimeStampEntity).UpdatedOn = DateTime.Now;
+            }
+
+            if (item is BaseContent && ParentChatNode != null)
+                (item as BaseContent).NodeId = ParentChatNode.Id;
+
+            if ((item is SectionContent || item is ButtonContent) && ChatContentOwner != null)
+            {
+                if (ChatContentOwner is Section && item is SectionContent)
+                {
+                    (item as SectionContent).SectionId = (ChatContentOwner as Section)._id;
+                    //if (item is TextSectionContent tsItem)
+                    //    tsItem.SectionText = (ChatContentOwner as Section).Alias;
+                }
+                else if (ChatContentOwner is Button && item is ButtonContent)
+                {
+                    (item as ButtonContent).ButtonId = (ChatContentOwner as Button)._id;
+                    //(item as ButtonContent).ButtonText = (ChatContentOwner as Button).Alias;
+                }
+            }
+        }
     }
 }

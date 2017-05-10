@@ -810,7 +810,8 @@
                             MouseDown="networkControl_MouseDown"
                             MouseUp="networkControl_MouseUp"
                             MouseMove="networkControl_MouseMove"
-                            MouseWheel="networkControl_MouseWheel"  
+                            MouseWheel="networkControl_MouseWheel"
+                            MouseDoubleClick="networkControl_MouseDoubleClick"
                             />
                                                 <!--
                         This Canvas and Border are used as a very simple way to render a drag rectangle that the user
@@ -839,22 +840,24 @@
                             </DockPanel>
                         </avalonDock:LayoutDocument>
                     </avalonDock:LayoutDocumentPane>
+                    <avalonDock:LayoutAnchorablePane DockWidth="400">
+                        <avalonDock:LayoutAnchorable AutoHideMinWidth="400" ContentId="NodeEditor" x:Name="NodeEditorLayoutAnchorable" Title="Node Editor" CanHide="False" CanClose="False">
+                            <xctk:PropertyGrid SelectedObject="{Binding SelectedChatNode, Mode=TwoWay}" AutoGenerateProperties="True"  />
+                        </avalonDock:LayoutAnchorable>
+                    </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
-                <avalonDock:LayoutRoot.RightSide>
-                    <avalonDock:LayoutAnchorSide>
-                        <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable AutoHideMinWidth="400" ContentId="NodeEditor" Title="Node Editor" CanHide="False">
-                                <xctk:PropertyGrid SelectedObject="{Binding SelectedChatNode, Mode=TwoWay}" AutoGenerateProperties="True"  />
-                            </avalonDock:LayoutAnchorable>
-                        </avalonDock:LayoutAnchorGroup>
-                    </avalonDock:LayoutAnchorSide>
-                </avalonDock:LayoutRoot.RightSide>
                 <avalonDock:LayoutRoot.BottomSide>
                     <avalonDock:LayoutAnchorSide>
                         <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable AutoHideMinHeight="400" x:Name="SectionButtonEditor" ContentId="SectionButtonEditor" Title="Section Button Editor" CanHide="False"/>
-                            <avalonDock:LayoutAnchorable AutoHideMinHeight="400" ContentId="ContentEditor" Title="Content Editor" CanHide="False">
-                                <Controls:ChatContentCollectionControl Visibility="Collapsed" ParentChatNode="{Binding Path=Content.OwnerChatNode, ElementName=SectionButtonEditor}" ChatContentOwner="{Binding ElementName=SectionButtonEditor, Path=Content.SelectedItem, Mode=TwoWay, FallbackValue=null}"/>
+                            <avalonDock:LayoutAnchorable AutoHideMinHeight="400" x:Name="SectionButtonEditorLayoutAnchorable" ContentId="SectionButtonEditor" Title="Section Button Editor" CanHide="False" CanClose="False" >
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition />
+                                        <ColumnDefinition />
+                                    </Grid.ColumnDefinitions>
+                                    <ContentControl x:Name="SectionButtonEditor"/>
+                                    <Controls:ChatContentCollectionControl x:Name="ChatContentCollectionEditor" Grid.Column="1" Visibility="Collapsed" ParentChatNode="{Binding Path=Content.OwnerChatNode, ElementName=SectionButtonEditor}" ChatContentOwner="{Binding ElementName=SectionButtonEditor, Path=Content.SelectedItem, Mode=TwoWay, FallbackValue=null}"/>
+                                </Grid>
                             </avalonDock:LayoutAnchorable>
                         </avalonDock:LayoutAnchorGroup>
                     </avalonDock:LayoutAnchorSide>
