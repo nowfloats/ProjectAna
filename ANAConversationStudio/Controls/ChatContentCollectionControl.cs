@@ -25,13 +25,11 @@ namespace ANAConversationStudio.Controls
             else
                 control.Visibility = Visibility.Visible;
         }));
-
         public object ChatContentOwner
         {
             get { return (object)GetValue(ChatContentOwnerProperty); }
             set { SetValue(ChatContentOwnerProperty, value); }
         }
-
         public static readonly DependencyProperty ChatContentOwnerProperty = DependencyProperty.Register(nameof(ChatContentOwner), typeof(object), typeof(ChatContentCollectionControl), new PropertyMetadata((s, e) =>
         {
             var control = s as ChatContentCollectionControl;
@@ -61,59 +59,40 @@ namespace ANAConversationStudio.Controls
             else
                 control.Visibility = Visibility.Collapsed;
         }));
-
         public ChatContentCollectionControl()
         {
             ItemAdding += ItemAddingEventHandler;
-            //ItemAdded += ItemAddedEventHandler;
-            //ItemDeleted += ItemDeletedEventHandler;
-            Items.CollectionChanged += Items_CollectionChanged;
+            ItemAdded += ItemAddedEventHandler;
+            ItemDeleted += ItemDeletedEventHandler;
         }
-
-        private void Items_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        public void ContentItemAddExternal(BaseContent item)
         {
-            switch (e.Action)
-            {
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Add:
-                    if (e.NewItems?.Count > 0)
-                    {
-                        var contentItem = e.NewItems.Cast<object>().First();
-                        MongoHelper.Current.Contents.Add(contentItem as BaseContent);
-                    }
-                    break;
-                case System.Collections.Specialized.NotifyCollectionChangedAction.Remove:
-                    if (e.OldItems?.Count > 0)
-                    {
-                        var c = e.OldItems.Cast<object>().First() as BaseContent;
-                        var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == c._id);
-                        if (content != null)
-                            MongoHelper.Current.Contents.Remove(content);
-                    }
-                    break;
-                default:
-                    break;
-            }
+            if (item == null) return;
+            PreProccessAddingItem(item);
+            Items.Add(item);
+            ContentItemAdded(item);
+        }
+        public void ContentItemDeleted(BaseContent item)
+        {
+            if (item == null) return;
+            var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == item._id);
+            if (content != null)
+                MongoHelper.Current.Contents.Remove(content);
         }
 
-        //private void ItemDeletedEventHandler(object sender, ItemEventArgs e)
-        //{
-        //    var c = e.Item as BaseContent;
-        //    var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == c._id);
-        //    if (content != null)
-        //        MongoHelper.Current.Contents.Remove(content);
-        //}
-
-        //private void ItemAddedEventHandler(object sender, ItemEventArgs e)
-        //{
-        //    MongoHelper.Current.Contents.Add(e.Item as BaseContent);
-        //}
-
+        private void ItemDeletedEventHandler(object sender, ItemEventArgs e)
+        {
+            ContentItemDeleted(e.Item as BaseContent);
+        }
+        private void ItemAddedEventHandler(object sender, ItemEventArgs e)
+        {
+            ContentItemAdded(e.Item as BaseContent);
+        }
         private void ItemAddingEventHandler(object sender, ItemAddingEventArgs e)
         {
             PreProccessAddingItem(e.Item);
         }
-
-        public void PreProccessAddingItem(object item)
+        private void PreProccessAddingItem(object item)
         {
             if (item is BaseIdEntity)
                 (item as BaseIdEntity)._id = ObjectId.GenerateNewId().ToString();
@@ -132,17 +111,15 @@ namespace ANAConversationStudio.Controls
             if ((item is SectionContent || item is ButtonContent) && ChatContentOwner != null)
             {
                 if (ChatContentOwner is Section && item is SectionContent)
-                {
                     (item as SectionContent).SectionId = (ChatContentOwner as Section)._id;
-                    //if (item is TextSectionContent tsItem)
-                    //    tsItem.SectionText = (ChatContentOwner as Section).Alias;
-                }
                 else if (ChatContentOwner is Button && item is ButtonContent)
-                {
                     (item as ButtonContent).ButtonId = (ChatContentOwner as Button)._id;
-                    //(item as ButtonContent).ButtonText = (ChatContentOwner as Button).Alias;
-                }
             }
+        }
+        private void ContentItemAdded(BaseContent item)
+        {
+            if (item == null) return;
+            MongoHelper.Current.Contents.Add(item as BaseContent);
         }
     }
 }
