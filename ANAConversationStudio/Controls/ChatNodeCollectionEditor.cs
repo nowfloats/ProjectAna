@@ -46,7 +46,7 @@ namespace ANAConversationStudio.Controls
 
             _collectionControl.Loaded += _collectionControl_Loaded;
             _collectionControl.ItemAdding += ItemAdding;
-            _collectionControl.ItemAdded += ItemAdded;
+            _collectionControl.ItemAdded += ItemAddedAsync;
             _collectionControl.ItemDeleted += ItemCollectionChanged;
             _collectionControl.ItemMovedDown += ItemCollectionChanged;
             _collectionControl.ItemMovedUp += ItemCollectionChanged;
@@ -62,22 +62,18 @@ namespace ANAConversationStudio.Controls
             base.ResolveValueBinding(_propertyItem);
         }
 
-        private void ItemAdded(object sender, ItemEventArgs e)
+        private async void ItemAddedAsync(object sender, ItemEventArgs e)
         {
             InvalidateSource();
-            Task.Delay(1000).ContinueWith(async (s) =>
+            await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                await App.Current.Dispatcher.InvokeAsync(() =>
+                var editor = MainWindow.Current.ChatContentCollectionEditor;
+                if (editor != null && editor.NewItemTypes?.Count > 0 && editor.Items.Count == 0)
                 {
-                    var editor = MainWindow.Current.ChatContentCollectionEditor;
-                    if (editor != null && editor.NewItemTypes?.Count > 0 && editor.Items.Count == 0)
-                    {
-                        var newItem = Activator.CreateInstance(editor.NewItemTypes.First());
-                        editor.PreProccessAddingItem(newItem);
-                        editor.Items.Add(newItem);
-                        editor.SelectedItem = newItem;
-                    }
-                });
+                    var newItem = Activator.CreateInstance(editor.NewItemTypes.First());
+                    editor.ContentItemAddExternal(newItem as BaseContent);
+                    editor.SelectedItem = newItem;
+                }
             });
         }
 
