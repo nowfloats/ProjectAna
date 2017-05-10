@@ -561,10 +561,10 @@ namespace ANAConversationStudio.ViewModels
 
                 var start = new Point(100, 60);
                 var allChatNodes = MongoHelper.Current.ChatNodes;
-                var unuqueChatNodes = allChatNodes.GroupBy(x => x.Id).SelectMany(x => x).OrderByDescending(x => x.IsStartNode).ToList();
+                var uniqueChatNodes = allChatNodes.GroupBy(x => x.Id).SelectMany(x => x).OrderByDescending(x => x.IsStartNode).ToList();
 
-                var nodeVMs = unuqueChatNodes.Select(x => new NodeViewModel(x, MongoHelper.Current.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
-                this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections
+                var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, MongoHelper.Current.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
+                this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections  
 
                 foreach (var node in nodeVMs)
                 {

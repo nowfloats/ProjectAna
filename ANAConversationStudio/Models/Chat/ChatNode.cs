@@ -24,6 +24,7 @@ namespace ANAConversationStudio.Models.Chat
         #region Important
         private string _Name;
         [Category("Important")]
+        [PropertyOrder(1)]
         public string Name
         {
             get { return _Name; }
@@ -37,9 +38,26 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private NodeTypeEnum _NodeType = NodeTypeEnum.Combination;
+        [Category("Important")]
+        [PropertyOrder(2)]
+        public NodeTypeEnum NodeType
+        {
+            get { return _NodeType; }
+            set
+            {
+                if (_NodeType != value)
+                {
+                    _NodeType = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private ObservableCollection<Section> _Sections = new ObservableCollection<Section>();
         [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection))]
         [Category("Important")]
+        [PropertyOrder(3)]
         [Editor(typeof(ChatNodeCollectionEditor<Section>), typeof(ChatNodeCollectionEditor<Section>))]
         public ObservableCollection<Section> Sections
         {
@@ -57,6 +75,7 @@ namespace ANAConversationStudio.Models.Chat
         private ObservableCollection<Button> _Buttons = new ObservableCollection<Button>();
         [Category("Important")]
         [Editor(typeof(ChatNodeCollectionEditor<Button>), typeof(ChatNodeCollectionEditor<Button>))]
+        [PropertyOrder(4)]
         public ObservableCollection<Button> Buttons
         {
             get { return _Buttons; }
@@ -70,20 +89,7 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
-        private NodeTypeEnum _NodeType = NodeTypeEnum.Combination;
-        [Category("Important")]
-        public NodeTypeEnum NodeType
-        {
-            get { return _NodeType; }
-            set
-            {
-                if (_NodeType != value)
-                {
-                    _NodeType = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
+        
         #endregion
 
         #region Misc
@@ -167,8 +173,6 @@ namespace ANAConversationStudio.Models.Chat
 
         private ApiMethodEnum? _ApiMethod;
         [Category("For NodeType ApiCall")]
-        //[JsonConverter(typeof(StringEnumConverter))]
-        //[BsonRepresentation(BsonType.String)]
         public ApiMethodEnum? ApiMethod
         {
             get { return _ApiMethod; }

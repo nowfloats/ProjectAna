@@ -112,6 +112,7 @@ namespace ANAConversationStudio.Models
     public class TitleCaptionSectionContent : SectionContent
     {
         private string _Title;
+        [Category("Important")]
         public string Title
         {
             get { return _Title; }
@@ -126,6 +127,7 @@ namespace ANAConversationStudio.Models
         }
 
         private string _Caption;
+        [Category("Important")]
         public string Caption
         {
             get { return _Caption; }
