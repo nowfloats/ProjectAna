@@ -13,7 +13,7 @@ Ability to switch to an agent within the chat and switch back! (Hybrid chat), We
 
 ----------
 
-![Studio and Simulator Image](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ANA+ConStudio+%26+ANA+ConSim+Parallelly+3.jpg)
+![Studio and Simulator Image](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ANA-Studio-Simulator.jpg)
 
 ----------
 
