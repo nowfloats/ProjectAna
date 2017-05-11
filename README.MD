@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Absolutely modular architechture, ability to add your own customizations and infinitely scalable. 
+World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Absolutely modular architecture, ability to add your own customizations and infinitely scalable. 
 
 Setup time less than 30 minutes. Edit content and flow without changing any code.
 Android & iOS SDK available on request. 
@@ -10,6 +10,14 @@ Android & iOS SDK available on request.
 **Launching soon:**
  
 Ability to switch to an agent within the chat and switch back! (Hybrid chat), Web & Messenger SDK
+
+----------
+
+![Studio and Simulator Image](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ANA+ConStudio+%26+ANA+ConSim+Parallelly+3.jpg)
+
+----------
+
+
 
 ## Components Overview
 
@@ -54,6 +62,10 @@ Ability to switch to an agent within the chat and switch back! (Hybrid chat), We
 4.  First time of the launch, you will be asked for the Chat and UploadFile APIs. Edit it to match the URL of your hosted ANA Conversation Platform.
 5.  If everything went as it should, your chat should have started and you should see the content of the first node -> first section.
 6.  If you choose to build the app instead of using the built package, obtain your own MapToken required by the UWP Map Control from your developer.microsoft.com account and place it in Config-Sample.json. Then rename the file to Config.json and build the project.
+
+**Creating your first flow**
+
+![ProjectANA Sample Chat Flow](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)
 
 ## Note
 
