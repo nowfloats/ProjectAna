@@ -3,10 +3,6 @@ using ANAConversationSimulator.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using System.Collections.ObjectModel;
-using Coding4Fun.Toolkit.Controls;
-using System.Linq;
-using System.Diagnostics;
 using System.Threading.Tasks;
 namespace ANAConversationSimulator.Views
 {
@@ -15,7 +11,7 @@ namespace ANAConversationSimulator.Views
         public MainPage()
         {
             InitializeComponent();
-            NavigationCacheMode = Windows.UI.Xaml.Navigation.NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Enabled;
 
             Loaded += MainPage_LoadedAsync;
         }

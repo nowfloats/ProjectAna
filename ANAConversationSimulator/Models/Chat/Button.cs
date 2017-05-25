@@ -15,11 +15,11 @@ namespace ANAConversationSimulator.Models.Chat
         public ButtonTypeEnum ButtonType { get; set; }
         public string DeepLinkUrl { get; set; }
         public string Url { get; set; }
-        public int? BounceTimeout { get; set; } = null;
+        public int? BounceTimeout { get; set; }
         public string NextNodeId { get; set; }
         public bool DefaultButton { get; set; } = false;
         public bool Hidden { get; set; }
-        public string VariableValue { get; set; } = null;
+        public string VariableValue { get; set; }
         public string PlaceholderText { get; set; }
         public bool ConfirmInput { get; set; }
         public string PrefixText { get; set; }
@@ -51,7 +51,8 @@ namespace ANAConversationSimulator.Models.Chat
         public Dictionary<string, string> ItemsSource { get; set; }
 
         //Below fields are filled at runtime
-        public string VariableName { get; set; } = null;
+        public string VariableName { get; set; }
+        public string NodeId { get; set; }
         public ButtonActionCommand Action { get; } = new ButtonActionCommand();
         public bool Visible { get { return !Hidden; } }
 

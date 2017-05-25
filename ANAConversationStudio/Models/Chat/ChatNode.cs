@@ -138,6 +138,21 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+
+        private string _GroupName;
+        [Category("Misc")]
+        public string GroupName
+        {
+            get { return _GroupName; }
+            set
+            {
+                if (_GroupName != value)
+                {
+                    _GroupName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
         #endregion
 
         #region For NodeType ApiCall

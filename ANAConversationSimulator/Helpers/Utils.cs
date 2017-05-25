@@ -1,10 +1,13 @@
-﻿using Newtonsoft.Json;
+﻿using ANAConversationSimulator.Models;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System.Profile;
 using Windows.UI.Popups;
 
 namespace ANAConversationSimulator.Helpers
@@ -119,6 +122,61 @@ namespace ANAConversationSimulator.Helpers
             {
                 ShowDialog("Unable to load Config.\r\n\r\nMessage: " + ex.Message);
             }
+        }
+
+        public static ChatActivityEvent GetViewEvent(string nodeId, string userId)
+        {
+            return new ChatActivityEvent
+            {
+                EventCategory = "ANA_CHAT",
+                EventChannel = "ANA_SIM_WIN",
+                NodeId = nodeId,
+                EventName = "VIEW",
+                UserId = userId,
+                EventDateTime = DateTime.UtcNow,
+            };
+        }
+        public static ChatActivityEvent GetClickEvent(string nodeId, string userId, string buttonId, string buttonLabel, Dictionary<string, string> userData)
+        {
+            return new ChatActivityEvent
+            {
+                EventCategory = "ANA_CHAT",
+                EventChannel = "ANA_SIM_WIN",
+                NodeId = nodeId,
+                EventName = "CLICK",
+                UserId = userId,
+                EventDateTime = DateTime.UtcNow,
+                EventData = new Dictionary<string, string>
+                {
+                    { "ButtonID", buttonId },
+                    { "ButtonLabel", buttonLabel },
+                },
+                UserData = userData
+            };
+        }
+
+        private static string _deviceId;
+        public static string DeviceId
+        {
+            get
+            {
+                if (_deviceId == null)
+                    _deviceId = GetDeviceId();
+                return _deviceId;
+            }
+        }
+        private static string GetDeviceId()
+        {
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.System.Profile.HardwareIdentification"))
+            {
+                var token = HardwareIdentification.GetPackageSpecificToken(null);
+                var hardwareId = token.Id;
+                var dataReader = Windows.Storage.Streams.DataReader.FromBuffer(hardwareId);
+                byte[] bytes = new byte[hardwareId.Length];
+                dataReader.ReadBytes(bytes);
+                return BitConverter.ToString(bytes).Replace("-", "");
+            }
+            return "DEVICE-ID-NOT-FOUND";
         }
     }
 

@@ -19,12 +19,12 @@ namespace ANAConversationPlatform.Controllers
             Debug.WriteLine(chatNodes.ToJson());
             if (chatNodes == null || chatNodes.Count == 0)
             {
-                //TODO: Log API Responsed as Not Found
+                //TODO: Log API Response as Not Found
                 //Task.Run(() => Logger.APILog("", ipAddress, requestTime, "Not Found", "Chat"));
                 return Ok(new object[] { });
             }
 
-            //TODO: Log API Responsed as Not Found
+            //TODO: Log API Response as Ok
             //Task.Run(() => Logger.APILog("", ipAddress, requestTime, "OK", "Chat"));
 
             return Json(chatNodes, new JsonSerializerSettings()

@@ -11,10 +11,8 @@ using ANAConversationSimulator.Models.Chat;
 using Newtonsoft.Json.Linq;
 using ANAConversationSimulator.Models.Chat.Sections;
 using Windows.UI.Xaml;
-using Windows.Storage;
 using Windows.ApplicationModel;
 using ANAConversationSimulator.Helpers;
-using System.Diagnostics;
 using ANAConversationSimulator.UserControls;
 
 namespace ANAConversationSimulator.ViewModels
@@ -136,6 +134,7 @@ namespace ANAConversationSimulator.ViewModels
             {
                 var sectionsSource = node["Sections"];
                 var currentSectionSource = section ?? sectionsSource.First;
+
                 //Replaceing verbs
                 currentSectionSource = JToken.Parse(VerbProcessor.Process(currentSectionSource.ToString()));
 
@@ -183,14 +182,29 @@ namespace ANAConversationSimulator.ViewModels
                         var precacheSucess = await PrecacheSection(parsedSection);
                         //Remove 'typing' bubble
                         ToggleTyping(false);
-
+                        var sectionIndex = (sectionsSource.Children().ToList().FindIndex(x => x["_id"].ToString() == parsedSection._id));
                         if (precacheSucess)
+                        {
+                            if (sectionIndex == 0) //First section in node, send View Event
+                            {
+                                await Task.Run(async () =>
+                                {
+                                    try
+                                    {
+                                        await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
+                                    }
+                                    catch (Exception ex)
+                                    {
+                                        await Utils.ShowDialogAsync(ex.ToString());
+                                    }
+                                });
+                            }
                             AddIncommingSection(parsedSection);
-
-                        var remainingSections = sectionsSource.Children().Count() - (sectionsSource.Children().ToList().FindIndex(x => x["_id"].ToString() == parsedSection._id) + 1);
+                        }
+                        var remainingSections = sectionsSource.Children().Count() - (sectionIndex + 1);
                         if (remainingSections > 0)
                         {
-                            var nextSection = sectionsSource.ElementAt(sectionsSource.Children().ToList().FindIndex(x => x["_id"].ToString() == parsedSection._id) + 1);
+                            var nextSection = sectionsSource.ElementAt(sectionIndex + 1);
                             ProcessNode(node, nextSection);
                         }
                         else
@@ -224,6 +238,7 @@ namespace ANAConversationSimulator.ViewModels
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
             {
                 btn.VariableName = node["VariableName"] + "";
+                btn.NodeId = parsedNode.Id;
                 btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
                 btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
                 CurrentClickButtons.Add(btn);
@@ -231,6 +246,7 @@ namespace ANAConversationSimulator.ViewModels
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.TextInput))
             {
                 btn.VariableName = node["VariableName"] + "";
+                btn.NodeId = parsedNode.Id;
                 btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
                 btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
                 try
@@ -338,11 +354,13 @@ namespace ANAConversationSimulator.ViewModels
         public async void UpdateAPI()
         {
             Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
+            Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
 
             InputContentDialog icd = new InputContentDialog()
             {
                 ChatFlowAPI = currentAPI,
-                UploadFileAPI = UploadFileAPI + ""
+                UploadFileAPI = UploadFileAPI + "",
+                ActivityTrackAPI = ActivityTrackAPI + ""
             };
 
             icd.Closed += (s, e) =>
@@ -351,6 +369,7 @@ namespace ANAConversationSimulator.ViewModels
                 {
                     Utils.APISettings.Values["API"] = icd.ChatFlowAPI;
                     Utils.APISettings.Values["UploadFileAPI"] = icd.UploadFileAPI;
+                    Utils.APISettings.Values["ActivityTrackAPI"] = icd.ActivityTrackAPI;
 
                     Reset();
                 }

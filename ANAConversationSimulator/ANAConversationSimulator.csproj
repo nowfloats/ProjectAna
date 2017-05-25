@@ -133,6 +133,7 @@
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Models\ChatActivityEvent.cs" />
     <Compile Include="Models\UploadFileResponse.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsCommand.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsConverter.cs" />
@@ -249,6 +250,9 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <SDKReference Include="WindowsDesktop, Version=10.0.10586.0">
+      <Name>Windows Desktop Extensions for the UWP</Name>
+    </SDKReference>
     <SDKReference Include="WindowsMobile, Version=10.0.10586.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>

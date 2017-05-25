@@ -8,6 +8,8 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.Storage;
 using System.IO;
+using ANAConversationSimulator.Models;
+
 namespace ANAConversationSimulator.Helpers
 {
     public class APIHelper
@@ -47,6 +49,14 @@ namespace ANAConversationSimulator.Helpers
                 return JsonConvert.DeserializeObject<TResponse>(await resp.Content.ReadAsStringAsync());
             }
         }
+        public static async Task HitPostAsync<TRequest>(string api, TRequest data)
+        {
+            using (var client = new HttpClient())
+            {
+                var resp = await client.PostAsync(api, new StringContent(JsonConvert.SerializeObject(data), Encoding.UTF8, "application/json"));
+                resp = resp.EnsureSuccessStatusCode();
+            }
+        }
 
         public static async Task<TResponse> UploadFile<TResponse>(string fileName, StorageFile sFile)
         {
@@ -64,6 +74,24 @@ namespace ANAConversationSimulator.Helpers
                     resp = resp.EnsureSuccessStatusCode();
                     return JsonConvert.DeserializeObject<TResponse>(await resp.Content.ReadAsStringAsync());
                 }
+            }
+        }
+
+        public static async Task TrackEvent(ChatActivityEvent activityEvent)
+        {
+            try
+            {
+                Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
+                if (string.IsNullOrWhiteSpace(ActivityTrackAPI + ""))
+                {
+                    Utils.ShowDialog("Activity Track API is not set. Please go to Menu(...) -> Update APIs and set it.");
+                    return;
+                }
+                await HitPostAsync(ActivityTrackAPI + "", activityEvent);
+            }
+            catch (Exception ex)
+            {
+                await Utils.ShowDialogAsync(ex.ToString());
             }
         }
 

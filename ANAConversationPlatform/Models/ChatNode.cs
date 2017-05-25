@@ -23,6 +23,7 @@ namespace ANAConversationPlatform.Models
         public string ApiUrl { get; set; } = null;
         public string NextNodeId { get; set; } = null;
         public string[] RequiredVariables { get; set; } = null;
+        public string GroupName { get; set; }
     }
 
     public enum NodeTypeEnum
