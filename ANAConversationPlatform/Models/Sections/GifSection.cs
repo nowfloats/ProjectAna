@@ -18,5 +18,7 @@
 		public GifSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Gif, delayInMs)
 		{
 		}
+
+        public GifSection() { }
 	}
 }

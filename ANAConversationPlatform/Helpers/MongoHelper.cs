@@ -91,9 +91,6 @@ namespace ANAConversationPlatform.Helpers
                         //Adding Header Text
                         Content nodeContent = Contents.GetFor(chatNode);
 
-                        if (nodeContent != null)
-                            chatNode.HeaderText = nodeContent.NodeHeaderText;
-
                         BsonArray sectionBsonArray = node.GetValue("Sections").AsBsonArray;
                         foreach (BsonDocument sectionBsonDocument in sectionBsonArray)
                         {

@@ -22,5 +22,7 @@
 		}
 
         public ImageSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Image, delayInMs) { }
+
+        public ImageSection() { }
 	}
 }

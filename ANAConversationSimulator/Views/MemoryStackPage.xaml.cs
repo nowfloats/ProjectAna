@@ -32,5 +32,15 @@ namespace ANAConversationSimulator.Views
         {
             MemoryStack = Utils.LocalStore.ToList();
         }
+
+        public async void ClearMemoryStack()
+        {
+            Utils.LocalStore.Clear();
+            Utils.InitMemoryStack();
+
+            await Utils.ShowDialogAsync("Cleared");
+            if (Frame.CanGoBack)
+                Frame.GoBack();
+        }
     }
 }

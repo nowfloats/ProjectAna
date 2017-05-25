@@ -2,6 +2,8 @@
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
@@ -34,6 +36,12 @@ namespace ANAConversationSimulator.Helpers
                     _localStore = ApplicationData.Current.LocalSettings.CreateContainer("LOCAL_STORE", ApplicationDataCreateDisposition.Always).Values;
                 return _localStore;
             }
+        }
+
+        public static void InitMemoryStack()
+        {
+            if (!Utils.LocalStore.ContainsKey("DEVICE_ID"))
+                Utils.LocalStore["DEVICE_ID"] = Utils.DeviceId;
         }
 
         public static void ShowDialog(string txt)
@@ -161,10 +169,11 @@ namespace ANAConversationSimulator.Helpers
             get
             {
                 if (_deviceId == null)
-                    _deviceId = GetDeviceId();
+                    _deviceId = CalculateMD5Hash(GetDeviceId());
                 return _deviceId;
             }
         }
+
         private static string GetDeviceId()
         {
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.System.Profile.HardwareIdentification"))
@@ -177,6 +186,17 @@ namespace ANAConversationSimulator.Helpers
                 return BitConverter.ToString(bytes).Replace("-", "");
             }
             return "DEVICE-ID-NOT-FOUND";
+        }
+
+        public static string CalculateMD5Hash(string input)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
+            var sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+            return sb.ToString();
         }
     }
 

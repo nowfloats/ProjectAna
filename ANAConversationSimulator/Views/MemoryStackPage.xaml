@@ -25,6 +25,9 @@
                     <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" />
                 </Grid>
             </controls:PageHeader.Content>
+            <controls:PageHeader.SecondaryCommands>
+                <AppBarButton Click="{x:Bind ClearMemoryStack}" Label="Clear Memory Stack" />
+            </controls:PageHeader.SecondaryCommands>
         </controls:PageHeader>
         <ListView Grid.Row="1" ItemsSource="{Binding MemoryStack}" HorizontalAlignment="Stretch" >
             <ListView.ItemContainerStyle>

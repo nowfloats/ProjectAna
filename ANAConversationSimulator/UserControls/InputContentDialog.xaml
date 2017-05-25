@@ -11,9 +11,12 @@
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
-    <StackPanel>
-        <TextBox Text="{Binding ChatFlowAPI, Mode=TwoWay}" Header="Chat Flow API" Margin="0,10,0,0"/>
-        <TextBox Text="{Binding UploadFileAPI, Mode=TwoWay}" Header="Upload File API" Margin="0,10,0,0"/>
-        <TextBox Text="{Binding ActivityTrackAPI, Mode=TwoWay}" Header="Activity Track API" Margin="0,10,0,0"/>
-    </StackPanel>
+    <ScrollViewer>
+        <StackPanel>
+            <TextBox Text="{Binding ChatFlowAPI, Mode=TwoWay}" Header="Chat Flow API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding UploadFileAPI, Mode=TwoWay}" Header="Upload File API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding ActivityTrackAPI, Mode=TwoWay}" Header="Activity Track API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding SocketServer, Mode=TwoWay}" Header="Socket Server" Margin="0,10,0,0"/>
+        </StackPanel>
+    </ScrollViewer>
 </ContentDialog>

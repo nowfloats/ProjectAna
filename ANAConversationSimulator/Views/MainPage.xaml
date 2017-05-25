@@ -26,6 +26,8 @@
                 <AppBarButton Click="{x:Bind ViewModel.Reset}" Label="Reset" />
                 <AppBarButton Click="{x:Bind ViewModel.UpdateAPI}" Label="Update APIs" />
                 <AppBarButton Click="{x:Bind ViewModel.ShowMemoryStack}" Label="Show Memory Stack" />
+                <AppBarButton Click="{x:Bind ViewModel.AgentChat}" Label="Agent Chat" />
+                
             </controls:PageHeader.SecondaryCommands>
         </controls:PageHeader>
         <Grid x:Name="ContentGrid" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="pageHeader" Background="White">

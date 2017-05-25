@@ -19,8 +19,10 @@ namespace ANAConversationSimulator.UserControls
                 ChatFlowAPI = "http://<your-server.com>/api/Conversation/Chat";
             if (string.IsNullOrWhiteSpace(UploadFileAPI))
                 UploadFileAPI = "http://<your-server.com>/api/Services/ReceiveFile?fileName={fileName}";
-            if(string.IsNullOrWhiteSpace(ActivityTrackAPI))
+            if (string.IsNullOrWhiteSpace(ActivityTrackAPI))
                 ActivityTrackAPI = "http://<your-server.com>/api/Activity/Track";
+            if (string.IsNullOrWhiteSpace(SocketServer))
+                SocketServer = "http://<your-socket-server.com>/";
         }
 
         public string ChatFlowAPI
@@ -43,6 +45,14 @@ namespace ANAConversationSimulator.UserControls
             set { SetValue(ActivityTrackAPIProperty, value); }
         }
         public static readonly DependencyProperty ActivityTrackAPIProperty = DependencyProperty.Register("ActivityTrackAPI", typeof(string), typeof(InputContentDialog), new PropertyMetadata(null));
+
+        public string SocketServer
+        {
+            get { return (string)GetValue(SocketServerProperty); }
+            set { SetValue(SocketServerProperty, value); }
+        }
+
+        public static readonly DependencyProperty SocketServerProperty = DependencyProperty.Register("SocketServer", typeof(string), typeof(InputContentDialog), new PropertyMetadata(null));
 
         public bool Result = false;
         private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)

@@ -2,6 +2,7 @@
 {
     public class Button : BaseEntity
     {
+        public Button() { }
         public Button(string id = "", string buttonName = "", string buttonText = "", EmotionEnum emotion = EmotionEnum.Cool, ButtonTypeEnum buttonType = ButtonTypeEnum.None, string nextNodeId = "", bool defaultButton = false, bool hidden = false, string variableValue = "")
         {
             this._id = id;

@@ -18,5 +18,7 @@
 		public UrlSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Link, delayInMs)
 		{
 		}
+
+        public UrlSection() { }
 	}
 }

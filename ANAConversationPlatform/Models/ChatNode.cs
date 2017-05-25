@@ -5,13 +5,13 @@ namespace ANAConversationPlatform.Models
 {
     public class ChatNode
     {
+        public ChatNode() { }
         public ChatNode(string id)
         {
             this.Id = id;
         }
 
         public string Name { get; set; } = null;
-        public string HeaderText { get; set; } = null;
         public string Id { get; set; }
         public EmotionEnum Emotion { get; set; }
         public int TimeoutInMs { get; set; }

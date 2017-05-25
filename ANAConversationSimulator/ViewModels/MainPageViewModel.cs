@@ -14,6 +14,10 @@ using Windows.UI.Xaml;
 using Windows.ApplicationModel;
 using ANAConversationSimulator.Helpers;
 using ANAConversationSimulator.UserControls;
+using Quobject.SocketIoClientDotNet.Client;
+using System.Diagnostics;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 
 namespace ANAConversationSimulator.ViewModels
 {
@@ -23,6 +27,8 @@ namespace ANAConversationSimulator.ViewModels
         public MainPageViewModel()
         {
             CurrentInstance = this;
+
+            Utils.InitMemoryStack();
         }
 
         public string PageTitle => $"{Package.Current.DisplayName} {Utils.VersionDisplay()}";
@@ -66,6 +72,7 @@ namespace ANAConversationSimulator.ViewModels
         public async void StartChatting()
         {
             ClearChatThread();
+            SetupSocketConnection();
             ToggleTyping(true);
             await LoadNodesAsync();
             if (chatNodes == null || chatNodes.Count == 0)
@@ -77,11 +84,15 @@ namespace ANAConversationSimulator.ViewModels
         public async void ProcessNode(JToken node, JToken section = null)
         {
             if (node == null) return;
-            ClearButtons();
+            ClearButtonTimer();
+
             //Replaceing verbs
             node = JToken.Parse(VerbProcessor.Process(node.ToString()));
 
             var parsedNode = node.ToObject<ChatNode>();
+            if (parsedNode.Buttons != null && parsedNode.Buttons.Count > 0)
+                ClearButtons();
+
             if (parsedNode.NodeType == NodeTypeEnum.ApiCall)
             {
                 ToggleTyping(true);
@@ -89,7 +100,12 @@ namespace ANAConversationSimulator.ViewModels
                 {
                     var paramDict = new Dictionary<string, object>();
                     foreach (var reqParam in parsedNode.RequiredVariables)
-                        paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
+                    {
+                        if (reqParam == "HISTORY") //Custom Variable
+                            paramDict[reqParam] = ChatThread.Where(x => x.SectionType != SectionTypeEnum.Typing).ToArray();
+                        else
+                            paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
+                    }
                     var nextNodeId = parsedNode.NextNodeId; //Default
                     switch (parsedNode.ApiMethod.ToUpper())
                     {
@@ -129,6 +145,11 @@ namespace ANAConversationSimulator.ViewModels
                     Utils.ShowDialog(ex.ToString());
                     NavigateToNode(parsedNode.NextNodeId);
                 }
+            }
+            else if (node["Sections"] == null || node["Sections"].Children().Count() == 0)
+            {
+                ToggleTyping(false);
+                await ProcessButtonsAsync(node);
             }
             else if (node["Sections"] != null && node["Sections"].Children().Count() > 0)
             {
@@ -214,26 +235,33 @@ namespace ANAConversationSimulator.ViewModels
                 }
             }
         }
-
-        public void ClearButtons()
+        public void ClearButtonTimer()
         {
-            CurrentClickButtons.Clear();
-            CurrentTextInputButtons.Clear();
             if (buttonTimeoutTimer != null)
             {
                 buttonTimeoutTimer.Stop();
                 buttonTimeoutTimer = null;
             }
         }
+        public void ClearButtons()
+        {
+            CurrentClickButtons.Clear();
+            CurrentTextInputButtons.Clear();
+        }
         public void ClearChatThread()
         {
             ChatThread.Clear();
+            ClearButtonTimer();
             ClearButtons();
         }
         public async Task ProcessButtonsAsync(JToken node)
         {
-            ClearButtons();
+            ClearButtonTimer();
             var parsedNode = node.ToObject<ChatNode>();
+            if (parsedNode.Buttons == null || parsedNode.Buttons.Count == 0)
+                return;
+
+            ClearButtons();
             var allButtons = node["Buttons"].ToObject<List<Button>>();
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
             {
@@ -293,6 +321,7 @@ namespace ANAConversationSimulator.ViewModels
             sec.Hidden = false;
             if (sec is TextSection textSec)
                 textSec.Text = VerbProcessor.Process(textSec.Text);
+            sec.Sno = (ChatThread.Count + 1);
             ChatThread.Add(sec);
         }
         public void AddIncommingSection(Section sec)
@@ -303,6 +332,7 @@ namespace ANAConversationSimulator.ViewModels
             if (sec is TextSection textSec)
                 textSec.Text = VerbProcessor.Process(textSec.Text);
 
+            sec.Sno = (ChatThread.Count + 1);
             ChatThread.Add(sec);
         }
         public async Task<bool> PrecacheSection(Section sec)
@@ -355,12 +385,14 @@ namespace ANAConversationSimulator.ViewModels
         {
             Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
             Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
+            Utils.APISettings.Values.TryGetValue("SocketServer", out object SocketServer);
 
             InputContentDialog icd = new InputContentDialog()
             {
                 ChatFlowAPI = currentAPI,
                 UploadFileAPI = UploadFileAPI + "",
-                ActivityTrackAPI = ActivityTrackAPI + ""
+                ActivityTrackAPI = ActivityTrackAPI + "",
+                SocketServer = SocketServer + ""
             };
 
             icd.Closed += (s, e) =>
@@ -370,12 +402,68 @@ namespace ANAConversationSimulator.ViewModels
                     Utils.APISettings.Values["API"] = icd.ChatFlowAPI;
                     Utils.APISettings.Values["UploadFileAPI"] = icd.UploadFileAPI;
                     Utils.APISettings.Values["ActivityTrackAPI"] = icd.ActivityTrackAPI;
+                    Utils.APISettings.Values["SocketServer"] = icd.SocketServer;
 
                     Reset();
                 }
             };
             ToggleTyping(false);
             await icd.ShowAsync();
+        }
+        #endregion
+
+        #region Agent Chat
+        public void AgentChat()
+        {
+            var first = chatNodes.FirstOrDefault(x => x["Id"] + "" == "INIT_CHAT_NODE");
+            if (first != null)
+            {
+                ProcessNode(first);
+            }
+            else
+            {
+                Utils.ShowDialog("Chat Init node not found");
+            }
+        }
+
+        private Socket socket;
+        public void SetupSocketConnection()
+        {
+            if (socket != null)
+                socket.Close();
+            Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
+            if (string.IsNullOrWhiteSpace(socketServer + ""))
+            {
+                Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
+                return;
+            }
+            socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
+
+            socket.On(Socket.EVENT_CONNECT, () =>
+            {
+                Debug.WriteLine("Connected");
+                socket.Emit("join", Utils.DeviceId);
+            });
+
+            socket.On(Socket.EVENT_DISCONNECT, () =>
+            {
+                Debug.WriteLine("Disconnected");
+            });
+
+            socket.On(Socket.EVENT_MESSAGE, (data) =>
+            {
+                var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
+                Debug.WriteLine(dataString);
+
+                Dispatcher.Dispatch(() =>
+                {
+                    if (data is JObject jData)
+                    {
+                        chatNodes.Add(jData);
+                        ProcessNode(jData);
+                    }
+                });
+            });
         }
         #endregion
     }
