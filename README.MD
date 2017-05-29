@@ -69,7 +69,7 @@ Web & Messenger SDK
 
 ----------
 
-##Agent Chat
+## Agent Chat
 The ability to switch from a predefined structured flow to a live chat agent is now part of ANA Platform. This can be used if users are stuck at some point in the chat flow due to lack of clarity or they want some manual assistance.
 
 1. **Pre-requisites**:
