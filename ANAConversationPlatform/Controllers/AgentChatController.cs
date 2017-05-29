@@ -42,7 +42,6 @@ namespace ANAConversationPlatform.Controllers
             try
             {
                 var merchant = new RocketChatSDK(history.CHAT_USER_ID, history.CHAT_USER_TOKEN);
-                var parsedHistory = history.HISTORY.ToObject<List<Section>>();
 
                 foreach (var section in history.HISTORY.OrderBy(x => (int)x["Sno"]))
                 {
