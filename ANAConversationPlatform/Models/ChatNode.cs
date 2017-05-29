@@ -5,13 +5,13 @@ namespace ANAConversationPlatform.Models
 {
     public class ChatNode
     {
+        public ChatNode() { }
         public ChatNode(string id)
         {
             this.Id = id;
         }
 
         public string Name { get; set; } = null;
-        public string HeaderText { get; set; } = null;
         public string Id { get; set; }
         public EmotionEnum Emotion { get; set; }
         public int TimeoutInMs { get; set; }
@@ -23,6 +23,7 @@ namespace ANAConversationPlatform.Models
         public string ApiUrl { get; set; } = null;
         public string NextNodeId { get; set; } = null;
         public string[] RequiredVariables { get; set; } = null;
+        public string GroupName { get; set; }
     }
 
     public enum NodeTypeEnum

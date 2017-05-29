@@ -1,10 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using ANAConversationSimulator.Models;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System.Profile;
 using Windows.UI.Popups;
 
 namespace ANAConversationSimulator.Helpers
@@ -31,6 +36,12 @@ namespace ANAConversationSimulator.Helpers
                     _localStore = ApplicationData.Current.LocalSettings.CreateContainer("LOCAL_STORE", ApplicationDataCreateDisposition.Always).Values;
                 return _localStore;
             }
+        }
+
+        public static void InitMemoryStack()
+        {
+            if (!Utils.LocalStore.ContainsKey("DEVICE_ID"))
+                Utils.LocalStore["DEVICE_ID"] = Utils.DeviceId;
         }
 
         public static void ShowDialog(string txt)
@@ -119,6 +130,73 @@ namespace ANAConversationSimulator.Helpers
             {
                 ShowDialog("Unable to load Config.\r\n\r\nMessage: " + ex.Message);
             }
+        }
+
+        public static ChatActivityEvent GetViewEvent(string nodeId, string userId)
+        {
+            return new ChatActivityEvent
+            {
+                EventCategory = "ANA_CHAT",
+                EventChannel = "ANA_SIM_WIN",
+                NodeId = nodeId,
+                EventName = "VIEW",
+                UserId = userId,
+                EventDateTime = DateTime.UtcNow,
+            };
+        }
+        public static ChatActivityEvent GetClickEvent(string nodeId, string userId, string buttonId, string buttonLabel, Dictionary<string, string> userData)
+        {
+            return new ChatActivityEvent
+            {
+                EventCategory = "ANA_CHAT",
+                EventChannel = "ANA_SIM_WIN",
+                NodeId = nodeId,
+                EventName = "CLICK",
+                UserId = userId,
+                EventDateTime = DateTime.UtcNow,
+                EventData = new Dictionary<string, string>
+                {
+                    { "ButtonID", buttonId },
+                    { "ButtonLabel", buttonLabel },
+                },
+                UserData = userData
+            };
+        }
+
+        private static string _deviceId;
+        public static string DeviceId
+        {
+            get
+            {
+                if (_deviceId == null)
+                    _deviceId = CalculateMD5Hash(GetDeviceId());
+                return _deviceId;
+            }
+        }
+
+        private static string GetDeviceId()
+        {
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.System.Profile.HardwareIdentification"))
+            {
+                var token = HardwareIdentification.GetPackageSpecificToken(null);
+                var hardwareId = token.Id;
+                var dataReader = Windows.Storage.Streams.DataReader.FromBuffer(hardwareId);
+                byte[] bytes = new byte[hardwareId.Length];
+                dataReader.ReadBytes(bytes);
+                return BitConverter.ToString(bytes).Replace("-", "");
+            }
+            return "DEVICE-ID-NOT-FOUND";
+        }
+
+        public static string CalculateMD5Hash(string input)
+        {
+            var md5 = MD5.Create();
+            var inputBytes = Encoding.ASCII.GetBytes(input);
+            var hash = md5.ComputeHash(inputBytes);
+            var sb = new StringBuilder();
+            for (int i = 0; i < hash.Length; i++)
+                sb.Append(hash[i].ToString("X2"));
+            return sb.ToString();
         }
     }
 

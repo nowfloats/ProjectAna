@@ -16,7 +16,7 @@ namespace ANAConversationSimulator.Models.Chat
 
         public int DelayInMs { get; set; } = 0;
         public bool Hidden { get; set; } = false;
-
+        public int Sno { get; set; }
         public MessageDirection Direction { get; set; }
         public string Title { get; set; } = null;
         public string Caption { get; set; } = null;

@@ -4,6 +4,9 @@ using ANAConversationSimulator.Models.Chat;
 using System;
 using System.Linq;
 using System.Windows.Input;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Windows.System.Threading;
 
 namespace ANAConversationSimulator.Services.ChatInterfaceServices
 {
@@ -20,6 +23,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
         {
             if (parameter is Button button)
             {
+                var userData = new Dictionary<string, string>();
                 switch (button.ButtonType)
                 {
                     case ButtonTypeEnum.PostText:
@@ -32,6 +36,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                     case ButtonTypeEnum.GetText:
                         if (string.IsNullOrWhiteSpace(button.VariableValue)) return;
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
+                        userData[button.VariableName] = button.VariableValue;
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
@@ -43,6 +48,8 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                             return;
                         }
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
+                        userData[button.VariableName] = button.VariableValue;
+
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
@@ -55,6 +62,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                             return;
                         }
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, d.ToString());
+                        userData[button.VariableName] = d.ToString();
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + d.ToString() + button.PostfixText);
                         break;
@@ -66,6 +74,8 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                             return;
                         }
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
+                        userData[button.VariableName] = button.VariableValue;
+
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
@@ -77,6 +87,8 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                             return;
                         }
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, valueToSave.Key);
+                        userData[button.VariableName] = valueToSave.Key;
+
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
@@ -99,6 +111,15 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                                             ButtonActionHelper.HandleSaveTextInput("LNG", ad.Longitude.ToString());
                                             ButtonActionHelper.HandleSaveTextInput("STREET_ADDRESS", ad.StreetAddress);
 
+                                            #region User Data Fill
+                                            userData["CITY"] = ad.City;
+                                            userData["COUNTRY"] = ad.Country;
+                                            userData["PINCODE"] = ad.PinCode;
+                                            userData["LAT"] = ad.Latitude.ToString();
+                                            userData["LNG"] = ad.Longitude.ToString();
+                                            userData["STREET_ADDRESS"] = ad.StreetAddress;
+                                            #endregion
+
                                             if (!button.Hidden)
                                                 ButtonActionHelper.HandlePostTextToThread($"{ad.StreetAddress}\r\n\r\nCity: {ad.City}\r\nCountry: {ad.Country}\r\nPin: {ad.PinCode}");
                                             done = true;
@@ -115,8 +136,9 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                     case ButtonTypeEnum.GetImage:
                     case ButtonTypeEnum.GetAudio:
                     case ButtonTypeEnum.GetVideo:
-                        var image = await ButtonActionHelper.HandleSaveMediaInputAsync(button.VariableName, button.ButtonType);
-                        ButtonActionHelper.HandlePostMediaToThread(image, button.ButtonType);
+                        var mediaUrl = await ButtonActionHelper.HandleSaveMediaInputAsync(button.VariableName, button.ButtonType);
+                        userData[button.VariableName] = mediaUrl;
+                        ButtonActionHelper.HandlePostMediaToThread(mediaUrl, button.ButtonType);
                         break;
                     case ButtonTypeEnum.NextNode:
                         if (!button.Hidden)
@@ -133,8 +155,26 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         Utils.ShowDialog($"Button type: {button.ButtonType} not supported");
                         break;
                 }
+                trackViewEvent(button, userData);
                 ButtonActionHelper.NavigateToNode(button.NextNodeId);
             }
+        }
+
+        private async void trackViewEvent(Button button, Dictionary<string, string> userData)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    if (userData.Count == 0)
+                        userData = null;
+                    await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
+                }
+                catch (Exception ex)
+                {
+                    await Utils.ShowDialogAsync(ex.ToString());
+                }
+            });
         }
     }
 }

@@ -24,5 +24,7 @@
 		public VideoSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Video, delayInMs)
 		{
 		}
+
+        public VideoSection() { }
 	}
 }

@@ -22,5 +22,7 @@
 		public EmbeddedHtmlSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.EmbeddedHtml, delayInMs)
 		{
 		}
+
+        public EmbeddedHtmlSection() { }
 	}
 }

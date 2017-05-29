@@ -12,5 +12,7 @@
 		public TextSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Text, delayInMs)
 		{
 		}
+
+        public TextSection() { }
 	}
 }

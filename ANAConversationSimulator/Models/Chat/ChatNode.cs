@@ -23,6 +23,7 @@ namespace ANAConversationSimulator.Models.Chat
         public string[] RequiredVariables { get; set; } = null;
         public string NextNodeId { get; set; } = null;
         public bool IsStartNode { get; set; }
+        public string GroupName { get; set; }
     }
 
     public enum NodeTypeEnum

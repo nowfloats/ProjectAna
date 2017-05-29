@@ -2,6 +2,7 @@
 {
     public class AudioSection : Section
 	{
+        public AudioSection() { }
 		public AudioSection(string id, int delayInMs, string title, string caption, int durationInSeconds, AudioFormatEnum format, string url, string encodingType, bool downloadable, bool buffer, bool animateEmotion) : base(id, SectionTypeEnum.Audio, delayInMs)
 		{
 			this.Title = title;

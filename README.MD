@@ -67,6 +67,58 @@ Ability to switch to an agent within the chat and switch back! (Hybrid chat), We
 
 [![ProjectANA Sample Chat Flow](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)
 
+##Agent Chat
+The ability to switch from a predefined structured flow to a live chat agent is now part of ANA Platform. This can be used if users are stuck at some point in the chat flow due to lack of clarity or they want some manual assistance.
+
+1. **Pre-requisites**:
+ 
+	*[Rocket Chat](https://rocket.chat/) server*: Rocket Chat is a full flege open source chat application. This is used as the agent chat platform here. A running Rocket Chat Server with admin access is needed to configure Agent Chat. Follow their docs and setup your rocket chat server. Note down the server URL, admin username and password.
+
+2. **Agent Chat Setup**:
+ 
+	This process assumes you have already setup ANA without agent chat by following above instructions.
+
+	Setting up agent chat involves the following steps.
+ 
+	1. Setup LiveClientSockets Server:
+		1. Deploy the NodeJS project 'LiveClientSocketsManager' (included in the repo) on a server. The server can be same or different than the one ANA Platform is deployed on. 
+		2. *Note*: If you are not using IISNode to host it or you are not hosting it in IIS server, make sure the variables 'auth_username' and 'auth_password' are accessible via process.env to the node js code. IISNode does that automatically as these variables are defined in web.config
+		3. Once the code is deployed. Make note of two things..
+			1. Server URL: http://<your-domain.com>/
+			1. Basic Auth Base64:
+				1. Which is the base 64 of <auth_username>:<auth_password> of the values you set as in the web.config.
+				1. Default is agentchat:agentchat and its Basic Auth Base64 will be 'YWdlbnRjaGF0OmFnZW50Y2hhdA=='
+	2. Configure Rocket Chat:
+		1. Login to rocket chat with admin user.
+		2. Goto /admin/integrations
+			1. Create a new outgoing integration
+				1. This is basically setting up a web hook to notify ANA about a new message sent from Rocket Chat.
+			2. Set the fields of the integration as following
+				1. Event Trigger: Message Sent
+				2. Enabled: true
+				3. Channel: all_direct_messages
+				4. URLs: http://<your-ANA-domain.com>/api/AgentChat/CallbackReceivedFromRocketChatServerAsync
+				5. Impersonate: False
+				6. Post as: [Use any existing user]. This callback will not post anything using the call back response to this 'Post as' does not matter.
+		3. Goto /admin/Layout
+			1. Inside 'User Interface' Section, Set everything to true, mainly, 'Use Real Name' option. This will display the actual Name of the user in the rocket chat threads. It is picked up from "PERSON_NAME" variable from Memory Stack of at the simulator. Make sure it is present in the chat flow and is filled before switching to agent chat.
+		4. Create few users in rocket chat other than admin. They will be the users which agents have to login with. ANA automatically assigns agents to new chat requests, depending on availability.
+		5. Make another user account which will act as the default user account to which ANA will assign new incoming agent chat requests if none of the agents are available.
+	3. Configure ANA Platform:
+		1. Open appsettings-sample.json
+		2. Fill in all the new fields present in the json by the ones which you have noted above and move those settings to your existing appsettings.json file.
+	4. Setup the simulator:
+		1. Install the latest simulator app and open it.
+		2. Choose the Update APIs option from the top right options button (…)
+		3. Enter the sockets server URL in the specified field.
+		4. Update the Chat Flow URL to end with 'HybridChat' instead of 'Chat', which was previously the case.
+		4. Click Ok to save.
+	5. Trying out Agent Chat:
+		1. Login to a user in rocket chat. Make sure the status is online if the user is not the default agent chat user!
+		2. Open the simulator app. Assuming you have your own chat flow setup and working, simulator will start the structured chat as usual. After completing 1-2 steps of the chat flow, to switch to an agent, click the Agent Chat option in the top right options menu. 
+		3. If everything is working fine, the current chat flow history should come into the rocket chat thread, text input should appear in the simulator. From now on, Simulator and Rocket chat user can chat two ways. Whatever typed in the simulator will be sent to the rocket chat user and vice versa. 
+		4. Sending the chat flow user(simulator user) back to a structured flow from agent chat is a planned feature comming soon.
+
 ## Note
 
 This is just the setup documentation. ANA Conversation Platform has much more scope than predefined flows. You can call your own APIs from the chat nodes. Create and store variables at the mobile client app, use them to take

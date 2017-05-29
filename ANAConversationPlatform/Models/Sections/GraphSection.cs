@@ -24,6 +24,8 @@ namespace ANAConversationPlatform.Models.Sections
 		public GraphSection(string id, int delayInMs = 0) : base(id, SectionTypeEnum.Graph, delayInMs)
 		{ 
 		}
+
+        public GraphSection() { }
 	}
 
 	public enum GraphTypeEnum
@@ -122,7 +124,7 @@ namespace ANAConversationPlatform.Models.Sections
 		{
 			this.CoordinateText = coordinateText;
 		}
-
+        public Coordinate() { }
 		public string X { get; private set; }
 		public string Y { get; private set; }
 		public string CoordinateText { get; private set; }

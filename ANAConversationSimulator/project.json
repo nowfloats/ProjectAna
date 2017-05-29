@@ -5,6 +5,7 @@
     "Microsoft.Xaml.Behaviors.Uwp.Managed": "2.0.0",
     "Newtonsoft.Json": "10.0.2",
     "RichTextBlock.Html2Xaml": "1.2.0",
+    "SocketIoClientDotNet": "0.9.13",
     "System.ValueTuple": "4.3.0",
     "Template10": "1.1.12",
     "XamlAnimatedGif": "1.1.8"

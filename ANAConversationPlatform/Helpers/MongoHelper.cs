@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using ANAConversationPlatform.Models.Activity;
 
 namespace ANAConversationPlatform.Helpers
 {
@@ -44,9 +45,14 @@ namespace ANAConversationPlatform.Helpers
         {
             get
             {
-                if (_contents == null)
-                    _contents = GetContentCollection();
-                return _contents;
+                if (Settings.CacheContent)
+                {
+                    if (_contents == null)
+                        _contents = GetContentCollection();
+                    return _contents;
+                }
+                else
+                    return GetContentCollection();
             }
         }
 
@@ -84,9 +90,6 @@ namespace ANAConversationPlatform.Helpers
 
                         //Adding Header Text
                         Content nodeContent = Contents.GetFor(chatNode);
-
-                        if (nodeContent != null)
-                            chatNode.HeaderText = nodeContent.NodeHeaderText;
 
                         BsonArray sectionBsonArray = node.GetValue("Sections").AsBsonArray;
                         foreach (BsonDocument sectionBsonDocument in sectionBsonArray)
@@ -266,6 +269,15 @@ namespace ANAConversationPlatform.Helpers
                     break;
             }
             return sectObj;
+        }
+
+        public static void InsertActivityEvent(ChatActivityEvent activityEvent)
+        {
+            if (activityEvent != null && string.IsNullOrWhiteSpace(activityEvent._id))
+                activityEvent._id = ObjectId.GenerateNewId().ToString();
+
+            var coll = ChatDB.GetCollection<ChatActivityEvent>(Settings.ActivityEventLogCollectionName);
+            coll.InsertOne(activityEvent);
         }
     }
 }
