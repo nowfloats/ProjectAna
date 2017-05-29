@@ -103,23 +103,23 @@ The ability to switch from a predefined structured flow to a live chat agent is 
 				5. Impersonate: False
 				6. Post as: [Use any existing user]. This callback will not post anything using the call back response to this 'Post as' does not matter.
 		3. Goto /admin/Layout
-			1. Inside 'User Interface' Section, Set everything to true, mainly, 'Use Real Name' option. This will display the actual Name of the user in the rocket chat threads. It is picked up from "PERSON_NAME" variable from Memory Stack of at the simulator. Make sure it is present in the chat flow and is filled before switching to agent chat.
+			1. Inside 'User Interface' section, set everything to true, mainly, 'Use Real Name' option. This will display the actual name of the user in the rocket chat threads. It is picked up from 'PERSON_NAME' variable from Memory Stack of the simulator. Make sure 'PERSON_NAME' is captured in your chat flow before switching to agent chat.
 		4. Create few users in rocket chat other than admin. They will be the users which agents have to login with. ANA automatically assigns agents to new chat requests, depending on availability.
-		5. Make another user account which will act as the default user account to which ANA will assign new incoming agent chat requests if none of the agents are available.
+		5. Make another user account which will act as the default user to which ANA will assign new incoming agent chat requests if none of the agents are available.
 	3. Configure ANA Platform:
 		1. Open appsettings-sample.json
 		2. Fill in all the new fields present in the json by the ones which you have noted above and move those settings to your existing appsettings.json file.
 	4. Setup the simulator:
 		1. Install the latest simulator app and open it.
-		2. Choose the Update APIs option from the top right options button (…)
-		3. Enter the sockets server URL in the specified field.
-		4. Update the Chat Flow URL to end with 'HybridChat' instead of 'Chat', which was previously the case.
+		2. Choose the 'Update APIs' option from the top right options button (…).
+		3. Enter the above noted sockets server URL in the specified field.
+		4. Update the 'Chat Flow URL' to end with 'HybridChat' instead of 'Chat', which was previously the case.
 		4. Click Ok to save.
 	5. Trying out Agent Chat:
 		1. Login to a user in rocket chat. Make sure the status is online if the user is not the default agent chat user!
-		2. Open the simulator app. Assuming you have your own chat flow setup and working, simulator will start the structured chat as usual. After completing 1-2 steps of the chat flow, to switch to an agent, click the Agent Chat option in the top right options menu. 
-		3. If everything is working fine, the current chat flow history should come into the rocket chat thread, text input should appear in the simulator. From now on, Simulator and Rocket chat user can chat two ways. Whatever typed in the simulator will be sent to the rocket chat user and vice versa. 
-		4. Sending the chat flow user(simulator user) back to a structured flow from agent chat is a planned feature comming soon.
+		2. Open the simulator app. Assuming you have your own chat flow setup and working, simulator will start the structured chat as usual. After completing 1-2 steps of your chat flow, to switch to an agent, click the 'Agent Chat' option in the top right options menu. 
+		3. If everything is working fine, the current chat flow history should come into the rocket chat thread, text input box should appear in the simulator. From now on, Simulator and Rocket Chat user can chat two ways. Whatever typed in the simulator will be sent to the rocket chat user and vice versa. 
+		4. Sending the chat flow user (simulator user) back to a structured flow from agent chat is a planned feature comming soon.
 
 ----------
 
