@@ -9,7 +9,7 @@ Android & iOS SDK available on request.
 
 **Launching soon:**
  
-Ability to switch to an agent within the chat and switch back! (Hybrid chat), Web & Messenger SDK
+Web & Messenger SDK
 
 ----------
 
@@ -67,6 +67,8 @@ Ability to switch to an agent within the chat and switch back! (Hybrid chat), We
 
 [![ProjectANA Sample Chat Flow](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)
 
+----------
+
 ##Agent Chat
 The ability to switch from a predefined structured flow to a live chat agent is now part of ANA Platform. This can be used if users are stuck at some point in the chat flow due to lack of clarity or they want some manual assistance.
 
@@ -118,6 +120,8 @@ The ability to switch from a predefined structured flow to a live chat agent is 
 		2. Open the simulator app. Assuming you have your own chat flow setup and working, simulator will start the structured chat as usual. After completing 1-2 steps of the chat flow, to switch to an agent, click the Agent Chat option in the top right options menu. 
 		3. If everything is working fine, the current chat flow history should come into the rocket chat thread, text input should appear in the simulator. From now on, Simulator and Rocket chat user can chat two ways. Whatever typed in the simulator will be sent to the rocket chat user and vice versa. 
 		4. Sending the chat flow user(simulator user) back to a structured flow from agent chat is a planned feature comming soon.
+
+----------
 
 ## Note
 
