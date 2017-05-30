@@ -25,6 +25,9 @@ namespace ANAConversationSimulator.Models.Chat
         public string PrefixText { get; set; }
         public string PostfixText { get; set; }
 
+        public string APIResponseMatchKey { get; set; }
+        public string APIResponseMatchValue { get; set; }
+
         private Dictionary<string, string> _items;
         /// <summary>
         /// Contains visible/filtered items in case of <see cref="ButtonTypeEnum.GetItemFromSource"/>

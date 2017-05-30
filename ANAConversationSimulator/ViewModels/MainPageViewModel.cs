@@ -114,17 +114,25 @@ namespace ANAConversationSimulator.ViewModels
                                 var query = string.Join("&", paramDict.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value + "")}"));
                                 var api = string.IsNullOrWhiteSpace(query) ? parsedNode.ApiUrl : parsedNode.ApiUrl + "?" + query;
 
-                                var resp = await APIHelper.HitAsync<Dictionary<string, object>>(api);
-                                if (resp.ContainsKey("NextNodeId"))
+                                var resp = await APIHelper.HitAsync<JObject>(api);
+
+                                if (!string.IsNullOrWhiteSpace(resp["NextNodeId"] + ""))
                                     nextNodeId = resp["NextNodeId"] + "";
-                                ButtonActionHelper.HandleSaveMultiple(resp);
+                                    
+                                ButtonActionHelper.HandleSaveMultiple(resp.ToObject<Dictionary<string, object>>());
+                                var apiNextNodeId = ExtractNextNodeIdFromAPIResp(parsedNode, resp);
+                                if (!string.IsNullOrWhiteSpace(apiNextNodeId))
+                                    nextNodeId = apiNextNodeId;
                             }
                             break;
                         case "POST":
                             {
-                                var resp = await APIHelper.HitPostAsync<Dictionary<string, object>, Dictionary<string, object>>(parsedNode.ApiUrl, paramDict);
-                                if (resp.ContainsKey("NextNodeId"))
+                                var resp = await APIHelper.HitPostAsync<Dictionary<string, object>, JObject>(parsedNode.ApiUrl, paramDict);
+                                if (!string.IsNullOrWhiteSpace(resp["NextNodeId"] + ""))
                                     nextNodeId = resp["NextNodeId"] + "";
+                                var apiNextNodeId = ExtractNextNodeIdFromAPIResp(parsedNode, resp);
+                                if (!string.IsNullOrWhiteSpace(apiNextNodeId))
+                                    nextNodeId = apiNextNodeId;
                             }
                             break;
                         default:
@@ -352,7 +360,16 @@ namespace ANAConversationSimulator.ViewModels
             if (!string.IsNullOrWhiteSpace(nextNodeId))
                 ProcessNode(GetNodeById(nextNodeId));
         }
-
+        private string ExtractNextNodeIdFromAPIResp(ChatNode node, JObject resp)
+        {
+            if (node.Buttons == null)
+                return null;
+            return node.Buttons.FirstOrDefault(btn =>
+                !string.IsNullOrWhiteSpace(btn.APIResponseMatchKey) &&
+                resp[btn.APIResponseMatchKey] != null &&
+                resp.SelectToken(btn.APIResponseMatchKey) + "" == btn.APIResponseMatchValue + "")
+                    ?.NextNodeId;
+        }
         #region Default
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {

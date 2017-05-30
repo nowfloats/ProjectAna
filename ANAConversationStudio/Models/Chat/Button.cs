@@ -105,6 +105,36 @@ namespace ANAConversationStudio.Models.Chat
         #endregion
 
         #region Misc
+        private string _APIResponseMatchKey;
+        [Category("Misc")]
+        public string APIResponseMatchKey
+        {
+            get { return _APIResponseMatchKey; }
+            set
+            {
+                if (_APIResponseMatchKey != value)
+                {
+                    _APIResponseMatchKey = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _APIResponseMatchValue;
+        [Category("Misc")]
+        public string APIResponseMatchValue
+        {
+            get { return _APIResponseMatchValue; }
+            set
+            {
+                if (_APIResponseMatchValue != value)
+                {
+                    _APIResponseMatchValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _DeepLinkUrl;
         [Category("Misc")]
         public string DeepLinkUrl
