@@ -261,4 +261,85 @@ namespace ANAConversationStudio.Models
             }
         }
     }
+
+    public class CarouselButtonContent : BaseContent
+    {
+        private string _CarouselButtonId;
+        [ReadOnly(true)]
+        public string CarouselButtonId
+        {
+            get { return _CarouselButtonId; }
+            set
+            {
+                if (_CarouselButtonId != value)
+                {
+                    _CarouselButtonId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _ButtonText;
+        [Category("Important")]
+        public string ButtonText
+        {
+            get { return _ButtonText; }
+            set
+            {
+                if (_ButtonText != value)
+                {
+                    _ButtonText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+    }
+
+    public class CarouselItemContent : BaseContent
+    {
+        private string _CarouselItemId;
+        [ReadOnly(true)]
+        public string CarouselItemId
+        {
+            get { return _CarouselItemId; }
+            set
+            {
+                if (_CarouselItemId != value)
+                {
+                    _CarouselItemId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Title;
+        [Category("Important")]
+        public string Title
+        {
+            get { return _Title; }
+            set
+            {
+                if (_Title != value)
+                {
+                    _Title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Caption;
+        [Category("Important")]
+        public string Caption
+        {
+            get { return _Caption; }
+            set
+            {
+                if (_Caption != value)
+                {
+                    _Caption = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+    }
 }

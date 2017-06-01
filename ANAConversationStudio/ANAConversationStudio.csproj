@@ -131,6 +131,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\ChatElementCollectionEditor.cs" />
     <Compile Include="Controls\ChatNodeCollectionEditor.cs" />
     <Compile Include="Controls\ChatContentCollectionControl.cs" />
     <Compile Include="Controls\ChatNodeCollectionControl.cs" />
@@ -138,6 +139,9 @@
     <Compile Include="Helpers\Shortcuts.cs" />
     <Compile Include="Models\LayoutPoint.cs" />
     <Compile Include="UIHelpers\NullToBoolConverter.cs" />
+    <Compile Include="Views\ChatElementCollectionEditorWindow.xaml.cs">
+      <DependentUpon>ChatElementCollectionEditorWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\DBConnectionManager.xaml.cs">
       <DependentUpon>DBConnectionManager.xaml</DependentUpon>
     </Compile>
@@ -166,6 +170,10 @@
     <Compile Include="UIHelpers\BindingProxy.cs" />
     <Compile Include="UIHelpers\NullToVisibilityConverter.cs" />
     <Compile Include="UIHelpers\BindingToTypeNameConverter.cs" />
+    <Page Include="Views\ChatElementCollectionEditorWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\DBConnectionManager.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

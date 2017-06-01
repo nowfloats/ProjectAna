@@ -67,6 +67,47 @@
             </StackPanel>
         </C4F:ChatBubble>
     </DataTemplate>
+    <DataTemplate x:Key="CarouselSectionChatBubbleTemplate">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+            <StackPanel Background="{StaticResource PaleWhiteBrush}">
+                <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" Foreground="Black" />
+                <ScrollViewer MaxHeight="300" HorizontalScrollBarVisibility="Auto" Padding="-5,0" VerticalScrollBarVisibility="Disabled">
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <ItemsStackPanel Orientation="Horizontal" Margin="0,0,0,20"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <Grid VerticalAlignment="Center" Padding="5" Margin="5" Background="White">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                        <RowDefinition Height="Auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Image Margin="5" Source="{Binding ImageUrl}" Visibility="{Binding ImageUrl, Converter={StaticResource C4FS2V}}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    <TextBlock Grid.Row="1" Text="{Binding Title}" Margin="5" TextAlignment="Center" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" Foreground="Black"/>
+                                    <TextBlock Grid.Row="2" Text="{Binding Caption}" Margin="5,5,5,10" TextAlignment="Center" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}" Style="{StaticResource CaptionTextStyle}"  Foreground="Black"/>
+                                    <ItemsControl Grid.Row="3" ItemsSource="{Binding Buttons}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Button HorizontalAlignment="Stretch" MinWidth="150" HorizontalContentAlignment="Stretch" Command="{Binding Action}" CommandParameter="{Binding}" Background="White" BorderBrush="Black" BorderThickness="1" Margin="2">
+                                                    <TextBlock Text="{Binding Text}" TextWrapping="Wrap" TextAlignment="Center" />
+                                                </Button>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <TextBlock Text="{Binding Caption}" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}" Style="{StaticResource CaptionTextStyle}"  Foreground="Black"/>
+            </StackPanel>
+        </C4F:ChatBubble>
+    </DataTemplate>
     <DataTemplate x:Key="VideoSectionChatBubbleTemplate">
         <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="300">

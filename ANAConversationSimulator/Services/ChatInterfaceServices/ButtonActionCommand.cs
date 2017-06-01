@@ -7,6 +7,7 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Windows.System.Threading;
+using ANAConversationSimulator.Models.Chat.Sections;
 
 namespace ANAConversationSimulator.Services.ChatInterfaceServices
 {
@@ -158,6 +159,31 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                 trackViewEvent(button, userData);
                 ButtonActionHelper.NavigateToNode(button.NextNodeId);
             }
+            else if (parameter is CarouselButton cButton)
+            {
+                var userData = new Dictionary<string, string>();
+                switch (cButton.Type)
+                {
+                    case CardButtonType.NextNode:
+                        if (!string.IsNullOrWhiteSpace(cButton.VariableName) && cButton.VariableValue != null) //VariableValue should be != null only
+                        {
+                            ButtonActionHelper.HandleSaveTextInput(cButton.VariableName, cButton.VariableValue);
+                            userData[cButton.VariableName] = cButton.VariableValue;
+                        }
+                        break;
+                    case CardButtonType.DeepLink:
+                        await ButtonActionHelper.HandleDeepLinkAsync(cButton.Url);
+                        break;
+                    case CardButtonType.OpenUrl:
+                        ButtonActionHelper.HandleOpenUrl(cButton.Url);
+                        break;
+                    default:
+                        Utils.ShowDialog($"Button type: {cButton.Type} not supported");
+                        break;
+                }
+                trackViewEvent(cButton, userData);
+                ButtonActionHelper.NavigateToNode(cButton.NextNodeId);
+            }
         }
 
         private async void trackViewEvent(Button button, Dictionary<string, string> userData)
@@ -169,6 +195,22 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                     if (userData.Count == 0)
                         userData = null;
                     await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
+                }
+                catch (Exception ex)
+                {
+                    await Utils.ShowDialogAsync(ex.ToString());
+                }
+            });
+        }
+        private async void trackViewEvent(CarouselButton cButton, Dictionary<string, string> userData)
+        {
+            await Task.Run(async () =>
+            {
+                try
+                {
+                    if (userData.Count == 0)
+                        userData = null;
+                    await APIHelper.TrackEvent(Utils.GetClickEvent(cButton.NodeId, Utils.DeviceId, cButton._id, cButton.Text, userData));
                 }
                 catch (Exception ex)
                 {

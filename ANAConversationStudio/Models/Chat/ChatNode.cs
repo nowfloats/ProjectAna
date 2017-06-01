@@ -55,7 +55,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private ObservableCollection<Section> _Sections = new ObservableCollection<Section>();
-        [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection))]
+        [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection), typeof(CarouselSection))]
         [Category("Important")]
         [PropertyOrder(3)]
         [Editor(typeof(ChatNodeCollectionEditor<Section>), typeof(ChatNodeCollectionEditor<Section>))]

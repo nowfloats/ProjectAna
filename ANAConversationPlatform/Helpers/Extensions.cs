@@ -23,6 +23,18 @@ namespace ANAConversationPlatform.Helpers
             return contentCollection.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.SectionId) && x.SectionId == section._id);
         }
 
+        public static Content GetFor(this List<Content> contentCollection, CarouselItem carouselItem)
+        {
+            if (string.IsNullOrWhiteSpace(carouselItem._id)) return null;
+            return contentCollection.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.CarouselItemId) && x.CarouselItemId == carouselItem._id);
+        }
+
+        public static Content GetFor(this List<Content> contentCollection, CarouselButton carouselBtn)
+        {
+            if (string.IsNullOrWhiteSpace(carouselBtn._id)) return null;
+            return contentCollection.FirstOrDefault(x => !string.IsNullOrWhiteSpace(x.CarouselButtonId) && x.CarouselButtonId == carouselBtn._id);
+        }
+
         public static Content GetFor(this List<Content> contentCollection, Button btn)
         {
             if (string.IsNullOrWhiteSpace(btn._id)) return null;

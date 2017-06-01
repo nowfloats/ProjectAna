@@ -159,58 +159,59 @@ namespace ANAConversationPlatform.Helpers
                     break;
 
                 case "graph":
-
-                    GraphSection gphObj = BsonSerializer.Deserialize<GraphSection>(sectionBsonDocument);
-
-                    Content docContent = Contents.GetFor(gphObj);
-                    if (docContent != null)
                     {
-                        gphObj.Caption = docContent.Caption;
+                        GraphSection gphObj = BsonSerializer.Deserialize<GraphSection>(sectionBsonDocument);
 
-                        gphObj.X.Label = docContent.XLabel;
-                        gphObj.Y.Label = docContent.YLabel;
-                    }
-                    gphObj.CoordinatesSet = new List<Coordinates>();
-                    BsonArray coordinateSetBsonArray = sectionBsonDocument.GetValue("CoordinatesSet").AsBsonArray;
-
-
-                    if (coordinateSetBsonArray != null)
-                        foreach (BsonDocument coordinateSetBsonDoc in coordinateSetBsonArray)
+                        Content docContent = Contents.GetFor(gphObj);
+                        if (docContent != null)
                         {
-                            var coordinateListId = coordinateSetBsonDoc.GetValue("CoordinateListId")?.ToString();
-                            if (!string.IsNullOrWhiteSpace(coordinateListId))
-                                continue;
+                            gphObj.Caption = docContent.Caption;
 
-                            var coordinatesObj = new Coordinates()
-                            {
-                                CoordinateListId = coordinateListId
-                            };
-
-                            var coordinateContent = Contents.GetFor(coordinatesObj);
-                            coordinatesObj.LegendName = coordinateContent?.CoordinateListLegend;
-
-                            if (coordinateSetBsonDoc.TryGetValue("CoordinateList", out BsonValue tempCoordinateList))
-                            {
-                                BsonArray coordinateListBsonArray = tempCoordinateList?.AsBsonArray;
-                                if (coordinateListBsonArray != null)
-                                    foreach (BsonDocument coordinateBsonDoc in coordinateListBsonArray)
-                                    {
-                                        string x = coordinateBsonDoc.GetValue("X")?.AsString;
-                                        string y = coordinateBsonDoc.GetValue("Y")?.AsString;
-
-                                        string coordinateText = coordinateContent?.CoordinateText;
-
-                                        if (string.IsNullOrWhiteSpace(coordinateText))
-                                            coordinatesObj.AddXYCoordinates(x, y);
-                                        else
-                                            coordinatesObj.AddXYCoordinates(x, y, coordinateText);
-
-                                        Debug.WriteLine(coordinatesObj.ToJson());
-                                    }
-                            }
-                            gphObj.CoordinatesSet.Add(coordinatesObj);
+                            gphObj.X.Label = docContent.XLabel;
+                            gphObj.Y.Label = docContent.YLabel;
                         }
-                    sectObj = gphObj;
+                        gphObj.CoordinatesSet = new List<Coordinates>();
+                        BsonArray coordinateSetBsonArray = sectionBsonDocument.GetValue("CoordinatesSet").AsBsonArray;
+
+
+                        if (coordinateSetBsonArray != null)
+                            foreach (BsonDocument coordinateSetBsonDoc in coordinateSetBsonArray)
+                            {
+                                var coordinateListId = coordinateSetBsonDoc.GetValue("CoordinateListId")?.ToString();
+                                if (!string.IsNullOrWhiteSpace(coordinateListId))
+                                    continue;
+
+                                var coordinatesObj = new Coordinates()
+                                {
+                                    CoordinateListId = coordinateListId
+                                };
+
+                                var coordinateContent = Contents.GetFor(coordinatesObj);
+                                coordinatesObj.LegendName = coordinateContent?.CoordinateListLegend;
+
+                                if (coordinateSetBsonDoc.TryGetValue("CoordinateList", out BsonValue tempCoordinateList))
+                                {
+                                    BsonArray coordinateListBsonArray = tempCoordinateList?.AsBsonArray;
+                                    if (coordinateListBsonArray != null)
+                                        foreach (BsonDocument coordinateBsonDoc in coordinateListBsonArray)
+                                        {
+                                            string x = coordinateBsonDoc.GetValue("X")?.AsString;
+                                            string y = coordinateBsonDoc.GetValue("Y")?.AsString;
+
+                                            string coordinateText = coordinateContent?.CoordinateText;
+
+                                            if (string.IsNullOrWhiteSpace(coordinateText))
+                                                coordinatesObj.AddXYCoordinates(x, y);
+                                            else
+                                                coordinatesObj.AddXYCoordinates(x, y, coordinateText);
+
+                                            Debug.WriteLine(coordinatesObj.ToJson());
+                                        }
+                                }
+                                gphObj.CoordinatesSet.Add(coordinatesObj);
+                            }
+                        sectObj = gphObj;
+                    }
 
                     break;
 
@@ -264,6 +265,32 @@ namespace ANAConversationPlatform.Helpers
                     sectObj = embeddedHtmlObj;
                     break;
 
+                case "carousel":
+                    var carouselObj = BsonSerializer.Deserialize<CarouselSection>(sectionBsonDocument);
+                    var carContent = Contents.GetFor(carouselObj);
+                    if (carContent != null)
+                    {
+                        carouselObj.Title = carContent.Title;
+                        carouselObj.Caption = carContent.Caption;
+                    }
+                    if (carouselObj.Items != null)
+                        foreach (var carItem in carouselObj.Items)
+                        {
+                            var content = Contents.GetFor(carItem);
+                            if (content != null)
+                            {
+                                carItem.Title = content.Title;
+                                carItem.Caption = content.Caption;
+                            }
+                            if (carItem.Buttons != null)
+                                foreach (var carBtn in carItem.Buttons)
+                                {
+                                    var carBtnContent = Contents.GetFor(carBtn);
+                                    carBtn.Text = carBtnContent?.ButtonText;
+                                }
+                        }
+                    sectObj = carouselObj;
+                    break;
                 default:
                     sectObj = null;
                     break;
