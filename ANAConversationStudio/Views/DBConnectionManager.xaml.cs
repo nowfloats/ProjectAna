@@ -26,7 +26,7 @@ namespace ANAConversationStudio.Views
         {
             InitializeComponent();
             this.Closing += DBConnectionManager_Closing;
-            CollectionControl.ItemsSource = databaseConnections;
+            CollectionControl.ItemsSource = databaseConnections.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<DatabaseConnection>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(DatabaseConnection) };
         }
@@ -85,9 +85,48 @@ namespace ANAConversationStudio.Views
 
         private void SaveClick(object sender, RoutedEventArgs e)
         {
-            Save();
+            if (Save())
+            {
+                HideConfirm = true;
+                Close();
+            }
+        }
+
+        private void CancelClick(object sender, RoutedEventArgs e)
+        {
             HideConfirm = true;
             Close();
+        }
+
+        private void SaveAndConnectClick(object sender, RoutedEventArgs e)
+        {
+            if (CollectionControl.SelectedItem as DatabaseConnection != null)
+            {
+                try
+                {
+                    if (!(CollectionControl.SelectedItem as DatabaseConnection).IsValid())
+                    {
+                        MessageBox.Show("The connection details are invalid. Please correct them and try again.", "Oops!");
+                        return;
+                    }
+                    MongoHelper.Current = new MongoHelper(CollectionControl.SelectedItem as DatabaseConnection);
+                    var connected = MainWindow.Current.ViewModel.LoadNodesFromDB();
+                    if (connected)
+                    {
+                        MainWindow.Current.Status("Chat flow loaded");
+                        if (Save())
+                        {
+                            HideConfirm = true;
+                            Close();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MongoHelper.Current = null;
+                    MainWindow.Current.Status("Unable to connect to the database");
+                }
+            }
         }
     }
 }

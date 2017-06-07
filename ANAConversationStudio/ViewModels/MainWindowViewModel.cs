@@ -545,15 +545,14 @@ namespace ANAConversationStudio.ViewModels
         {
             MongoHelper.Current.SaveChatNodes(this.Network.Nodes.Select(x => x.ChatNode).ToList());
         }
-        public void LoadNodesFromDB()
+        public bool LoadNodesFromDB()
         {
             try
             {
-
                 if (MongoHelper.Current == null)
                 {
                     MessageBox.Show("Database Connection is not yet selected.", "Oops!");
-                    return;
+                    return false;
                 }
                 
                 this.Network = new NetworkViewModel();
@@ -583,12 +582,14 @@ namespace ANAConversationStudio.ViewModels
                         }
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 if (!Utilities.IsDesignMode())
                     MessageBox.Show(ex.ToString(), "Initialization error");
             }
+            return false;
         }
 
         private void Connections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

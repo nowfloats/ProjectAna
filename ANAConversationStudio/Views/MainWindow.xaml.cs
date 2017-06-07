@@ -809,15 +809,21 @@ namespace ANAConversationStudio.Views
             }
         }
 
-        private void LoadSavedConnections()
+        private bool LoadFileMenuSavedConnections()
         {
             if (Utilities.Settings.SavedConnections.Count <= 0)
             {
                 SavedConnectionsFileMenu.IsEnabled = false;
-                return;
+                return false;
             }
             SavedConnectionsFileMenu.ItemsSource = Utilities.Settings.SavedConnections;
-            LoadConnection(Utilities.Settings.SavedConnections.First());
+            SavedConnectionsFileMenu.IsEnabled = true;
+            return true;
+        }
+        private void LoadSavedConnections()
+        {
+            if (LoadFileMenuSavedConnections())
+                LoadConnection(Utilities.Settings.SavedConnections.First());
         }
         public void Status(string txt)
         {
@@ -853,6 +859,7 @@ namespace ANAConversationStudio.Views
         {
             DBConnectionManager man = new DBConnectionManager(Utilities.Settings.SavedConnections);
             man.ShowDialog();
+            LoadFileMenuSavedConnections();
         }
         private void ResetEditors()
         {
