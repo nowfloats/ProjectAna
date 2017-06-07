@@ -34,6 +34,9 @@
 
         public string APIResponseMatchKey { get; set; }
         public string APIResponseMatchValue { get; set; }
+
+        public string ConfirmHeader { get; set; }
+
     }
     public enum ButtonTypeEnum
     {

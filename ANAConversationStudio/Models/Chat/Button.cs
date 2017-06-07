@@ -102,6 +102,22 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+
+        private string _ConfirmHeader;
+        [Category("For ButtonType Get[X]")]
+        public string ConfirmHeader
+        {
+            get { return _ConfirmHeader; }
+            set
+            {
+                if (_ConfirmHeader != value)
+                {
+                    _ConfirmHeader = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         #endregion
 
         #region Misc

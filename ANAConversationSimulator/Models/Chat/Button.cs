@@ -28,6 +28,8 @@ namespace ANAConversationSimulator.Models.Chat
         public string APIResponseMatchKey { get; set; }
         public string APIResponseMatchValue { get; set; }
 
+        public string ConfirmHeader { get; set; }
+
         private Dictionary<string, string> _items;
         /// <summary>
         /// Contains visible/filtered items in case of <see cref="ButtonTypeEnum.GetItemFromSource"/>
