@@ -13,7 +13,8 @@ namespace ANAConversationStudio.Models.Chat
 {
     [CategoryOrder("Important", 1)]
     [CategoryOrder("For NodeType ApiCall", 2)]
-    [CategoryOrder("Misc", 3)]
+    [CategoryOrder("For NodeType Card", 3)]
+    [CategoryOrder("Misc", 4)]
     public class ChatNode : INotifyPropertyChanged
     {
         public ChatNode()
@@ -88,8 +89,6 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
-
-        
         #endregion
 
         #region Misc
@@ -232,6 +231,72 @@ namespace ANAConversationStudio.Models.Chat
         }
         #endregion
 
+        #region For NodeType Card
+        private string _Header;
+        [Category("For NodeType Card")]
+        [PropertyOrder(11)]
+        public string Header
+        {
+            get { return _Header; }
+            set
+            {
+                if (_Header != value)
+                {
+                    _Header = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Footer;
+        [Category("For NodeType Card")]
+        [PropertyOrder(12)]
+        public string Footer
+        {
+            get { return _Footer; }
+            set
+            {
+                if (_Footer != value)
+                {
+                    _Footer = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Placement _Placement;
+        [Category("For NodeType Card")]
+        [PropertyOrder(13)]
+        public Placement Placement
+        {
+            get { return _Placement; }
+            set
+            {
+                if (_Placement != value)
+                {
+                    _Placement = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _PostToChat;
+        [Category("For NodeType Card")]
+        [PropertyOrder(14)]
+        public string PostToChat
+        {
+            get { return _PostToChat; }
+            set
+            {
+                if (_PostToChat != value)
+                {
+                    _PostToChat = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public override string ToString()
@@ -257,11 +322,16 @@ namespace ANAConversationStudio.Models.Chat
 
     public enum NodeTypeEnum
     {
-        ApiCall, Combination
+        ApiCall, Combination, Card
     };
 
     public enum EmotionEnum
     {
         Cool, Happy, Excited, Neutral, Sad, Irritated, Angry
     };
+
+    public enum Placement
+    {
+        Incomming, Outgoing, Center
+    }
 }
