@@ -44,6 +44,7 @@ namespace ANAConversationPlatform
                 .AddFile(Configuration.GetSection("FileLogging"));
 
             RocketChatSDK.Logger = loggerFactory.CreateLogger<RocketChatSDK>();
+            MongoHelper.Logger = loggerFactory.CreateLogger("MongoHelper");
 
             Task.Run(async () =>
             {

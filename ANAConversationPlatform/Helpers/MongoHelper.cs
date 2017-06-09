@@ -10,6 +10,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using ANAConversationPlatform.Models.Activity;
+using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using ANAConversationPlatform.Controllers;
+using Microsoft.Extensions.Logging;
+using static ANAConversationPlatform.Helpers.Constants;
 
 namespace ANAConversationPlatform.Helpers
 {
@@ -19,6 +24,7 @@ namespace ANAConversationPlatform.Helpers
         {
             ConventionRegistry.Register(typeof(IgnoreExtraElementsConvention).Name, new ConventionPack { new IgnoreExtraElementsConvention(true) }, t => true);
         }
+        public static ILogger Logger { get; set; }
 
         public static DatabaseConnectionSettings Settings { get; set; }
 
@@ -40,19 +46,14 @@ namespace ANAConversationPlatform.Helpers
             }
         }
 
-        private static List<Content> _contents;
-        private static List<Content> Contents
+        private static ConcurrentBag<Content> _contents;
+        private static ConcurrentBag<Content> Contents
         {
             get
             {
-                if (Settings.CacheContent)
-                {
-                    if (_contents == null)
-                        _contents = GetContentCollection();
-                    return _contents;
-                }
-                else
-                    return GetContentCollection();
+                if (_contents == null)
+                    _contents = new ConcurrentBag<Content>(GetContentCollection());
+                return _contents;
             }
         }
 
@@ -60,26 +61,23 @@ namespace ANAConversationPlatform.Helpers
 
         public static void RefreshContentInMemory()
         {
-            _contents = GetContentCollection();
+            _contents = new ConcurrentBag<Content>(GetContentCollection());
         }
 
         public static List<ChatNode> RetrieveRecordsFromChatNode()
         {
             try
             {
+                if (!Settings.CacheContent)
+                    RefreshContentInMemory();
+
                 var nodeTemplateCollection = ChatDB.GetCollection<BsonDocument>(Settings.TemplateCollectionName);
 
-                // Creating Filter for Date Range Greater than Equal to Start Date and Less than End Date
-                FilterDefinitionBuilder<BsonDocument> builder = Builders<BsonDocument>.Filter;
-
-                var filter = new BsonDocument();
-                List<BsonDocument> nodeList;
-
                 // Retrieving records, if no/invalid limit is specified then all records are retrieved otherwise records as per specified limit and offset are retrieved
-                nodeList = nodeTemplateCollection.Find(filter).Project(Builders<BsonDocument>.Projection.Exclude("Sections._t").Exclude("Buttons._t")).ToList();
+                var nodeList = nodeTemplateCollection.Find(new BsonDocument()).Project(Builders<BsonDocument>.Projection.Exclude("Sections._t").Exclude("Buttons._t")).ToList();
 
-                List<ChatNode> chatNodes = new List<ChatNode>();
-                foreach (BsonDocument node in nodeList)
+                var chatNodes = new ConcurrentBag<ChatNode>();
+                Parallel.ForEach(nodeList, node =>
                 {
                     try
                     {
@@ -87,9 +85,6 @@ namespace ANAConversationPlatform.Helpers
 
                         chatNode.Sections = new List<Section>();
                         chatNode.Buttons = new List<Button>();
-
-                        //Adding Header Text
-                        Content nodeContent = Contents.GetFor(chatNode);
 
                         BsonArray sectionBsonArray = node.GetValue("Sections").AsBsonArray;
                         foreach (BsonDocument sectionBsonDocument in sectionBsonArray)
@@ -107,30 +102,32 @@ namespace ANAConversationPlatform.Helpers
                             btn.ButtonText = buttonContent?.ButtonText;
                             chatNode.Buttons.Add(btn);
                         }
-
-                        if (node.Contains("IsStartNode") && node["IsStartNode"] != null && (bool)node["IsStartNode"])
-                            chatNodes.Insert(0, chatNode);
-                        else
-                            chatNodes.Add(chatNode);
+                        chatNodes.Add(chatNode);
                     }
-                    catch (Exception e)
+                    catch (Exception ex)
                     {
-                        Debug.WriteLine(e);
+                        Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "RetrieveRecordsFromChatNode Error: {0}", ex.Message);
                     }
+                });
+
+                var startNode = chatNodes.FirstOrDefault(x => x.IsStartNode);
+                if (startNode != null) //If start chat node is present, move it up
+                {
+                    var result = chatNodes.Where(x => x != startNode).ToList();
+                    result.Insert(0, startNode);
+                    return result;
                 }
-                return chatNodes;
+                return chatNodes.ToList();
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                Debug.WriteLine(e.Message + "\n" + e.StackTrace);
+                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "RetrieveRecordsFromChatNode Error: {0}", ex.Message);
             }
             return null;
         }
 
         private static Section GetSection(BsonDocument sectionBsonDocument)
         {
-            Random rnd = new Random();
-
             Section sectObj;
 
             string sectionType = sectionBsonDocument.GetValue("SectionType")?.ToString();
@@ -145,16 +142,18 @@ namespace ANAConversationPlatform.Helpers
                         imgSectObj.Title = imgContent.Title;
                         imgSectObj.Caption = imgContent.Caption;
                     }
-
                     sectObj = imgSectObj;
-
                     break;
 
                 case "text":
                     TextSection textSectObj = BsonSerializer.Deserialize<TextSection>(sectionBsonDocument);
                     Content textContent = Contents.GetFor(textSectObj);
                     if (textContent != null)
+                    {
                         textSectObj.Text = textContent.SectionText;
+                        if (textSectObj.DelayInMs == 0)
+                            textSectObj.DelayInMs = Math.Min(1500, textSectObj.Text.Length * Constants.TIME_TAKEN_TO_TYPE_EACH_CHARACTER_BY_ANA);
+                    }
                     sectObj = textSectObj;
                     break;
 

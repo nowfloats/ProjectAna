@@ -87,40 +87,24 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
-
-        private bool _ConfirmInput;
-        [Category("For ButtonType Get[X]")]
-        public bool ConfirmInput
-        {
-            get { return _ConfirmInput; }
-            set
-            {
-                if (_ConfirmInput != value)
-                {
-                    _ConfirmInput = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _ConfirmHeader;
-        [Category("For ButtonType Get[X]")]
-        public string ConfirmHeader
-        {
-            get { return _ConfirmHeader; }
-            set
-            {
-                if (_ConfirmHeader != value)
-                {
-                    _ConfirmHeader = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
         #endregion
 
         #region Misc
+        private bool _PostToChat = true;
+        [Category("Misc")]
+        public bool PostToChat
+        {
+            get { return _PostToChat; }
+            set
+            {
+                if (_PostToChat != value)
+                {
+                    _PostToChat = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _APIResponseMatchKey;
         [Category("Misc")]
         public string APIResponseMatchKey

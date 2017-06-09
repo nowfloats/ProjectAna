@@ -1,4 +1,5 @@
 ﻿using ANAConversationPlatform.Models.Sections;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 
 namespace ANAConversationPlatform.Models
@@ -13,6 +14,10 @@ namespace ANAConversationPlatform.Models
 
         public string Name { get; set; }
         public string Id { get; set; }
+
+        [JsonIgnore] //bsonIgnore should NOT be used here
+        public bool IsStartNode { get; set; }
+
         public EmotionEnum Emotion { get; set; }
         public int TimeoutInMs { get; set; }
         public NodeTypeEnum NodeType { get; set; } = NodeTypeEnum.Combination;
@@ -26,12 +31,10 @@ namespace ANAConversationPlatform.Models
         public string GroupName { get; set; }
 
         #region Card Node
-        public string Header { get; set; }
-        public string Footer { get; set; }
-        public Placement Placement { get; set; }
+        public string CardHeader { get; set; }
+        public string CardFooter { get; set; }
+        public Placement? Placement { get; set; }
         #endregion
-
-        public bool PostToChat { get; set; }
     }
 
     public enum NodeTypeEnum
@@ -46,6 +49,6 @@ namespace ANAConversationPlatform.Models
 
     public enum Placement
     {
-        Incomming, Outgoing, Center
+        Incoming, Outgoing, Center
     }
 }

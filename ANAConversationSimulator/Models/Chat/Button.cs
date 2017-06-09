@@ -21,14 +21,13 @@ namespace ANAConversationSimulator.Models.Chat
         public bool Hidden { get; set; }
         public string VariableValue { get; set; }
         public string PlaceholderText { get; set; }
-        public bool ConfirmInput { get; set; }
         public string PrefixText { get; set; }
         public string PostfixText { get; set; }
 
         public string APIResponseMatchKey { get; set; }
         public string APIResponseMatchValue { get; set; }
 
-        public string ConfirmHeader { get; set; }
+        public bool PostToChat { get; set; } = true;
 
         private Dictionary<string, string> _items;
         /// <summary>

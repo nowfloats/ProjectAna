@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using ANAConversationPlatform.Models;
 using ANAConversationPlatform.Models.Sections;
 using Microsoft.Extensions.Logging;
+using static ANAConversationPlatform.Helpers.Constants;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -23,16 +24,23 @@ namespace ANAConversationPlatform.Controllers
         [HttpGet]
         public ActionResult Chat()
         {
-            var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
-            Debug.WriteLine(chatNodes.ToJson());
-            if (chatNodes == null || chatNodes.Count == 0)
-                return Ok(new object[] { });
-
-            return Json(chatNodes, new JsonSerializerSettings()
+            try
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
-            });
+                var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
+                if (chatNodes == null || chatNodes.Count == 0)
+                    return Ok(new object[] { });
+
+                return Json(chatNodes, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
+                });
+            }
+            catch (System.Exception ex)
+            {
+                _log.LogError(new EventId((int)LoggerEventId.CHAT_ACTION_ERROR), ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
 
         [HttpGet]
@@ -45,9 +53,11 @@ namespace ANAConversationPlatform.Controllers
         [HttpGet]
         public ActionResult HybridChat()
         {
-            var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
+            try
+            {
+                var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
 
-            chatNodes.AddRange(new[] {
+                chatNodes.AddRange(new[] {
                 new ChatNode("INIT_CHAT_NODE")
                 {
                     ApiMethod = "GET",
@@ -105,15 +115,20 @@ namespace ANAConversationPlatform.Controllers
                 }
             });
 
-            if (chatNodes == null || chatNodes.Count == 0)
-                return Ok(new object[] { });
+                if (chatNodes == null || chatNodes.Count == 0)
+                    return Ok(new object[] { });
 
-            return Json(chatNodes, new JsonSerializerSettings()
+                return Json(chatNodes, new JsonSerializerSettings()
+                {
+                    NullValueHandling = NullValueHandling.Ignore,
+                    Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
+                });
+            }
+            catch (System.Exception ex)
             {
-                NullValueHandling = NullValueHandling.Ignore,
-                Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
-            });
+                _log.LogError(new EventId((int)LoggerEventId.HYBRID_CHAT_ACTION_ERROR), ex, ex.Message);
+                return StatusCode(500, new { Message = ex.Message });
+            }
         }
-
     }
 }

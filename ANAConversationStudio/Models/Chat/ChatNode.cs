@@ -232,42 +232,42 @@ namespace ANAConversationStudio.Models.Chat
         #endregion
 
         #region For NodeType Card
-        private string _Header;
+        private string _CardHeader;
         [Category("For NodeType Card")]
         [PropertyOrder(11)]
-        public string Header
+        public string CardHeader
         {
-            get { return _Header; }
+            get { return _CardHeader; }
             set
             {
-                if (_Header != value)
+                if (_CardHeader != value)
                 {
-                    _Header = value;
+                    _CardHeader = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private string _Footer;
+        private string _CardFooter;
         [Category("For NodeType Card")]
         [PropertyOrder(12)]
-        public string Footer
+        public string CardFooter
         {
-            get { return _Footer; }
+            get { return _CardFooter; }
             set
             {
-                if (_Footer != value)
+                if (_CardFooter != value)
                 {
-                    _Footer = value;
+                    _CardFooter = value;
                     OnPropertyChanged();
                 }
             }
         }
 
-        private Placement _Placement;
+        private Placement? _Placement;
         [Category("For NodeType Card")]
         [PropertyOrder(13)]
-        public Placement Placement
+        public Placement? Placement
         {
             get { return _Placement; }
             set
@@ -275,22 +275,6 @@ namespace ANAConversationStudio.Models.Chat
                 if (_Placement != value)
                 {
                     _Placement = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _PostToChat;
-        [Category("For NodeType Card")]
-        [PropertyOrder(14)]
-        public string PostToChat
-        {
-            get { return _PostToChat; }
-            set
-            {
-                if (_PostToChat != value)
-                {
-                    _PostToChat = value;
                     OnPropertyChanged();
                 }
             }
@@ -332,6 +316,6 @@ namespace ANAConversationStudio.Models.Chat
 
     public enum Placement
     {
-        Incomming, Outgoing, Center
+        Incoming, Outgoing, Center
     }
 }

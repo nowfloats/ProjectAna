@@ -27,7 +27,6 @@
         public bool DefaultButton { get; set; }
         public bool Hidden { get; set; }
         public string VariableValue { get; set; }
-        public bool ConfirmInput { get; set; }
         public string PrefixText { get; set; }
         public string PostfixText { get; set; }
         public string PlaceholderText { get; set; }
@@ -35,8 +34,7 @@
         public string APIResponseMatchKey { get; set; }
         public string APIResponseMatchValue { get; set; }
 
-        public string ConfirmHeader { get; set; }
-
+        public bool PostToChat { get; set; } = true;
     }
     public enum ButtonTypeEnum
     {
