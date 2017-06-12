@@ -1,4 +1,6 @@
-﻿using Newtonsoft.Json;
+﻿using ANAConversationStudio.Models;
+using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -9,7 +11,7 @@ namespace ANAConversationStudio.Helpers
         const string FILE_NAME = "Settings.json";
 
         public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
-
+        public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
         public static Settings Load()
         {
             if (File.Exists(FILE_NAME))
@@ -43,5 +45,16 @@ namespace ANAConversationStudio.Helpers
         {
             return Utilities.ValidateStrings(TemplateCollectionName, ContentCollectionName, LayoutCollectionName, DatabaseName, ConnectionString, Name);
         }
+    }
+
+    public class EditableSettings
+    {
+        public string StudioUpdateUrl { get; set; }
+    }
+
+    public class AutoUpdateResponse
+    {
+        public string DownloadLink { get; set; }
+        public Version Version { get; set; }
     }
 }

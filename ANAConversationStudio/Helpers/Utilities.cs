@@ -12,6 +12,10 @@ using System.ComponentModel;
 using Serilog;
 using System.Runtime.CompilerServices;
 using System.IO;
+using System.Net;
+using System.Threading.Tasks;
+using Newtonsoft.Json;
+using System.Reflection;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -110,6 +114,19 @@ namespace ANAConversationStudio.Helpers
             foreach (var item in strings)
                 if (string.IsNullOrWhiteSpace(item)) return false;
             return true;
+        }
+
+        public static async Task<AutoUpdateResponse> GetLatestVersionInfo()
+        {
+            if (Settings.UpdateDetails != null && !string.IsNullOrWhiteSpace(Settings.UpdateDetails.StudioUpdateUrl))
+            {
+                using (var wc = new WebClient())
+                {
+                    var resp = await wc.DownloadStringTaskAsync(Settings.UpdateDetails.StudioUpdateUrl);
+                    return JsonConvert.DeserializeObject<AutoUpdateResponse>(resp);
+                }
+            }
+            return null;
         }
     }
 

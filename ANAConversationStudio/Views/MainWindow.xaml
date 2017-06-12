@@ -586,12 +586,15 @@
                     </MenuItem.ItemTemplate>
                 </MenuItem>
                 <MenuItem Header="Manage Connections" Click="ManageConnectionClick"/>
+                <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
             </MenuItem>
-
+            <MenuItem Header="Help" Name="HelpMenu">
+                <MenuItem Header="No update available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
+            </MenuItem>
         </Menu>
         <avalonDock:DockingManager Grid.Row="1" x:Name="dockingManager" >
             <avalonDock:LayoutRoot>

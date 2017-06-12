@@ -12,6 +12,10 @@ using ANAConversationStudio.ViewModels;
 using System.Reflection;
 using Xceed.Wpf.Toolkit;
 using System.Linq;
+using System.Windows.Media;
+using System.Net;
+using System.IO;
+using System.Diagnostics;
 
 namespace ANAConversationStudio.Views
 {
@@ -192,6 +196,63 @@ namespace ANAConversationStudio.Views
         private void ConvSimMenuClick(object sender, RoutedEventArgs e)
         {
             var p = System.Diagnostics.Process.Start("anaconsim://");
+        }
+
+        private async void UpdateMenuClick(object sender, RoutedEventArgs e)
+        {
+            var updateInfo = (AutoUpdateResponse)UpdateMenuItem.Tag;
+            if (updateInfo != null)
+            {
+                using (var wc = new WebClient())
+                {
+                    var tempFile = Path.GetTempFileName();
+                    File.Delete(tempFile);
+                    wc.DownloadProgressChanged += (s, args) =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            Status($"Downloading {updateInfo.Version}: {args.ProgressPercentage}% ...");
+                        });
+                    };
+                    Status("Downloading...");
+                    await wc.DownloadFileTaskAsync(updateInfo.DownloadLink, tempFile);
+                    Status("Download Complete");
+                    if (System.Windows.MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    {
+                        var tempPath = Path.GetTempPath();
+                        var srcPath = Path.Combine(Environment.CurrentDirectory, "Tools");
+                        foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                            File.Copy(newPath, Path.Combine(tempPath, Path.GetFileName(newPath)), true);
+
+                        var extractorFilePath = Path.Combine(tempPath, "extract.bat");
+
+                        var commandLine = $"\"{tempFile}\" \"{Environment.CurrentDirectory}\"";
+                        askAlert = false;
+                        Application.Current.Exit += (s, args) =>
+                        {
+                            var psi = new ProcessStartInfo
+                            {
+                                Arguments = commandLine,
+                                FileName = extractorFilePath,
+                                WorkingDirectory = tempPath
+                            };
+                            Process.Start(psi);
+                        };
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+        }
+
+        private void SettingsClick(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow sw = new SettingsWindow(Utilities.Settings.UpdateDetails);
+            sw.ShowDialog();
+            if (sw.Save)
+            {
+                Utilities.Settings.UpdateDetails = sw.Config;
+                Utilities.Settings.Save();
+            }
         }
     }
 
@@ -706,8 +767,9 @@ namespace ANAConversationStudio.Views
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Title += " " + Assembly.GetExecutingAssembly().GetName().Version;
+            Title += " " + GetVersion();
             LoadSavedConnections();
+            CheckForUpdates();
 
             #region Overview Windows Commented
             //OverviewWindow overviewWindow = new OverviewWindow();
@@ -718,9 +780,31 @@ namespace ANAConversationStudio.Views
             //overviewWindow.Show(); 
             #endregion
         }
-
+        private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
+        private async void CheckForUpdates()
+        {
+            var info = await Utilities.GetLatestVersionInfo();
+            if (info != null && info.Version > GetVersion())
+            {
+                HelpMenu.Background = new SolidColorBrush(Colors.Crimson);
+                HelpMenu.Foreground = new SolidColorBrush(Colors.White);
+                UpdateMenuItem.Header = $"Update {info.Version} available!";
+                UpdateMenuItem.Foreground = new SolidColorBrush(Colors.Black);
+                UpdateMenuItem.IsEnabled = true;
+                UpdateMenuItem.Tag = info;
+            }
+            else
+            {
+                HelpMenu.Background = null;
+                HelpMenu.Foreground = new SolidColorBrush(Colors.Black);
+                UpdateMenuItem.Header = $"No update available!";
+                UpdateMenuItem.IsEnabled = false;
+            }
+        }
+        private bool askAlert = true;
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (!askAlert) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {
