@@ -135,6 +135,7 @@
     <Compile Include="Controls\ChatNodeCollectionEditor.cs" />
     <Compile Include="Controls\ChatContentCollectionControl.cs" />
     <Compile Include="Controls\ChatNodeCollectionControl.cs" />
+    <Compile Include="Controls\ReadonlyTextBoxEditor.cs" />
     <Compile Include="Helpers\MongoHelper.cs" />
     <Compile Include="Helpers\Shortcuts.cs" />
     <Compile Include="Models\LayoutPoint.cs" />

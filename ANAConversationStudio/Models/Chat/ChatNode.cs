@@ -94,7 +94,7 @@ namespace ANAConversationStudio.Models.Chat
         #region Misc
         private string _Id;
         [Category("Misc")]
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string Id
         {
             get { return _Id; }

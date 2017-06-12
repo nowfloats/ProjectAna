@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ANAConversationStudio.Controls;
+using System.ComponentModel;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat
@@ -211,7 +212,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NextNodeId
         {
             get { return _NextNodeId; }

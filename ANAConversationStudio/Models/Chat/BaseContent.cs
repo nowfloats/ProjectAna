@@ -2,6 +2,7 @@
 using ANAConversationStudio.Views;
 using System.ComponentModel;
 using System.Linq;
+using ANAConversationStudio.Controls;
 
 namespace ANAConversationStudio.Models
 {
@@ -28,7 +29,7 @@ namespace ANAConversationStudio.Models
         }
 
         private string _NodeId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NodeId
         {
             get { return _NodeId; }
@@ -76,7 +77,7 @@ namespace ANAConversationStudio.Models
     public class SectionContent : BaseContent
     {
         private string _SectionId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string SectionId
         {
             get { return _SectionId; }
@@ -232,7 +233,7 @@ namespace ANAConversationStudio.Models
     public class ButtonContent : BaseContent
     {
         private string _ButtonId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string ButtonId
         {
             get { return _ButtonId; }
@@ -265,7 +266,7 @@ namespace ANAConversationStudio.Models
     public class CarouselButtonContent : BaseContent
     {
         private string _CarouselButtonId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string CarouselButtonId
         {
             get { return _CarouselButtonId; }
@@ -298,7 +299,7 @@ namespace ANAConversationStudio.Models
     public class CarouselItemContent : BaseContent
     {
         private string _CarouselItemId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string CarouselItemId
         {
             get { return _CarouselItemId; }
