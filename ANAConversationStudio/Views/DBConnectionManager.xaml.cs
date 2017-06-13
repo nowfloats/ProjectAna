@@ -78,7 +78,7 @@ namespace ANAConversationStudio.Views
                     return false;
                 }
                 Utilities.Settings.SavedConnections = conns;
-                Utilities.Settings.Save();
+                Utilities.Settings.Save(App.Cryptio);
             }
             return true;
         }

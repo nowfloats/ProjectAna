@@ -12,15 +12,31 @@ namespace ANAConversationStudio.Helpers
 
         public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
         public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
-        public static Settings Load()
+        public static bool IsEncrypted()
+        {
+            try
+            {
+                if (!File.Exists(FILE_NAME)) return false;
+
+                JsonConvert.DeserializeObject<Settings>(File.ReadAllText(FILE_NAME));
+                //If the settings file gets parsed without decryption, it means, the password is not set yet.
+                return false;
+            }
+            catch
+            {
+                return true;
+            }
+        }
+        public static Settings Load(string password)
         {
             if (File.Exists(FILE_NAME))
-                return JsonConvert.DeserializeObject<Settings>(File.ReadAllText(FILE_NAME));
+                return JsonConvert.DeserializeObject<Settings>(Utilities.Decrypt(File.ReadAllText(FILE_NAME), password));
             return new Settings();
         }
-        public void Save()
+
+        public void Save(string password)
         {
-            File.WriteAllText(FILE_NAME, JsonConvert.SerializeObject(this));
+            File.WriteAllText(FILE_NAME, Utilities.Encrypt(JsonConvert.SerializeObject(this), password));
         }
     }
 

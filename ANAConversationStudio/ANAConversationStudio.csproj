@@ -172,6 +172,12 @@
     <Compile Include="UIHelpers\BindingProxy.cs" />
     <Compile Include="UIHelpers\NullToVisibilityConverter.cs" />
     <Compile Include="UIHelpers\BindingToTypeNameConverter.cs" />
+    <Compile Include="Views\EnterPassword.xaml.cs">
+      <DependentUpon>EnterPassword.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SetPassword.xaml.cs">
+      <DependentUpon>SetPassword.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
@@ -180,6 +186,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DBConnectionManager.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\EnterPassword.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -205,6 +215,10 @@
     <Page Include="Styles\SharedVisualTemplates.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SetPassword.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\SettingsWindow.xaml">
       <SubType>Designer</SubType>

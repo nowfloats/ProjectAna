@@ -14,5 +14,6 @@ namespace ANAConversationStudio
             Logger.Write(e.Exception);
             MessageBox.Show(e.Exception.StackTrace, e.Exception.Message);
         }
+        public static string Cryptio { get; set; }
     }
 }

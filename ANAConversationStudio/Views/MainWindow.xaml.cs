@@ -227,7 +227,7 @@ namespace ANAConversationStudio.Views
                         var extractorFilePath = Path.Combine(tempPath, "extract.bat");
 
                         var commandLine = $"\"{tempFile}\" \"{Environment.CurrentDirectory}\"";
-                        askAlert = false;
+                        AskAlert = false;
                         Application.Current.Exit += (s, args) =>
                         {
                             var psi = new ProcessStartInfo
@@ -251,7 +251,7 @@ namespace ANAConversationStudio.Views
             if (sw.Save)
             {
                 Utilities.Settings.UpdateDetails = sw.Config;
-                Utilities.Settings.Save();
+                Utilities.Settings.Save(App.Cryptio);
             }
         }
     }
@@ -764,10 +764,28 @@ namespace ANAConversationStudio.Views
                 SectionButtonEditor.Content = value;
             }
         }
-
+        private bool AskPass()
+        {
+            if (!Settings.IsEncrypted())
+            {
+                SetPassword sp = new SetPassword();
+                sp.ShowDialog();
+                return sp.Success;
+            }
+            else
+            {
+                EnterPassword wp = new EnterPassword();
+                wp.ShowDialog();
+                return wp.Success;
+            }
+        }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
             Title += " " + GetVersion();
+            this.IsEnabled = false;
+            if (!AskPass()) return;
+
+            this.IsEnabled = true;
             LoadSavedConnections();
             CheckForUpdates();
 
@@ -801,10 +819,10 @@ namespace ANAConversationStudio.Views
                 UpdateMenuItem.IsEnabled = false;
             }
         }
-        private bool askAlert = true;
+        public bool AskAlert = true;
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            if (!askAlert) return;
+            if (!AskAlert) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {
