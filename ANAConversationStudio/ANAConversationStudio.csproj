@@ -138,6 +138,7 @@
     <Compile Include="Controls\ReadonlyTextBoxEditor.cs" />
     <Compile Include="Helpers\MongoHelper.cs" />
     <Compile Include="Helpers\Shortcuts.cs" />
+    <Compile Include="Models\Chat\Sections\PrintOTPSection.cs" />
     <Compile Include="Models\LayoutPoint.cs" />
     <Compile Include="UIHelpers\NullToBoolConverter.cs" />
     <Compile Include="Views\ChatElementCollectionEditorWindow.xaml.cs">

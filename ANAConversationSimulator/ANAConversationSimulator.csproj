@@ -134,6 +134,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\ChatActivityEvent.cs" />
+    <Compile Include="Models\Chat\Sections\PrintOTPSection.cs" />
     <Compile Include="Models\UploadFileResponse.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsCommand.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsConverter.cs" />

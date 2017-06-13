@@ -18,6 +18,6 @@ namespace ANAConversationStudio.Models.Chat
 
     public enum SectionTypeEnum
     {
-        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel
+        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, PrintOTP
     };
 }

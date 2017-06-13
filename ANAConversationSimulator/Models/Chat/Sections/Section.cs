@@ -18,15 +18,15 @@ namespace ANAConversationSimulator.Models.Chat
         public bool Hidden { get; set; } = false;
         public int Sno { get; set; }
         public MessageDirection Direction { get; set; }
-        public string Title { get; set; } = null;
-        public string Caption { get; set; } = null;
+        public string Title { get; set; }
+        public string Caption { get; set; }
         public Section() { }
     }
 
     public enum SectionTypeEnum
     {
-        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, Typing
-    };
+        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, Typing, PrintOTP
+    }
 
     public enum MessageDirection { In, Out }
 }

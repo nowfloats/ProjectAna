@@ -32,7 +32,7 @@ namespace ANAConversationPlatform.Models.Sections
 
     public enum SectionTypeEnum
     {
-        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel
+        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, PrintOTP
     };
 
     public enum MessageDirection { In, Out }

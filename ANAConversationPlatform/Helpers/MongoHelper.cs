@@ -290,6 +290,11 @@ namespace ANAConversationPlatform.Helpers
                         }
                     sectObj = carouselObj;
                     break;
+                case "printotp":
+                    PrintOTPSection printOTPSection = BsonSerializer.Deserialize<PrintOTPSection>(sectionBsonDocument);
+                    //No content to load for Section Type: PrintOTP
+                    sectObj = printOTPSection;
+                    break;
                 default:
                     sectObj = null;
                     break;
