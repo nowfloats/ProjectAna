@@ -126,6 +126,7 @@ namespace ANAConversationPlatform.Helpers
             return null;
         }
 
+        static Random rand = new Random();
         private static Section GetSection(BsonDocument sectionBsonDocument)
         {
             Section sectObj;
@@ -152,7 +153,7 @@ namespace ANAConversationPlatform.Helpers
                     {
                         textSectObj.Text = textContent.SectionText;
                         if (textSectObj.DelayInMs == 0)
-                            textSectObj.DelayInMs = Math.Min(1500, textSectObj.Text.Length * Constants.TIME_TAKEN_TO_TYPE_EACH_CHARACTER_BY_ANA);
+                            textSectObj.DelayInMs = Math.Min(1500, textSectObj.Text.Length * (Constants.TIME_TAKEN_TO_TYPE_EACH_CHARACTER_BY_ANA + rand.Next(0, 10)));
                     }
                     sectObj = textSectObj;
                     break;
