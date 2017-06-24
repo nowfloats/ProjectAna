@@ -116,6 +116,7 @@ namespace ANAConversationSimulator.Models.Chat
         NextNode,
         DeepLink,
         GetAgent,
-        ApiCall
+        ApiCall,
+        ShowConfirmation
     }
 }

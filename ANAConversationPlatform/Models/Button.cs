@@ -53,6 +53,7 @@
         NextNode,
         DeepLink,
         GetAgent,
-        ApiCall
+        ApiCall,
+        ShowConfirmation
     }
 }
