@@ -103,20 +103,21 @@ namespace ANAConversationSimulator.ViewModels
                 try
                 {
                     var paramDict = new Dictionary<string, object>();
-                    foreach (var reqParam in parsedNode.RequiredVariables)
-                    {
-                        if (reqParam == "HISTORY") //Custom Variable
-                            paramDict[reqParam] = ChatThread.Where(x => x.SectionType != SectionTypeEnum.Typing).ToArray();
-                        else
-                            paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
-                    }
+                    if (parsedNode.RequiredVariables != null)
+                        foreach (var reqParam in parsedNode.RequiredVariables)
+                        {
+                            if (reqParam == "HISTORY") //Custom Variable
+                                paramDict[reqParam] = ChatThread.Where(x => x.SectionType != SectionTypeEnum.Typing).ToArray();
+                            else
+                                paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
+                        }
                     var nextNodeId = parsedNode.NextNodeId; //Default
                     switch (parsedNode.ApiMethod.ToUpper())
                     {
                         case "GET":
                             {
                                 var query = string.Join("&", paramDict.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value + "")}"));
-                                var api = string.IsNullOrWhiteSpace(query) ? parsedNode.ApiUrl : parsedNode.ApiUrl + "?" + query;
+                                var api = string.IsNullOrWhiteSpace(query) ? parsedNode.ApiUrl : parsedNode.ApiUrl + (parsedNode.ApiUrl?.Contains("?") == true ? "&" : "?") + query;
 
                                 var resp = await APIHelper.HitAsync<JObject>(api);
 
@@ -379,8 +380,7 @@ namespace ANAConversationSimulator.ViewModels
             if (node.Buttons == null)
                 return null;
             return node.Buttons.FirstOrDefault(btn =>
-                !string.IsNullOrWhiteSpace(btn.APIResponseMatchKey) &&
-                resp[btn.APIResponseMatchKey] != null &&
+                !string.IsNullOrWhiteSpace(btn.APIResponseMatchKey) && //resp[btn.APIResponseMatchKey] != null &&
                 resp.SelectToken(btn.APIResponseMatchKey) + "" == btn.APIResponseMatchValue + "")
                     ?.NextNodeId;
         }
