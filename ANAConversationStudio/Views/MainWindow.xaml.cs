@@ -16,6 +16,7 @@ using System.Windows.Media;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace ANAConversationStudio.Views
 {
@@ -253,6 +254,31 @@ namespace ANAConversationStudio.Views
                 Utilities.Settings.UpdateDetails = sw.Config;
                 Utilities.Settings.Save(App.Cryptio);
             }
+        }
+
+        private void NextNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var position = 1;
+            if (Keyboard.IsKeyDown(Key.D2))
+                position = 2;
+            if (Keyboard.IsKeyDown(Key.D3))
+                position = 3;
+            if (Keyboard.IsKeyDown(Key.D4))
+                position = 4;
+            GotoNextNode(position);
+        }
+
+        private void PrevNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var position = 1;
+
+            if (Keyboard.IsKeyDown(Key.D2))
+                position = 2;
+            if (Keyboard.IsKeyDown(Key.D3))
+                position = 3;
+            if (Keyboard.IsKeyDown(Key.D4))
+                position = 4;
+            GotoPreviousNode(position);
         }
     }
 
@@ -967,6 +993,57 @@ namespace ANAConversationStudio.Views
         {
             this.ViewModel.SelectedChatNode = null;
             NodeCollectionControl = null;
+        }
+
+        public void GotoNextNode(int position = 1)
+        {
+            try
+            {
+                if (this.ViewModel.SelectedChatNode != null)
+                {
+                    var nextNodeIds = new List<string>();
+                    if (this.ViewModel.SelectedChatNode.Buttons != null && this.ViewModel.SelectedChatNode.Buttons.Count > 0)
+                        nextNodeIds.AddRange(this.ViewModel.SelectedChatNode.Buttons.Select(x => x.NextNodeId));
+                    if (!string.IsNullOrWhiteSpace(this.ViewModel.SelectedChatNode.NextNodeId))
+                        nextNodeIds.Add(this.ViewModel.SelectedChatNode.NextNodeId);
+                    if (position <= nextNodeIds.Count)
+                    {
+                        var node = networkControl.Nodes.Cast<NodeViewModel>().FirstOrDefault(x => x.ChatNode.Id == nextNodeIds[position - 1]);
+                        if (node != null)
+                        {
+                            networkControl.SelectedNode = node;
+                            networkControl.BringSelectedNodesIntoView();
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+
+        public void GotoPreviousNode(int position = 1)
+        {
+            try
+            {
+                if (this.ViewModel.SelectedChatNode != null)
+                {
+                    var currentNodeId = this.ViewModel.SelectedChatNode.Id;
+
+                    var prevNodeIds = networkControl.Nodes.Cast<NodeViewModel>()
+                        .Where(x => x.ChatNode.NextNodeId == currentNodeId ||
+                        (x.ChatNode.Buttons?.Count(y => y.NextNodeId == currentNodeId) > 0)).Select(x => x.ChatNode.Id).ToList();
+
+                    if (position <= prevNodeIds.Count)
+                    {
+                        var node = networkControl.Nodes.Cast<NodeViewModel>().FirstOrDefault(x => x.ChatNode.Id == prevNodeIds[position - 1]);
+                        if (node != null)
+                        {
+                            networkControl.SelectedNode = node;
+                            networkControl.BringSelectedNodesIntoView();
+                        }
+                    }
+                }
+            }
+            catch { }
         }
     }
 }
