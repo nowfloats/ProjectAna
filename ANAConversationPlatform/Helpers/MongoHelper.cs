@@ -305,11 +305,18 @@ namespace ANAConversationPlatform.Helpers
 
         public static void InsertActivityEvent(ChatActivityEvent activityEvent)
         {
-            if (activityEvent != null && string.IsNullOrWhiteSpace(activityEvent._id))
-                activityEvent._id = ObjectId.GenerateNewId().ToString();
+            try
+            {
+                if (activityEvent != null && string.IsNullOrWhiteSpace(activityEvent._id))
+                    activityEvent._id = ObjectId.GenerateNewId().ToString();
 
-            var coll = ChatDB.GetCollection<ChatActivityEvent>(Settings.ActivityEventLogCollectionName);
-            coll.InsertOne(activityEvent);
+                var coll = ChatDB.GetCollection<ChatActivityEvent>(Settings.ActivityEventLogCollectionName);
+                coll.InsertOne(activityEvent);
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "InsertActivityEvent: {0}", ex.Message);
+            }
         }
     }
 }

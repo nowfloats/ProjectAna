@@ -233,14 +233,17 @@ namespace ANAConversationSimulator.ViewModels
                             {
                                 await Task.Run(async () =>
                                 {
-                                    try
+                                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                                     {
-                                        await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        await Utils.ShowDialogAsync(ex.ToString());
-                                    }
+                                        try
+                                        {
+                                            await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            await Utils.ShowDialogAsync(ex.ToString());
+                                        }
+                                    });
                                 });
                             }
                             AddIncommingSection(parsedSection);
