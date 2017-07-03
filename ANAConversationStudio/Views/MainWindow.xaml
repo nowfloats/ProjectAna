@@ -463,10 +463,12 @@
 			/>
         <KeyBinding
 			Key="OemComma"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.PrevNode}"
 			/>
         <KeyBinding
 			Key="OemPeriod"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.NextNode}"
 			/>
     </Window.InputBindings>

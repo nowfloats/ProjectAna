@@ -13,5 +13,8 @@ namespace ANAConversationPlatform.Helpers
     public class Settings
     {
         public string StudioDistFolder { get; set; }
+        public int MaxCapTimeTakenToType { get; set; }
+        public int BaseTimeTakenToTypePerChar { get; set; }
+        public int VariableTimeTakenToTypePerChar { get; set; }
     }
 }

@@ -3,7 +3,6 @@
     public static class Constants
     {
         public const string CHAT_MEDIA_FOLDER_NAME = "ChatMedia";
-        public const int TIME_TAKEN_TO_TYPE_EACH_CHARACTER_BY_ANA = 25;
         public enum LoggerEventId
         {
             ROCKET_CHAT_SDK_INIT_ERROR = 0,

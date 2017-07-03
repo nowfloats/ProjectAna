@@ -153,7 +153,7 @@ namespace ANAConversationPlatform.Helpers
                     {
                         textSectObj.Text = textContent.SectionText;
                         if (textSectObj.DelayInMs == 0)
-                            textSectObj.DelayInMs = Math.Min(1500, textSectObj.Text.Length * (Constants.TIME_TAKEN_TO_TYPE_EACH_CHARACTER_BY_ANA + rand.Next(0, 10)));
+                            textSectObj.DelayInMs = Math.Min(Utils.Settings.MaxCapTimeTakenToType, textSectObj.Text.Length * (Utils.Settings.BaseTimeTakenToTypePerChar + rand.Next(0, Utils.Settings.VariableTimeTakenToTypePerChar)));
                     }
                     sectObj = textSectObj;
                     break;

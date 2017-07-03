@@ -7,13 +7,13 @@
 
   <ItemGroup>
     <Compile Remove="Logs\**" />
+    <Compile Remove="wwwroot\ChatMedia\**" />
     <Content Remove="Logs\**" />
+    <Content Remove="wwwroot\ChatMedia\**" />
     <EmbeddedResource Remove="Logs\**" />
+    <EmbeddedResource Remove="wwwroot\ChatMedia\**" />
     <None Remove="Logs\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\ChatMedia\" />
+    <None Remove="wwwroot\ChatMedia\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="AWSSDK.S3" Version="3.3.6.1" />

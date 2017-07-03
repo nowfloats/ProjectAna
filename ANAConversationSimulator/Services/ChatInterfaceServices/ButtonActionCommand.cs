@@ -190,32 +190,39 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
         {
             await Task.Run(async () =>
             {
-                try
-                {
-                    if (userData.Count == 0)
-                        userData = null;
-                    await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
-                }
-                catch (Exception ex)
-                {
-                    await Utils.ShowDialogAsync(ex.ToString());
-                }
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                 {
+                     try
+                     {
+                         if (userData.Count == 0)
+                             userData = null;
+                         await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
+                     }
+                     catch (Exception ex)
+                     {
+                         await Utils.ShowDialogAsync(ex.ToString());
+                     }
+                 });
             });
         }
         private async void trackViewEvent(CarouselButton cButton, Dictionary<string, string> userData)
         {
             await Task.Run(async () =>
             {
-                try
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    if (userData.Count == 0)
-                        userData = null;
-                    await APIHelper.TrackEvent(Utils.GetClickEvent(cButton.NodeId, Utils.DeviceId, cButton._id, cButton.Text, userData));
-                }
-                catch (Exception ex)
-                {
-                    await Utils.ShowDialogAsync(ex.ToString());
-                }
+                    try
+                    {
+                        if (userData.Count == 0)
+                            userData = null;
+                        await APIHelper.TrackEvent(Utils.GetClickEvent(cButton.NodeId, Utils.DeviceId, cButton._id, cButton.Text, userData));
+                    }
+                    catch (Exception ex)
+                    {
+                        await Utils.ShowDialogAsync(ex.ToString());
+                    }
+                });
+
             });
         }
     }
