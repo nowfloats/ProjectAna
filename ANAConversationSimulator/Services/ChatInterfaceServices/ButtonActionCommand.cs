@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Windows.System.Threading;
 using ANAConversationSimulator.Models.Chat.Sections;
+using ANAConversationSimulator.ViewModels;
 
 namespace ANAConversationSimulator.Services.ChatInterfaceServices
 {
@@ -149,6 +150,12 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         break;
                     case ButtonTypeEnum.DeepLink:
                         await ButtonActionHelper.HandleDeepLinkAsync(button.DeepLinkUrl);
+                        if (!button.Hidden)
+                            ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
+                        break;
+                    case ButtonTypeEnum.GetAgent:
+                        if (MainPageViewModel.CurrentInstance != null)
+                            MainPageViewModel.CurrentInstance.AgentChat();
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
