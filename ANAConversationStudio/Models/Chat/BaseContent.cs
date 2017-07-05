@@ -2,6 +2,7 @@
 using ANAConversationStudio.Views;
 using System.ComponentModel;
 using System.Linq;
+using ANAConversationStudio.Controls;
 
 namespace ANAConversationStudio.Models
 {
@@ -28,7 +29,7 @@ namespace ANAConversationStudio.Models
         }
 
         private string _NodeId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NodeId
         {
             get { return _NodeId; }
@@ -76,7 +77,7 @@ namespace ANAConversationStudio.Models
     public class SectionContent : BaseContent
     {
         private string _SectionId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string SectionId
         {
             get { return _SectionId; }
@@ -232,7 +233,7 @@ namespace ANAConversationStudio.Models
     public class ButtonContent : BaseContent
     {
         private string _ButtonId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string ButtonId
         {
             get { return _ButtonId; }
@@ -256,6 +257,87 @@ namespace ANAConversationStudio.Models
                 if (_ButtonText != value)
                 {
                     _ButtonText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+    }
+
+    public class CarouselButtonContent : BaseContent
+    {
+        private string _CarouselButtonId;
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
+        public string CarouselButtonId
+        {
+            get { return _CarouselButtonId; }
+            set
+            {
+                if (_CarouselButtonId != value)
+                {
+                    _CarouselButtonId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _ButtonText;
+        [Category("Important")]
+        public string ButtonText
+        {
+            get { return _ButtonText; }
+            set
+            {
+                if (_ButtonText != value)
+                {
+                    _ButtonText = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+    }
+
+    public class CarouselItemContent : BaseContent
+    {
+        private string _CarouselItemId;
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
+        public string CarouselItemId
+        {
+            get { return _CarouselItemId; }
+            set
+            {
+                if (_CarouselItemId != value)
+                {
+                    _CarouselItemId = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Title;
+        [Category("Important")]
+        public string Title
+        {
+            get { return _Title; }
+            set
+            {
+                if (_Title != value)
+                {
+                    _Title = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _Caption;
+        [Category("Important")]
+        public string Caption
+        {
+            get { return _Caption; }
+            set
+            {
+                if (_Caption != value)
+                {
+                    _Caption = value;
                     OnPropertyChanged();
                 }
             }

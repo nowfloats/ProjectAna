@@ -83,7 +83,11 @@ namespace ANAConversationSimulator.ViewModels
         private DispatcherTimer buttonTimeoutTimer;
         public async void ProcessNode(JToken node, JToken section = null)
         {
-            if (node == null) return;
+            if (node == null)
+            {
+                Utils.ShowDialog("Node not found!");
+                return;
+            }
             ClearButtonTimer();
 
             //Replaceing verbs
@@ -99,32 +103,41 @@ namespace ANAConversationSimulator.ViewModels
                 try
                 {
                     var paramDict = new Dictionary<string, object>();
-                    foreach (var reqParam in parsedNode.RequiredVariables)
-                    {
-                        if (reqParam == "HISTORY") //Custom Variable
-                            paramDict[reqParam] = ChatThread.Where(x => x.SectionType != SectionTypeEnum.Typing).ToArray();
-                        else
-                            paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
-                    }
+                    if (parsedNode.RequiredVariables != null)
+                        foreach (var reqParam in parsedNode.RequiredVariables)
+                        {
+                            if (reqParam == "HISTORY") //Custom Variable
+                                paramDict[reqParam] = ChatThread.Where(x => x.SectionType != SectionTypeEnum.Typing).ToArray();
+                            else
+                                paramDict[reqParam] = ButtonActionHelper.GetSavedValue(reqParam);
+                        }
                     var nextNodeId = parsedNode.NextNodeId; //Default
                     switch (parsedNode.ApiMethod.ToUpper())
                     {
                         case "GET":
                             {
                                 var query = string.Join("&", paramDict.Select(x => $"{x.Key}={Uri.EscapeDataString(x.Value + "")}"));
-                                var api = string.IsNullOrWhiteSpace(query) ? parsedNode.ApiUrl : parsedNode.ApiUrl + "?" + query;
+                                var api = string.IsNullOrWhiteSpace(query) ? parsedNode.ApiUrl : parsedNode.ApiUrl + (parsedNode.ApiUrl?.Contains("?") == true ? "&" : "?") + query;
 
-                                var resp = await APIHelper.HitAsync<Dictionary<string, object>>(api);
-                                if (resp.ContainsKey("NextNodeId"))
+                                var resp = await APIHelper.HitAsync<JObject>(api);
+
+                                if (!string.IsNullOrWhiteSpace(resp["NextNodeId"] + ""))
                                     nextNodeId = resp["NextNodeId"] + "";
-                                ButtonActionHelper.HandleSaveMultiple(resp);
+
+                                ButtonActionHelper.HandleSaveMultiple(resp.ToObject<Dictionary<string, object>>());
+                                var apiNextNodeId = ExtractNextNodeIdFromAPIResp(parsedNode, resp);
+                                if (!string.IsNullOrWhiteSpace(apiNextNodeId))
+                                    nextNodeId = apiNextNodeId;
                             }
                             break;
                         case "POST":
                             {
-                                var resp = await APIHelper.HitPostAsync<Dictionary<string, object>, Dictionary<string, object>>(parsedNode.ApiUrl, paramDict);
-                                if (resp.ContainsKey("NextNodeId"))
+                                var resp = await APIHelper.HitPostAsync<Dictionary<string, object>, JObject>(parsedNode.ApiUrl, paramDict);
+                                if (!string.IsNullOrWhiteSpace(resp["NextNodeId"] + ""))
                                     nextNodeId = resp["NextNodeId"] + "";
+                                var apiNextNodeId = ExtractNextNodeIdFromAPIResp(parsedNode, resp);
+                                if (!string.IsNullOrWhiteSpace(apiNextNodeId))
+                                    nextNodeId = apiNextNodeId;
                             }
                             break;
                         default:
@@ -184,9 +197,19 @@ namespace ANAConversationSimulator.ViewModels
                     case SectionTypeEnum.EmbeddedHtml:
                         parsedSection = currentSectionSource.ToObject<EmbeddedHtmlSection>();
                         break;
+                    case SectionTypeEnum.Carousel:
+                        parsedSection = currentSectionSource.ToObject<CarouselSection>();
+                        (parsedSection as CarouselSection).Items
+                            .SelectMany(x => x.Buttons)
+                            .Where(X => X != null).ToList()
+                            .ForEach(x =>
+                            {
+                                x.VariableName = parsedNode.VariableName;
+                                x.NodeId = parsedNode.Id;
+                            });
+                        break;
                     case SectionTypeEnum.Link:
                     case SectionTypeEnum.Graph:
-                    case SectionTypeEnum.Carousel:
                         Utils.ShowDialog($"{secType} Coming soon!");
                         break;
                     default:
@@ -210,14 +233,17 @@ namespace ANAConversationSimulator.ViewModels
                             {
                                 await Task.Run(async () =>
                                 {
-                                    try
+                                    await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                                     {
-                                        await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
-                                    }
-                                    catch (Exception ex)
-                                    {
-                                        await Utils.ShowDialogAsync(ex.ToString());
-                                    }
+                                        try
+                                        {
+                                            await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            await Utils.ShowDialogAsync(ex.ToString());
+                                        }
+                                    });
                                 });
                             }
                             AddIncommingSection(parsedSection);
@@ -352,7 +378,15 @@ namespace ANAConversationSimulator.ViewModels
             if (!string.IsNullOrWhiteSpace(nextNodeId))
                 ProcessNode(GetNodeById(nextNodeId));
         }
-
+        private string ExtractNextNodeIdFromAPIResp(ChatNode node, JObject resp)
+        {
+            if (node.Buttons == null)
+                return null;
+            return node.Buttons.FirstOrDefault(btn =>
+                !string.IsNullOrWhiteSpace(btn.APIResponseMatchKey) && //resp[btn.APIResponseMatchKey] != null &&
+                resp.SelectToken(btn.APIResponseMatchKey) + "" == btn.APIResponseMatchValue + "")
+                    ?.NextNodeId;
+        }
         #region Default
         public override async Task OnNavigatedToAsync(object parameter, NavigationMode mode, IDictionary<string, object> suspensionState)
         {

@@ -7,6 +7,8 @@ using System.Windows.Input;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Windows.System.Threading;
+using ANAConversationSimulator.Models.Chat.Sections;
+using ANAConversationSimulator.ViewModels;
 
 namespace ANAConversationSimulator.Services.ChatInterfaceServices
 {
@@ -151,6 +153,12 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
+                    case ButtonTypeEnum.GetAgent:
+                        if (MainPageViewModel.CurrentInstance != null)
+                            MainPageViewModel.CurrentInstance.AgentChat();
+                        if (!button.Hidden)
+                            ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
+                        break;
                     default:
                         Utils.ShowDialog($"Button type: {button.ButtonType} not supported");
                         break;
@@ -158,22 +166,70 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                 trackViewEvent(button, userData);
                 ButtonActionHelper.NavigateToNode(button.NextNodeId);
             }
+            else if (parameter is CarouselButton cButton)
+            {
+                var userData = new Dictionary<string, string>();
+                switch (cButton.Type)
+                {
+                    case CardButtonType.NextNode:
+                        if (!string.IsNullOrWhiteSpace(cButton.VariableName) && cButton.VariableValue != null) //VariableValue should be != null only
+                        {
+                            ButtonActionHelper.HandleSaveTextInput(cButton.VariableName, cButton.VariableValue);
+                            userData[cButton.VariableName] = cButton.VariableValue;
+                        }
+                        break;
+                    case CardButtonType.DeepLink:
+                        await ButtonActionHelper.HandleDeepLinkAsync(cButton.Url);
+                        break;
+                    case CardButtonType.OpenUrl:
+                        ButtonActionHelper.HandleOpenUrl(cButton.Url);
+                        break;
+                    default:
+                        Utils.ShowDialog($"Button type: {cButton.Type} not supported");
+                        break;
+                }
+                trackViewEvent(cButton, userData);
+                ButtonActionHelper.NavigateToNode(cButton.NextNodeId);
+            }
         }
 
         private async void trackViewEvent(Button button, Dictionary<string, string> userData)
         {
             await Task.Run(async () =>
             {
-                try
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
+                 {
+                     try
+                     {
+                         if (userData.Count == 0)
+                             userData = null;
+                         await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
+                     }
+                     catch (Exception ex)
+                     {
+                         await Utils.ShowDialogAsync(ex.ToString());
+                     }
+                 });
+            });
+        }
+        private async void trackViewEvent(CarouselButton cButton, Dictionary<string, string> userData)
+        {
+            await Task.Run(async () =>
+            {
+                await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
                 {
-                    if (userData.Count == 0)
-                        userData = null;
-                    await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
-                }
-                catch (Exception ex)
-                {
-                    await Utils.ShowDialogAsync(ex.ToString());
-                }
+                    try
+                    {
+                        if (userData.Count == 0)
+                            userData = null;
+                        await APIHelper.TrackEvent(Utils.GetClickEvent(cButton.NodeId, Utils.DeviceId, cButton._id, cButton.Text, userData));
+                    }
+                    catch (Exception ex)
+                    {
+                        await Utils.ShowDialogAsync(ex.ToString());
+                    }
+                });
+
             });
         }
     }

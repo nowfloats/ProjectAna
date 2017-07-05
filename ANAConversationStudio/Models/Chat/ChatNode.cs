@@ -13,7 +13,8 @@ namespace ANAConversationStudio.Models.Chat
 {
     [CategoryOrder("Important", 1)]
     [CategoryOrder("For NodeType ApiCall", 2)]
-    [CategoryOrder("Misc", 3)]
+    [CategoryOrder("For NodeType Card", 3)]
+    [CategoryOrder("Misc", 4)]
     public class ChatNode : INotifyPropertyChanged
     {
         public ChatNode()
@@ -55,7 +56,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private ObservableCollection<Section> _Sections = new ObservableCollection<Section>();
-        [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection))]
+        [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection), typeof(CarouselSection), typeof(PrintOTPSection))]
         [Category("Important")]
         [PropertyOrder(3)]
         [Editor(typeof(ChatNodeCollectionEditor<Section>), typeof(ChatNodeCollectionEditor<Section>))]
@@ -88,14 +89,12 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
-
-        
         #endregion
 
         #region Misc
         private string _Id;
         [Category("Misc")]
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string Id
         {
             get { return _Id; }
@@ -232,6 +231,56 @@ namespace ANAConversationStudio.Models.Chat
         }
         #endregion
 
+        #region For NodeType Card
+        private string _CardHeader;
+        [Category("For NodeType Card")]
+        [PropertyOrder(11)]
+        public string CardHeader
+        {
+            get { return _CardHeader; }
+            set
+            {
+                if (_CardHeader != value)
+                {
+                    _CardHeader = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _CardFooter;
+        [Category("For NodeType Card")]
+        [PropertyOrder(12)]
+        public string CardFooter
+        {
+            get { return _CardFooter; }
+            set
+            {
+                if (_CardFooter != value)
+                {
+                    _CardFooter = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private Placement? _Placement;
+        [Category("For NodeType Card")]
+        [PropertyOrder(13)]
+        public Placement? Placement
+        {
+            get { return _Placement; }
+            set
+            {
+                if (_Placement != value)
+                {
+                    _Placement = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public override string ToString()
@@ -257,11 +306,16 @@ namespace ANAConversationStudio.Models.Chat
 
     public enum NodeTypeEnum
     {
-        ApiCall, Combination
+        ApiCall, Combination, Card
     };
 
     public enum EmotionEnum
     {
         Cool, Happy, Excited, Neutral, Sad, Irritated, Angry
     };
+
+    public enum Placement
+    {
+        Incoming, Outgoing, Center
+    }
 }

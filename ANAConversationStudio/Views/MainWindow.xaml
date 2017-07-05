@@ -55,6 +55,8 @@
             <RoutedUICommand x:Key="Commands.Fill" />
             <RoutedUICommand x:Key="Commands.OneHundredPercent" />
             <RoutedUICommand x:Key="Commands.Save" />
+            <RoutedUICommand x:Key="Commands.PrevNode" />
+            <RoutedUICommand x:Key="Commands.NextNode" />
 
             <!-- 
             This converts from a scale value to a percentage value.
@@ -459,6 +461,16 @@
             Modifiers="Alt"
 			Command="{StaticResource Commands.CloneNode}"
 			/>
+        <KeyBinding
+			Key="OemComma"
+            Modifiers="Ctrl"
+			Command="{StaticResource Commands.PrevNode}"
+			/>
+        <KeyBinding
+			Key="OemPeriod"
+            Modifiers="Ctrl"
+			Command="{StaticResource Commands.NextNode}"
+			/>
     </Window.InputBindings>
 
     <Window.CommandBindings>
@@ -513,6 +525,14 @@
         <CommandBinding 
             Command="{StaticResource Commands.CloneNode}" 
             Executed="CloneSelectedNode_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.NextNode}" 
+            Executed="NextNode_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.PrevNode}" 
+            Executed="PrevNode_Executed" 
             />
     </Window.CommandBindings>
 
@@ -586,12 +606,15 @@
                     </MenuItem.ItemTemplate>
                 </MenuItem>
                 <MenuItem Header="Manage Connections" Click="ManageConnectionClick"/>
+                <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
             </MenuItem>
-
+            <MenuItem Header="Help" Name="HelpMenu">
+                <MenuItem Header="No update available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
+            </MenuItem>
         </Menu>
         <avalonDock:DockingManager Grid.Row="1" x:Name="dockingManager" >
             <avalonDock:LayoutRoot>

@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace ANAConversationSimulator.Helpers
 {
@@ -21,7 +18,7 @@ namespace ANAConversationSimulator.Helpers
                     var varName = match.Groups[1].Value;
                     var value = ButtonActionHelper.GetSavedValue(varName);
                     if (!string.IsNullOrWhiteSpace(value + ""))
-                        input = input.Replace(match.Value, value + "");
+                        input = input.Replace(match.Value, JsonConvert.SerializeObject(value + "").Trim('"'));
                 }
             }
             return input;

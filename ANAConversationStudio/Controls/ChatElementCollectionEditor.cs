@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 
 namespace ANAConversationStudio.Controls
 {
-    public class ChatNodeCollectionEditor<T> : TypeEditor<Button>
+    public class ChatElementCollectionEditor<T> : TypeEditor<Button>
     {
         protected override void SetValueDependencyProperty()
         {
@@ -24,6 +24,7 @@ namespace ANAConversationStudio.Controls
         }
         private PropertyItem _propertyItem;
         private ChatNodeCollectionControl _collectionControl;
+        private ChatElementCollectionEditorWindow editorWindow;
         protected override void ResolveValueBinding(PropertyItem propertyItem)
         {
             _propertyItem = propertyItem;
@@ -55,9 +56,13 @@ namespace ANAConversationStudio.Controls
             Editor.Click += (s, e) =>
             {
                 InvalidatePropertyGrid();
-                MainWindow.Current.NodeCollectionControl = _collectionControl;
-                if (MainWindow.Current.SectionButtonEditorLayoutAnchorable != null)
-                    MainWindow.Current.SectionButtonEditorLayoutAnchorable.IsActive = true;
+                if (editorWindow != null)
+                {
+                    editorWindow.Close();
+                    editorWindow = null;
+                }
+                editorWindow = new ChatElementCollectionEditorWindow(_collectionControl);
+                editorWindow.ShowDialog();
             };
             base.ResolveValueBinding(_propertyItem);
         }
@@ -67,7 +72,7 @@ namespace ANAConversationStudio.Controls
             InvalidateSource();
             await Application.Current.Dispatcher.InvokeAsync(() =>
             {
-                var editor = MainWindow.Current.ChatContentCollectionEditor;
+                var editor = editorWindow.ChatElementContentCollectionEditor;
                 if (editor != null && editor.NewItemTypes?.Count > 0 && editor.Items.Count == 0)
                 {
                     var newItem = Activator.CreateInstance(editor.NewItemTypes.First());
@@ -91,15 +96,13 @@ namespace ANAConversationStudio.Controls
             {
                 if (pItem.PropertyName == nameof(bEntity.Alias)) //If name of the property changed is 'Alias'
                 {
-                    var editor = MainWindow.Current.ChatContentCollectionEditor;
+                    var editor = editorWindow.ChatElementContentCollectionEditor;
                     if (editor.SelectedItem != null) //copy alias to content only when 1 content is present
                     {
                         if (editor.SelectedItem is ButtonContent bContent && string.IsNullOrWhiteSpace(bContent.ButtonText))
                             bContent.ButtonText = e.NewValue as string;
                         else if (editor.SelectedItem is TextSectionContent txtContent && string.IsNullOrWhiteSpace(txtContent.SectionText))
                             txtContent.SectionText = e.NewValue as string;
-                        else if (editor.SelectedItem is TitleCaptionSectionContent titleCaptionSectionContent && string.IsNullOrWhiteSpace(titleCaptionSectionContent.Title))
-                            titleCaptionSectionContent.Title = e.NewValue as string;
                         else if (editor.SelectedItem is CarouselButtonContent cBtnContent && string.IsNullOrWhiteSpace(cBtnContent.ButtonText))
                             cBtnContent.ButtonText = e.NewValue as string;
                         else if (editor.SelectedItem is CarouselItemContent cItemContent && string.IsNullOrWhiteSpace(cItemContent.Title))

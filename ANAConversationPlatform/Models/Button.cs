@@ -22,15 +22,19 @@
         public ButtonTypeEnum ButtonType { get; set; }
         public string DeepLinkUrl { get; set; }
         public string Url { get; set; }
-        public int? BounceTimeout { get; set; } = null;
+        public int? BounceTimeout { get; set; }
         public string NextNodeId { get; set; }
-        public bool DefaultButton { get; set; } = false;
+        public bool DefaultButton { get; set; }
         public bool Hidden { get; set; }
-        public string VariableValue { get; set; } = null;
-        public bool ConfirmInput { get; set; }
-        public string PrefixText { get; set; } = null;
-        public string PostfixText { get; set; } = null;
-        public string PlaceholderText { get; set; } = null;
+        public string VariableValue { get; set; }
+        public string PrefixText { get; set; }
+        public string PostfixText { get; set; }
+        public string PlaceholderText { get; set; }
+
+        public string APIResponseMatchKey { get; set; }
+        public string APIResponseMatchValue { get; set; }
+
+        public bool PostToChat { get; set; } = true;
     }
     public enum ButtonTypeEnum
     {
@@ -49,6 +53,7 @@
         NextNode,
         DeepLink,
         GetAgent,
-        ApiCall
+        ApiCall,
+        ShowConfirmation
     }
 }

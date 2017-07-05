@@ -4,17 +4,17 @@ using Newtonsoft.Json;
 namespace ANAConversationPlatform.Models.Sections
 {
     public class Section : BaseEntity
-	{
+    {
         public Section() { }
-		public Section(string id, SectionTypeEnum sectionType, int delayInMs)
-		{
-			this._id = id;
-			this.SectionType = sectionType;
-			this.DelayInMs = delayInMs;
-		}
-		public SectionTypeEnum SectionType { get; set; }
-		public int DelayInMs { get; set; } = 0;
-		public bool Hidden { get; set; } = false;
+        public Section(string id, SectionTypeEnum sectionType, int delayInMs)
+        {
+            this._id = id;
+            this.SectionType = sectionType;
+            this.DelayInMs = delayInMs;
+        }
+        public SectionTypeEnum SectionType { get; set; }
+        public int DelayInMs { get; set; } = 0;
+        public bool Hidden { get; set; } = false;
 
         [BsonIgnore]
         [JsonIgnore]
@@ -30,10 +30,10 @@ namespace ANAConversationPlatform.Models.Sections
         public int Sno { get; set; }
     }
 
-	public enum SectionTypeEnum
-	{
-		Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml
-	};
+    public enum SectionTypeEnum
+    {
+        Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, PrintOTP
+    };
 
     public enum MessageDirection { In, Out }
 }

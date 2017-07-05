@@ -29,5 +29,9 @@ namespace ANAConversationPlatform.Models
         public string CoordinateListId { get; set; }
         public string CoordinateText { get; set; }
 
+        #region Carousal Item and Button Identifiers
+        public string CarouselItemId { get; set; }
+        public string CarouselButtonId { get; set; }
+        #endregion
     }
 }

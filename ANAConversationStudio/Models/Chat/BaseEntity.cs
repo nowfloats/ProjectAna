@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ANAConversationStudio.Controls;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -10,7 +11,7 @@ namespace ANAConversationStudio.Models
         protected void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private string __id;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string _id
         {
             get { return __id; }
@@ -27,7 +28,7 @@ namespace ANAConversationStudio.Models
     public class BaseIdTimeStampEntity : BaseIdEntity
     {
         private DateTime _CreatedOn;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public DateTime CreatedOn
         {
             get { return _CreatedOn; }
@@ -42,7 +43,7 @@ namespace ANAConversationStudio.Models
         }
 
         private DateTime _UpdatedOn;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public DateTime UpdatedOn
         {
             get { return _UpdatedOn; }

@@ -12,6 +12,11 @@ using ANAConversationStudio.ViewModels;
 using System.Reflection;
 using Xceed.Wpf.Toolkit;
 using System.Linq;
+using System.Windows.Media;
+using System.Net;
+using System.IO;
+using System.Diagnostics;
+using System.Collections.Generic;
 
 namespace ANAConversationStudio.Views
 {
@@ -192,6 +197,88 @@ namespace ANAConversationStudio.Views
         private void ConvSimMenuClick(object sender, RoutedEventArgs e)
         {
             var p = System.Diagnostics.Process.Start("anaconsim://");
+        }
+
+        private async void UpdateMenuClick(object sender, RoutedEventArgs e)
+        {
+            var updateInfo = (AutoUpdateResponse)UpdateMenuItem.Tag;
+            if (updateInfo != null)
+            {
+                using (var wc = new WebClient())
+                {
+                    var tempFile = Path.GetTempFileName();
+                    File.Delete(tempFile);
+                    wc.DownloadProgressChanged += (s, args) =>
+                    {
+                        Dispatcher.Invoke(() =>
+                        {
+                            Status($"Downloading {updateInfo.Version}: {args.ProgressPercentage}% ...");
+                        });
+                    };
+                    Status("Downloading...");
+                    await wc.DownloadFileTaskAsync(updateInfo.DownloadLink, tempFile);
+                    Status("Download Complete");
+                    if (System.Windows.MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    {
+                        var tempPath = Path.GetTempPath();
+                        var srcPath = Path.Combine(Environment.CurrentDirectory, "Tools");
+                        foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
+                            File.Copy(newPath, Path.Combine(tempPath, Path.GetFileName(newPath)), true);
+
+                        var extractorFilePath = Path.Combine(tempPath, "extract.bat");
+
+                        var commandLine = $"\"{tempFile}\" \"{Environment.CurrentDirectory}\"";
+                        AskAlert = false;
+                        Application.Current.Exit += (s, args) =>
+                        {
+                            var psi = new ProcessStartInfo
+                            {
+                                Arguments = commandLine,
+                                FileName = extractorFilePath,
+                                WorkingDirectory = tempPath
+                            };
+                            Process.Start(psi);
+                        };
+                        Application.Current.Shutdown();
+                    }
+                }
+            }
+        }
+
+        private void SettingsClick(object sender, RoutedEventArgs e)
+        {
+            SettingsWindow sw = new SettingsWindow(Utilities.Settings.UpdateDetails);
+            sw.ShowDialog();
+            if (sw.Save)
+            {
+                Utilities.Settings.UpdateDetails = sw.Config;
+                Utilities.Settings.Save(App.Cryptio);
+            }
+        }
+
+        private void NextNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var position = 1;
+            if (Keyboard.IsKeyDown(Key.D2))
+                position = 2;
+            if (Keyboard.IsKeyDown(Key.D3))
+                position = 3;
+            if (Keyboard.IsKeyDown(Key.D4))
+                position = 4;
+            GotoNextNode(position);
+        }
+
+        private void PrevNode_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            var position = 1;
+
+            if (Keyboard.IsKeyDown(Key.D2))
+                position = 2;
+            if (Keyboard.IsKeyDown(Key.D3))
+                position = 3;
+            if (Keyboard.IsKeyDown(Key.D4))
+                position = 4;
+            GotoPreviousNode(position);
         }
     }
 
@@ -703,11 +790,30 @@ namespace ANAConversationStudio.Views
                 SectionButtonEditor.Content = value;
             }
         }
-
+        private bool AskPass()
+        {
+            if (!Settings.IsEncrypted())
+            {
+                SetPassword sp = new SetPassword();
+                sp.ShowDialog();
+                return sp.Success;
+            }
+            else
+            {
+                EnterPassword wp = new EnterPassword();
+                wp.ShowDialog();
+                return wp.Success;
+            }
+        }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Title += " " + Assembly.GetExecutingAssembly().GetName().Version;
+            Title += " " + GetVersion();
+            this.IsEnabled = false;
+            if (!AskPass()) return;
+
+            this.IsEnabled = true;
             LoadSavedConnections();
+            CheckForUpdates();
 
             #region Overview Windows Commented
             //OverviewWindow overviewWindow = new OverviewWindow();
@@ -718,9 +824,31 @@ namespace ANAConversationStudio.Views
             //overviewWindow.Show(); 
             #endregion
         }
-
+        private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
+        private async void CheckForUpdates()
+        {
+            var info = await Utilities.GetLatestVersionInfo();
+            if (info != null && info.Version > GetVersion())
+            {
+                HelpMenu.Background = new SolidColorBrush(Colors.Crimson);
+                HelpMenu.Foreground = new SolidColorBrush(Colors.White);
+                UpdateMenuItem.Header = $"Update {info.Version} available!";
+                UpdateMenuItem.Foreground = new SolidColorBrush(Colors.Black);
+                UpdateMenuItem.IsEnabled = true;
+                UpdateMenuItem.Tag = info;
+            }
+            else
+            {
+                HelpMenu.Background = null;
+                HelpMenu.Foreground = new SolidColorBrush(Colors.Black);
+                UpdateMenuItem.Header = $"No update available!";
+                UpdateMenuItem.IsEnabled = false;
+            }
+        }
+        public bool AskAlert = true;
         private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
+            if (!AskAlert) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {
@@ -809,15 +937,21 @@ namespace ANAConversationStudio.Views
             }
         }
 
-        private void LoadSavedConnections()
+        private bool LoadFileMenuSavedConnections()
         {
             if (Utilities.Settings.SavedConnections.Count <= 0)
             {
                 SavedConnectionsFileMenu.IsEnabled = false;
-                return;
+                return false;
             }
             SavedConnectionsFileMenu.ItemsSource = Utilities.Settings.SavedConnections;
-            LoadConnection(Utilities.Settings.SavedConnections.First());
+            SavedConnectionsFileMenu.IsEnabled = true;
+            return true;
+        }
+        private void LoadSavedConnections()
+        {
+            if (LoadFileMenuSavedConnections())
+                LoadConnection(Utilities.Settings.SavedConnections.First());
         }
         public void Status(string txt)
         {
@@ -853,11 +987,63 @@ namespace ANAConversationStudio.Views
         {
             DBConnectionManager man = new DBConnectionManager(Utilities.Settings.SavedConnections);
             man.ShowDialog();
+            LoadFileMenuSavedConnections();
         }
         private void ResetEditors()
         {
             this.ViewModel.SelectedChatNode = null;
             NodeCollectionControl = null;
+        }
+
+        public void GotoNextNode(int position = 1)
+        {
+            try
+            {
+                if (this.ViewModel.SelectedChatNode != null)
+                {
+                    var nextNodeIds = new List<string>();
+                    if (this.ViewModel.SelectedChatNode.Buttons != null && this.ViewModel.SelectedChatNode.Buttons.Count > 0)
+                        nextNodeIds.AddRange(this.ViewModel.SelectedChatNode.Buttons.Select(x => x.NextNodeId));
+                    if (!string.IsNullOrWhiteSpace(this.ViewModel.SelectedChatNode.NextNodeId))
+                        nextNodeIds.Add(this.ViewModel.SelectedChatNode.NextNodeId);
+                    if (position <= nextNodeIds.Count)
+                    {
+                        var node = networkControl.Nodes.Cast<NodeViewModel>().FirstOrDefault(x => x.ChatNode.Id == nextNodeIds[position - 1]);
+                        if (node != null)
+                        {
+                            networkControl.SelectedNode = node;
+                            networkControl.BringSelectedNodesIntoView();
+                        }
+                    }
+                }
+            }
+            catch { }
+        }
+
+        public void GotoPreviousNode(int position = 1)
+        {
+            try
+            {
+                if (this.ViewModel.SelectedChatNode != null)
+                {
+                    var currentNodeId = this.ViewModel.SelectedChatNode.Id;
+
+                    var prevNodeIds = networkControl.Nodes.Cast<NodeViewModel>()
+                        .Where(x => x.ChatNode.NextNodeId == currentNodeId ||
+                        (x.ChatNode.Buttons?.Count(y => y.NextNodeId == currentNodeId) > 0)).Select(x => x.ChatNode.Id).ToList();
+
+                    if (position <= prevNodeIds.Count)
+                    {
+                        var node = networkControl.Nodes.Cast<NodeViewModel>().FirstOrDefault(x => x.ChatNode.Id == prevNodeIds[position - 1]);
+                        if (node != null)
+                        {
+                            networkControl.SelectedNode = node;
+                            networkControl.BringSelectedNodesIntoView();
+                        }
+                    }
+                }
+            }
+            catch { }
         }
     }
 }

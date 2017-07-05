@@ -65,6 +65,15 @@ namespace ANAConversationStudio.Helpers
 
             if (!BsonClassMap.IsClassMapRegistered(typeof(ButtonContent)))
                 BsonClassMap.RegisterClassMap<ButtonContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(PrintOTPSection)))
+                BsonClassMap.RegisterClassMap<PrintOTPSection>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselButtonContent)))
+                BsonClassMap.RegisterClassMap<CarouselButtonContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselItemContent)))
+                BsonClassMap.RegisterClassMap<CarouselItemContent>();
             #endregion
             _connection = connection;
         }

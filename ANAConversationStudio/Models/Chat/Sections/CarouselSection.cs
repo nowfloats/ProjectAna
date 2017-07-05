@@ -1,4 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using ANAConversationStudio.Controls;
+using MongoDB.Bson;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Linq;
 
 namespace ANAConversationStudio.Models.Chat.Sections
 {
@@ -8,36 +13,31 @@ namespace ANAConversationStudio.Models.Chat.Sections
         {
             SectionType = SectionTypeEnum.Carousel;
         }
-        public List<Carousel> CarouselList { get; set; } = new List<Carousel>();
 
-        public void AddNewCarouselEntry(Carousel carouselEntry)
-        {
-            if (CarouselList == null)
-                CarouselList = new List<Carousel>();
-            CarouselList.Add(carouselEntry);
-        }
+        [Editor(typeof(ChatElementCollectionEditor<CarouselItem>), typeof(ChatElementCollectionEditor<CarouselItem>))]
+        public ObservableCollection<CarouselItem> Items { get; set; } = new ObservableCollection<CarouselItem>();
     }
 
-    public class Carousel
+    public class CarouselItem : BaseEntity
     {
-        public override string ToString()
-        {
-            return Title;
-        }
-        public Carousel() { }
-        public Carousel(string title, string imageUrl)
-        {
-            this.Title = title;
-            this.ImageUrl = imageUrl;
-        }
-        public string Title { get; set; }
-        public string ImageUrl { get; set; } = null;
-        public List<string> Values { get; set; } = new List<string>();
-        public void AddValue(string value)
-        {
-            if (Values == null)
-                Values = new List<string>();
-            Values.Add(value);
-        }
+        public string ImageUrl { get; set; }
+
+        [Editor(typeof(ChatElementCollectionEditor<CarouselButton>), typeof(ChatElementCollectionEditor<CarouselButton>))]
+        public ObservableCollection<CarouselButton> Buttons { get; set; } = new ObservableCollection<CarouselButton>();
+    }
+
+    public class CarouselButton : BaseEntity
+    {
+        public string Url { get; set; }
+        public CardButtonType Type { get; set; }
+        public string VariableValue { get; set; }
+        public string NextNodeId { get; set; }
+    }
+
+    public enum CardButtonType
+    {
+        NextNode,
+        DeepLink,
+        OpenUrl
     }
 }

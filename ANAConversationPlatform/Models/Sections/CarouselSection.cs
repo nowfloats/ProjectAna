@@ -1,10 +1,6 @@
-﻿using ANAConversationSimulator.Services.ChatInterfaceServices;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Windows.Input;
+﻿using System.Collections.Generic;
 
-namespace ANAConversationSimulator.Models.Chat.Sections
+namespace ANAConversationPlatform.Models.Sections
 {
     public class CarouselSection : Section
     {
@@ -12,6 +8,8 @@ namespace ANAConversationSimulator.Models.Chat.Sections
         {
             SectionType = SectionTypeEnum.Carousel;
         }
+        public string Title { get; set; }
+        public string Caption { get; set; }
         public List<CarouselItem> Items { get; set; } = new List<CarouselItem>();
     }
 
@@ -30,14 +28,6 @@ namespace ANAConversationSimulator.Models.Chat.Sections
         public CardButtonType Type { get; set; }
         public string VariableValue { get; set; }
         public string NextNodeId { get; set; }
-
-        [JsonIgnore]
-        public ICommand Action { get; set; } = new ButtonActionCommand();
-
-        [JsonIgnore]
-        public string VariableName { get; set; }
-        [JsonIgnore]
-        public string NodeId { get; set; }
     }
 
     public enum CardButtonType

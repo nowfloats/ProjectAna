@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using Xceed.Wpf.Toolkit;
+using ANAConversationStudio.Models.Chat.Sections;
 
 namespace ANAConversationStudio.Controls
 {
@@ -115,6 +116,12 @@ namespace ANAConversationStudio.Controls
                 else if (ChatContentOwner is Button && item is ButtonContent)
                     (item as ButtonContent).ButtonId = (ChatContentOwner as Button)._id;
             }
+
+            if (item is CarouselButtonContent cBtnContent && ChatContentOwner != null && ChatContentOwner is CarouselButton cBtn)
+                cBtnContent.CarouselButtonId = cBtn._id;
+
+            if (item is CarouselItemContent cItemContent && ChatContentOwner != null && ChatContentOwner is CarouselItem cItem)
+                cItemContent.CarouselItemId = cItem._id;
         }
         private void ContentItemAdded(BaseContent item)
         {

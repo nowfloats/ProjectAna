@@ -265,10 +265,10 @@ namespace ANAConversationStudio.ViewModels
                 //
                 // Only allow connections from output connector to input connector (ie each
                 // connector must have a different type).
-                // Also only allocation from one node to another, never one node back to the same node.
                 //
-                connectionOk = sourceConnector.ParentNode != destConnector.ParentNode &&
-                                 sourceConnector.Type != destConnector.Type;
+                //(Also only allocation from one node to another, never one node back to the same node.) Condition Removed
+                //connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode && 
+                connectionOk = sourceConnector.Type != destConnector.Type;
 
                 if (connectionOk)
                 {
@@ -324,10 +324,10 @@ namespace ANAConversationStudio.ViewModels
             //
             // Only allow connections from output connector to input connector (ie each
             // connector must have a different type).
-            // Also only allocation from one node to another, never one node back to the same node.
-            //
-            bool connectionOk = connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode &&
-                                connectorDraggedOut.Type != connectorDraggedOver.Type;
+            // 
+            //(Also only allocation from one node to another, never one node back to the same node.) Condition Removed
+            //connectorDraggedOut.ParentNode != connectorDraggedOver.ParentNode && 
+            bool connectionOk = connectorDraggedOut.Type != connectorDraggedOver.Type;
 
             if (!connectionOk)
             {
@@ -430,7 +430,7 @@ namespace ANAConversationStudio.ViewModels
             if (askConfirmation)
                 if (MessageBox.Show("Do you want to delete '" + node.Name + "' node?", "Confirm", MessageBoxButton.YesNo) != MessageBoxResult.Yes)
                     return;
-            
+
             //
             // Remove all connections attached to the node.
             //
@@ -545,17 +545,16 @@ namespace ANAConversationStudio.ViewModels
         {
             MongoHelper.Current.SaveChatNodes(this.Network.Nodes.Select(x => x.ChatNode).ToList());
         }
-        public void LoadNodesFromDB()
+        public bool LoadNodesFromDB()
         {
             try
             {
-
                 if (MongoHelper.Current == null)
                 {
                     MessageBox.Show("Database Connection is not yet selected.", "Oops!");
-                    return;
+                    return false;
                 }
-                
+
                 this.Network = new NetworkViewModel();
                 this.Network.Connections.CollectionChanged += Connections_CollectionChanged;
 
@@ -583,12 +582,14 @@ namespace ANAConversationStudio.ViewModels
                         }
                     }
                 }
+                return true;
             }
             catch (Exception ex)
             {
                 if (!Utilities.IsDesignMode())
                     MessageBox.Show(ex.ToString(), "Initialization error");
             }
+            return false;
         }
 
         private void Connections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)

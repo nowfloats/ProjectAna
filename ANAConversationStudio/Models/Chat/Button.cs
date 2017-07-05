@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using ANAConversationStudio.Controls;
+using System.ComponentModel;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat
@@ -87,24 +88,54 @@ namespace ANAConversationStudio.Models.Chat
                 }
             }
         }
+        #endregion
 
-        private bool _ConfirmInput;
-        [Category("For ButtonType Get[X]")]
-        public bool ConfirmInput
+        #region Misc
+        private bool _PostToChat = true;
+        [Category("Misc")]
+        public bool PostToChat
         {
-            get { return _ConfirmInput; }
+            get { return _PostToChat; }
             set
             {
-                if (_ConfirmInput != value)
+                if (_PostToChat != value)
                 {
-                    _ConfirmInput = value;
+                    _PostToChat = value;
                     OnPropertyChanged();
                 }
             }
         }
-        #endregion
 
-        #region Misc
+        private string _APIResponseMatchKey;
+        [Category("Misc")]
+        public string APIResponseMatchKey
+        {
+            get { return _APIResponseMatchKey; }
+            set
+            {
+                if (_APIResponseMatchKey != value)
+                {
+                    _APIResponseMatchKey = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _APIResponseMatchValue;
+        [Category("Misc")]
+        public string APIResponseMatchValue
+        {
+            get { return _APIResponseMatchValue; }
+            set
+            {
+                if (_APIResponseMatchValue != value)
+                {
+                    _APIResponseMatchValue = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _DeepLinkUrl;
         [Category("Misc")]
         public string DeepLinkUrl
@@ -181,7 +212,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
-        [ReadOnly(true)]
+        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -217,5 +248,6 @@ namespace ANAConversationStudio.Models.Chat
         NextNode,
         DeepLink,
         GetAgent,
+        ShowConfirmation
     }
 }

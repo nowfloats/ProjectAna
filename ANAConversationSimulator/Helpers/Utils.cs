@@ -40,8 +40,13 @@ namespace ANAConversationSimulator.Helpers
 
         public static void InitMemoryStack()
         {
+            InitDeviceIdInMemoryStack();
+        }
+
+        public static void InitDeviceIdInMemoryStack()
+        {
             if (!Utils.LocalStore.ContainsKey("DEVICE_ID"))
-                Utils.LocalStore["DEVICE_ID"] = Utils.DeviceId;
+                Utils.LocalStore["DEVICE_ID"] = Utils.GetFinalDeviceId();
         }
 
         public static void ShowDialog(string txt)
@@ -163,17 +168,15 @@ namespace ANAConversationSimulator.Helpers
             };
         }
 
-        private static string _deviceId;
         public static string DeviceId
         {
             get
             {
-                if (_deviceId == null)
-                    _deviceId = CalculateMD5Hash(GetDeviceId());
-                return _deviceId;
+                return (string)Utils.LocalStore["DEVICE_ID"];
             }
         }
 
+        public static string GetFinalDeviceId() => CalculateMD5Hash(GetDeviceId());
         private static string GetDeviceId()
         {
             if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent("Windows.System.Profile.HardwareIdentification"))

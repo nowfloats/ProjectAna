@@ -23,8 +23,9 @@
                     <Setter Property="MinWidth" Value="100"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Open Selected Connection" Click="ConnectToSelectedClick" IsEnabled="{Binding ElementName=CollectionControl, Path=SelectedItem, Converter={StaticResource N2B}}"/>
             <Button Content="Save and Close" Click="SaveClick"/>
+            <Button Content="Save and Connect" Click="SaveAndConnectClick" IsEnabled="{Binding ElementName=CollectionControl, Path=SelectedItem, Converter={StaticResource N2B}}"/>
+            <Button Content="Cancel" Click="CancelClick"/>
         </StackPanel>
     </Grid>
 </Window>
