@@ -131,6 +131,11 @@ namespace ANAConversationSimulator.Helpers
             Utils.ShowDialog($"Deeplink: {deeplinkSlug}.\r\nNote: Deeplinks not supported here");
         }
 
+        internal static async Task HandleFetchChatFlowAsync(string flowUrl)
+        {
+            await MainPageViewModel.CurrentInstance.JoinNodesFromFlowAsync(flowUrl);
+        }
+
         public static void NavigateToNode(string nodeId)
         {
             MainPageViewModel.CurrentInstance.NavigateToNode(nodeId);

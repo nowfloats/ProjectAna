@@ -159,6 +159,13 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         if (!button.Hidden)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
+                    case ButtonTypeEnum.FetchChatFlow:
+                        if (!button.Hidden)
+                            ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
+                        if (!string.IsNullOrWhiteSpace(button.VariableName) && button.VariableValue != null) //VariableValue should be != null only
+                            ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
+                        await ButtonActionHelper.HandleFetchChatFlowAsync(button.Url);
+                        break;
                     default:
                         Utils.ShowDialog($"Button type: {button.ButtonType} not supported");
                         break;

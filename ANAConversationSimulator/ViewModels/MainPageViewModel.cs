@@ -65,6 +65,27 @@ namespace ANAConversationSimulator.ViewModels
                 Utils.ShowDialog(ex.Message);
             }
         }
+        public async Task JoinNodesFromFlowAsync(string chatFlowUrl)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(chatFlowUrl))
+                {
+                    Utils.ShowDialog("Given chat flow url is empty! Please provide a correct chat flow url in the button");
+                    return;
+                }
+                using (var hc = new HttpClient())
+                {
+                    var resp = await hc.GetStringAsync(chatFlowUrl);
+                    foreach (var newChatNode in JArray.Parse(resp))
+                        chatNodes.Add(newChatNode);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowDialog(ex.Message);
+            }
+        }
         public JToken GetNodeById(string nodeId)
         {
             return chatNodes.Children().FirstOrDefault(x => x["Id"].ToString() == nodeId);
