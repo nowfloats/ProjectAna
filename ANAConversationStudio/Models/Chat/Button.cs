@@ -248,6 +248,7 @@ namespace ANAConversationStudio.Models.Chat
         NextNode,
         DeepLink,
         GetAgent,
-        ShowConfirmation
+        ShowConfirmation,
+        FetchChatFlow
     }
 }
