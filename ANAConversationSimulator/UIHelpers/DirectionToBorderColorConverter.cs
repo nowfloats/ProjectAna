@@ -9,7 +9,7 @@ using Windows.UI.Xaml.Media;
 
 namespace ANAConversationSimulator.UIHelpers
 {
-    class DirectionToForegroundColorConverter : IValueConverter
+    public class DirectionToBorderColorConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, string language)
         {
@@ -18,11 +18,13 @@ namespace ANAConversationSimulator.UIHelpers
                 switch (direction)
                 {
                     case MessageDirection.In:
-                        return new SolidColorBrush(Windows.UI.Colors.Black) { Opacity = 1 };
+                        return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 234, 237, 242)) { Opacity = 1 }; //Pale White
+                    case MessageDirection.AwkwardCenter:
+                        return new SolidColorBrush(Windows.UI.Colors.Transparent);
                     case MessageDirection.Out:
-                        return new SolidColorBrush(Windows.UI.Colors.White) { Opacity = 1 };
+                        return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 173, 239)) { Opacity = 1 }; //NF Yellow
                     default:
-                        return new SolidColorBrush(Windows.UI.Colors.Black) { Opacity = 1 };
+                        return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 234, 237, 242)) { Opacity = 1 }; //Pale White
                 }
             }
             return value;

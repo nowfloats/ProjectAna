@@ -25,11 +25,18 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
         {
             if (parameter is Button button)
             {
+                var parentNode = MainPageViewModel.CurrentInstance.GetNodeById(button.NodeId);
+                var parsedParentNode = parentNode?.ToObject<ChatNode>();
+
+                //Special Case: Print OTP Section
+                if (Utils.IsSectionTypePresentInNode(parentNode, SectionTypeEnum.PrintOTP))
+                    button.VariableValue = PrintOTPSection.OTP;
+
                 var userData = new Dictionary<string, string>();
                 switch (button.ButtonType)
                 {
                     case ButtonTypeEnum.PostText:
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
                     case ButtonTypeEnum.OpenUrl:
@@ -39,7 +46,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         if (string.IsNullOrWhiteSpace(button.VariableValue)) return;
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
                         userData[button.VariableName] = button.VariableValue;
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
                     case ButtonTypeEnum.GetEmail:
@@ -52,7 +59,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
                         userData[button.VariableName] = button.VariableValue;
 
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
                     case ButtonTypeEnum.GetNumber:
@@ -65,7 +72,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         }
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, d.ToString());
                         userData[button.VariableName] = d.ToString();
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + d.ToString() + button.PostfixText);
                         break;
                     case ButtonTypeEnum.GetPhoneNumber:
@@ -78,20 +85,20 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
                         userData[button.VariableName] = button.VariableValue;
 
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
                     case ButtonTypeEnum.GetItemFromSource:
-                        var valueToSave = button.Items.FirstOrDefault(x => x.Value == button.VariableValue);
-                        if (valueToSave.Key == null && valueToSave.Value == null)
+                        var valueToSave = button.Items?.FirstOrDefault(x => x.Value == button.VariableValue);
+                        if (valueToSave?.Key == null && valueToSave?.Value == null)
                         {
                             Utils.ShowDialog("Invalid value");
                             return;
                         }
-                        ButtonActionHelper.HandleSaveTextInput(button.VariableName, valueToSave.Key);
-                        userData[button.VariableName] = valueToSave.Key;
+                        ButtonActionHelper.HandleSaveTextInput(button.VariableName, valueToSave?.Key);
+                        userData[button.VariableName] = valueToSave?.Key;
 
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.PrefixText + button.VariableValue + button.PostfixText);
                         break;
                     case ButtonTypeEnum.GetAddress:
@@ -122,7 +129,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                                             userData["STREET_ADDRESS"] = ad.StreetAddress;
                                             #endregion
 
-                                            if (!button.Hidden)
+                                            if (!button.Hidden && button.PostToChat)
                                                 ButtonActionHelper.HandlePostTextToThread($"{ad.StreetAddress}\r\n\r\nCity: {ad.City}\r\nCountry: {ad.Country}\r\nPin: {ad.PinCode}");
                                             done = true;
                                         }
@@ -143,24 +150,24 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                         ButtonActionHelper.HandlePostMediaToThread(mediaUrl, button.ButtonType);
                         break;
                     case ButtonTypeEnum.NextNode:
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         if (!string.IsNullOrWhiteSpace(button.VariableName) && button.VariableValue != null) //VariableValue should be != null only
                             ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
                         break;
                     case ButtonTypeEnum.DeepLink:
                         await ButtonActionHelper.HandleDeepLinkAsync(button.DeepLinkUrl);
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
                     case ButtonTypeEnum.GetAgent:
                         if (MainPageViewModel.CurrentInstance != null)
                             MainPageViewModel.CurrentInstance.AgentChat();
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         break;
                     case ButtonTypeEnum.FetchChatFlow:
-                        if (!button.Hidden)
+                        if (!button.Hidden && button.PostToChat)
                             ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
                         if (!string.IsNullOrWhiteSpace(button.VariableName) && button.VariableValue != null) //VariableValue should be != null only
                             ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);

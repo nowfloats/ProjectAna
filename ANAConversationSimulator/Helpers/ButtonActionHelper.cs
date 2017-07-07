@@ -80,7 +80,7 @@ namespace ANAConversationSimulator.Helpers
             MainPageViewModel.CurrentInstance.AddOutgoingSection(new TextSection
             {
                 SectionType = SectionTypeEnum.Text,
-                Text = text
+                Text = text,
             });
         }
         public static void HandlePostMediaToThread(string mediaUrl, ButtonTypeEnum mediaType)

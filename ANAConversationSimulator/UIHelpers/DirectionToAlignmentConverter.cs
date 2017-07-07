@@ -21,7 +21,8 @@ namespace ANAConversationSimulator.UIHelpers
                         return HorizontalAlignment.Left;
                     case MessageDirection.Out:
                         return HorizontalAlignment.Right;
-
+                    case MessageDirection.AwkwardCenter:
+                        return HorizontalAlignment.Center;
                 }
             }
             return value;
