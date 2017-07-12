@@ -7,14 +7,6 @@ namespace ANAConversationPlatform.Controllers
     [Produces("application/json")]
     public class ActivityController : Controller
     {
-        [HttpGet]
-        public ActionResult Summary(string nodeIds)
-        {
-            var nodeIdList = nodeIds.Split(',');
-
-            return Ok(new { Message = "Done" });
-        }
-
         [HttpPost]
         public ActionResult Track([FromBody]ChatActivityEvent activityEvent)
         {

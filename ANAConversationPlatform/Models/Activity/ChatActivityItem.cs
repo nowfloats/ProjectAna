@@ -13,6 +13,7 @@ namespace ANAConversationPlatform.Models.Activity
         public Dictionary<string, string> UserData { get; set; }
         public string UserId { get; set; }
         public string NodeId { get; set; }
+        public string ProjectId { get; set; }
         public DateTime EventDateTime { get; set; }
     }
 }
