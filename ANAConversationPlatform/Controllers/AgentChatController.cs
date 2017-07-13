@@ -35,7 +35,7 @@ namespace ANAConversationPlatform.Controllers
         public async Task<ActionResult> SubmitHistory([FromBody]SubmitChatHistoryModel history)
         {
             if (string.IsNullOrWhiteSpace(history.CHAT_USER_ID) || string.IsNullOrWhiteSpace(history.CHAT_USER_TOKEN))
-                return BadRequest("Empty chat user id or chat user token");
+                return BadRequest(new { Message = "Empty chat user id or chat user token" });
             if (history == null || history.HISTORY == null || history.HISTORY.Count <= 0)
                 return Ok();
 

@@ -15,7 +15,7 @@ namespace ANAConversationPlatform.Controllers
             var projs = await MongoHelper.GetProjectsAsync();
             if (projs != null)
                 return Json(new { Message = "Projects list", Data = projs });
-            return BadRequest("Unable to list the projects!");
+            return BadRequest(new { Message = "Unable to list the projects!" });
         }
 
         [HttpPost]
@@ -25,7 +25,7 @@ namespace ANAConversationPlatform.Controllers
             if (projs != null)
                 return Ok(new { Message = "Saved", Data = projects });
 
-            return BadRequest("Unable to save!");
+            return BadRequest(new { Message = "Unable to save!" });
         }
     }
 }

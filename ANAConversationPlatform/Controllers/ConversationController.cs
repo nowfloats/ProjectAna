@@ -28,7 +28,7 @@ namespace ANAConversationPlatform.Controllers
             try
             {
                 if (string.IsNullOrWhiteSpace(projectId) && string.IsNullOrWhiteSpace(projectName))
-                    return BadRequest("Either project id or project name has to be provided");
+                    return BadRequest(new { Message = "Either project id or project name has to be provided" });
 
                 ChatFlowPack chatFlowPack = null;
                 if (!string.IsNullOrWhiteSpace(projectId))
@@ -37,7 +37,7 @@ namespace ANAConversationPlatform.Controllers
                     chatFlowPack = await MongoHelper.GetChatFlowPackByProjectNameAsync(projectName);
 
                 if (chatFlowPack == null)
-                    return BadRequest("No chat flow found by the given project id or name");
+                    return BadRequest(new { Message = "No chat flow found by the given project id or name" });
 
                 var chatNodes = ChatFlowBuilder.Build(chatFlowPack);
                 if (chatNodes == null || chatNodes.Count == 0)
@@ -72,7 +72,7 @@ namespace ANAConversationPlatform.Controllers
                     req = BsonSerializer.Deserialize<ChatFlowPack>(s.ReadToEnd());
 
                 if (req == null)
-                    return BadRequest("No chat flow received to save!");
+                    return BadRequest(new { Message = "No chat flow received to save!" });
 
                 var saved = await MongoHelper.SaveChatFlowAsync(req);
                 if (saved)
@@ -80,9 +80,9 @@ namespace ANAConversationPlatform.Controllers
             }
             catch (System.Exception ex)
             {
-                return BadRequest("Unable to save chat flow!. Ex: " + ex.Message);
+                return BadRequest(new { Message = "Unable to save chat flow!. Ex: " + ex.Message });
             }
-            return BadRequest("Unable to save chat flow!");
+            return BadRequest(new { Message = "Unable to save chat flow!" });
         }
 
         [Produces("text/plain")]
@@ -90,12 +90,12 @@ namespace ANAConversationPlatform.Controllers
         public async Task<ActionResult> FetchChatFlow([FromQuery] string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))
-                return BadRequest("Project Id is not provided!");
+                return BadRequest(new { Message = "Project Id is not provided!" });
 
             var proj = await MongoHelper.GetChatFlowPackAsync(projectId);
             if (proj != null)
                 return Content(new { Message = "Fetched", Data = proj }.ToJson(), "text/plain");
-            return BadRequest("Project with the given id was not found or could not be retrieved!");
+            return BadRequest(new { Message = "Project with the given id was not found or could not be retrieved!" });
         }
 
         private void AddAgentChatNodes(List<ChatNode> chatNodes)

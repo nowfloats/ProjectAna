@@ -296,6 +296,11 @@ namespace ANAConversationStudio.Views
 
         private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
         {
+            if (StudioContext.Current?.ChatServer?.ServerUrl == null)
+            {
+                System.Windows.MessageBox.Show("No project is loaded at the moment");
+                return;
+            }
             Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
         }
     }
