@@ -62,7 +62,7 @@ namespace ANAConversationPlatform.Controllers
 
             var saved = await MongoHelper.SaveChatFlowAsync(req);
             if (saved)
-                return Json(new { Message = "Chat flow saved", Data = req });
+                return Content(new { Message = "Chat flow saved", Data = req }.ToJson(), "text/plain");
             return BadRequest("Unable to save chat flow!");
         }
 

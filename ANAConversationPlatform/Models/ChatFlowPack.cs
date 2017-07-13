@@ -2,7 +2,7 @@
 
 namespace ANAConversationPlatform.Models
 {
-    public class ChatFlowPack : BaseTimestampEntity
+    public class ChatFlowPack : BaseIdTimestampEntity
     {
         public string ProjectId { get; set; }
 

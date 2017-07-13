@@ -119,7 +119,7 @@ namespace ANAConversationStudio.Helpers
                     wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.AuthUser}:{ChatServer.AuthKey}"));
                     T resp = default(T);
                     if (strictTypeNames)
-                        resp = JsonConvert.DeserializeObject<T>(await wc.UploadStringTaskAsync(api, JsonConvert.SerializeObject(requestData)), Utilities.StrictTypeHandlingJsonSettings);
+                        resp = BsonSerializer.Deserialize<T>(await wc.DownloadStringTaskAsync(api));
                     else
                         resp = JsonConvert.DeserializeObject<T>(await wc.UploadStringTaskAsync(api, JsonConvert.SerializeObject(requestData)));
 

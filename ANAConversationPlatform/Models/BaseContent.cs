@@ -1,6 +1,6 @@
 ﻿namespace ANAConversationPlatform.Models
 {
-    public class BaseContent : BaseTimestampEntity
+    public class BaseContent : BaseIdTimestampEntity
     {
         public string NodeName { get; set; }
         public string NodeId { get; set; }
