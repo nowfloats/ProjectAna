@@ -899,6 +899,7 @@ namespace ANAConversationStudio.Views
         private async void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!AskAlert) return;
+            if (StudioContext.Current == null) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {

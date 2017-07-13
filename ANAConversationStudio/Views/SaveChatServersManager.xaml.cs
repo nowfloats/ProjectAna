@@ -23,16 +23,20 @@ namespace ANAConversationStudio.Views
         {
             if (HideConfirm) return;
 
-            var op = MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
-            if (op == MessageBoxResult.Cancel)
-            {
-                e.Cancel = true;
-                Application.Current.Shutdown();
-                return;
-            }
+            var op = MessageBox.Show("Save changes and exit?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Yes)
             {
                 Save();
+                HideConfirm = true;
+                if (MainWindow.Current != null)
+                    MainWindow.Current.AskAlert = false;
+                Application.Current.Shutdown();
+            }
+            else if (op == MessageBoxResult.No)
+            {
+                HideConfirm = true;
+                if (MainWindow.Current != null)
+                    MainWindow.Current.AskAlert = false;
                 Application.Current.Shutdown();
             }
         }
