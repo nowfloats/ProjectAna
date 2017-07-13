@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -66,10 +67,14 @@ namespace ANAConversationStudio.Helpers
 
     public class ChatServerConnection
     {
-        public string ServerUrl { get; set; }
+        [PropertyOrder(1)]
         public string Name { get; set; }
-
+        [PropertyOrder(2)]
+        public string ServerUrl { get; set; }
+        
+        [PropertyOrder(3)]
         public string AuthUser { get; set; }
+        [PropertyOrder(4)]
         public string AuthKey { get; set; }
 
         public override string ToString()

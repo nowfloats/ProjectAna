@@ -296,12 +296,22 @@ namespace ANAConversationStudio.Views
 
         private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
         {
+            StartChatInSimulator();
+        }
+
+        private void StartChatInSimulator()
+        {
             if (StudioContext.Current?.ChatServer?.ServerUrl == null)
             {
                 System.Windows.MessageBox.Show("No project is loaded at the moment");
                 return;
             }
             Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
+        }
+
+        private void StartInSimulator_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            StartChatInSimulator();
         }
     }
 
@@ -830,7 +840,6 @@ namespace ANAConversationStudio.Views
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Title += " " + GetVersion();
             this.IsEnabled = false;
             if (!AskPass()) return;
 
@@ -838,7 +847,7 @@ namespace ANAConversationStudio.Views
             AskToSelectChatServer();
             LoadProjects();
             CheckForUpdates();
-
+            UpdateTitle();
             #region Overview Windows Commented
             //OverviewWindow overviewWindow = new OverviewWindow();
             //overviewWindow.Left = this.Left;
@@ -848,7 +857,17 @@ namespace ANAConversationStudio.Views
             //overviewWindow.Show(); 
             #endregion
         }
+        private void UpdateTitle()
+        {
+            var chatServerName = StudioContext.Current?.ChatServer?.Name;
+            var chatProjectName = StudioContext.Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == StudioContext.Current?.ChatFlow?.ProjectId)?.Name;
 
+            var title = $"{chatServerName} : {chatProjectName}";
+            if (string.IsNullOrWhiteSpace(chatServerName) || string.IsNullOrWhiteSpace(chatProjectName))
+                Title = $"ANA Conversation Studio {GetVersion()}";
+            else
+                Title = $"{title} - ANA Conversation Studio {GetVersion()}";
+        }
         private void AskToSelectChatServer()
         {
             SaveChatServersManager man = new SaveChatServersManager();
@@ -995,6 +1014,7 @@ namespace ANAConversationStudio.Views
             await StudioContext.Current.LoadChatFlowAsync(proj._id);
             this.ViewModel.LoadNodes();
             Status("Loaded");
+            UpdateTitle();
 
 #pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
             Task.Delay(500).ContinueWith((s) =>

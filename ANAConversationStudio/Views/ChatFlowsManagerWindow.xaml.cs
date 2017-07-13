@@ -107,7 +107,7 @@ namespace ANAConversationStudio.Views
                 }
                 catch (Exception ex)
                 {
-                    MainWindow.Current.Status("Unable to connect to the chat server. " + ex.Message);
+                    MessageBox.Show("Unable to load the selected chat flow project.");
                 }
             }
         }

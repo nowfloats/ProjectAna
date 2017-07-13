@@ -57,6 +57,7 @@
             <RoutedUICommand x:Key="Commands.Save" />
             <RoutedUICommand x:Key="Commands.PrevNode" />
             <RoutedUICommand x:Key="Commands.NextNode" />
+            <RoutedUICommand x:Key="Commands.StartInSimulator" />
 
             <!-- 
             This converts from a scale value to a percentage value.
@@ -471,6 +472,10 @@
             Modifiers="Ctrl"
 			Command="{StaticResource Commands.NextNode}"
 			/>
+        <KeyBinding
+			Key="F5"
+			Command="{StaticResource Commands.StartInSimulator}"
+			/>
     </Window.InputBindings>
 
     <Window.CommandBindings>
@@ -533,6 +538,10 @@
         <CommandBinding 
             Command="{StaticResource Commands.PrevNode}" 
             Executed="PrevNode_Executed" 
+            />
+        <CommandBinding 
+            Command="{StaticResource Commands.StartInSimulator}" 
+            Executed="StartInSimulator_Executed" 
             />
     </Window.CommandBindings>
 
@@ -612,8 +621,8 @@
             </MenuItem>
             <MenuItem Header="Tools">
                 <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
-                <MenuItem Header="Launch Current Chat in Simulator" Click="ConvSimWithChatMenuClick"/>
-                
+                <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
+
             </MenuItem>
             <MenuItem Header="Help" Name="HelpMenu">
                 <MenuItem Header="No update available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
