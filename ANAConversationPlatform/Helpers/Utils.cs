@@ -17,4 +17,13 @@ namespace ANAConversationPlatform.Helpers
         public int BaseTimeTakenToTypePerChar { get; set; }
         public int VariableTimeTakenToTypePerChar { get; set; }
     }
+    public class APIResponse
+    {
+        public bool Status { get; set; }
+        public string Message { get; set; }
+    }
+    public class DataResponse<T> : APIResponse
+    {
+        public T Data { get; set; }
+    }
 }

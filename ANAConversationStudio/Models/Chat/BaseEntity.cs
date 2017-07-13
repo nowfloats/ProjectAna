@@ -79,5 +79,4 @@ namespace ANAConversationStudio.Models
             return Alias;
         }
     }
-
 }

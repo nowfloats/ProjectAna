@@ -1,4 +1,9 @@
-﻿namespace ANAConversationPlatform.Helpers
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
+using System.Collections.Generic;
+
+namespace ANAConversationPlatform.Helpers
 {
     public static class Constants
     {
@@ -15,5 +20,17 @@
             CHAT_ACTION_ERROR = 7,
             HYBRID_CHAT_ACTION_ERROR = 8,
         }
+
+        public static readonly JsonSerializerSettings ChatFlowJsonSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            Converters = new List<JsonConverter> { new StringEnumConverter() }
+        };
+
+        public static readonly JsonSerializerSettings PublishJsonSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            Converters = new List<JsonConverter> { new StringEnumConverter() }
+        };
     }
 }

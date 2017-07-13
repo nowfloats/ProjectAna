@@ -7,12 +7,9 @@ using ANAConversationPlatform.Models.Sections;
 using ANAConversationPlatform.Models.Settings;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using ANAConversationPlatform.Models.Activity;
 using System.Threading.Tasks;
-using System.Collections.Concurrent;
-using ANAConversationPlatform.Controllers;
 using Microsoft.Extensions.Logging;
 using static ANAConversationPlatform.Helpers.Constants;
 
@@ -46,15 +43,32 @@ namespace ANAConversationPlatform.Helpers
             if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselSection)))
                 BsonClassMap.RegisterClassMap<CarouselSection>();
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof(Content)))
-                BsonClassMap.RegisterClassMap<Content>();
+            if (!BsonClassMap.IsClassMapRegistered(typeof(SectionContent)))
+                BsonClassMap.RegisterClassMap<SectionContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(TextSectionContent)))
+                BsonClassMap.RegisterClassMap<TextSectionContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(TitleCaptionSectionContent)))
+                BsonClassMap.RegisterClassMap<TitleCaptionSectionContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(ImageSectionContent)))
+                BsonClassMap.RegisterClassMap<ImageSectionContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(ButtonContent)))
+                BsonClassMap.RegisterClassMap<ButtonContent>();
 
             if (!BsonClassMap.IsClassMapRegistered(typeof(PrintOTPSection)))
                 BsonClassMap.RegisterClassMap<PrintOTPSection>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselButtonContent)))
+                BsonClassMap.RegisterClassMap<CarouselButtonContent>();
+
+            if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselItemContent)))
+                BsonClassMap.RegisterClassMap<CarouselItemContent>();
             #endregion
         }
         public static ILogger Logger { get; set; }
-
         public static DatabaseConnectionSettings Settings { get; set; }
 
         private static MongoClient _chatClient;
@@ -75,7 +89,7 @@ namespace ANAConversationPlatform.Helpers
             }
         }
 
-        public static void InsertActivityEvent(ChatActivityEvent activityEvent)
+        public static async Task InsertActivityEventAsync(ChatActivityEvent activityEvent)
         {
             try
             {
@@ -83,7 +97,7 @@ namespace ANAConversationPlatform.Helpers
                     activityEvent._id = ObjectId.GenerateNewId().ToString();
 
                 var coll = ChatDB.GetCollection<ChatActivityEvent>(Settings.ActivityEventLogCollectionName);
-                coll.InsertOne(activityEvent);
+                await coll.InsertOneAsync(activityEvent);
             }
             catch (Exception ex)
             {
@@ -174,7 +188,7 @@ namespace ANAConversationPlatform.Helpers
             }
             catch (Exception ex)
             {
-                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "GetProjectAsync: {0}", ex.Message);
+                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "GetChatFlowPackAsync: {0}", ex.Message);
                 return null;
             }
         }

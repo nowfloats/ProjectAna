@@ -1,13 +1,10 @@
 ﻿using MongoDB.Bson;
 using ANAConversationStudio.Models;
-using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.ViewModels;
 using ANAConversationStudio.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 
 namespace ANAConversationStudio.Helpers
@@ -16,9 +13,11 @@ namespace ANAConversationStudio.Helpers
     {
         public static void CloneNode(NodeViewModel node)
         {
+            if (StudioContext.Current?.ChatFlow?.ChatContent == null) return;
             if (node == null) return;
+
             var copyChatNode = node.ChatNode.DeepCopy();
-            var contentBankOfNode = MongoHelper.Current.Contents.Where(x => x.NodeId == copyChatNode.Id).ToList().DeepCopy();
+            var contentBankOfNode = StudioContext.Current.ChatFlow.ChatContent.Where(x => x.NodeId == copyChatNode.Id).ToList().DeepCopy();
 
             var nodeContents = contentBankOfNode.Where(x => x is NodeContent).ToList();
             List<BaseContent> btnContents = null;
@@ -56,7 +55,7 @@ namespace ANAConversationStudio.Helpers
                         (sectionContent as SectionContent).SectionId = section._id;
             }
 
-            MongoHelper.Current.Contents.AddRange(contentBankOfNode);
+            StudioContext.Current.ChatFlow.ChatContent.AddRange(contentBankOfNode);
             MainWindow.Current.ViewModel.CreateNode(copyChatNode, new Point(node.X + 100, node.Y + 100));
         }
     }

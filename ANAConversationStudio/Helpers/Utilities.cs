@@ -15,16 +15,16 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json.Converters;
 
 namespace ANAConversationStudio.Helpers
 {
     public static class Utilities
     {
         public static Settings Settings { get; set; }
-        
+
         public static BaseContent GetContentObject(object contentOwner)
         {
             BaseContent contentObj = null;
@@ -42,31 +42,34 @@ namespace ANAConversationStudio.Helpers
         }
         public static IEnumerable<BaseContent> GetContentBank(object choosenOwner)
         {
+            if (StudioContext.Current?.ChatFlow?.ChatContent == null)
+                return new List<BaseContent>();
+
             if (choosenOwner is ChatNode node)
-                return MongoHelper.Current.Contents.Where(x => x is NodeContent).Cast<NodeContent>().Where(x => x.NodeId == node.Id).ToList();
+                return StudioContext.Current.ChatFlow.ChatContent.Where(x => x is NodeContent).Cast<NodeContent>().Where(x => x.NodeId == node.Id).ToList();
 
             if (choosenOwner is Section section)
-                return MongoHelper.Current.Contents.Where(x => x is SectionContent).Cast<SectionContent>().Where(x => x.SectionId == section._id).ToList();
+                return StudioContext.Current.ChatFlow.ChatContent.Where(x => x is SectionContent).Cast<SectionContent>().Where(x => x.SectionId == section._id).ToList();
 
             if (choosenOwner is Button btn)
-                return MongoHelper.Current.Contents.Where(x => x is ButtonContent).Cast<ButtonContent>().Where(x => x.ButtonId == btn._id).ToList();
+                return StudioContext.Current.ChatFlow.ChatContent.Where(x => x is ButtonContent).Cast<ButtonContent>().Where(x => x.ButtonId == btn._id).ToList();
 
             if (choosenOwner is CarouselItem cItem)
-                return MongoHelper.Current.Contents.Where(x => x is CarouselItemContent).Cast<CarouselItemContent>().Where(x => x.CarouselItemId == cItem._id).ToList();
+                return StudioContext.Current.ChatFlow.ChatContent.Where(x => x is CarouselItemContent).Cast<CarouselItemContent>().Where(x => x.CarouselItemId == cItem._id).ToList();
 
             if (choosenOwner is CarouselButton cButton)
-                return MongoHelper.Current.Contents.Where(x => x is CarouselButtonContent).Cast<CarouselButtonContent>().Where(x => x.CarouselButtonId == cButton._id).ToList();
+                return StudioContext.Current.ChatFlow.ChatContent.Where(x => x is CarouselButtonContent).Cast<CarouselButtonContent>().Where(x => x.CarouselButtonId == cButton._id).ToList();
 
             return new List<BaseContent>();
         }
-        public static void UpdateContentBank(IEnumerable<BaseContent> editedContentEntries)
-        {
-            if (editedContentEntries != null && editedContentEntries.Count() > 0)
-            {
-                MongoHelper.Current.Contents.RemoveAll(x => editedContentEntries.Select(y => y._id).Contains(x._id));
-                MongoHelper.Current.Contents.AddRange(editedContentEntries);
-            }
-        }
+        //public static void UpdateContentBank(IEnumerable<BaseContent> editedContentEntries)
+        //{
+        //    if (editedContentEntries != null && editedContentEntries.Count() > 0)
+        //    {
+        //        MongoHelper.Current.Contents.RemoveAll(x => editedContentEntries.Select(y => y._id).Contains(x._id));
+        //        MongoHelper.Current.Contents.AddRange(editedContentEntries);
+        //    }
+        //}
         public static BaseContent GetContentObjectV2(object contentOwner)
         {
             BaseContent contentObj = null;
@@ -94,12 +97,6 @@ namespace ANAConversationStudio.Helpers
             else if (contentOwner is CarouselButton)
                 contentObj = new CarouselButtonContent();
             return contentObj;
-        }
-
-        static Random rand = new Random();
-        public static int Rand()
-        {
-            return rand.Next(700, 1000);
         }
 
         public static bool IsDesignMode()
@@ -170,6 +167,12 @@ namespace ANAConversationStudio.Helpers
             return cipherText;
         }
 
+
+        public static readonly JsonSerializerSettings StrictTypeHandlingJsonSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            Converters = new List<JsonConverter> { new StringEnumConverter() }
+        };
     }
 
     public static class Exts
@@ -178,6 +181,13 @@ namespace ANAConversationStudio.Helpers
         {
             var json = source.ToJson();
             return BsonSerializer.Deserialize<T>(json);
+        }
+
+        public static Point? GetPointForNode(this Dictionary<string, LayoutPoint> nodeLocations, string chatNodeId)
+        {
+            if (nodeLocations.ContainsKey(chatNodeId) && nodeLocations[chatNodeId] != null)
+                return new Point(nodeLocations[chatNodeId].X, nodeLocations[chatNodeId].Y);
+            return null;
         }
     }
     public static class Logger

@@ -136,16 +136,19 @@
     <Compile Include="Controls\ChatContentCollectionControl.cs" />
     <Compile Include="Controls\ChatNodeCollectionControl.cs" />
     <Compile Include="Controls\ReadonlyTextBoxEditor.cs" />
+    <Compile Include="Helpers\StudioContext.cs" />
     <Compile Include="Helpers\MongoHelper.cs" />
     <Compile Include="Helpers\Shortcuts.cs" />
+    <Compile Include="Models\Chat\ANAProject.cs" />
+    <Compile Include="Models\Chat\ChatFlowPack.cs" />
     <Compile Include="Models\Chat\Sections\PrintOTPSection.cs" />
     <Compile Include="Models\LayoutPoint.cs" />
     <Compile Include="UIHelpers\NullToBoolConverter.cs" />
     <Compile Include="Views\ChatElementCollectionEditorWindow.xaml.cs">
       <DependentUpon>ChatElementCollectionEditorWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\DBConnectionManager.xaml.cs">
-      <DependentUpon>DBConnectionManager.xaml</DependentUpon>
+    <Compile Include="Views\SaveChatServersManager.xaml.cs">
+      <DependentUpon>SaveChatServersManager.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\Utilities.cs" />
@@ -185,9 +188,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Views\DBConnectionManager.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="Views\SaveChatServersManager.xaml">
       <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\EnterPassword.xaml">
       <SubType>Designer</SubType>

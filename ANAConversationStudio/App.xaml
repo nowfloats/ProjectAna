@@ -4,6 +4,7 @@
              xmlns:local="clr-namespace:ANAConversationStudio"
              xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
+             Startup="Application_Startup"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
         <Style TargetType="ListBoxItem" x:Key="ListBoxItemItemContainerStyle" >

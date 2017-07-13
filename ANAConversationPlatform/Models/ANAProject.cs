@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace ANAConversationPlatform.Models
+﻿namespace ANAConversationPlatform.Models
 {
     public class ANAProject : BaseTimestampEntity
     {

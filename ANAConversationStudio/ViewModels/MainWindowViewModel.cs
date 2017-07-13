@@ -9,6 +9,7 @@ using System.Diagnostics;
 using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Helpers;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace ANAConversationStudio.ViewModels
 {
@@ -537,21 +538,21 @@ namespace ANAConversationStudio.ViewModels
             }
         }
 
-        public void SaveNetworkLayout()
+        public async Task SaveLoadedChat()
         {
-            MongoHelper.Current.SaveNodeLocations(this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new Point(x.X, x.Y)));
+            StudioContext.Current.ChatFlow.NodeLocations = this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new LayoutPoint(x.X, x.Y));
+            StudioContext.Current.ChatFlow.ChatNodes = this.Network.Nodes.Select(x => x.ChatNode).ToList();
+
+            await StudioContext.Current.SaveChatFlowAsync();
         }
-        public void SaveChatNodes()
-        {
-            MongoHelper.Current.SaveChatNodes(this.Network.Nodes.Select(x => x.ChatNode).ToList());
-        }
-        public bool LoadNodesFromDB()
+
+        public bool LoadNodes()
         {
             try
             {
-                if (MongoHelper.Current == null)
+                if (StudioContext.Current?.ChatFlow?.ChatNodes == null)
                 {
-                    MessageBox.Show("Database Connection is not yet selected.", "Oops!");
+                    MessageBox.Show("Connection with chat server is not established. Please restart the application and try again.", "Oops!");
                     return false;
                 }
 
@@ -559,10 +560,10 @@ namespace ANAConversationStudio.ViewModels
                 this.Network.Connections.CollectionChanged += Connections_CollectionChanged;
 
                 var start = new Point(100, 60);
-                var allChatNodes = MongoHelper.Current.ChatNodes;
+                var allChatNodes = StudioContext.Current.ChatFlow.ChatNodes;
                 var uniqueChatNodes = allChatNodes.GroupBy(x => x.Id).SelectMany(x => x).OrderByDescending(x => x.IsStartNode).ToList();
 
-                var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, MongoHelper.Current.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
+                var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, StudioContext.Current.ChatFlow.NodeLocations.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
                 this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections  
 
                 foreach (var node in nodeVMs)

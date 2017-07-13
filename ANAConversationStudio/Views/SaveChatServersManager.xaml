@@ -1,12 +1,12 @@
-﻿<Window x:Class="ANAConversationStudio.Views.DBConnectionManager"
+﻿<Window x:Class="ANAConversationStudio.Views.SaveChatServersManager"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:ANAConversationStudio.Views"
         mc:Ignorable="d"
-        Title="Database Connection Manager (Mongo DB is supported currently)" Height="600" Width="800" WindowStyle="ToolWindow">
+        Closing="Window_Closing"
+        Title="Char Server Connection Manager" Height="600" Width="800" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>
@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <xctk:CollectionControl Margin="10" x:Name="CollectionControl"/>
-        <TextBlock Grid.Row="1" Text="Note: First connection will be the default connection and is loaded automatically. Use 'Up' and 'Down' arrows to re-order the connections." Margin="10,0"/>
+        <!--<TextBlock Grid.Row="1" Text="Note: First connection will be the default connection and is loaded automatically. Use 'Up' and 'Down' arrows to re-order the connections." Margin="10,0"/>-->
         <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="Button">
@@ -23,8 +23,8 @@
                     <Setter Property="MinWidth" Value="100"/>
                 </Style>
             </StackPanel.Resources>
-            <Button Content="Save and Close" Click="SaveClick"/>
-            <Button Content="Save and Connect" Click="SaveAndConnectClick" IsEnabled="{Binding ElementName=CollectionControl, Path=SelectedItem, Converter={StaticResource N2B}}"/>
+            <!--<Button Content="Save and Close" Click="SaveClick"/>-->
+            <Button Content="Save and connect selected" Click="SaveAndConnectClick" IsEnabled="{Binding ElementName=CollectionControl, Path=SelectedItem, Converter={StaticResource N2B}}"/>
             <Button Content="Cancel" Click="CancelClick"/>
         </StackPanel>
     </Grid>

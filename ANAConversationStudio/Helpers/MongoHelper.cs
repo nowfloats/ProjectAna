@@ -11,9 +11,11 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
+using System;
 
 namespace ANAConversationStudio.Helpers
 {
+    /*
     public class MongoHelper
     {
         public static MongoHelper Current { get; set; }
@@ -197,4 +199,5 @@ namespace ANAConversationStudio.Helpers
             }
         }
     }
+    */
 }

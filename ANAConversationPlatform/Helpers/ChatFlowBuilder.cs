@@ -22,7 +22,7 @@ namespace ANAConversationPlatform.Helpers
                 var filter = Builders<ChatFlowPack>.Filter;
 
                 var nodesList = new ConcurrentBag<ChatNode>(chatFlow.ChatNodes);
-                var content = new ConcurrentBag<Content>(chatFlow.ChatContent);
+                var content = new ConcurrentBag<BaseContent>(chatFlow.ChatContent);
                 Parallel.ForEach(nodesList, chatNode =>
                 {
                     try
@@ -55,14 +55,14 @@ namespace ANAConversationPlatform.Helpers
         }
 
         private static readonly Random rand = new Random();
-        private static void FillSectionWithContent(Section emptySection, ConcurrentBag<Content> contents)
+        private static void FillSectionWithContent(Section emptySection, ConcurrentBag<BaseContent> contents)
         {
             switch (emptySection.SectionType)
             {
                 case SectionTypeEnum.Image:
                 case SectionTypeEnum.Gif:
                     var imgSection = emptySection as ImageSection;
-                    var imgContent = contents.GetFor(imgSection);
+                    var imgContent = contents.GetFor(imgSection) as ImageSectionContent;
                     if (imgContent != null)
                     {
                         imgSection.Title = imgContent.Title;
@@ -73,7 +73,7 @@ namespace ANAConversationPlatform.Helpers
 
                 case SectionTypeEnum.Text:
                     var textSection = emptySection as TextSection;
-                    var textContent = contents.GetFor(textSection);
+                    var textContent = contents.GetFor(textSection) as TextSectionContent;
                     if (textContent != null)
                     {
                         textSection.Text = textContent.SectionText;
@@ -84,7 +84,7 @@ namespace ANAConversationPlatform.Helpers
 
                 case SectionTypeEnum.Audio:
                     var audioSection = emptySection as AudioSection;
-                    var audioContent = contents.GetFor(audioSection);
+                    var audioContent = contents.GetFor(audioSection) as TitleCaptionSectionContent;
                     if (audioContent != null)
                     {
                         audioSection.Title = audioContent.Title;
@@ -94,7 +94,7 @@ namespace ANAConversationPlatform.Helpers
 
                 case SectionTypeEnum.Video:
                     var videoSection = emptySection as VideoSection;
-                    var videoContent = contents.GetFor(videoSection);
+                    var videoContent = contents.GetFor(videoSection) as TitleCaptionSectionContent;
                     if (videoContent != null)
                     {
                         videoSection.Title = videoContent.Title;
@@ -104,7 +104,7 @@ namespace ANAConversationPlatform.Helpers
 
                 case SectionTypeEnum.EmbeddedHtml:
                     var embeddedHtmlSection = emptySection as EmbeddedHtmlSection;
-                    var embeddedHtmlContent = contents.GetFor(embeddedHtmlSection);
+                    var embeddedHtmlContent = contents.GetFor(embeddedHtmlSection) as TitleCaptionSectionContent;
                     if (embeddedHtmlContent != null)
                     {
                         embeddedHtmlSection.Title = embeddedHtmlContent.Title;
@@ -114,7 +114,7 @@ namespace ANAConversationPlatform.Helpers
 
                 case SectionTypeEnum.Carousel:
                     var carouselSection = emptySection as CarouselSection;
-                    var carContent = contents.GetFor(carouselSection);
+                    var carContent = contents.GetFor(carouselSection) as TitleCaptionSectionContent;
                     if (carContent != null)
                     {
                         carouselSection.Title = carContent.Title;

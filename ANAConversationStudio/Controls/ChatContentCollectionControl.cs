@@ -75,10 +75,11 @@ namespace ANAConversationStudio.Controls
         }
         public void ContentItemDeleted(BaseContent item)
         {
+            if (StudioContext.Current?.ChatFlow?.ChatContent == null) return;
             if (item == null) return;
-            var content = MongoHelper.Current.Contents.FirstOrDefault(x => x._id == item._id);
+            var content = StudioContext.Current.ChatFlow.ChatContent.FirstOrDefault(x => x._id == item._id);
             if (content != null)
-                MongoHelper.Current.Contents.Remove(content);
+                StudioContext.Current.ChatFlow.ChatContent.Remove(content);
         }
 
         private void ItemDeletedEventHandler(object sender, ItemEventArgs e)
@@ -126,7 +127,7 @@ namespace ANAConversationStudio.Controls
         private void ContentItemAdded(BaseContent item)
         {
             if (item == null) return;
-            MongoHelper.Current.Contents.Add(item as BaseContent);
+            StudioContext.Current?.ChatFlow?.ChatContent?.Add(item as BaseContent);
         }
     }
 }

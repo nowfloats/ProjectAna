@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using ANAConversationPlatform.Models.Activity;
 using ANAConversationPlatform.Helpers;
+using System.Threading.Tasks;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -8,9 +9,9 @@ namespace ANAConversationPlatform.Controllers
     public class ActivityController : Controller
     {
         [HttpPost]
-        public ActionResult Track([FromBody]ChatActivityEvent activityEvent)
+        public async Task<ActionResult> Track([FromBody]ChatActivityEvent activityEvent)
         {
-            MongoHelper.InsertActivityEvent(activityEvent);
+            await MongoHelper.InsertActivityEventAsync(activityEvent);
             return Ok();
         }
     }

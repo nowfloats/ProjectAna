@@ -8,6 +8,7 @@ using ANAConversationPlatform.Models.AgentChat;
 using ANAConversationPlatform.Helpers;
 using System.Threading.Tasks;
 using static ANAConversationPlatform.Helpers.Constants;
+using Newtonsoft.Json.Serialization;
 
 namespace ANAConversationPlatform
 {
@@ -34,7 +35,9 @@ namespace ANAConversationPlatform
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services
+                .AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

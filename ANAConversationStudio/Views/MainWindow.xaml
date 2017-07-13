@@ -598,14 +598,15 @@
         </Grid.RowDefinitions>
         <Menu Grid.Row="0" x:Name="menu" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
             <MenuItem Header="File" x:Name="FileMenu">
-                <MenuItem Header="Open Saved" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
+                <MenuItem Header="Connect to Chat Server" Click="ConnectToChatServerClick"/>
+                <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
                     <MenuItem.ItemTemplate>
                         <DataTemplate>
                             <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="SavedConnectionClick"/>
                         </DataTemplate>
                     </MenuItem.ItemTemplate>
                 </MenuItem>
-                <MenuItem Header="Manage Connections" Click="ManageConnectionClick"/>
+                <MenuItem Header="Manage Saved Chat Servers" Click="ManageSavedChatServersClick"/>
                 <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>

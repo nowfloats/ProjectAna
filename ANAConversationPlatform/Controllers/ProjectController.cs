@@ -13,7 +13,7 @@ namespace ANAConversationPlatform.Controllers
         {
             var projs = await MongoHelper.GetProjectsAsync();
             if (projs != null)
-                return Ok(projs);
+                return Json(new { Message = "Projects list", Data = projs });
             return BadRequest("Unable to list the projects!");
         }
 

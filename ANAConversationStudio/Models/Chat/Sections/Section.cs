@@ -1,7 +1,4 @@
-﻿using ANAConversationStudio.Models;
-using ANAConversationStudio.Helpers;
-using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 
 namespace ANAConversationStudio.Models.Chat
 {
@@ -12,7 +9,7 @@ namespace ANAConversationStudio.Models.Chat
         [Category("Important")]
         public SectionTypeEnum SectionType { get; set; }
 
-        public int DelayInMs { get; set; } = Utilities.Rand();
+        public int DelayInMs { get; set; }
         public bool Hidden { get; set; } = false;
     }
 

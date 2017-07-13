@@ -1,14 +1,12 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ANAConversationPlatform.Helpers;
-using System.Diagnostics;
-using MongoDB.Bson;
-using Newtonsoft.Json;
 using ANAConversationPlatform.Models;
 using ANAConversationPlatform.Models.Sections;
 using Microsoft.Extensions.Logging;
 using static ANAConversationPlatform.Helpers.Constants;
 using System.Threading.Tasks;
+using MongoDB.Bson;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -27,20 +25,21 @@ namespace ANAConversationPlatform.Controllers
         {
             try
             {
+                if (string.IsNullOrWhiteSpace(projectId))
+                    return BadRequest("Project Id is not provided!");
+
                 var chatFlowPack = await MongoHelper.GetChatFlowPackAsync(projectId);
+                if (chatFlowPack == null)
+                    return BadRequest("No chat flow found by the given project id");
 
                 var chatNodes = ChatFlowBuilder.Build(chatFlowPack);
-                if (enableAgentChat)
-                    AddAgentChatNodes(chatNodes);
-
                 if (chatNodes == null || chatNodes.Count == 0)
                     return Ok(new object[] { });
 
-                return Json(chatNodes, new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
-                });
+                if (enableAgentChat)
+                    AddAgentChatNodes(chatNodes);
+
+                return Json(chatNodes, PublishJsonSettings);
             }
             catch (System.Exception ex)
             {
@@ -58,18 +57,24 @@ namespace ANAConversationPlatform.Controllers
         [HttpPost]
         public async Task<ActionResult> SaveChatFlow([FromBody] ChatFlowPack req)
         {
+            if (req == null)
+                return BadRequest("No chat flow received to save!");
+
             var saved = await MongoHelper.SaveChatFlowAsync(req);
             if (saved)
-                return Ok(new { Message = "Chat flow saved", Data = req });
+                return Json(new { Message = "Chat flow saved", Data = req });
             return BadRequest("Unable to save chat flow!");
         }
 
         [HttpGet]
-        public ActionResult FetchChatFlow([FromQuery] string projectId)
+        public async Task<ActionResult> FetchChatFlow([FromQuery] string projectId)
         {
-            var proj = MongoHelper.GetProjectAsync(projectId);
+            if (string.IsNullOrWhiteSpace(projectId))
+                return BadRequest("Project Id is not provided!");
+
+            var proj = await MongoHelper.GetChatFlowPackAsync(projectId);
             if (proj != null)
-                return Ok(new { Message = "Fetched", Data = proj });
+                return Content(new { Message = "Fetched", Data = proj }.ToJson(), "text/plain");
             return BadRequest("Project with the given id was not found or could not be retrieved!");
         }
 

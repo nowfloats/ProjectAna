@@ -17,6 +17,7 @@ using System.Net;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ANAConversationStudio.Views
 {
@@ -279,6 +280,17 @@ namespace ANAConversationStudio.Views
             if (Keyboard.IsKeyDown(Key.D4))
                 position = 4;
             GotoPreviousNode(position);
+        }
+
+        private void ConnectToChatServerClick(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ManageSavedChatServersClick(object sender, RoutedEventArgs e)
+        {
+            SaveChatServersManager w = new SaveChatServersManager(Utilities.Settings.SavedChatServerConnections);
+            w.ShowDialog();
         }
     }
 
@@ -812,7 +824,8 @@ namespace ANAConversationStudio.Views
             if (!AskPass()) return;
 
             this.IsEnabled = true;
-            LoadSavedConnections();
+            AskToSelectChatServer();
+            LoadProjects();
             CheckForUpdates();
 
             #region Overview Windows Commented
@@ -824,6 +837,13 @@ namespace ANAConversationStudio.Views
             //overviewWindow.Show(); 
             #endregion
         }
+
+        private void AskToSelectChatServer()
+        {
+            SaveChatServersManager man = new SaveChatServersManager(Utilities.Settings.SavedChatServerConnections);
+            man.ShowDialog();
+        }
+
         private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
         private async void CheckForUpdates()
         {
@@ -846,7 +866,7 @@ namespace ANAConversationStudio.Views
             }
         }
         public bool AskAlert = true;
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!AskAlert) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
@@ -857,7 +877,7 @@ namespace ANAConversationStudio.Views
             }
             if (op == MessageBoxResult.Yes)
             {
-                SaveEdits();
+                await SaveEditsAsync();
             }
         }
 
@@ -883,13 +903,13 @@ namespace ANAConversationStudio.Views
                 this.ViewModel.Network.Nodes.Select(x => x.ChatNode).Where(x => x.Id != senderNode.Id && x.IsStartNode).ToList().ForEach(x => x.IsStartNode = false);
         }
 
-        private void SaveButtonClick(object sender, RoutedEventArgs e)
+        private async void SaveButtonClick(object sender, RoutedEventArgs e)
         {
-            SaveEdits();
+            await SaveEditsAsync();
         }
-        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SaveEdits();
+            await SaveEditsAsync();
         }
 
         #region TODO: Window Layout Save and Load Functions 
@@ -920,15 +940,12 @@ namespace ANAConversationStudio.Views
         //} 
         #endregion
 
-        private void SaveEdits()
+        private async Task SaveEditsAsync()
         {
             try
             {
                 if (this.ViewModel.Network == null) return;
-
-                this.ViewModel.SaveNetworkLayout();
-                this.ViewModel.SaveChatNodes();
-                MongoHelper.Current.SaveChatContent();
+                await this.ViewModel.SaveLoadedChat();
                 StatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString();
             }
             catch (Exception ex)
@@ -939,56 +956,43 @@ namespace ANAConversationStudio.Views
 
         private bool LoadFileMenuSavedConnections()
         {
-            if (Utilities.Settings.SavedConnections.Count <= 0)
+            if (StudioContext.Current?.AvailableProjects == null || StudioContext.Current?.AvailableProjects.Count <= 0)
             {
                 SavedConnectionsFileMenu.IsEnabled = false;
                 return false;
             }
-            SavedConnectionsFileMenu.ItemsSource = Utilities.Settings.SavedConnections;
+            SavedConnectionsFileMenu.ItemsSource = StudioContext.Current.AvailableProjects;
             SavedConnectionsFileMenu.IsEnabled = true;
             return true;
         }
-        private void LoadSavedConnections()
+        private async void LoadProjects()
         {
             if (LoadFileMenuSavedConnections())
-                LoadConnection(Utilities.Settings.SavedConnections.First());
+                await LoadProjectAsync(StudioContext.Current.AvailableProjects.First());
         }
         public void Status(string txt)
         {
             StatusTextblock.Text = txt;
         }
-        private void SavedConnectionClick(object sender, RoutedEventArgs e)
+        private async void SavedConnectionClick(object sender, RoutedEventArgs e)
         {
-            LoadConnection((sender as MenuItem).Tag as DatabaseConnection);
+            await LoadProjectAsync((sender as MenuItem).Tag as ANAProject);
         }
 
-        private void LoadConnection(DatabaseConnection conn)
+        private async Task LoadProjectAsync(ANAProject proj)
         {
-            if (conn == null)
-            {
-                Status("Unable to load.");
-                return;
-            }
-            if (!conn.IsValid())
-            {
-                Status("Invalid Connection. Please edit and complete it.");
-                return;
-            }
-            MongoHelper.Current = new MongoHelper(conn);
-            this.ViewModel.LoadNodesFromDB();
+            await StudioContext.Current.LoadChatFlowAsync(proj._id);
+            this.ViewModel.LoadNodes();
             Status("Loaded");
-            System.Threading.Tasks.Task.Delay(500).ContinueWith((s) =>
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Delay(500).ContinueWith((s) =>
             {
                 Dispatcher.Invoke(() => this.FitContent_Executed(null, null));
             });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        private void ManageConnectionClick(object sender, RoutedEventArgs e)
-        {
-            DBConnectionManager man = new DBConnectionManager(Utilities.Settings.SavedConnections);
-            man.ShowDialog();
-            LoadFileMenuSavedConnections();
-        }
         private void ResetEditors()
         {
             this.ViewModel.SelectedChatNode = null;

@@ -1,5 +1,4 @@
-﻿using ANAConversationStudio.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -10,7 +9,9 @@ namespace ANAConversationStudio.Helpers
     {
         const string FILE_NAME = "Settings.json";
 
-        public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
+        //public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
+
+        public List<ChatServerConnection> SavedChatServerConnections { get; set; } = new List<ChatServerConnection>();
         public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
         public static bool IsEncrypted()
         {
@@ -60,6 +61,29 @@ namespace ANAConversationStudio.Helpers
         public bool IsValid()
         {
             return Utilities.ValidateStrings(TemplateCollectionName, ContentCollectionName, LayoutCollectionName, DatabaseName, ConnectionString, Name);
+        }
+    }
+
+    public class ChatServerConnection
+    {
+        public string ServerUrl { get; set; }
+        public string Name { get; set; }
+
+        public string AuthUser { get; set; }
+        public string AuthKey { get; set; }
+
+        public override string ToString()
+        {
+            if (!string.IsNullOrWhiteSpace(Name))
+                return Name;
+            if (!string.IsNullOrWhiteSpace(ServerUrl))
+                return ServerUrl;
+            return "New Chat Server Connection";
+        }
+
+        public bool IsValid()
+        {
+            return Utilities.ValidateStrings(ServerUrl, Name);
         }
     }
 
