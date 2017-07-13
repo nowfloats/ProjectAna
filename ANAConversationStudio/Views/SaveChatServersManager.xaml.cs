@@ -27,6 +27,7 @@ namespace ANAConversationStudio.Views
             if (op == MessageBoxResult.Cancel)
             {
                 e.Cancel = true;
+                Application.Current.Shutdown();
                 return;
             }
             if (op == MessageBoxResult.Yes)
@@ -64,7 +65,6 @@ namespace ANAConversationStudio.Views
         private void CancelClick(object sender, RoutedEventArgs e)
         {
             HideConfirm = true;
-            //Close();
             Application.Current.Shutdown();
         }
 
@@ -80,7 +80,8 @@ namespace ANAConversationStudio.Views
                         MessageBox.Show("The connection details are invalid. Please correct them and try again.", "Oops!");
                         return;
                     }
-                    await StudioContext.LoadFromChatServerConnectionAsync(conn);
+                    var done = await StudioContext.LoadFromChatServerConnectionAsync(conn);
+                    if (!done) return;
                     if (Save())
                     {
                         HideConfirm = true;

@@ -122,6 +122,13 @@ namespace ANAConversationStudio.Helpers
                     return respParsed;
                 }
             }
+            catch (Exception ex)
+            {
+                var respParsed = Activator.CreateInstance<T>();
+                respParsed.Message = ex.Message;
+                respParsed.Status = false;
+                return respParsed;
+            }
         }
         private async Task<T> HitPost<T, TReq>(string api, TReq requestData, bool strictTypeNames = false) where T : APIResponse
         {
