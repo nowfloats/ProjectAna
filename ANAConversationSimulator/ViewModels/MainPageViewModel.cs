@@ -248,7 +248,7 @@ namespace ANAConversationSimulator.ViewModels
 #endif
                 if (parsedSection != null)
                 {
-                    if (parsedSection.DelayInMs > 50 || showTyping) //Add 'typing' bubble if delay is grather than 50 ms
+                    if (parsedSection.DelayInMs > 50 || showTyping) //Add 'typing' bubble if delay is greater than 50 ms
                         ToggleTyping(true);
 
                     //Wait for delay MilliSeconds and then continue with chat
@@ -378,7 +378,7 @@ namespace ANAConversationSimulator.ViewModels
                 };
                 buttonTimeoutTimer.Tick += (s, e) =>
                 {
-                    ClearButtons();
+                    //ClearButtons();
                     ClearButtonTimer();
                     defaultBtn.Action.Execute(defaultBtn);
                 };
