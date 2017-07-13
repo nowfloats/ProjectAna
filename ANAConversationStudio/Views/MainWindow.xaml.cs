@@ -282,15 +282,21 @@ namespace ANAConversationStudio.Views
             GotoPreviousNode(position);
         }
 
-        private void ConnectToChatServerClick(object sender, RoutedEventArgs e)
+        private void NewChatFlowClick(object sender, RoutedEventArgs e)
         {
-
+            ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
+            w.ShowDialog();
         }
 
-        private void ManageSavedChatServersClick(object sender, RoutedEventArgs e)
+        private void ManageChatFlowsClick(object sender, RoutedEventArgs e)
         {
-            SaveChatServersManager w = new SaveChatServersManager(Utilities.Settings.SavedChatServerConnections);
+            ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
             w.ShowDialog();
+        }
+
+        private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
+        {
+            Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
         }
     }
 
@@ -840,7 +846,7 @@ namespace ANAConversationStudio.Views
 
         private void AskToSelectChatServer()
         {
-            SaveChatServersManager man = new SaveChatServersManager(Utilities.Settings.SavedChatServerConnections);
+            SaveChatServersManager man = new SaveChatServersManager();
             man.ShowDialog();
         }
 
@@ -954,21 +960,21 @@ namespace ANAConversationStudio.Views
             }
         }
 
-        private bool LoadFileMenuSavedConnections()
+        public bool LoadFileMenuSavedConnections()
         {
-            if (StudioContext.Current?.AvailableProjects == null || StudioContext.Current?.AvailableProjects.Count <= 0)
+            if (StudioContext.Current?.ChatFlowProjects == null || StudioContext.Current?.ChatFlowProjects.Count <= 0)
             {
                 SavedConnectionsFileMenu.IsEnabled = false;
                 return false;
             }
-            SavedConnectionsFileMenu.ItemsSource = StudioContext.Current.AvailableProjects;
+            SavedConnectionsFileMenu.ItemsSource = StudioContext.Current.ChatFlowProjects;
             SavedConnectionsFileMenu.IsEnabled = true;
             return true;
         }
         private async void LoadProjects()
         {
             if (LoadFileMenuSavedConnections())
-                await LoadProjectAsync(StudioContext.Current.AvailableProjects.First());
+                await LoadProjectAsync(StudioContext.Current.ChatFlowProjects.First());
         }
         public void Status(string txt)
         {
@@ -979,7 +985,7 @@ namespace ANAConversationStudio.Views
             await LoadProjectAsync((sender as MenuItem).Tag as ANAProject);
         }
 
-        private async Task LoadProjectAsync(ANAProject proj)
+        public async Task LoadProjectAsync(ANAProject proj)
         {
             await StudioContext.Current.LoadChatFlowAsync(proj._id);
             this.ViewModel.LoadNodes();

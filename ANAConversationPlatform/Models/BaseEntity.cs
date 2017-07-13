@@ -13,7 +13,7 @@ namespace ANAConversationPlatform.Models
         public DateTime UpdatedOn { get; set; }
     }
 
-    public class BaseEntity : BaseIdTimestampEntity
+    public class BaseEntity : BaseIdEntity
     {
         public string Alias { get; set; }
     }

@@ -147,6 +147,9 @@
     <Compile Include="Views\ChatElementCollectionEditorWindow.xaml.cs">
       <DependentUpon>ChatElementCollectionEditorWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\ChatFlowsManagerWindow.xaml.cs">
+      <DependentUpon>ChatFlowsManagerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SaveChatServersManager.xaml.cs">
       <DependentUpon>SaveChatServersManager.xaml</DependentUpon>
     </Compile>
@@ -187,6 +190,10 @@
     <Page Include="Views\ChatElementCollectionEditorWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChatFlowsManagerWindow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Views\SaveChatServersManager.xaml">
       <Generator>MSBuild:Compile</Generator>

@@ -1,4 +1,5 @@
 ﻿using ANAConversationStudio.Models.Chat;
+using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json;
 using System;
@@ -26,7 +27,7 @@ namespace ANAConversationStudio.Helpers
             return done;
         }
         public ChatServerConnection ChatServer { get; set; }
-        public List<ANAProject> AvailableProjects { get; set; }
+        public List<ANAProject> ChatFlowProjects { get; set; }
         public ChatFlowPack ChatFlow { get; set; }
 
         private async Task<bool> LoadProjectsAsync()
@@ -34,7 +35,7 @@ namespace ANAConversationStudio.Helpers
             var projsResp = await Hit<DataListResponse<ANAProject>>(LoadProjectsAPI);
             if (projsResp.Status)
             {
-                AvailableProjects = projsResp.Data;
+                ChatFlowProjects = projsResp.Data;
                 return true;
             }
             MessageBox.Show("Error: " + projsResp.Message, "Unable to load projects from chat server.");
@@ -43,7 +44,7 @@ namespace ANAConversationStudio.Helpers
 
         public async Task<bool> LoadChatFlowAsync(string projectId)
         {
-            if (AvailableProjects != null && AvailableProjects.Any(x => x._id == projectId))
+            if (ChatFlowProjects != null && ChatFlowProjects.Any(x => x._id == projectId))
             {
                 var chatFlowResp = await Hit<DataResponse<ChatFlowPack>>(FetchChatFlowPackAPI.Replace("{projectId}", projectId), true);
                 if (chatFlowResp.Status)
@@ -59,7 +60,7 @@ namespace ANAConversationStudio.Helpers
         {
             if (ChatFlow != null)
             {
-                var saveChatFlowResp = await HitPost<DataResponse<ChatFlowPack>, ChatFlowPack>(SaveProjectsAPI, ChatFlow, true);
+                var saveChatFlowResp = await HitPost<DataResponse<ChatFlowPack>, ChatFlowPack>(SaveChatFlowPackAPI, ChatFlow, true);
                 if (saveChatFlowResp.Status)
                 {
                     ChatFlow = saveChatFlowResp.Data;
@@ -68,6 +69,21 @@ namespace ANAConversationStudio.Helpers
             }
             return false;
         }
+
+        public async Task<bool> SaveProjectsAsync()
+        {
+            if (ChatFlow != null)
+            {
+                var saveProjectsResp = await HitPost<DataListResponse<ANAProject>, List<ANAProject>>(SaveProjectsAPI, ChatFlowProjects);
+                if (saveProjectsResp.Status)
+                {
+                    ChatFlowProjects = saveProjectsResp.Data;
+                    return true;
+                }
+            }
+            return false;
+        }
+
 
         private const string LoadProjectsAPI = "api/Project/List";
         private const string SaveProjectsAPI = "api/Project/Save";
@@ -84,14 +100,15 @@ namespace ANAConversationStudio.Helpers
                 api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
                 using (var wc = new WebClient())
                 {
-                    wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                     wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.AuthUser}:{ChatServer.AuthKey}"));
                     T resp = default(T);
                     if (strictTypeNames)
                         resp = BsonSerializer.Deserialize<T>(await wc.DownloadStringTaskAsync(api));
                     else
+                    {
+                        wc.Headers[HttpRequestHeader.Accept] = "application/json";
                         resp = JsonConvert.DeserializeObject<T>(await wc.DownloadStringTaskAsync(api));
-
+                    }
                     resp.Status = true;
                     return resp;
                 }
@@ -115,14 +132,20 @@ namespace ANAConversationStudio.Helpers
                 api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
                 using (var wc = new WebClient())
                 {
-                    wc.Headers[HttpRequestHeader.ContentType] = "application/json";
                     wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.AuthUser}:{ChatServer.AuthKey}"));
                     T resp = default(T);
                     if (strictTypeNames)
-                        resp = BsonSerializer.Deserialize<T>(await wc.DownloadStringTaskAsync(api));
+                    {
+                        //wc.Headers[HttpRequestHeader.ContentType] = "text/plain";
+                        //wc.Headers[HttpRequestHeader.Accept] = "text/plain";
+                        resp = BsonSerializer.Deserialize<T>(await wc.UploadStringTaskAsync(api, requestData.ToJson()));
+                    }
                     else
+                    {
+                        wc.Headers[HttpRequestHeader.ContentType] = "application/json";
+                        wc.Headers[HttpRequestHeader.Accept] = "application/json";
                         resp = JsonConvert.DeserializeObject<T>(await wc.UploadStringTaskAsync(api, JsonConvert.SerializeObject(requestData)));
-
+                    }
                     resp.Status = true;
                     return resp;
                 }
@@ -131,10 +154,21 @@ namespace ANAConversationStudio.Helpers
             {
                 using (var resp = new StreamReader(ex.Response.GetResponseStream()))
                 {
-                    var respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
+                    T respParsed = Activator.CreateInstance<T>();
+                    if (strictTypeNames)
+                        respParsed.Message = await resp.ReadToEndAsync();
+                    else
+                        respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
                     respParsed.Status = false;
                     return respParsed;
                 }
+            }
+            catch (Exception ex)
+            {
+                T respParsed = Activator.CreateInstance<T>();
+                respParsed.Status = false;
+                respParsed.Message = ex.Message;
+                return respParsed;
             }
         }
     }

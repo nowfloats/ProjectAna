@@ -11,6 +11,7 @@ namespace ANAConversationStudio.Models
         protected void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         private string __id;
+        [DisplayName("Id")]
         [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string _id
         {

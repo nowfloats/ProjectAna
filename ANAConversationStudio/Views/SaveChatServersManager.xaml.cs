@@ -10,11 +10,11 @@ namespace ANAConversationStudio.Views
 {
     public partial class SaveChatServersManager : Window
     {
-        public SaveChatServersManager(List<ChatServerConnection> chatConns)
+        public SaveChatServersManager()
         {
             InitializeComponent();
 
-            CollectionControl.ItemsSource = chatConns.DeepCopy();
+            CollectionControl.ItemsSource = Utilities.Settings.SavedChatServerConnections.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<ChatServerConnection>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(ChatServerConnection) };
         }
@@ -90,7 +90,7 @@ namespace ANAConversationStudio.Views
                 catch (Exception ex)
                 {
                     StudioContext.Current = null;
-                    MainWindow.Current.Status("Unable to connect to the database");
+                    MainWindow.Current.Status("Unable to connect to the chat server");
                 }
             }
         }

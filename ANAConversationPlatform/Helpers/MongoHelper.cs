@@ -131,23 +131,73 @@ namespace ANAConversationPlatform.Helpers
             }
         }
 
-        public static async Task<ANAProject> SaveProjectAsync(ANAProject project)
+        public static async Task<ANAProject> GetProjectByNameAsync(string projectName)
+        {
+            try
+            {
+                return await ChatDB.GetCollection<ANAProject>(Settings.ProjectsCollectionName).Find(x => x.Name == projectName).SingleOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "GetProjectAsync: {0}", ex.Message);
+                return null;
+            }
+        }
+
+        public static List<ANAProject> SaveProjects(List<ANAProject> projects)
         {
             try
             {
                 var coll = ChatDB.GetCollection<ANAProject>(Settings.ProjectsCollectionName);
-                if (string.IsNullOrWhiteSpace(project._id))
-                    project._id = ObjectId.GenerateNewId().ToString();
 
-                if (coll.Count(x => x._id == project._id, new CountOptions { Limit = 1 }) > 0)
+                projects = projects.Where(x => x != null).ToList();
+
+                Parallel.ForEach(projects, async proj =>
                 {
-                    project.UpdatedOn = DateTime.UtcNow;
-                    await coll.ReplaceOneAsync(x => x._id == project._id, project);
-                    return project;
-                }
+                    try
+                    {
+                        if (string.IsNullOrWhiteSpace(proj._id) || await coll.CountAsync(x => x._id == proj._id, new CountOptions { Limit = 1 }) <= 0)
+                        {
+                            if (string.IsNullOrWhiteSpace(proj._id))
+                                proj._id = ObjectId.GenerateNewId().ToString();
+                            proj.CreatedOn = proj.UpdatedOn = DateTime.UtcNow;
+                            await coll.InsertOneAsync(proj);
+                            await SaveChatFlowAsync(new ChatFlowPack
+                            {
+                                ChatContent = new List<BaseContent>(),
+                                ChatNodes = new List<ChatNode>(),
+                                CreatedOn = DateTime.UtcNow,
+                                UpdatedOn = DateTime.UtcNow,
+                                NodeLocations = new Dictionary<string, LayoutPoint>(),
+                                ProjectId = proj._id,
+                                _id = ObjectId.GenerateNewId().ToString()
+                            });
+                        }
+                        else
+                        {
+                            proj.UpdatedOn = DateTime.UtcNow;
+                            await coll.ReplaceOneAsync(x => x._id == proj._id, proj);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "SaveProjectsAsync Single: {0}", ex.Message);
+                    }
+                });
+                return projects;
 
-                project.CreatedOn = project.UpdatedOn = DateTime.UtcNow;
-                await coll.InsertOneAsync(project);
+                //if (string.IsNullOrWhiteSpace(project._id))
+                //    project._id = ObjectId.GenerateNewId().ToString();
+
+                //if (coll.Count(x => x._id == project._id, new CountOptions { Limit = 1 }) > 0)
+                //{
+                //    project.UpdatedOn = DateTime.UtcNow;
+                //    await coll.ReplaceOneAsync(x => x._id == project._id, project);
+                //    return project;
+                //}
+
+                //project.CreatedOn = project.UpdatedOn = DateTime.UtcNow;
+                //await coll.InsertOneAsync(project);
             }
             catch (Exception ex)
             {
@@ -189,6 +239,22 @@ namespace ANAConversationPlatform.Helpers
             catch (Exception ex)
             {
                 Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "GetChatFlowPackAsync: {0}", ex.Message);
+                return null;
+            }
+        }
+
+        public static async Task<ChatFlowPack> GetChatFlowPackByProjectNameAsync(string projectName)
+        {
+            try
+            {
+                var project = await GetProjectByNameAsync(projectName);
+                if (project == null || string.IsNullOrWhiteSpace(project.Name)) return null;
+
+                return await ChatDB.GetCollection<ChatFlowPack>(Settings.ChatFlowPacksCollectionName).Find(x => x.ProjectId == project._id).SingleOrDefaultAsync();
+            }
+            catch (Exception ex)
+            {
+                Logger.LogError(new EventId((int)LoggerEventId.MONGO_HELPER_ERROR), ex, "GetChatFlowPackByProjectNameAsync: {0}", ex.Message);
                 return null;
             }
         }

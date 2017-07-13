@@ -189,6 +189,8 @@ namespace ANAConversationStudio.Helpers
                 return new Point(nodeLocations[chatNodeId].X, nodeLocations[chatNodeId].Y);
             return null;
         }
+
+
     }
     public static class Logger
     {

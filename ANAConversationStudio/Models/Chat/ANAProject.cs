@@ -1,4 +1,6 @@
-﻿namespace ANAConversationStudio.Models.Chat
+﻿using ANAConversationStudio.Helpers;
+
+namespace ANAConversationStudio.Models.Chat
 {
     public class ANAProject : BaseIdEntity
     {
@@ -7,6 +9,11 @@
         public override string ToString()
         {
             return Name;
+        }
+
+        public bool IsValid()
+        {
+            return Utilities.ValidateStrings(Name);
         }
     }
 }

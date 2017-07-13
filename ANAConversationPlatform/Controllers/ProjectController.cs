@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using ANAConversationPlatform.Helpers;
 using ANAConversationPlatform.Models;
+using System.Collections.Generic;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -18,11 +19,11 @@ namespace ANAConversationPlatform.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult> Save([FromBody] ANAProject project)
+        public ActionResult Save([FromBody] List<ANAProject> projects)
         {
-            var projs = await MongoHelper.SaveProjectAsync(project);
+            var projs = MongoHelper.SaveProjects(projects);
             if (projs != null)
-                return Ok(new { Message = "Saved", Data = project });
+                return Ok(new { Message = "Saved", Data = projects });
 
             return BadRequest("Unable to save!");
         }
