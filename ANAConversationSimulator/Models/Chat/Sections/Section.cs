@@ -28,5 +28,5 @@ namespace ANAConversationSimulator.Models.Chat
         Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, Carousel, Typing, PrintOTP
     }
 
-    public enum MessageDirection { In, Out }
+    public enum MessageDirection { In, Out, AwkwardCenter }
 }

@@ -19,8 +19,12 @@ namespace ANAConversationSimulator.UIHelpers
                 {
                     case MessageDirection.In:
                         return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 234, 237, 242)) { Opacity = 1 }; //Pale White
+                    case MessageDirection.AwkwardCenter:
+                        return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 234, 237, 242)) { Opacity = 1 }; //Pale White
                     case MessageDirection.Out:
                         return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 0, 173, 239)) { Opacity = 1 }; //NF Yellow
+                    default:
+                        return new SolidColorBrush(Windows.UI.Color.FromArgb(255, 234, 237, 242)) { Opacity = 1 }; //Pale White
                 }
             }
             return value;

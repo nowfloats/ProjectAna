@@ -65,6 +65,27 @@ namespace ANAConversationSimulator.ViewModels
                 Utils.ShowDialog(ex.Message);
             }
         }
+        public async Task JoinNodesFromFlowAsync(string chatFlowUrl)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(chatFlowUrl))
+                {
+                    Utils.ShowDialog("Given chat flow url is empty! Please provide a correct chat flow url in the button");
+                    return;
+                }
+                using (var hc = new HttpClient())
+                {
+                    var resp = await hc.GetStringAsync(chatFlowUrl);
+                    foreach (var newChatNode in JArray.Parse(resp))
+                        chatNodes.Add(newChatNode);
+                }
+            }
+            catch (Exception ex)
+            {
+                Utils.ShowDialog(ex.Message);
+            }
+        }
         public JToken GetNodeById(string nodeId)
         {
             return chatNodes.Children().FirstOrDefault(x => x["Id"].ToString() == nodeId);
@@ -197,6 +218,9 @@ namespace ANAConversationSimulator.ViewModels
                     case SectionTypeEnum.EmbeddedHtml:
                         parsedSection = currentSectionSource.ToObject<EmbeddedHtmlSection>();
                         break;
+                    case SectionTypeEnum.PrintOTP:
+                        parsedSection = currentSectionSource.ToObject<PrintOTPSection>();
+                        break;
                     case SectionTypeEnum.Carousel:
                         parsedSection = currentSectionSource.ToObject<CarouselSection>();
                         (parsedSection as CarouselSection).Items
@@ -215,6 +239,13 @@ namespace ANAConversationSimulator.ViewModels
                     default:
                         break;
                 }
+#if DEBUG
+                if (Debugger.IsAttached)
+                {
+                    if (parsedSection != null)
+                        parsedSection.DelayInMs = 0;
+                }
+#endif
                 if (parsedSection != null)
                 {
                     if (parsedSection.DelayInMs > 50 || showTyping) //Add 'typing' bubble if delay is grather than 50 ms
@@ -246,7 +277,21 @@ namespace ANAConversationSimulator.ViewModels
                                     });
                                 });
                             }
-                            AddIncommingSection(parsedSection);
+
+                            if (parsedNode.NodeType == NodeTypeEnum.Card)
+                            {
+                                parsedSection.Title = VerbProcessor.Process(parsedNode.CardHeader);
+                                parsedSection.Caption = VerbProcessor.Process(parsedNode.CardFooter);
+
+                                if (parsedNode.Placement == null || parsedNode.Placement == Placement.Incoming)
+                                    AddIncommingSection(parsedSection);
+                                else if (parsedNode.Placement == Placement.Outgoing)
+                                    AddOutgoingSection(parsedSection);
+                                else if (parsedNode.Placement == Placement.Center)
+                                    AddCenterSection(parsedSection);
+                            }
+                            else
+                                AddIncommingSection(parsedSection);
                         }
                         var remainingSections = sectionsSource.Children().Count() - (sectionIndex + 1);
                         if (remainingSections > 0)
@@ -311,12 +356,21 @@ namespace ANAConversationSimulator.ViewModels
                         btn.Items = btn.ItemsSource;
                     }
                 }
-                catch { }
+                catch
+                {
+#if DEBUG
+                    if (Debugger.IsAttached)
+                    {
+                        btn.ItemsSource = JsonConvert.DeserializeObject<Dictionary<string, string>>("{\r\n    \"ADVERTISING & MARKETING SERVICES\": \"Advertising & Marketing Services\",\r\n    \"AEROSPACE\": \"Aerospace\",\r\n    \"ARCHITECTURE\": \"Architecture\",\r\n    \"ARTS & CRAFTS\": \"Arts & Crafts\",\r\n    \"AUTOMOTIVE\": \"Automotive\",\r\n    \"BANK\": \"Bank\",\r\n    \"BIOTECHNOLOGY\": \"Biotechnology\",\r\n    \"BOOK STORE\": \"Book Store\",\r\n    \"BLOGS\": \"Blogs\",\r\n    \"BUSINESS SERVICES\": \"Business Services\",\r\n    \"CARS\": \"Cars\",\r\n    \"USED CARS\": \"Used Cars\",\r\n    \"CARGO & LOGISTICS\": \"Cargo & Logistics\",\r\n    \"CATERING\": \"Catering\",\r\n    \"CHEMICALS\": \"Chemicals\",\r\n    \"COLLEGE\": \"College\",\r\n    \"COMMUNITY\": \"Community\",\r\n    \"COMPUTERS\": \"Computers\",\r\n    \"CONSTRUCTION MATERIAL\": \"Construction Material\",\r\n    \"CONSULTANTS\": \"Consultants\",\r\n    \"EDUCATION\": \"Education\",\r\n    \"ELECTRONICS\": \"Electronics\",\r\n    \"ENERGY\": \"Energy\",\r\n    \"ENTERTAINMENT\": \"Entertainment\",\r\n    \"EQUIPMENT\": \"Equipment\",\r\n    \"EVENT PLANNING SERVICES\": \"Event Planning Services\",\r\n    \"EVENTS\": \"Events\",\r\n    \"EXPORTS\": \"Exports\",\r\n    \"FASHION - APPAREL\": \"Fashion - Apparel\",\r\n    \"FASHION - FOOTWEAR\": \"Fashion - Footwear\",\r\n    \"F&B - BAKERY\": \"F&B - Bakery\",\r\n    \"F&B - BARS\": \"F&B - Bars\",\r\n    \"F&B - CAFE\": \"F&B - Cafe\",\r\n    \"F&B - RESTAURANTS\": \"F&B - Restaurants\",\r\n    \"FREELANCER\": \"Freelancer\",\r\n    \"FLOWER SHOP\": \"Flower Shop\",\r\n    \"FINANCIAL SERVICES\": \"Financial Services\",\r\n    \"FURNITURE\": \"Furniture\",\r\n    \"GENERAL SERVICES\": \"General Services\",\r\n    \"GIFTS & NOVELTIES\": \"Gifts & Novelties\",\r\n    \"GROCERY\": \"Grocery\",\r\n    \"GAMING\": \"Gaming\",\r\n    \"GARDEN\": \"Garden\",\r\n    \"HOME FURNISHINGS\": \"Home Furnishings\",\r\n    \"HEALTH & FITNESS\": \"Health & Fitness\",\r\n    \"HOME APPLIANCES\": \"Home Appliances\",\r\n    \"HARDWARE & SANITARY-WARE\": \"Hardware & Sanitary-Ware\",\r\n    \"HOME MAINTENANCE\": \"Home Maintenance\",\r\n    \"HOME CARE\": \"Home Care\",\r\n    \"HOTEL & MOTELS\": \"Hotel & Motels\",\r\n    \"HOSPITAL\": \"Hospital\",\r\n    \"HYPERMARKET\": \"Hypermarket\",\r\n    \"INSURANCE\": \"Insurance\",\r\n    \"INTERIOR DESIGN\": \"Interior Design\",\r\n    \"KINDER GARTEN\": \"Kinder Garten\",\r\n    \"KIDS GOODS\": \"Kids Goods\",\r\n    \"KITCHEN EQUIPMENT\": \"Kitchen Equipment\",\r\n    \"LEGAL SERVICES\": \"Legal Services\",\r\n    \"MANUFACTURERS\": \"Manufacturers\",\r\n    \"MEDICAL - DENTAL\": \"Medical - Dental\",\r\n    \"MEDICAL - GENERAL\": \"Medical - General\",\r\n    \"MEDIA & NEWS\": \"Media & News\",\r\n    \"MINING\": \"Mining\",\r\n    \"NATURAL & AYURVEDA\": \"Natural & Ayurveda\",\r\n    \"NON-PROFIT ORGANIZATION\": \"Non-Profit Organization\",\r\n    \"OFFICE SUPPLIES\": \"Office Supplies\",\r\n    \"OTHER RETAIL\": \"Other Retail\",\r\n    \"OUTDOOR & SPORTING GOODS\": \"Outdoor & Sporting Goods\",\r\n    \"PETS\": \"Pets\",\r\n    \"PHOTOGRAPHY\": \"Photography\",\r\n    \"POLITICAL ORGANIZATION\": \"Political Organization\",\r\n    \"REAL ESTATE & CONSTRUCTION\": \"Real Estate & Construction\",\r\n    \"RELIGIOUS ORGANIZATION\": \"Religious Organization\",\r\n    \"SPA\": \"Spa\",\r\n    \"SPORTS\": \"Sports\",\r\n    \"SHOPPING COMPLEX\": \"Shopping Complex\",\r\n    \"SOFTWARE\": \"Software\",\r\n    \"SCIENCE & ENGINEERING\": \"Science & Engineering\",\r\n    \"SECURITY\": \"Security\",\r\n    \"TELECOMMUNICATION\": \"Telecommunication\",\r\n    \"TOURISM\": \"Tourism\",\r\n    \"TRADING\": \"Trading\",\r\n    \"TRANSPORTATION SERVICE\": \"Transportation Service\",\r\n    \"TRAINING INSTITUTES\": \"Training Institutes\",\r\n    \"TUITIONS & COACHING\": \"Tuitions & Coaching\",\r\n    \"WATCHES\": \"Watches\",\r\n    \"WATCHES & JEWELRY\": \"Watches & Jewelry\"\r\n}");
+                        btn.Items = btn.ItemsSource;
+                    }
+#endif
+                }
                 CurrentTextInputButtons.Add(btn);
             }
             //Handling node timeout to default button
-            var defaultBtn = allButtons.FirstOrDefault(x => x.DefaultButton);
-            if (defaultBtn != null && parsedNode.TimeoutInMs > 0)
+            var defaultBtn = allButtons.FirstOrDefault(x => x.DefaultButton && !Utils.IGNORED_DEFAULT_BUTTONS.Contains(x.ButtonType));
+            if (defaultBtn != null && parsedNode.TimeoutInMs >= 0)
             {
                 buttonTimeoutTimer = new DispatcherTimer()
                 {
@@ -325,6 +379,7 @@ namespace ANAConversationSimulator.ViewModels
                 buttonTimeoutTimer.Tick += (s, e) =>
                 {
                     ClearButtons();
+                    ClearButtonTimer();
                     defaultBtn.Action.Execute(defaultBtn);
                 };
                 buttonTimeoutTimer.Start();
@@ -349,6 +404,8 @@ namespace ANAConversationSimulator.ViewModels
                 textSec.Text = VerbProcessor.Process(textSec.Text);
             sec.Sno = (ChatThread.Count + 1);
             ChatThread.Add(sec);
+
+            RemoveOldCenterSectionsFromThread();
         }
         public void AddIncommingSection(Section sec)
         {
@@ -360,7 +417,29 @@ namespace ANAConversationSimulator.ViewModels
 
             sec.Sno = (ChatThread.Count + 1);
             ChatThread.Add(sec);
+
+            RemoveOldCenterSectionsFromThread();
         }
+        public void AddCenterSection(Section sec)
+        {
+            if (sec == null) return;
+
+            sec.Direction = MessageDirection.AwkwardCenter;
+            if (sec is TextSection textSec)
+                textSec.Text = VerbProcessor.Process(textSec.Text);
+
+            sec.Sno = (ChatThread.Count + 1);
+            ChatThread.Add(sec);
+
+            RemoveOldCenterSectionsFromThread();
+        }
+        public void RemoveOldCenterSectionsFromThread()
+        {
+            var sectionsToRemove = ChatThread.Where(x => x.Direction == MessageDirection.AwkwardCenter && ChatThread.LastOrDefault() != x).ToList();
+            foreach (var section in sectionsToRemove)
+                ChatThread.Remove(section);
+        }
+
         public async Task<bool> PrecacheSection(Section sec)
         {
             try

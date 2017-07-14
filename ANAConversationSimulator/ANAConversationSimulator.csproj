@@ -138,6 +138,8 @@
     <Compile Include="Models\UploadFileResponse.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsCommand.cs" />
     <Compile Include="UIHelpers\AutoSuggestFilterItemsConverter.cs" />
+    <Compile Include="UIHelpers\DirectionToTextAlignmentConverter.cs" />
+    <Compile Include="UIHelpers\DirectionToBorderColorConverter.cs" />
     <Compile Include="UIHelpers\DirectionToForegroundColorConverter.cs" />
     <Compile Include="UIHelpers\HTML2XamlRichText\RichTextBlockProperties.cs" />
     <Compile Include="UIHelpers\HTMLToRichTextHelper.cs" />

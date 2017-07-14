@@ -1,7 +1,10 @@
 ﻿using ANAConversationSimulator.Models;
+using ANAConversationSimulator.Models.Chat;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -200,6 +203,13 @@ namespace ANAConversationSimulator.Helpers
             for (int i = 0; i < hash.Length; i++)
                 sb.Append(hash[i].ToString("X2"));
             return sb.ToString();
+        }
+
+        public static readonly ButtonTypeEnum[] IGNORED_DEFAULT_BUTTONS = new[] { ButtonTypeEnum.GetItemFromSource };
+
+        public static bool IsSectionTypePresentInNode(JToken node, SectionTypeEnum secType)
+        {
+            return node?["Sections"]?.Any(x => x.ToObject<Section>()?.SectionType == secType) == true;
         }
     }
 

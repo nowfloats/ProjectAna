@@ -21,6 +21,8 @@ namespace ANAConversationSimulator.UIHelpers
                         return ChatBubbleDirection.UpperLeft;
                     case MessageDirection.Out:
                         return ChatBubbleDirection.LowerRight;
+                    default:
+                        return ChatBubbleDirection.UpperLeft;
                 }
             }
             return value;

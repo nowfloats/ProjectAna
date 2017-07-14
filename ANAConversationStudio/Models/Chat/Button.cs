@@ -212,7 +212,7 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
+        //[Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -248,6 +248,7 @@ namespace ANAConversationStudio.Models.Chat
         NextNode,
         DeepLink,
         GetAgent,
-        ShowConfirmation
+        ShowConfirmation,
+        FetchChatFlow
     }
 }

@@ -1,6 +1,6 @@
 ﻿using ANAConversationSimulator.Models.Chat;
 
-namespace ANAConversationSimulator.Models.Sections
+namespace ANAConversationSimulator.Models.Chat.Sections
 {
     public class PrintOTPSection : Section
     {
@@ -9,5 +9,8 @@ namespace ANAConversationSimulator.Models.Sections
         {
             SectionType = SectionTypeEnum.PrintOTP;
         }
+
+        //Below fields will be filled at runtime
+        public static string OTP { get; set; }
     }
 }

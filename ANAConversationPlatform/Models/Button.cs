@@ -54,6 +54,7 @@
         DeepLink,
         GetAgent,
         ApiCall,
-        ShowConfirmation
+        ShowConfirmation,
+        FetchChatFlow
     }
 }

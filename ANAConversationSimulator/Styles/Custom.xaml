@@ -44,7 +44,10 @@
     <UIHelpers:DirectionToAlignmentConverter x:Key="DirectionToAlignmentConverter"/>
     <UIHelpers:DirectionToBubbleDirectionConverter x:Key="DirectionToBubbleDirectionConverter"/>
     <UIHelpers:DirectionToBackgroundColorConverter x:Key="DirectionToBackgroundColorConverter"/>
+    <UIHelpers:DirectionToBorderColorConverter x:Key="DirectionToBorderColorConverter"/>
     <UIHelpers:DirectionToForegroundColorConverter x:Key="DirectionToForegroundColorConverter"/>
+    <UIHelpers:DirectionToTextAlignmentConverter x:Key="DirectionToTextAlignmentConverter"/>
+
     <UIHelpers:ButtonTypeToInputScopeConverter x:Key="ButtonTypeToInputScopeConverter"/>
     <UIHelpers:ChatButtonsTemplateSelector x:Key="ChatButtonsTemplateSelector"/>
     <C4FConverters:BooleanToVisibilityConverter x:Key="C4FB2V"/>
@@ -54,12 +57,35 @@
 
     <!-- Section Templates -->
     <DataTemplate x:Key="TextSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
-            <RichTextBlock UIHelpersHTML2Xaml:Properties.Html="{Binding Text}" TextWrapping="Wrap" FontSize="15" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" />
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+            <StackPanel>
+                <Border Margin="0,0,0,10" BorderBrush="Black" BorderThickness="0,0,0,1" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" >
+                    <TextBlock Text="{Binding Title}" Style="{StaticResource TitleTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" FontSize="12" TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}"/>
+                </Border>
+                <RichTextBlock UIHelpersHTML2Xaml:Properties.Html="{Binding Text}" TextWrapping="Wrap" FontSize="15" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}"/>
+                <Border Margin="0,10,0,0" BorderBrush="Black" BorderThickness="0,1,0,0" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}">
+                    <TextBlock Text="{Binding Caption}" Style="{StaticResource CaptionTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" FontSize="12" TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}"/>
+                </Border>
+            </StackPanel>
         </C4F:ChatBubble>
     </DataTemplate>
+    <DataTemplate x:Key="PrintOTPSectionChatBubbleTemplate">
+        <C4F:ChatBubble HorizontalContentAlignment="Stretch" MinWidth="300" BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+            <StackPanel>
+                <Border  Margin="0,0,0,10" BorderBrush="Black" BorderThickness="0,0,0,1" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" >
+                    <TextBlock Text="{Binding Title}" TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}" Style="{StaticResource TitleTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" FontSize="12"/>
+                </Border>
+                <TextBox Width="100" InputScope="NumericPin" Text="{Binding OTP, Mode=TwoWay}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}"/>
+                <!--<RichTextBlock UIHelpersHTML2Xaml:Properties.Html="{Binding Text}" TextWrapping="Wrap" FontSize="15" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}"/>-->
+                <Border Margin="0,10,0,0" BorderBrush="Black" BorderThickness="0,1,0,0" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}">
+                    <TextBlock TextAlignment="{Binding Direction, Converter={StaticResource DirectionToTextAlignmentConverter}}" Text="{Binding Caption}" Style="{StaticResource CaptionTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}" FontSize="12"/>
+                </Border>
+            </StackPanel>
+        </C4F:ChatBubble>
+    </DataTemplate>
+
     <DataTemplate x:Key="ImageSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="200">
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
                 <Image Source="{Binding Url}" MaxHeight="300" Width="200" Stretch="Uniform"/>
@@ -68,7 +94,7 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="CarouselSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Background="{StaticResource PaleWhiteBrush}">
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" Foreground="Black" />
                 <ScrollViewer MaxHeight="300" HorizontalScrollBarVisibility="Auto" Padding="-5,0" VerticalScrollBarVisibility="Disabled">
@@ -109,7 +135,7 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="VideoSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="300">
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
                 <MediaElement Source="{Binding Url}" Height="300" Width="300" Stretch="Uniform" AreTransportControlsEnabled="True" AutoPlay="False" IsFullWindow="False" >
@@ -122,7 +148,7 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="EmbeddedHtmlSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="300">
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
                 <WebView Height="300" Source="{Binding Url}" />
@@ -132,7 +158,7 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="AudioSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="300" >
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
                 <MediaElement Source="{Binding Url}" Height="50" Width="300" Stretch="Uniform" AreTransportControlsEnabled="True" AutoPlay="False" IsFullWindow="False" >
@@ -145,7 +171,7 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="GifSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="200">
                 <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
                 <Image gif:AnimationBehavior.SourceUri="{Binding Url}" gif:AnimationBehavior.AutoStart="True" gif:AnimationBehavior.RepeatBehavior="Forever" gif:AnimationBehavior.AnimateInDesignMode="True" MaxHeight="200" Width="200" Stretch="Uniform"/>
@@ -154,12 +180,12 @@
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="GraphSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <TextBlock Text="[Graph Section comming soon]" TextWrapping="Wrap" FontSize="15" Foreground="White" />
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="TypingSectionChatBubbleTemplate">
-        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
+        <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <ProgressBar IsIndeterminate="True" Width="50" IsEnabled="True" Foreground="Black"/>
         </C4F:ChatBubble>
     </DataTemplate>
