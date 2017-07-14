@@ -111,7 +111,7 @@ namespace ANAConversationSimulator.ViewModels
             }
             ClearButtonTimer();
 
-            //Replaceing verbs
+            //Replacing verbs
             node = JToken.Parse(VerbProcessor.Process(node.ToString()));
 
             var parsedNode = node.ToObject<ChatNode>();
@@ -190,7 +190,7 @@ namespace ANAConversationSimulator.ViewModels
                 var sectionsSource = node["Sections"];
                 var currentSectionSource = section ?? sectionsSource.First;
 
-                //Replaceing verbs
+                //Replacing verbs
                 currentSectionSource = JToken.Parse(VerbProcessor.Process(currentSectionSource.ToString()));
 
                 SectionTypeEnum secType = (SectionTypeEnum)Enum.Parse(typeof(SectionTypeEnum), currentSectionSource["SectionType"].ToString());
