@@ -215,6 +215,21 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private string _ApiResponseDataRoot;
+        [Category("For NodeType ApiCall")]
+        public string ApiResponseDataRoot
+        {
+            get { return _ApiResponseDataRoot; }
+            set
+            {
+                if (_ApiResponseDataRoot != value)
+                {
+                    _ApiResponseDataRoot = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _NextNodeId;
         [Category("For NodeType ApiCall")]
         public string NextNodeId

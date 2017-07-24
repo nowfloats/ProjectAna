@@ -211,6 +211,13 @@ namespace ANAConversationSimulator.Helpers
         {
             return node?["Sections"]?.Any(x => x.ToObject<Section>()?.SectionType == secType) == true;
         }
+
+        public static T DeepCopy<T>(this T source)
+        {
+            var json = JsonConvert.SerializeObject(source);
+            return JsonConvert.DeserializeObject<T>(json);
+        }
+
     }
 
     public enum DeviceFormFactorType

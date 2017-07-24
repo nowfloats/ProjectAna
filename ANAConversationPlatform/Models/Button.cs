@@ -35,6 +35,12 @@
         public string APIResponseMatchValue { get; set; }
 
         public bool PostToChat { get; set; } = true;
+
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
     }
     public enum ButtonTypeEnum
     {

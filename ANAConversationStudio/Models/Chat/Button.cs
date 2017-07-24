@@ -90,6 +90,84 @@ namespace ANAConversationStudio.Models.Chat
         }
         #endregion
 
+        #region For Repeat Buttons
+
+        private bool _DoesRepeat;
+        [Category("For Repeating Buttons")]
+        public bool DoesRepeat
+        {
+            get { return _DoesRepeat; }
+            set
+            {
+                if (_DoesRepeat != value)
+                {
+                    _DoesRepeat = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _RepeatOn;
+        [Category("For Repeating Buttons")]
+        public string RepeatOn
+        {
+            get { return _RepeatOn; }
+            set
+            {
+                if (_RepeatOn != value)
+                {
+                    _RepeatOn = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private string _RepeatAs;
+        [Category("For Repeating Buttons")]
+        public string RepeatAs
+        {
+            get { return _RepeatAs; }
+            set
+            {
+                if (_RepeatAs != value)
+                {
+                    _RepeatAs = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _StartPosition;
+        [Category("For Repeating Buttons")]
+        public int StartPosition
+        {
+            get { return _StartPosition; }
+            set
+            {
+                if (_StartPosition != value)
+                {
+                    _StartPosition = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private int _MaxRepeats;
+        [Category("For Repeating Buttons")]
+        public int MaxRepeats
+        {
+            get { return _MaxRepeats; }
+            set
+            {
+                if (_MaxRepeats != value)
+                {
+                    _MaxRepeats = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+        #endregion
+
         #region Misc
         private bool _PostToChat = true;
         [Category("Misc")]

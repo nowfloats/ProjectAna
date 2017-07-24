@@ -24,6 +24,14 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         [Editor(typeof(ChatElementCollectionEditor<CarouselButton>), typeof(ChatElementCollectionEditor<CarouselButton>))]
         public ObservableCollection<CarouselButton> Buttons { get; set; } = new ObservableCollection<CarouselButton>();
+
+        #region Repeat
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
+        #endregion
     }
 
     public class CarouselButton : BaseEntity
@@ -32,6 +40,14 @@ namespace ANAConversationStudio.Models.Chat.Sections
         public CardButtonType Type { get; set; }
         public string VariableValue { get; set; }
         public string NextNodeId { get; set; }
+
+        #region Repeat
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
+        #endregion
     }
 
     public enum CardButtonType

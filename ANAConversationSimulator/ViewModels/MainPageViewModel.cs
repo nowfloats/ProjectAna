@@ -222,15 +222,10 @@ namespace ANAConversationSimulator.ViewModels
                         parsedSection = currentSectionSource.ToObject<PrintOTPSection>();
                         break;
                     case SectionTypeEnum.Carousel:
-                        parsedSection = currentSectionSource.ToObject<CarouselSection>();
-                        (parsedSection as CarouselSection).Items
-                            .SelectMany(x => x.Buttons)
-                            .Where(X => X != null).ToList()
-                            .ForEach(x =>
-                            {
-                                x.VariableName = parsedNode.VariableName;
-                                x.NodeId = parsedNode.Id;
-                            });
+                        {
+                            parsedSection = currentSectionSource.ToObject<CarouselSection>();
+                            (parsedSection as CarouselSection).Items = VerbProcessor.ProcessCarousalItems((parsedSection as CarouselSection).Items, parsedNode);
+                        }
                         break;
                     case SectionTypeEnum.Link:
                     case SectionTypeEnum.Graph:
@@ -334,14 +329,39 @@ namespace ANAConversationSimulator.ViewModels
 
             ClearButtons();
             var allButtons = node["Buttons"].ToObject<List<Button>>();
-            foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
+            foreach (var btnSrc in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
             {
-                btn.VariableName = node["VariableName"] + "";
-                btn.NodeId = parsedNode.Id;
-                btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
-                btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
-                CurrentClickButtons.Add(btn);
+                var btn = btnSrc.DeepCopy();
+                if (btn.DoesRepeat)
+                {
+                    var repeatOn = ButtonActionHelper.GetSavedArray(btn.RepeatOn);
+                    if (repeatOn != null)
+                    {
+                        var max = btn.MaxRepeats == 0 ? repeatOn.Count - 1 : btn.MaxRepeats;
+                        for (int i = btn.StartPosition; i <= max; i++)
+                        {
+                            var b = btn.DeepCopy();
+                            b.VariableName = node["VariableName"] + "";
+                            b.NodeId = parsedNode.Id;
+                            ButtonActionHelper.ClearSavedValue(b.RepeatAs);
+                            ButtonActionHelper.HandleSaveTextInput(b.RepeatAs, repeatOn[i] + "");
+                            b.ButtonName = VerbProcessor.Process(b.ButtonName, false);
+                            b.ButtonText = VerbProcessor.Process(b.ButtonText, false);
+                            ButtonActionHelper.ClearSavedValue(b.RepeatAs);
+                            CurrentClickButtons.Add(b);
+                        }
+                    }
+                }
+                else
+                {
+                    btn.VariableName = node["VariableName"] + "";
+                    btn.NodeId = parsedNode.Id;
+                    btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
+                    btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
+                    CurrentClickButtons.Add(btn);
+                }
             }
+
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.TextInput))
             {
                 btn.VariableName = node["VariableName"] + "";
