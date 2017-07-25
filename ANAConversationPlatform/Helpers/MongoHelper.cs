@@ -102,6 +102,8 @@ namespace ANAConversationPlatform.Helpers
                             btn.ButtonText = buttonContent?.ButtonText;
                             chatNode.Buttons.Add(btn);
                         }
+
+                        chatNode.FlowId = Settings.TemplateCollectionName;
                         chatNodes.Add(chatNode);
                     }
                     catch (Exception ex)
