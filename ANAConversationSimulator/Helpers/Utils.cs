@@ -4,16 +4,22 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
+using Windows.Storage.Streams;
 using Windows.System.Profile;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Media.Imaging;
 
 namespace ANAConversationSimulator.Helpers
 {
@@ -210,6 +216,29 @@ namespace ANAConversationSimulator.Helpers
         public static bool IsSectionTypePresentInNode(JToken node, SectionTypeEnum secType)
         {
             return node?["Sections"]?.Any(x => x.ToObject<Section>()?.SectionType == secType) == true;
+        }
+
+        public static string NormalizeFileName(string text)
+        {
+            if (text == null)
+                text = "New File";
+            foreach (var c in Path.GetInvalidFileNameChars())
+                text.Replace(c, '_');
+            return text;
+        }
+
+        public static async Task SaveVisualElementToFile(FrameworkElement element, StorageFile file)
+        {
+            var renderTargetBitmap = new RenderTargetBitmap();
+            await renderTargetBitmap.RenderAsync(element, (int)element.Width, (int)element.Height);
+            var pixels = await renderTargetBitmap.GetPixelsAsync();
+            using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.ReadWrite))
+            {
+                var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
+                byte[] bytes = pixels.ToArray();
+                encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, (uint)renderTargetBitmap.PixelWidth, (uint)renderTargetBitmap.PixelHeight, 96, 96, bytes);
+                await encoder.FlushAsync();
+            }
         }
     }
 

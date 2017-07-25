@@ -18,6 +18,7 @@ using Quobject.SocketIoClientDotNet.Client;
 using System.Diagnostics;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using ANAConversationSimulator.Views;
 
 namespace ANAConversationSimulator.ViewModels
 {
@@ -490,8 +491,6 @@ namespace ANAConversationSimulator.ViewModels
             await Task.CompletedTask;
         }
 
-        public void Reset() => StartChatting();
-
         public void ShowMemoryStack() => NavigationService.Navigate(typeof(Views.MemoryStackPage));
 
         public async void UpdateAPI()
@@ -517,7 +516,7 @@ namespace ANAConversationSimulator.ViewModels
                     Utils.APISettings.Values["ActivityTrackAPI"] = icd.ActivityTrackAPI;
                     Utils.APISettings.Values["SocketServer"] = icd.SocketServer;
 
-                    Reset();
+                    MainPage.Current?.Reset();
                 }
             };
             ToggleTyping(false);

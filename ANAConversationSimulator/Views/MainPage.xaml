@@ -23,11 +23,13 @@
                 </Grid>
             </controls:PageHeader.Content>
             <controls:PageHeader.SecondaryCommands>
-                <AppBarButton Click="{x:Bind ViewModel.Reset}" Label="Reset" />
+                <AppBarButton Click="{x:Bind Reset}" Label="Reset" />
                 <AppBarButton Click="{x:Bind ViewModel.UpdateAPI}" Label="Update APIs" />
                 <AppBarButton Click="{x:Bind ViewModel.ShowMemoryStack}" Label="Show Memory Stack" />
                 <AppBarButton Click="{x:Bind ViewModel.AgentChat}" Label="Agent Chat" />
-                
+                <AppBarSeparator />
+                <AppBarButton Click="{x:Bind SaveChatAsImageDefault}" Label="Save Snapshot" />
+                <AppBarButton Click="{x:Bind SaveChatAsImageWithName}" Label="Save Snapshot As.." />
             </controls:PageHeader.SecondaryCommands>
         </controls:PageHeader>
         <Grid x:Name="ContentGrid" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="pageHeader" Background="White">
