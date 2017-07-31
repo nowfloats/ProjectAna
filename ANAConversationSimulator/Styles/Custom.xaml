@@ -20,7 +20,7 @@
     <SolidColorBrush x:Key="TextForegroundBrush" Color="Gray" />
     <SolidColorBrush x:Key="PaleWhiteBrush" Color="#eaedf2" />
     <SolidColorBrush x:Key="NFYellowBrush" Color="#00ADEF" />
-    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#eaedf2" />
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#ccc" />
 
     <Style TargetType="TextBlock" x:Key="NormalTextStyle" >
         <!--//TextWrapping="Wrap" FontSize="15" Foreground="White"-->
@@ -87,9 +87,9 @@
     <DataTemplate x:Key="ImageSectionChatBubbleTemplate">
         <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
             <StackPanel Width="200">
-                <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" />
+                <TextBlock Text="{Binding Title}" Visibility="{Binding Title, Converter={StaticResource C4FS2V}}" Style="{StaticResource TitleTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}"/>
                 <Image Source="{Binding Url}" MaxHeight="300" Width="200" Stretch="Uniform"/>
-                <TextBlock Text="{Binding Caption}" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}" Style="{StaticResource CaptionTextStyle}"  />
+                <TextBlock Text="{Binding Caption}" Visibility="{Binding Caption, Converter={StaticResource C4FS2V}}" Style="{StaticResource CaptionTextStyle}" Foreground="{Binding Direction, Converter={StaticResource DirectionToForegroundColorConverter}}"/>
             </StackPanel>
         </C4F:ChatBubble>
     </DataTemplate>
