@@ -12,11 +12,14 @@
     <!-- The border brush for nodes. -->
     <SolidColorBrush
         x:Key="nodeBorderBrush"
-        Color="Black"
+        Color="Gray" Opacity="0"
         />
-
+    <SolidColorBrush
+        x:Key="nodeHeaderBorderBrush"
+        Color="Gray"
+        />
     <!-- The fill brush for nodes. -->
-    <SolidColorBrush x:Key="nodeFillBrush" Color="#ccc" Opacity="0.8"/>
+    <SolidColorBrush x:Key="nodeFillBrush" Color="#ccc"/>
     <!--<LinearGradientBrush
         x:Key="nodeFillBrush"
         StartPoint="0,0"
@@ -27,11 +30,7 @@
     </LinearGradientBrush>-->
 
     <!-- The brush for connections. -->
-    <SolidColorBrush
-        x:Key="connectionBrush"
-        Color="Black"
-        />
-
+   
     <!-- The brush for connectors. -->
     <SolidColorBrush
         x:Key="connectorBackgroundBrush"
@@ -94,6 +93,13 @@
                 Text="{Binding Name}"
                 VerticalAlignment="Center"
                 />
+
+            <Ellipse
+                    Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}"
+                    Margin="3"
+                    Fill="{StaticResource connectionBrush}"
+                    IsHitTestVisible="False"
+                    />
         </Grid>
     </DataTemplate>
 
@@ -105,23 +111,23 @@
         >
         <Grid
             HorizontalAlignment="Right"
-            Margin="0,2,0,0"
+            Margin="5,2,5,0"
             >
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
 
             <!-- The name of the connector. -->
             <TextBlock
-                Grid.Column="0"
                 Text="{Binding Name}"
+                FontStyle="Italic"
                 VerticalAlignment="Center"
-                Margin="0,0,5,0"
+                Margin="0,0,0,10"
                 />
 
             <Grid
-                Grid.Column="1"
+                Grid.Row="1"
                 Width="15"
                 Height="15"
                 Cursor="Hand"
@@ -134,7 +140,7 @@
                 <Ellipse
                     Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}"
                     Margin="3"
-                    Fill="{StaticResource connectionBrush}"
+                    Fill="{Binding ParentNode.IsSelected, Converter={StaticResource SelectionToFillBrushConverter}}"
                     IsHitTestVisible="False"
                     />
             </Grid>

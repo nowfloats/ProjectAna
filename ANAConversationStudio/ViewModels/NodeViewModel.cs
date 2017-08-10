@@ -358,7 +358,12 @@ namespace ANAConversationStudio.ViewModels
                 {
                     return;
                 }
+#if DEBUG
+                if (isSelected)
+                {
 
+                }
+#endif
                 isSelected = value;
 
                 OnPropertyChanged("IsSelected");

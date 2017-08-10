@@ -17,6 +17,14 @@ namespace ANAConversationStudio.Views
             CollectionControl.ItemsSource = Utilities.Settings.SavedChatServerConnections.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<ChatServerConnection>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(ChatServerConnection) };
+
+#if DEBUG
+            Loaded += (s, e) =>
+            {
+                CollectionControl.SelectedItem = CollectionControl.Items.FirstOrDefault();
+                SaveAndConnectClick(null, null);
+            };
+#endif
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)

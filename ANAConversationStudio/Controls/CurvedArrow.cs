@@ -131,7 +131,7 @@ namespace ANAConversationStudio.Controls
             arrowHeadFig.StartPoint = arrowHeadPoints[0];
             arrowHeadFig.Segments.Add(new LineSegment(arrowHeadPoints[1], true));
             arrowHeadFig.Segments.Add(new LineSegment(arrowHeadPoints[2], true));
-
+            
             PathGeometry pathGeometry = new PathGeometry();
             pathGeometry.Figures.Add(arrowHeadFig);
 

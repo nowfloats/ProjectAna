@@ -13,6 +13,32 @@
         <UI:BindingToTypeNameConverter x:Key="TypeName"/>
         <UI:NullToVisibilityConverter x:Key="N2V"/>
         <UI:NullToBoolConverter x:Key="N2B"/>
-        
+
+        <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
+        <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
+        <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />
+
+        <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
+        <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
+
+        <!--<Border Width="100" Height="100" x:Key="vBrushBack" BorderBrush="{StaticResource GridDotBrush}" BorderThickness="2"/>-->
+
+
+        <!--Dots-->
+        <Grid Width="100" Height="100" x:Key="vBrushBack">
+            <Border Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left"  Background="{StaticResource GridDotBrush}"/>
+            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{StaticResource GridDotBrush}"/>
+            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
+            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
+        </Grid>
+
+        <!--
+        Dotted Line code!
+        <Rectangle Width="100" Height="100" x:Key="vBrushBack" Stroke="{StaticResource GridDotBrush}" StrokeThickness="2,2,2,0" StrokeDashArray="2 2" />
+        -->
+
+        <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
+            Viewport="0,0,25,25"
+            ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
     </Application.Resources>
 </Application>
