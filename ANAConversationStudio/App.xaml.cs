@@ -77,6 +77,14 @@ namespace ANAConversationStudio
             if (!BsonClassMap.IsClassMapRegistered(typeof(CarouselItemContent)))
                 BsonClassMap.RegisterClassMap<CarouselItemContent>();
             #endregion
+
+
+            #region This applies the default font
+            FrameworkElement.StyleProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata
+            {
+                DefaultValue = FindResource(typeof(Window))
+            }); 
+            #endregion
         }
     }
 }

@@ -7,6 +7,10 @@
              Startup="Application_Startup"
              StartupUri="/Views/MainWindow.xaml">
     <Application.Resources>
+        <Style TargetType="{x:Type Window}">
+            <Setter Property="FontFamily" Value="Century Gothic" />
+        </Style>
+        
         <Style TargetType="ListBoxItem" x:Key="ListBoxItemItemContainerStyle" >
             <Setter Property="HorizontalContentAlignment" Value="Stretch" />
         </Style>

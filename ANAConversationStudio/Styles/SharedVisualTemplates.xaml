@@ -67,9 +67,7 @@
     <!-- 
     A data-template that defines the UI for input connectors.
     -->
-    <DataTemplate
-        x:Key="inputConnectorTemplate"
-        >
+    <DataTemplate x:Key="inputConnectorTemplate" >
         <Grid
             Margin="0,2,0,0"
             >
