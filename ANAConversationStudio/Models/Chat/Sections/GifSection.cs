@@ -2,12 +2,8 @@
 
 namespace ANAConversationStudio.Models.Chat.Sections
 {
-    public class GifSection : Section
+    public class GifSection : TitleCaptionUrlSection
     {
-        [Category("Important")]
-        public string Url { get; set; }
-        public bool PreFetch { get; set; }
-
         public GifSection()
         {
             SectionType = SectionTypeEnum.Gif;

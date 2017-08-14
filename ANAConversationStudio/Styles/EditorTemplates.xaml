@@ -1,0 +1,84 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:uc="clr-namespace:ANAConversationStudio.UserControls"
+                    xmlns:dialogs="clr-namespace:ANAConversationStudio.Dialogs"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Style x:Key="SectionEditorBorderStyle" TargetType="Border" >
+        <Setter Property="BorderBrush" Value="Gray"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+    <dialogs:SectionTypeSymbolConverter x:Key="SectionTypeSymbolConverter"/>
+
+    <Style x:Key="SectionEditorDeleteButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionButton}">
+        <Setter Property="VerticalAlignment" Value="Bottom" />
+        <Setter Property="Width" Value="30" />
+        <Setter Property="Height" Value="30" />
+        <Setter Property="HorizontalAlignment" Value="Center" />
+        <Setter Property="Command" Value="{Binding Remove}" />
+        <Setter Property="CommandParameter" Value="{Binding}" />
+        <Setter Property="Content" Value="&#xE107;" />
+        <Setter Property="FontFamily" Value="Segoe UI Symbol" />
+        <Setter Property="Margin" Value="20,0,0,0" />
+    </Style>
+    
+    <DataTemplate x:Key="TextSectionEditTemplate">
+        <Border Style="{StaticResource SectionEditorBorderStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <uc:TableRowUserControl Label="Type">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding SectionType}" IsReadOnly="True" IsReadOnlyCaretVisible="True"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Text">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding Text, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                </StackPanel>
+                <Button Grid.Column="1" Style="{StaticResource SectionEditorDeleteButtonStyle}" />
+            </Grid>
+        </Border>
+    </DataTemplate>
+    <DataTemplate x:Key="TitleCaptionUrlSectionEditTemplate">
+        <Border Style="{StaticResource SectionEditorBorderStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                    <uc:TableRowUserControl Label="Type">
+                        <uc:TableRowUserControl.Field>
+                            <StackPanel Orientation="Horizontal">
+                                <!--<TextBlock Text="{Binding SectionType, Converter={StaticResource SectionTypeSymbolConverter}}" FontFamily="{StaticResource MDL2Assets}"/>-->
+                                <TextBlock Text="{Binding SectionType}"/>
+                            </StackPanel>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Title">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding Title, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Url">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Caption">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding Caption, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                </StackPanel>
+                <Button Grid.Column="1" Style="{StaticResource SectionEditorDeleteButtonStyle}"/>
+            </Grid>
+        </Border>
+    </DataTemplate>
+</ResourceDictionary>

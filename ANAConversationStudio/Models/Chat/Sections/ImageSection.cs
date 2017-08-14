@@ -2,17 +2,11 @@
 
 namespace ANAConversationStudio.Models.Chat.Sections
 {
-    public class ImageSection : Section
+    public class ImageSection : TitleCaptionUrlSection
     {
-        public int HeightInPixels { get; set; }
-        public int WidthInPixels { get; set; }
-        [Category("Important")]
-        public string Url { get; set; }
-        public double SizeInKb { get; set; }
         public ImageSection()
         {
             SectionType = SectionTypeEnum.Image;
         }
-
     }
 }

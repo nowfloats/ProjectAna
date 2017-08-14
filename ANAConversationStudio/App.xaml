@@ -5,44 +5,62 @@
              xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
              Startup="Application_Startup"
-             StartupUri="/Views/MainWindow.xaml">
+             StartupUri="/Dialogs/NodeEditDialog.xaml"
+             >
+    <!--
+    StartupUri="/Views/MainWindow.xaml"
+    
+    StartupUri="/Dialogs/NodeEditDialog.xaml"-->
     <Application.Resources>
-        <Style TargetType="{x:Type Window}">
-            <Setter Property="FontFamily" Value="Century Gothic" />
-        </Style>
-        
-        <Style TargetType="ListBoxItem" x:Key="ListBoxItemItemContainerStyle" >
-            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
-        </Style>
-        <UI:BindingToTypeNameConverter x:Key="TypeName"/>
-        <UI:NullToVisibilityConverter x:Key="N2V"/>
-        <UI:NullToBoolConverter x:Key="N2B"/>
+        <ResourceDictionary>
+            <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
 
-        <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
-        <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
-        <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />
+            <Style TargetType="{x:Type Window}">
+                <Setter Property="FontFamily" Value="Century Gothic" />
+            </Style>
 
-        <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
-        <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
+            <Style TargetType="ListBoxItem" x:Key="ListBoxItemItemContainerStyle" >
+                <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            </Style>
+            <UI:BindingToTypeNameConverter x:Key="TypeName"/>
+            <UI:NullToVisibilityConverter x:Key="N2V"/>
+            <UI:NullToBoolConverter x:Key="N2B"/>
 
-        <!--<Border Width="100" Height="100" x:Key="vBrushBack" BorderBrush="{StaticResource GridDotBrush}" BorderThickness="2"/>-->
+            <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
+            <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
+            <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />
+
+            <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
+            <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
+
+            <!--<Border Width="100" Height="100" x:Key="vBrushBack" BorderBrush="{StaticResource GridDotBrush}" BorderThickness="2"/>-->
 
 
-        <!--Dots-->
-        <Grid Width="100" Height="100" x:Key="vBrushBack">
-            <Border Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left"  Background="{StaticResource GridDotBrush}"/>
-            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{StaticResource GridDotBrush}"/>
-            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
-            <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
-        </Grid>
+            <!--Dots-->
+            <Grid Width="100" Height="100" x:Key="vBrushBack">
+                <Border Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left"  Background="{StaticResource GridDotBrush}"/>
+                <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{StaticResource GridDotBrush}"/>
+                <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
+                <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
+            </Grid>
 
-        <!--
+            <!--
         Dotted Line code!
         <Rectangle Width="100" Height="100" x:Key="vBrushBack" Stroke="{StaticResource GridDotBrush}" StrokeThickness="2,2,2,0" StrokeDashArray="2 2" />
         -->
 
-        <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
+            <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
+
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Cyan.xaml" />
+                <ResourceDictionary Source="/Styles/EditorTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

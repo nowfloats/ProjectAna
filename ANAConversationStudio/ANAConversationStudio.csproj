@@ -47,6 +47,12 @@
     <Reference Include="AdornedControl">
       <HintPath>..\ExternalBinaries\AdornedControl.dll</HintPath>
     </Reference>
+    <Reference Include="MaterialDesignColors, Version=1.1.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignColors.1.1.2\lib\net45\MaterialDesignColors.dll</HintPath>
+    </Reference>
+    <Reference Include="MaterialDesignThemes.Wpf, Version=2.3.0.823, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\MaterialDesignThemes.2.3.0.823\lib\net45\MaterialDesignThemes.Wpf.dll</HintPath>
+    </Reference>
     <Reference Include="MongoDB.Bson, Version=2.4.3.23, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\MongoDB.Bson.2.4.3\lib\net45\MongoDB.Bson.dll</HintPath>
       <Private>True</Private>
@@ -93,6 +99,9 @@
     <Reference Include="System.Xaml">
       <RequiredTargetFramework>4.0</RequiredTargetFramework>
     </Reference>
+    <Reference Include="ToggleSwitch, Version=1.1.2.0, Culture=neutral, PublicKeyToken=8637099990568f75, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToggleSwitch.1.1.2\lib\net40-client\ToggleSwitch.dll</HintPath>
+    </Reference>
     <Reference Include="Utils">
       <HintPath>..\ExternalBinaries\Utils.dll</HintPath>
     </Reference>
@@ -137,6 +146,9 @@
     <Compile Include="Controls\ChatContentCollectionControl.cs" />
     <Compile Include="Controls\ChatNodeCollectionControl.cs" />
     <Compile Include="Controls\ReadonlyTextBoxEditor.cs" />
+    <Compile Include="Dialogs\NodeEditDialog.xaml.cs">
+      <DependentUpon>NodeEditDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Helpers\StudioContext.cs" />
     <Compile Include="Helpers\MongoHelper.cs" />
     <Compile Include="Helpers\Shortcuts.cs" />
@@ -144,8 +156,12 @@
     <Compile Include="Models\Chat\ChatFlowPack.cs" />
     <Compile Include="Models\Chat\Sections\PrintOTPSection.cs" />
     <Compile Include="Models\LayoutPoint.cs" />
+    <Compile Include="UIHelpers\EditSectionTemplateSelector.cs" />
     <Compile Include="UIHelpers\NullToBoolConverter.cs" />
     <Compile Include="UIHelpers\SelectionToFillBrushConverter.cs" />
+    <Compile Include="UserControls\TableRowUserControl.xaml.cs">
+      <DependentUpon>TableRowUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\ChatElementCollectionEditorWindow.xaml.cs">
       <DependentUpon>ChatElementCollectionEditorWindow.xaml</DependentUpon>
     </Compile>
@@ -189,7 +205,19 @@
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="Dialogs\NodeEditDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Styles\EditorTemplates.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\CustomDesignerTemplates.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\TableRowUserControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -272,6 +300,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\segoe-mdl2-assets.ttf" />
     <Resource Include="Resources\fontawesome-webfont.ttf">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Resource>

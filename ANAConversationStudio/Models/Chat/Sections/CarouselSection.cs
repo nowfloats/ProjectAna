@@ -14,8 +14,21 @@ namespace ANAConversationStudio.Models.Chat.Sections
             SectionType = SectionTypeEnum.Carousel;
         }
 
-        [Editor(typeof(ChatElementCollectionEditor<CarouselItem>), typeof(ChatElementCollectionEditor<CarouselItem>))]
-        public ObservableCollection<CarouselItem> Items { get; set; } = new ObservableCollection<CarouselItem>();
+
+        private ObservableCollection<CarouselItem> _Items = new ObservableCollection<CarouselItem>();
+        public ObservableCollection<CarouselItem> Items
+        {
+            get { return _Items; }
+            set
+            {
+                if (_Items != value)
+                {
+                    _Items = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
     }
 
     public class CarouselItem : BaseEntity
