@@ -152,6 +152,7 @@ namespace ANAConversationStudio.Dialogs
 
     public class SectionTypeSymbolConverter : IValueConverter
     {
+        //Search the below as 'Segoe MDL2 Assets' in the internet to find how they look.
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             var secType = (SectionTypeEnum)value;
@@ -160,27 +161,27 @@ namespace ANAConversationStudio.Dialogs
                 case SectionTypeEnum.Image:
                     return "\uEB9F";
                 case SectionTypeEnum.Text:
-                    return "\uE1A2";
+                    return "\uE700";
                 case SectionTypeEnum.Graph:
                     break;
                 case SectionTypeEnum.Gif:
-                    break;
+                    return "\uE913";
                 case SectionTypeEnum.Audio:
-                    break;
+                    return "\uE8D6";
                 case SectionTypeEnum.Video:
-                    break;
+                    return "\uE20A";
                 case SectionTypeEnum.Link:
                     break;
                 case SectionTypeEnum.EmbeddedHtml:
-                    break;
+                    return "\uE12B";
                 case SectionTypeEnum.Carousel:
-                    break;
+                    return "\uE89F";
                 case SectionTypeEnum.PrintOTP:
                     break;
                 default:
                     break;
             }
-            return "0";
+            return "\uE8F2";
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

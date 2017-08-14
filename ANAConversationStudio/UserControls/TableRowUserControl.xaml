@@ -9,7 +9,7 @@
              d:DesignHeight="300" d:DesignWidth="300">
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="150"/>
+            <ColumnDefinition Width="120"/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
         <TextBlock FontWeight="Bold" Text="{Binding Label, ElementName=Control}" Grid.Column="0" VerticalAlignment="Center"/>

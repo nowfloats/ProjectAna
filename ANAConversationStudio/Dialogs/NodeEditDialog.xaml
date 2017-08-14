@@ -49,7 +49,7 @@
         </Style>
     </Window.Resources>
     <Grid>
-        <TabControl SelectedIndex="1">
+        <TabControl SelectedIndex="1" >
             <TabItem Header="Node Details">
                 <ScrollViewer>
                     <!--<Grid>
