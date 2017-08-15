@@ -156,6 +156,7 @@
     <Compile Include="Models\Chat\ChatFlowPack.cs" />
     <Compile Include="Models\Chat\Sections\PrintOTPSection.cs" />
     <Compile Include="Models\LayoutPoint.cs" />
+    <Compile Include="UIHelpers\ActionCommand.cs" />
     <Compile Include="UIHelpers\EditSectionTemplateSelector.cs" />
     <Compile Include="UIHelpers\NullToBoolConverter.cs" />
     <Compile Include="UIHelpers\SelectionToFillBrushConverter.cs" />

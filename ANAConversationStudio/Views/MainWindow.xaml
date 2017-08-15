@@ -410,9 +410,9 @@
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
                             </ItemsControl>
-                            
+
                             <!--<TextBox Text="&#xE26E;" FontFamily="Segoe UI Symbol"/>-->
-                            
+
                             <!-- Displays the node's output connectors. -->
                             <ItemsControl
                                 HorizontalAlignment="Center"
@@ -477,27 +477,29 @@
     </Window.Resources>
 
     <Window.InputBindings>
-
         <!-- Bind input to commands. -->
-
         <KeyBinding
 			Key="Del"
 			Command="{StaticResource Commands.DeleteSelectedNodes}"
 			/>
         <KeyBinding
 			Key="Minus"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.ZoomOut}"
 			/>
         <KeyBinding
 			Key="Plus"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.ZoomIn}"
 			/>
         <KeyBinding
 			Key="Backspace"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.JumpBackToPrevZoom}"
 			/>
         <KeyBinding
 			Key="Space"
+            Modifiers="Ctrl"
 			Command="{StaticResource Commands.FitContent}"
 			/>
         <KeyBinding
@@ -594,11 +596,7 @@
     </Window.CommandBindings>
 
     <Window.ContextMenu>
-
         <ContextMenu>
-
-            <!-- Clicking this menu item creates a new node. -->
-
             <MenuItem
                 Header="Create Node"
                 Command="{StaticResource Commands.CreateNode}"
@@ -893,6 +891,7 @@
                             MouseMove="networkControl_MouseMove"
                             MouseWheel="networkControl_MouseWheel"
                             MouseDoubleClick="networkControl_MouseDoubleClick"
+                                                    
                             />
                                                 <!--
                         This Canvas and Border are used as a very simple way to render a drag rectangle that the user

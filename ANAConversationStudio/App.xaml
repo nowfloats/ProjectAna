@@ -3,9 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:ANAConversationStudio"
              xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
+             xmlns:dialogs="clr-namespace:ANAConversationStudio.Dialogs"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
              Startup="Application_Startup"
-             StartupUri="/Dialogs/NodeEditDialog.xaml"
+             StartupUri="/Views/MainWindow.xaml"
              >
     <!--
     StartupUri="/Views/MainWindow.xaml"
@@ -25,7 +26,8 @@
             <UI:BindingToTypeNameConverter x:Key="TypeName"/>
             <UI:NullToVisibilityConverter x:Key="N2V"/>
             <UI:NullToBoolConverter x:Key="N2B"/>
-
+            <BooleanToVisibilityConverter x:Key="B2V"/>
+            
             <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
             <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
             <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />

@@ -14,7 +14,6 @@
         Background="{DynamicResource MaterialDesignPaper}"
             
         mc:Ignorable="d"
-        Unloaded="DialogUnloaded"
         Name="Dialog"
         Title="Node Edit Dialog" Height="700" Width="600">
     <Window.Resources>
@@ -47,11 +46,14 @@
             <Setter Property="Margin" Value="5" />
             <Setter Property="VerticalAlignment" Value="Center" />
         </Style>
+        <Style TargetType="uc:TableRowUserControl" >
+            <Setter Property="LabelWidth" Value="120" />
+        </Style>
     </Window.Resources>
     <Grid>
-        <TabControl SelectedIndex="1" >
+        <TabControl SelectedIndex="2" >
             <TabItem Header="Node Details">
-                <ScrollViewer>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <!--<Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
@@ -123,8 +125,8 @@
                         
                     </Grid>-->
                     <StackPanel>
-                        <TextBlock Text="&#xEB9F;" Margin="10" FontSize="20" FontFamily="{StaticResource MDL2Assets}" />
-                        <GroupBox Header="General" >
+                        <!--<TextBlock Text="&#xEB9F;" Margin="10" FontSize="20" FontFamily="{StaticResource MDL2Assets}" />-->
+                        <GroupBox Header="General">
                             <StackPanel>
                                 <uc:TableRowUserControl Label="Name">
                                     <uc:TableRowUserControl.Field>
@@ -193,7 +195,7 @@
                                 </uc:TableRowUserControl>
                             </StackPanel>
                         </GroupBox>
-                        <Button Content="Click" Click="TestButtonClick"/>
+                        <!--<Button Content="Click" Click="TestButtonClick"/>-->
                     </StackPanel>
                 </ScrollViewer>
             </TabItem>
@@ -204,7 +206,7 @@
                         <RowDefinition/>
                     </Grid.RowDefinitions>
                     <Menu>
-                        <MenuItem Header="Add">
+                        <MenuItem Header="Add Section">
                             <MenuItem Header="Text" Tag="{x:Static chatSections:SectionTypeEnum.Text}" Click="AddSectionClick"/>
                             <MenuItem Header="Image" Tag="{x:Static chatSections:SectionTypeEnum.Image}" Click="AddSectionClick"/>
                             <MenuItem Header="Gif" Tag="{x:Static chatSections:SectionTypeEnum.Gif}" Click="AddSectionClick"/>
@@ -221,7 +223,18 @@
 
             </TabItem>
             <TabItem Header="Buttons">
-
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Menu>
+                        <MenuItem Header="Add Button" Click="AddButtonClick"/>
+                    </Menu>
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <ItemsControl ItemsSource="{Binding ChatNode.Buttons}" ItemTemplate="{StaticResource ChatButtonEditTemplate}"/>
+                    </ScrollViewer>
+                </Grid>
             </TabItem>
         </TabControl>
     </Grid>

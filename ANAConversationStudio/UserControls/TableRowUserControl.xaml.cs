@@ -25,5 +25,12 @@ namespace ANAConversationStudio.UserControls
         }
 
         public static readonly DependencyProperty FieldProperty = DependencyProperty.Register("Field", typeof(object), typeof(TableRowUserControl), new PropertyMetadata());
+
+        public double LabelWidth
+        {
+            get { return (double)GetValue(LabelWidthProperty); }
+            set { SetValue(LabelWidthProperty, value); }
+        }
+        public static readonly DependencyProperty LabelWidthProperty = DependencyProperty.Register("LabelWidth", typeof(double), typeof(TableRowUserControl), new PropertyMetadata(120D));
     }
 }

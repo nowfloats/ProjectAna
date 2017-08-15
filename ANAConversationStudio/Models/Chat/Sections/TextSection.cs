@@ -2,7 +2,11 @@
 {
     public class TextSection : Section
     {
-        public TextSection() { SectionType = SectionTypeEnum.Text; }
+        public TextSection()
+        {
+            SectionType = SectionTypeEnum.Text;
+            FillAlias();
+        }
 
         //Content
         private string _Text;
@@ -15,10 +19,15 @@
                 {
                     _Text = value;
 
-                    Alias = _Text;
+                    FillAlias();
                     OnPropertyChanged();
                 }
             }
+        }
+
+        private void FillAlias()
+        {
+            Alias = string.IsNullOrWhiteSpace(_Text) ? SectionType + "" : _Text;
         }
     }
 }

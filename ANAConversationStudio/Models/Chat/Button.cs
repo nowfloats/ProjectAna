@@ -1,5 +1,11 @@
 ﻿using ANAConversationStudio.Controls;
+using ANAConversationStudio.UIHelpers;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
+using System.Windows.Input;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat
@@ -9,7 +15,10 @@ namespace ANAConversationStudio.Models.Chat
     [CategoryOrder("Misc", 3)]
     public class Button : BaseEntity
     {
-        public Button() { }
+        public Button()
+        {
+            FillAlias();
+        }
 
         #region Important
         private ButtonTypeEnum _ButtonType = ButtonTypeEnum.NextNode;
@@ -22,6 +31,8 @@ namespace ANAConversationStudio.Models.Chat
                 if (_ButtonType != value)
                 {
                     _ButtonType = value;
+
+                    FillAlias();
                     OnPropertyChanged();
                 }
             }
@@ -305,10 +316,55 @@ namespace ANAConversationStudio.Models.Chat
         }
         #endregion
 
+        //Content
+
+        private string _ButtonText;
+        public string ButtonText
+        {
+            get { return _ButtonText; }
+            set
+            {
+                if (_ButtonText != value)
+                {
+                    _ButtonText = value;
+
+                    FillAlias();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        private void FillAlias()
+        {
+            Alias = string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText;
+        }
+
+        [JsonIgnore]
+        public IEnumerable<ButtonTypeEnum> ButtonTypes => Enum.GetValues(typeof(ButtonTypeEnum)).Cast<ButtonTypeEnum>();
+
         public override string ToString()
         {
             return Alias;
         }
+
+
+        private ChatNode _ParentNode;
+        [JsonIgnore]
+        public ChatNode ParentNode
+        {
+            get { return _ParentNode; }
+            set
+            {
+                if (_ParentNode != value)
+                {
+                    _ParentNode = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public ICommand Remove => new ActionCommand((p) => ParentNode.Buttons.Remove(this));
     }
     public enum ButtonTypeEnum
     {

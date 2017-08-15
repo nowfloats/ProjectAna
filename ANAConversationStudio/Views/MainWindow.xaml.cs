@@ -18,6 +18,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using ANAConversationStudio.Dialogs;
 
 namespace ANAConversationStudio.Views
 {
@@ -555,7 +556,11 @@ namespace ANAConversationStudio.Views
         private void OpenNodeEditor()
         {
             if (this.ViewModel.SelectedChatNode != null)
-                NodeEditorLayoutAnchorable.IsActive = true;
+            {
+                //NodeEditorLayoutAnchorable.IsActive = true;
+                var editor = new NodeEditDialog(this.ViewModel.SelectedChatNode);
+                editor.ShowDialog();
+            }
         }
 
         /// <summary>
