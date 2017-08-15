@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using System.IO;
+using ANAConversationPlatform.Attributes;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -61,8 +62,7 @@ namespace ANAConversationPlatform.Controllers
             return RedirectToAction(nameof(Chat));
         }
 
-        [Produces("text/plain")]
-        [HttpPost]
+        [Produces("text/plain"), HttpPost, BasicAuthentication]
         public async Task<ActionResult> SaveChatFlow()
         {
             try
@@ -85,8 +85,7 @@ namespace ANAConversationPlatform.Controllers
             return BadRequest(new { Message = "Unable to save chat flow!" });
         }
 
-        [Produces("text/plain")]
-        [HttpGet]
+        [Produces("text/plain"), HttpGet, BasicAuthentication]
         public async Task<ActionResult> FetchChatFlow([FromQuery] string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))

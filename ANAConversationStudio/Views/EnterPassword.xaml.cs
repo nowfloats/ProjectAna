@@ -1,4 +1,5 @@
 ﻿using ANAConversationStudio.Helpers;
+using System.Diagnostics;
 using System.Windows;
 
 namespace ANAConversationStudio.Views
@@ -11,13 +12,6 @@ namespace ANAConversationStudio.Views
         public EnterPassword()
         {
             InitializeComponent();
-#if DEBUG
-            this.Loaded += (s, e) =>
-            {
-                PwdBox.Password = "nizam@123";
-                Submit();
-            };
-#endif
         }
         public bool Success { get; set; }
         private void SubmitClick(object sender, RoutedEventArgs e)

@@ -30,6 +30,7 @@ namespace ANAConversationPlatform
             RocketChatSDK.Settings = Configuration.GetSection(nameof(AgentChatSettings)).Get<AgentChatSettings>();
             LiveClientSocketsHelper.Settings = Configuration.GetSection(nameof(LiveClientSocketsServerSettings)).Get<LiveClientSocketsServerSettings>();
             Utils.Settings = Configuration.GetSection(nameof(Helpers.Settings)).Get<Helpers.Settings>();
+            Utils.BasicAuth = Configuration.GetSection(nameof(Helpers.BasicAuth)).Get<Helpers.BasicAuth>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.

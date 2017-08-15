@@ -542,7 +542,7 @@ namespace ANAConversationStudio.ViewModels
         {
             StudioContext.Current.ChatFlow.NodeLocations = this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new LayoutPoint(x.X, x.Y));
             StudioContext.Current.ChatFlow.ChatNodes = this.Network.Nodes.Select(x => x.ChatNode).ToList();
-
+            StudioContext.Current.ChatFlow.ChatContent = Utilities.ExtractContentFromChatNodes(StudioContext.Current.ChatFlow.ChatNodes);
             await StudioContext.Current.SaveChatFlowAsync();
         }
 

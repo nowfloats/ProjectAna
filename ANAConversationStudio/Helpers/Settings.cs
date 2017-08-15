@@ -10,8 +10,6 @@ namespace ANAConversationStudio.Helpers
     {
         const string FILE_NAME = "Settings.json";
 
-        //public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
-
         public List<ChatServerConnection> SavedChatServerConnections { get; set; } = new List<ChatServerConnection>();
         public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
         public static bool IsEncrypted()
@@ -42,29 +40,6 @@ namespace ANAConversationStudio.Helpers
         }
     }
 
-    public class DatabaseConnection
-    {
-        public string TemplateCollectionName { get; set; }
-        public string ContentCollectionName { get; set; }
-        public string LayoutCollectionName { get; set; }
-
-        public string DatabaseName { get; set; }
-        public string ConnectionString { get; set; }
-        public string Name { get; set; }
-
-        public override string ToString()
-        {
-            if (string.IsNullOrWhiteSpace(Name))
-                return "Unnamed Connection";
-            return Name;
-        }
-
-        public bool IsValid()
-        {
-            return Utilities.ValidateStrings(TemplateCollectionName, ContentCollectionName, LayoutCollectionName, DatabaseName, ConnectionString, Name);
-        }
-    }
-
     public class ChatServerConnection
     {
         [PropertyOrder(1)]
@@ -73,9 +48,9 @@ namespace ANAConversationStudio.Helpers
         public string ServerUrl { get; set; }
         
         [PropertyOrder(3)]
-        public string AuthUser { get; set; }
+        public string APIKey { get; set; }
         [PropertyOrder(4)]
-        public string AuthKey { get; set; }
+        public string APISecret { get; set; }
 
         public override string ToString()
         {

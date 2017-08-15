@@ -1,19 +1,16 @@
-﻿using ANAConversationStudio.Controls;
+﻿using ANAConversationStudio.Helpers;
 using ANAConversationStudio.UIHelpers;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat
 {
-    [CategoryOrder("Important", 1)]
-    [CategoryOrder("For ButtonType Get[X]", 2)]
-    [CategoryOrder("Misc", 3)]
-    public class Button : BaseEntity
+    public class Button : RepeatableBaseEntity
     {
         public Button()
         {
@@ -95,84 +92,6 @@ namespace ANAConversationStudio.Models.Chat
                 if (_PostfixText != value)
                 {
                     _PostfixText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-        #endregion
-
-        #region For Repeat Buttons
-
-        private bool _DoesRepeat;
-        [Category("For Repeating Buttons")]
-        public bool DoesRepeat
-        {
-            get { return _DoesRepeat; }
-            set
-            {
-                if (_DoesRepeat != value)
-                {
-                    _DoesRepeat = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _RepeatOn;
-        [Category("For Repeating Buttons")]
-        public string RepeatOn
-        {
-            get { return _RepeatOn; }
-            set
-            {
-                if (_RepeatOn != value)
-                {
-                    _RepeatOn = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private string _RepeatAs;
-        [Category("For Repeating Buttons")]
-        public string RepeatAs
-        {
-            get { return _RepeatAs; }
-            set
-            {
-                if (_RepeatAs != value)
-                {
-                    _RepeatAs = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private int _StartPosition;
-        [Category("For Repeating Buttons")]
-        public int StartPosition
-        {
-            get { return _StartPosition; }
-            set
-            {
-                if (_StartPosition != value)
-                {
-                    _StartPosition = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private int _MaxRepeats;
-        [Category("For Repeating Buttons")]
-        public int MaxRepeats
-        {
-            get { return _MaxRepeats; }
-            set
-            {
-                if (_MaxRepeats != value)
-                {
-                    _MaxRepeats = value;
                     OnPropertyChanged();
                 }
             }
@@ -301,7 +220,6 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
-        //[Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -317,8 +235,9 @@ namespace ANAConversationStudio.Models.Chat
         #endregion
 
         //Content
-
         private string _ButtonText;
+        [JsonIgnore]
+        [BsonIgnore]
         public string ButtonText
         {
             get { return _ButtonText; }
@@ -334,22 +253,13 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
-        private void FillAlias()
-        {
-            Alias = string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText;
-        }
-
         [JsonIgnore]
+        [BsonIgnore]
         public IEnumerable<ButtonTypeEnum> ButtonTypes => Enum.GetValues(typeof(ButtonTypeEnum)).Cast<ButtonTypeEnum>();
-
-        public override string ToString()
-        {
-            return Alias;
-        }
-
 
         private ChatNode _ParentNode;
         [JsonIgnore]
+        [BsonIgnore]
         public ChatNode ParentNode
         {
             get { return _ParentNode; }
@@ -364,7 +274,46 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         [JsonIgnore]
+        [BsonIgnore]
         public ICommand Remove => new ActionCommand((p) => ParentNode.Buttons.Remove(this));
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveUp => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Buttons.IndexOf(this);
+            if (oldIdx <= 0) return;
+
+            ParentNode.Buttons.Move(oldIdx, oldIdx - 1);
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveDown => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Buttons.IndexOf(this);
+            if (oldIdx >= ParentNode.Buttons.Count - 1) return;
+
+            ParentNode.Buttons.Move(oldIdx, oldIdx + 1);
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentId { get; set; }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentEmotion { get; set; }
+
+        private void FillAlias()
+        {
+            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText);
+        }
+
+        public override string ToString()
+        {
+            return Alias;
+        }
     }
     public enum ButtonTypeEnum
     {

@@ -10,7 +10,6 @@ using ANAConversationStudio.Helpers;
 using MongoDB.Bson;
 using ANAConversationStudio.ViewModels;
 using System.Reflection;
-using Xceed.Wpf.Toolkit;
 using System.Linq;
 using System.Windows.Media;
 using System.Net;
@@ -18,7 +17,6 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using ANAConversationStudio.Dialogs;
 
 namespace ANAConversationStudio.Views
 {
@@ -184,7 +182,7 @@ namespace ANAConversationStudio.Views
         {
             if (networkControl.SelectedNode == null)
             {
-                System.Windows.MessageBox.Show("Please select a node to clone it", "No node selected");
+                MessageBox.Show("Please select a node to clone it", "No node selected");
                 return;
             }
             if (networkControl.SelectedNodes != null)
@@ -198,7 +196,7 @@ namespace ANAConversationStudio.Views
 
         private void ConvSimMenuClick(object sender, RoutedEventArgs e)
         {
-            var p = System.Diagnostics.Process.Start("anaconsim://");
+            var p = Process.Start("anaconsim://");
         }
 
         private async void UpdateMenuClick(object sender, RoutedEventArgs e)
@@ -220,7 +218,7 @@ namespace ANAConversationStudio.Views
                     Status("Downloading...");
                     await wc.DownloadFileTaskAsync(updateInfo.DownloadLink, tempFile);
                     Status("Download Complete");
-                    if (System.Windows.MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    if (MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                     {
                         var tempPath = Path.GetTempPath();
                         var srcPath = Path.Combine(Environment.CurrentDirectory, "Tools");
@@ -509,7 +507,7 @@ namespace ANAConversationStudio.Views
             else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
             {
                 //
-                // When in drag zooming mode continously update the position of the rectangle
+                // When in drag zooming mode continuously update the position of the rectangle
                 // that the user is dragging out.
                 //
                 Point curContentMousePoint = e.GetPosition(networkControl);
@@ -557,8 +555,7 @@ namespace ANAConversationStudio.Views
         {
             if (this.ViewModel.SelectedChatNode != null)
             {
-                //NodeEditorLayoutAnchorable.IsActive = true;
-                var editor = new NodeEditDialog(this.ViewModel.SelectedChatNode);
+                var editor = new NodeEditWindow(this.ViewModel.SelectedChatNode);
                 editor.ShowDialog();
             }
         }
@@ -726,7 +723,7 @@ namespace ANAConversationStudio.Views
             double x, y, width, height;
 
             //
-            // Deterine x,y,width and height of the rect inverting the points if necessary.
+            // Determine x,y,width and height of the rect inverting the points if necessary.
             // 
 
             if (pt2.X < pt1.X)
@@ -772,7 +769,7 @@ namespace ANAConversationStudio.Views
             SavePrevZoomRect();
 
             //
-            // Retreive the rectangle that the user draggged out and zoom in on it.
+            // Retrieve the rectangle that the user dragged out and zoom in on it.
             //
             double contentX = Canvas.GetLeft(dragZoomBorder);
             double contentY = Canvas.GetTop(dragZoomBorder);
@@ -819,15 +816,6 @@ namespace ANAConversationStudio.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public CollectionControl NodeCollectionControl
-        {
-            get { return SectionButtonEditor.Content as CollectionControl; }
-            set
-            {
-                SectionButtonEditor.Content = null;
-                SectionButtonEditor.Content = value;
-            }
-        }
         private bool AskPass()
         {
             if (!Settings.IsEncrypted())
@@ -853,14 +841,7 @@ namespace ANAConversationStudio.Views
             LoadProjects();
             CheckForUpdates();
             UpdateTitle();
-            #region Overview Windows Commented
-            //OverviewWindow overviewWindow = new OverviewWindow();
-            //overviewWindow.Left = this.Left;
-            //overviewWindow.Top = this.Top + this.Height + 5;
-            //overviewWindow.Owner = this;
-            //overviewWindow.DataContext = this.ViewModel; // Pass the view model onto the overview window.
-            //overviewWindow.Show(); 
-            #endregion
+
         }
         private void UpdateTitle()
         {
@@ -895,7 +876,7 @@ namespace ANAConversationStudio.Views
             else
             {
                 HelpMenu.Background = null;
-                HelpMenu.Foreground = new SolidColorBrush(Colors.Black);
+                HelpMenu.Foreground = App.Current.Resources["FileMenuForegroundBrush"] as SolidColorBrush;
                 UpdateMenuItem.Header = $"No update available!";
                 UpdateMenuItem.IsEnabled = false;
             }
@@ -928,7 +909,6 @@ namespace ANAConversationStudio.Views
                 this.ViewModel.SelectedChatNode = null;
                 this.ViewModel.SelectedChatNode = node.ChatNode;
                 this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
-                NodeCollectionControl = null;
             }
         }
 
@@ -948,34 +928,6 @@ namespace ANAConversationStudio.Views
             await SaveEditsAsync();
         }
 
-        #region TODO: Window Layout Save and Load Functions 
-        //private void dockingManager_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    if (File.Exists(Constants.WindowLayoutFileName))
-        //    {
-        //        try
-        //        {
-        //            XmlLayoutSerializer layoutSerializer = new XmlLayoutSerializer(dockingManager);
-        //            layoutSerializer.Deserialize(Constants.WindowLayoutFileName);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            System.Windows.MessageBox.Show(ex.StackTrace, "Window Layout Read Error: " + ex.Message);
-        //        }
-        //    }
-        //}
-
-        //private void LoadWindowLayout()
-        //{
-        //    try
-        //    {
-        //        XmlLayoutSerializer layoutSerializer = new XmlLayoutSerializer(dockingManager);
-        //        layoutSerializer.Serialize(Constants.WindowLayoutFileName);
-        //    }
-        //    catch { }
-        //} 
-        #endregion
-
         private async Task SaveEditsAsync()
         {
             try
@@ -986,7 +938,7 @@ namespace ANAConversationStudio.Views
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.StackTrace, "Error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace, "Error: " + ex.Message);
             }
         }
 
@@ -1033,7 +985,6 @@ namespace ANAConversationStudio.Views
         private void ResetEditors()
         {
             this.ViewModel.SelectedChatNode = null;
-            NodeCollectionControl = null;
         }
 
         public void GotoNextNode(int position = 1)

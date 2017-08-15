@@ -1,4 +1,8 @@
-﻿namespace ANAConversationStudio.Models.Chat.Sections
+﻿using ANAConversationStudio.Helpers;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+
+namespace ANAConversationStudio.Models.Chat.Sections
 {
     public class TextSection : Section
     {
@@ -10,6 +14,8 @@
 
         //Content
         private string _Text;
+        [JsonIgnore]
+        [BsonIgnore]
         public string Text
         {
             get { return _Text; }
@@ -25,9 +31,9 @@
             }
         }
 
-        private void FillAlias()
+        protected override void FillAlias()
         {
-            Alias = string.IsNullOrWhiteSpace(_Text) ? SectionType + "" : _Text;
+            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(_Text) ? SectionType + "" : _Text);
         }
     }
 }

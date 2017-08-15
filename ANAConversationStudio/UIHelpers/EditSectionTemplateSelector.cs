@@ -23,15 +23,17 @@ namespace ANAConversationStudio.UIHelpers
                 case SectionTypeEnum.Audio:
                 case SectionTypeEnum.Video:
                 case SectionTypeEnum.EmbeddedHtml:
-                    templateName = $"TitleCaptionUrlSectionEditTemplate";
+                    templateName = "TitleCaptionUrlSectionEditTemplate";
                     break;
                 case SectionTypeEnum.Text:
-                    templateName = $"TextSectionEditTemplate";
+                    templateName = "TextSectionEditTemplate";
+                    break;
+                case SectionTypeEnum.Carousel:
+                    templateName = "CarouselSectionEditTemplate";
                     break;
                 case SectionTypeEnum.Graph:
-                case SectionTypeEnum.Carousel:
                 case SectionTypeEnum.PrintOTP:
-                    templateName = $"TextSectionEditTemplate";
+                    templateName = "TextSectionEditTemplate";
                     //Not supported yet.
                     break;
                 default:

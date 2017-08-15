@@ -17,14 +17,6 @@ namespace ANAConversationStudio.Views
             CollectionControl.ItemsSource = Utilities.Settings.SavedChatServerConnections.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<ChatServerConnection>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(ChatServerConnection) };
-
-#if DEBUG
-            Loaded += (s, e) =>
-            {
-                CollectionControl.SelectedItem = CollectionControl.Items.FirstOrDefault();
-                SaveAndConnectClick(null, null);
-            };
-#endif
         }
 
         private void Window_Closing(object sender, CancelEventArgs e)
@@ -64,16 +56,6 @@ namespace ANAConversationStudio.Views
             return true;
         }
 
-        /*
-        private void SaveClick(object sender, RoutedEventArgs e)
-        {
-            if (Save())
-            {
-                HideConfirm = true;
-                Close();
-            }
-        }
-        */
         private void CancelClick(object sender, RoutedEventArgs e)
         {
             HideConfirm = true;
@@ -103,7 +85,7 @@ namespace ANAConversationStudio.Views
                 catch (Exception ex)
                 {
                     StudioContext.Current = null;
-                    MainWindow.Current.Status("Unable to connect to the chat server");
+                    MessageBox.Show("Unable to connect to the chat server");
                 }
             }
         }

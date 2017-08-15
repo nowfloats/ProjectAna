@@ -1,19 +1,20 @@
 ﻿<Application x:Class="ANAConversationStudio.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:local="clr-namespace:ANAConversationStudio"
              xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
-             xmlns:dialogs="clr-namespace:ANAConversationStudio.Dialogs"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
              Startup="Application_Startup"
              StartupUri="/Views/MainWindow.xaml"
              >
-    <!--
-    StartupUri="/Views/MainWindow.xaml"
-    
-    StartupUri="/Dialogs/NodeEditDialog.xaml"-->
+
     <Application.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
+                <ResourceDictionary Source="/Styles/EditorTemplates.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
             <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
 
             <Style TargetType="{x:Type Window}">
@@ -27,16 +28,14 @@
             <UI:NullToVisibilityConverter x:Key="N2V"/>
             <UI:NullToBoolConverter x:Key="N2B"/>
             <BooleanToVisibilityConverter x:Key="B2V"/>
-            
+
             <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
+            <UI:IsStartNodeToBrushConverter x:Key="IsStartNodeToBrushConverter"/>
             <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
             <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />
 
             <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
             <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
-
-            <!--<Border Width="100" Height="100" x:Key="vBrushBack" BorderBrush="{StaticResource GridDotBrush}" BorderThickness="2"/>-->
-
 
             <!--Dots-->
             <Grid Width="100" Height="100" x:Key="vBrushBack">
@@ -46,23 +45,32 @@
                 <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
             </Grid>
 
-            <!--
-        Dotted Line code!
-        <Rectangle Width="100" Height="100" x:Key="vBrushBack" Stroke="{StaticResource GridDotBrush}" StrokeThickness="2,2,2,0" StrokeDashArray="2 2" />
-        -->
-
             <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
 
-            
-            <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Light.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Primary/MaterialDesignColor.Teal.xaml" />
-                <ResourceDictionary Source="pack://application:,,,/MaterialDesignColors;component/Themes/Recommended/Accent/MaterialDesignColor.Cyan.xaml" />
-                <ResourceDictionary Source="/Styles/EditorTemplates.xaml" />
-            </ResourceDictionary.MergedDictionaries>
+            <!-- primary hues  -->
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#ccc"/>
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="Gray"/>
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="Gray"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
+            <!--  accent -->
+            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Crimson"/>
+            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="White"/>
+
+            <SolidColorBrush x:Key="FileMenuForegroundBrush" Color="#DD000000" />
+
+            <!-- Chat Designer Colors -->
+            <!-- The border brush for nodes. -->
+            <SolidColorBrush x:Key="nodeBorderBrush" Color="Transparent" />
+            <SolidColorBrush x:Key="startNodeBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
+            <SolidColorBrush x:Key="nodeHeaderBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
+            <!-- The fill brush for nodes. -->
+            <SolidColorBrush x:Key="nodeFillBrush" Color="{Binding Color, Source={StaticResource PrimaryHueLightBrush}}"/>
+            <SolidColorBrush x:Key="selectionBorderColor" Color="Transparent" />
+            <SolidColorBrush x:Key="selectionBorderBackgroundColor" Color="{Binding Color, Source={StaticResource PrimaryHueLightBrush}}" Opacity="0.5" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

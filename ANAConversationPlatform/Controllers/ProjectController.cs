@@ -3,10 +3,11 @@ using Microsoft.AspNetCore.Mvc;
 using ANAConversationPlatform.Helpers;
 using ANAConversationPlatform.Models;
 using System.Collections.Generic;
+using ANAConversationPlatform.Attributes;
 
 namespace ANAConversationPlatform.Controllers
 {
-    [Produces("application/json")]
+    [Produces("application/json"), BasicAuthentication]
     public class ProjectController : Controller
     {
         [HttpGet]

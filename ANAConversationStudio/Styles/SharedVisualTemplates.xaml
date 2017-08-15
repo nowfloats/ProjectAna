@@ -2,50 +2,116 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
-    xmlns:NetworkModel="clr-namespace:ANAConversationStudio.Models"    
     >
 
     <BooleanToVisibilityConverter
         x:Key="booleanToVisibilityConverter" 
         />
 
-    <!-- The border brush for nodes. -->
-    <SolidColorBrush
-        x:Key="nodeBorderBrush"
-        Color="Gray" Opacity="0"
-        />
-    <SolidColorBrush
-        x:Key="nodeHeaderBorderBrush"
-        Color="Gray"
-        />
-    <!-- The fill brush for nodes. -->
-    <SolidColorBrush x:Key="nodeFillBrush" Color="#ccc"/>
-    <!--<LinearGradientBrush
-        x:Key="nodeFillBrush"
-        StartPoint="0,0"
-        EndPoint="0,1"
-        >
-        <GradientStop Color="White" Offset="0" />
-        <GradientStop Color="#7FC9FF" Offset="0.6" />
-    </LinearGradientBrush>-->
-
-    <!-- The brush for connections. -->
-   
-    <!-- The brush for connectors. -->
     <SolidColorBrush
         x:Key="connectorBackgroundBrush"
         Color="White"
         />
 
-    <!--
-    Define a style for 'NodeItem'.
-    
-    Binds 'X' and 'Y' in the view-model (the 'NodeViewModel' class)
-    to 'X' and 'Y' in the NodeItem class.
-    
-    This sets the position of the node within the Canvas.
-    -->
-    <Style TargetType="{x:Type NetworkUI:NodeItem}">
+    <!-- Default style and control-template for 'NodeItem'. -->
+    <Style TargetType="NetworkUI:NodeItem" >
+
+        <!-- Data-bind the parent NetworkView. -->
+        <Setter Property="ParentNetworkView" Value="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type NetworkUI:NetworkView}}}" />
+
+        <!-- Set the position of the node within the canvas. -->
+        <Setter
+            Property="Canvas.Left"
+            Value="{Binding X, RelativeSource={RelativeSource Self}, Mode=TwoWay}"
+            />
+        <Setter
+            Property="Canvas.Top"
+            Value="{Binding Y, RelativeSource={RelativeSource Self}, Mode=TwoWay}"
+            />
+
+        <!-- Set the z-order of the node within the canvas. -->
+        <Setter
+            Property="Canvas.ZIndex"
+            Value="{Binding ZIndex, RelativeSource={RelativeSource Self}, Mode=TwoWay}"
+            />
+
+        <!-- Set defaults for background and border. -->
+        <Setter 
+            Property="Background" 
+            Value="Transparent" 
+            />
+        <Setter 
+            Property="BorderBrush" 
+            Value="Transparent" 
+            />
+        <Setter 
+            Property="BorderThickness" 
+            Value="1" 
+            />
+
+        <!-- The control-template for the node. -->
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate 
+                    TargetType="{x:Type NetworkUI:NodeItem}"
+                    >
+                    <Grid>
+
+                        <!-- 
+                        This border indicates that node is selected.
+                        Normally it is transparent, but when 'IsSelected' is set
+                        to 'true' the border brush becomes blue and its background
+                        becomes light blue.
+                        -->
+                        <Border
+                            x:Name="selectionBorder"
+                            Background="{TemplateBinding Background}" 
+                            BorderBrush="{TemplateBinding BorderBrush}" 
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            Margin="{TemplateBinding Margin}"
+                            Padding="{TemplateBinding Padding}"
+                            CornerRadius="8"
+                            >
+
+                            <!-- 
+                            User-defined node content is presented here. 
+                            -->
+                            <ContentPresenter />
+
+                        </Border>
+
+                    </Grid>
+                    <ControlTemplate.Triggers>
+
+                        <Trigger 
+                            Property="IsSelected"
+                            Value="True"
+                            >
+
+                            <!-- When the node is selected, set the color of 'selectionBorder' to blue. -->
+                            <Setter
+                                TargetName="selectionBorder"
+                                Property="BorderBrush"
+                                Value="{StaticResource selectionBorderColor}"
+                                />
+                        </Trigger>
+
+                        <Trigger 
+                            Property="IsSelected"
+                            Value="True"
+                            >
+
+                            <!-- When the node is selected, set the background of 'selectionBorder' to light blue. -->
+                            <Setter
+                                TargetName="selectionBorder"
+                                Property="Background"
+                                Value="{StaticResource selectionBorderBackgroundColor}"
+                                />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
         <Setter
             Property="X"
             Value="{Binding X}"
@@ -63,6 +129,7 @@
             Value="{Binding IsSelected}"
             />
     </Style>
+
 
     <!-- 
     A data-template that defines the UI for input connectors.
@@ -112,20 +179,30 @@
             Margin="5,2,5,0"
             >
             <Grid.RowDefinitions>
-                <RowDefinition Height="*" />
+                <RowDefinition/>
+                <RowDefinition />
                 <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
 
+            <TextBlock Grid.Row="0" HorizontalAlignment="Center" TextAlignment="Center" Text="{Binding Button.ButtonType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}" FontFamily="{StaticResource MDL2Assets}" VerticalAlignment="Center" Margin="0,0,5,0">
+                <TextBlock.ToolTip>
+                    <TextBlock>
+                        <Run Text="{Binding Button.ButtonType}"/><Run Text=" Button"/>
+                    </TextBlock>
+                </TextBlock.ToolTip>
+            </TextBlock>
+
             <!-- The name of the connector. -->
             <TextBlock
-                Text="{Binding Name}"
+                Text="{Binding Button.Alias}"
                 FontStyle="Italic"
                 VerticalAlignment="Center"
                 Margin="0,0,0,10"
+                Grid.Row="1"
                 />
 
             <Grid
-                Grid.Row="1"
+                Grid.Row="2"
                 Width="15"
                 Height="15"
                 Cursor="Hand"

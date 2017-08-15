@@ -1,17 +1,12 @@
 ﻿<Window x:Class="ANAConversationStudio.Views.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:ANAConversationStudio"
     xmlns:VM="clr-namespace:ANAConversationStudio.ViewModels"
     xmlns:Controls="clr-namespace:ANAConversationStudio.Controls"
     xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
-    xmlns:NetworkModel="clr-namespace:ANAConversationStudio.Models"
     xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
     xmlns:ZoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
     xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"
-    xmlns:avalonDock="http://schemas.xceed.com/wpf/xaml/avalondock"
-    xmlns:diagnostics="clr-namespace:System.Diagnostics;assembly=WindowsBase"
-    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
     Title="ANA Conversation Studio" 
     x:Name="mainWindow"
     MinWidth="400"
@@ -36,7 +31,6 @@
                 Merge in the resource dictionary that is shared between the main window and the overview window.
                 -->
                 <ResourceDictionary Source="/Styles/SharedVisualTemplates.xaml" />
-                <ResourceDictionary Source="/Styles/CustomDesignerTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <!-- UI commands. -->
@@ -313,6 +307,7 @@
                     VerticalAdornerPlacement="Outside"
                     AdornerOffsetX="-12"
                     AdornerOffsetY="8"
+                    Background="Transparent"
                     IsMouseOverShowEnabled="{Binding ElementName=networkControl, Path=IsNotDragging}"
                     >
 
@@ -320,12 +315,12 @@
 
                     <Border
                         MinWidth="120"
-                        Margin="10,6,10,0"
+                        Margin="10,6,10,6"
                         SizeChanged="Node_SizeChanged"
                         Background="{StaticResource nodeFillBrush}"
                         BorderThickness="1.3"
-                        BorderBrush="{StaticResource nodeBorderBrush}"
-                        CornerRadius="8"
+                        BorderBrush="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}"
+                        CornerRadius="10"
                         >
 
                         <!-- This rectangle is the main visual for the node. -->
@@ -365,15 +360,21 @@
                                 Grid.Row="0">
                                 <!-- The name of the node. -->
                                 <Grid>
-                                    <Grid Height="18" Background="Gray" VerticalAlignment="Bottom"/>
-                                    <TextBlock
-                                    Text="{Binding Name}"
-                                    Foreground="White"
-                                    HorizontalAlignment="Center"
-                                    VerticalAlignment="Center"
-                                    Margin="10,5,10,3"
-                                    Padding="0,3"
-                                    />
+                                    <Grid Height="18" Background="{StaticResource nodeHeaderBorderBrush}" VerticalAlignment="Bottom"/>
+                                    <StackPanel
+                                        Orientation="Horizontal"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Center"
+                                        Margin="10,5,10,3">
+                                        <TextBlock Margin="3" Foreground="White" Text="{Binding ChatNode.NodeType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}" FontFamily="{StaticResource MDL2Assets}" VerticalAlignment="Center">
+                                            <TextBlock.ToolTip>
+                                                <TextBlock >
+                                                    <Run Text="{Binding ChatNode.NodeType}"/><Run Text=" Node"/>
+                                                </TextBlock>
+                                            </TextBlock.ToolTip>
+                                        </TextBlock>
+                                        <TextBlock Text="{Binding ChatNode.Alias}" Foreground="White" Margin="3" VerticalAlignment="Center"/>
+                                    </StackPanel>
                                 </Grid>
                             </Border>
 
@@ -389,7 +390,7 @@
                                 Focusable="False"
                                 />
 
-                            <ItemsControl Margin="30,10" HorizontalAlignment="Left" ItemsSource="{Binding ChatNode.Sections}" Grid.Row="2" HorizontalContentAlignment="Stretch" Grid.Column="1">
+                            <ItemsControl Margin="30,10" HorizontalAlignment="Stretch" ItemsSource="{Binding ChatNode.Sections}" Grid.Row="2" HorizontalContentAlignment="Stretch" Grid.Column="1">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <Border BorderBrush="White" BorderThickness="0,0,0,0" HorizontalAlignment="Stretch" Padding="0,5,0,5">
@@ -402,8 +403,14 @@
                                                     <RowDefinition/>
                                                     <RowDefinition Height="Auto"/>
                                                 </Grid.RowDefinitions>
-                                                <TextBlock Grid.Row="0" Text="&#xE26E;" FontFamily="Segoe UI Symbol" VerticalAlignment="Center" Margin="0,0,5,0"/>
-                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Alias}" MaxWidth="250" TextWrapping="Wrap" Margin="0,0,5,0"/>
+                                                <TextBlock Grid.Row="0" Text="{Binding SectionType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}" FontFamily="{StaticResource MDL2Assets}" VerticalAlignment="Center" Margin="0,0,5,0" >
+                                                    <TextBlock.ToolTip>
+                                                        <TextBlock>
+                                                            <Run Text="{Binding SectionType}"/><Run Text=" Section"/>
+                                                        </TextBlock>
+                                                    </TextBlock.ToolTip>
+                                                </TextBlock>
+                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Alias}" MaxWidth="250" TextWrapping="Wrap" Margin="0,0,5,0" ToolTip="{Binding Text}"/>
                                                 <Border CornerRadius="2" BorderBrush="White" Grid.ColumnSpan="2" Margin="0,5,0,0" BorderThickness="0,0.2" HorizontalAlignment="Stretch" Grid.Row="1"/>
                                             </Grid>
                                         </Border>
@@ -471,7 +478,9 @@
                     </ac:AdornedControl.AdornerContent>
                 </ac:AdornedControl>
             </DataTemplate>
-
+            <Style TargetType="Menu" BasedOn="{StaticResource {x:Type Menu}}">
+                <Setter Property="Padding" Value="0"/>
+            </Style>
         </ResourceDictionary>
 
     </Window.Resources>
@@ -651,8 +660,8 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu Grid.Row="0" x:Name="menu" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
-            <MenuItem Header="File" x:Name="FileMenu">
+        <Menu BorderBrush="{StaticResource PrimaryHueLightBrush}" Foreground="{StaticResource FileMenuForegroundBrush}" BorderThickness="0,0,0,1" Grid.Row="0" x:Name="menu" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
+            <MenuItem Header="File" x:Name="FileMenu" Height="30">
                 <MenuItem Header="New Chat Flow" Click="NewChatFlowClick"/>
                 <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
                     <MenuItem.ItemTemplate>
@@ -665,145 +674,145 @@
                 <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
-            <MenuItem Header="Tools">
+            <MenuItem Header="Tools" Height="30">
                 <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
                 <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
 
             </MenuItem>
-            <MenuItem Header="Help" Name="HelpMenu">
-                <MenuItem Header="No update available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
+            <MenuItem Header="Help" Name="HelpMenu" Height="30">
+                <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
             </MenuItem>
         </Menu>
-        <avalonDock:DockingManager Grid.Row="1" x:Name="dockingManager" >
-            <avalonDock:LayoutRoot>
-                <avalonDock:LayoutPanel>
-                    <avalonDock:LayoutDocumentPane>
-                        <avalonDock:LayoutDocument ContentId="NodeNetworkView" Title=" Chat Flow " CanClose="False" CanFloat="False">
-                            <DockPanel>
+        <DockPanel Grid.Row="1" >
 
-                                <!-- Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons. -->
+            <!-- Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons. -->
 
-                                <Grid
+            <Grid
             Margin="5,5,5,5"
             DockPanel.Dock="Bottom"
             >
-                                    <Grid.ColumnDefinitions>
+                <Grid.Resources>
+                    <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                        <Setter Property="Padding" Value="0"/>
+                    </Style>
+                </Grid.Resources>
+                <Grid.ColumnDefinitions>
 
-                                        <!-- empty space -->
-                                        <ColumnDefinition Width="75" />
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="5"/>
+                    <!-- empty space -->
+                    <ColumnDefinition Width="75" />
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="5"/>
 
-                                        <!-- the fit content button -->
-                                        <ColumnDefinition Width="40" />
+                    <!-- the fit content button -->
+                    <ColumnDefinition Width="40" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the fill button -->
-                                        <ColumnDefinition Width="40" />
+                    <!-- the fill button -->
+                    <ColumnDefinition Width="40" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the 100% button -->
-                                        <ColumnDefinition Width="40" />
+                    <!-- the 100% button -->
+                    <ColumnDefinition Width="40" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the zoom percentage label -->
-                                        <ColumnDefinition Width="25" />
+                    <!-- the zoom percentage label -->
+                    <ColumnDefinition Width="25" />
 
-                                        <!-- the % symbol -->
-                                        <ColumnDefinition Width="15" />
+                    <!-- the % symbol -->
+                    <ColumnDefinition Width="15" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the zoom out button -->
-                                        <ColumnDefinition Width="20" />
+                    <!-- the zoom out button -->
+                    <ColumnDefinition Width="20" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the zoom slider -->
-                                        <ColumnDefinition Width="120" />
+                    <!-- the zoom slider -->
+                    <ColumnDefinition Width="120" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="5" />
 
-                                        <!-- the zoom in button -->
-                                        <ColumnDefinition Width="20" />
+                    <!-- the zoom in button -->
+                    <ColumnDefinition Width="20" />
 
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="10" />
+                    <!-- spacer -->
+                    <ColumnDefinition Width="10" />
 
-                                        <!-- resize grip -->
-                                        <ColumnDefinition Width="Auto" />
+                    <!-- resize grip -->
+                    <ColumnDefinition Width="Auto" />
 
-                                    </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save"/>
-                                    <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
-                                    <Button Grid.Column="2" Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)"/>
-                                    <!-- 
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save"/>
+                <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
+                <Button Grid.Column="2" Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)"/>
+                <!-- 
             The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
             -->
-                                    <Button
+                <Button
                 Grid.Column="4"
                 Command="{StaticResource Commands.FitContent}"
                 ToolTip="Fit all nodes to the viewport"
                 >
-                                        Fit
-                                    </Button>
+                    Fit
+                </Button>
 
-                                    <!-- 
+                <!-- 
             The fill button.  Causes the content to be scaled so that it fits in the viewport.
             -->
-                                    <Button
+                <Button
                 Grid.Column="6"
                 Command="{StaticResource Commands.Fill}"
                 ToolTip="Fit the entire content area to the viewport"
                 >
-                                        Fill
-                                    </Button>
+                    Fill
+                </Button>
 
-                                    <!-- 
+                <!-- 
             The 100% button.  Causes the content to be scaled to 100 percent.
             -->
-                                    <Button
+                <Button
                 Grid.Column="8"
                 Command="{StaticResource Commands.OneHundredPercent}"
                 ToolTip="Scale the content to 100%"
                 >
-                                        100%
-                                    </Button>
+                    100%
+                </Button>
 
-                                    <!--
+                <!--
             This is the label that shows what the current zoom level
             is while zooming in and out.
             -->
-                                    <TextBlock
+                <TextBlock
                 Grid.Column="10"
                 VerticalAlignment="Center"
                 HorizontalAlignment="Center"
                 Grid.ColumnSpan="2"
                 >
                                             <Run Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"/>%
-                                    </TextBlock>
+                </TextBlock>
 
-                                    <!-- Button to zoom out. -->
-                                    <Button
+                <!-- Button to zoom out. -->
+                <Button
                 Grid.Column="13"
                 Command="{StaticResource Commands.ZoomOut}"
                 ToolTip="Zoom out from the content"
                 >
-                                        -
-                                    </Button>
+                    -
+                </Button>
 
-                                    <!-- Slider to change the current zoom level. -->
-                                    <Slider
+                <!-- Slider to change the current zoom level. -->
+                <Slider
                 Grid.Column="15"
                 Minimum="10" 
                 LargeChange="20" 
@@ -815,40 +824,40 @@
                 ToolTip="Change the zoom level of the content"
                 />
 
-                                    <!--
+                <!--
             Button to zoom in.
             -->
-                                    <Button
+                <Button
                 Grid.Column="17"
                 Command="{StaticResource Commands.ZoomIn}"
                 ToolTip="Zoom in on the content"
                 >
-                                        +
-                                    </Button>
+                    +
+                </Button>
 
-                                    <!-- Stick a resize grip in the bottom right corner of the window. -->
-                                    <ResizeGrip
+                <!-- Stick a resize grip in the bottom right corner of the window. -->
+                <ResizeGrip
                 Grid.Column="19"
                 />
 
-                                </Grid>
+            </Grid>
 
-                                <!-- 
+            <!-- 
         The ScrollViewer displays scrollbars when the content is too big to fit in the viewport. 
         Focusable is set to False because it is only that NetworkView that I want to be focusable.
         -->
-                                <ScrollViewer
+            <ScrollViewer
             CanContentScroll="True"
             VerticalScrollBarVisibility="Visible"
             HorizontalScrollBarVisibility="Visible"
             Focusable="False"
             >
 
-                                    <!-- 
+                <!-- 
             The ZoomAndPanControl displays the NetworkView as its content.
             We can use the mouse to zoom and pan about the NetworkView.
             -->
-                                    <ZoomAndPan:ZoomAndPanControl
+                <ZoomAndPan:ZoomAndPanControl
                 x:Name="zoomAndPanControl"
                 ContentScale="{Binding ContentScale, Mode=TwoWay}"
                 ContentOffsetX="{Binding ContentOffsetX, Mode=TwoWay}"
@@ -857,26 +866,26 @@
                 ContentViewportHeight="{Binding ContentViewportHeight, Mode=OneWayToSource}"
                 Focusable="False"
                 >
-                                        <!--
+                    <!--
                 We need to nest our NetworkView in an AdornerDecorator so that adorners work correct when
                 we zoom in and out using the ZoomAndPanControl
                 -->
-                                        <AdornerDecorator>
-                                            <!--
+                    <AdornerDecorator>
+                        <!--
                     This grid specifies the size of the ZoomAndPanControl's content.
                     It wraps up both the NetworkView and drag-zooming Canvas.
                     -->
-                                            <!--Width="10000"
+                        <!--Width="10000"
                         Height="10000"-->
-                                            <!--Width="{Binding ContentWidth}"
+                        <!--Width="{Binding ContentWidth}"
                         Height="{Binding ContentHeight}"-->
-                                            <Grid
+                        <Grid
                         Width="10000"
                         Height="10000"
                         Background="{StaticResource GridlinesVBrush}"
                         >
-                                                <!-- In this sample the NetworkView is the content displayed by the ZoomAndPanControl. -->
-                                                <NetworkUI:NetworkView
+                            <!-- In this sample the NetworkView is the content displayed by the ZoomAndPanControl. -->
+                            <NetworkUI:NetworkView
                             x:Name="networkControl"
                             Background="Transparent"
                             NodesSource="{Binding Network.Nodes}"
@@ -893,15 +902,15 @@
                             MouseDoubleClick="networkControl_MouseDoubleClick"
                                                     
                             />
-                                                <!--
+                            <!--
                         This Canvas and Border are used as a very simple way to render a drag rectangle that the user
                         uses to specify an area to zoom in on.
                         -->
-                                                <Canvas
+                            <Canvas
                             x:Name="dragZoomCanvas"
                             Visibility="Collapsed"
                             >
-                                                    <Border 
+                                <Border 
                                 x:Name="dragZoomBorder"
                                 BorderBrush="Black"
                                 BorderThickness="1"
@@ -909,41 +918,15 @@
                                 CornerRadius="1"
                                 Opacity="0"
                                 />
-                                                </Canvas>
+                            </Canvas>
 
 
 
-                                            </Grid>
-                                        </AdornerDecorator>
-                                    </ZoomAndPan:ZoomAndPanControl>
-                                </ScrollViewer>
-                            </DockPanel>
-                        </avalonDock:LayoutDocument>
-                    </avalonDock:LayoutDocumentPane>
-                    <avalonDock:LayoutAnchorablePane DockWidth="400">
-                        <avalonDock:LayoutAnchorable AutoHideMinWidth="400" ContentId="NodeEditor" x:Name="NodeEditorLayoutAnchorable" Title="Node Editor" CanHide="False" CanClose="False">
-                            <xctk:PropertyGrid SelectedObject="{Binding SelectedChatNode, Mode=TwoWay}" AutoGenerateProperties="True"  />
-                        </avalonDock:LayoutAnchorable>
-                    </avalonDock:LayoutAnchorablePane>
-                </avalonDock:LayoutPanel>
-                <avalonDock:LayoutRoot.BottomSide>
-                    <avalonDock:LayoutAnchorSide>
-                        <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable AutoHideMinHeight="400" x:Name="SectionButtonEditorLayoutAnchorable" ContentId="SectionButtonEditor" Title="Section Button Editor" CanHide="False" CanClose="False" >
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition />
-                                        <ColumnDefinition />
-                                    </Grid.ColumnDefinitions>
-                                    <ContentControl x:Name="SectionButtonEditor"/>
-                                    <Controls:ChatContentCollectionControl x:Name="ChatContentCollectionEditor" Grid.Column="1" Visibility="Collapsed" ParentChatNode="{Binding Path=Content.OwnerChatNode, ElementName=SectionButtonEditor}" ChatContentOwner="{Binding ElementName=SectionButtonEditor, Path=Content.SelectedItem, Mode=TwoWay, FallbackValue=null}"/>
-                                </Grid>
-                            </avalonDock:LayoutAnchorable>
-                        </avalonDock:LayoutAnchorGroup>
-                    </avalonDock:LayoutAnchorSide>
-                </avalonDock:LayoutRoot.BottomSide>
-            </avalonDock:LayoutRoot>
-        </avalonDock:DockingManager>
+                        </Grid>
+                    </AdornerDecorator>
+                </ZoomAndPan:ZoomAndPanControl>
+            </ScrollViewer>
+        </DockPanel>
         <TextBlock Grid.Row="2" x:Name="StatusTextblock" Text=" " Margin="5"/>
     </Grid>
 </Window>

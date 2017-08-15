@@ -50,6 +50,7 @@ namespace ANAConversationStudio.Helpers
                 if (chatFlowResp.Status)
                 {
                     ChatFlow = chatFlowResp.Data;
+                    ChatFlowBuilder.Build(ChatFlow);
                     return true;
                 }
             }
@@ -100,7 +101,7 @@ namespace ANAConversationStudio.Helpers
                 api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
                 using (var wc = new WebClient())
                 {
-                    wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.AuthUser}:{ChatServer.AuthKey}"));
+                    wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
                     T resp = default(T);
                     if (strictTypeNames)
                         resp = BsonSerializer.Deserialize<T>(await wc.DownloadStringTaskAsync(api));
@@ -118,6 +119,11 @@ namespace ANAConversationStudio.Helpers
                 using (var resp = new StreamReader(ex.Response.GetResponseStream()))
                 {
                     var respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
+                    if (respParsed == default(T))
+                    {
+                        respParsed = Activator.CreateInstance<T>();
+                        respParsed.Message = ex.Message;
+                    }
                     respParsed.Status = false;
                     return respParsed;
                 }
@@ -139,12 +145,10 @@ namespace ANAConversationStudio.Helpers
                 api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
                 using (var wc = new WebClient())
                 {
-                    wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.AuthUser}:{ChatServer.AuthKey}"));
+                    wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
                     T resp = default(T);
                     if (strictTypeNames)
                     {
-                        //wc.Headers[HttpRequestHeader.ContentType] = "text/plain";
-                        //wc.Headers[HttpRequestHeader.Accept] = "text/plain";
                         resp = BsonSerializer.Deserialize<T>(await wc.UploadStringTaskAsync(api, requestData.ToJson()));
                     }
                     else

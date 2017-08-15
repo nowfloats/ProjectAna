@@ -1,4 +1,6 @@
-﻿using ANAConversationStudio.UIHelpers;
+﻿using ANAConversationStudio.Helpers;
+using ANAConversationStudio.UIHelpers;
+using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -60,12 +62,13 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         protected virtual void FillAlias()
         {
-            Alias = SectionType + "";
+            Alias = Utilities.TrimText(SectionType + "");
         }
 
 
         private ChatNode _ParentNode;
         [JsonIgnore]
+        [BsonIgnore]
         public ChatNode ParentNode
         {
             get { return _ParentNode; }
@@ -80,13 +83,45 @@ namespace ANAConversationStudio.Models.Chat.Sections
         }
 
         [JsonIgnore]
+        [BsonIgnore]
         public ICommand Remove => new ActionCommand((p) => ParentNode.Sections.Remove(this));
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveUp => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Sections.IndexOf(this);
+            if (oldIdx <= 0) return;
+
+            ParentNode.Sections.Move(oldIdx, oldIdx - 1);
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveDown => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Sections.IndexOf(this);
+            if (oldIdx >= ParentNode.Sections.Count - 1) return;
+
+            ParentNode.Sections.Move(oldIdx, oldIdx + 1);
+        });
+
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentId { get; set; }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentEmotion { get; set; }
     }
 
     public class TitleCaptionSection : Section
     {
         //Content
         private string _Title;
+        [JsonIgnore]
+        [BsonIgnore]
         public string Title
         {
             get { return _Title; }
@@ -103,6 +138,8 @@ namespace ANAConversationStudio.Models.Chat.Sections
         }
 
         private string _Caption;
+        [JsonIgnore]
+        [BsonIgnore]
         public string Caption
         {
             get { return _Caption; }
@@ -120,13 +157,15 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         protected override void FillAlias()
         {
-            var a = new List<string>();
+            var text = "";
             if (!string.IsNullOrWhiteSpace(Title))
-                a.Add(Title);
-            if (!string.IsNullOrWhiteSpace(Caption))
-                a.Add(Caption);
+                text = Title;
+            else if (!string.IsNullOrWhiteSpace(Caption))
+                text = Caption;
+            else
+                text = SectionType + "";
 
-            Alias = a.Count > 0 ? string.Join(" - ", a) : SectionType + "";
+            Alias = Utilities.TrimText(text);
         }
     }
     public class TitleCaptionUrlSection : TitleCaptionSection

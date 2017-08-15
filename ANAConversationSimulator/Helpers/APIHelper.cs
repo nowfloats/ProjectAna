@@ -67,7 +67,7 @@ namespace ANAConversationSimulator.Helpers
                     Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
                     if (string.IsNullOrWhiteSpace(UploadFileAPI + ""))
                     {
-                        Utils.ShowDialog("Upload File API is not set. Please go to Menu(...) -> Update APIs and set it.");
+                        //Utils.ShowDialog("Upload File API is not set. Please go to Menu(...) -> Update APIs and set it.");
                         return default(TResponse);
                     }
                     var resp = await client.PostAsync((UploadFileAPI + "").Replace("{fileName}", Uri.EscapeDataString(fileName)), new StreamContent(fStrm));
@@ -84,7 +84,7 @@ namespace ANAConversationSimulator.Helpers
                 Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
                 if (string.IsNullOrWhiteSpace(ActivityTrackAPI + ""))
                 {
-                    Utils.ShowDialog("Activity Track API is not set. Please go to Menu(...) -> Update APIs and set it.");
+                    //Utils.ShowDialog("Activity Track API is not set. Please go to Menu(...) -> Update APIs and set it.");
                     return;
                 }
                 await HitPostAsync(ActivityTrackAPI + "", activityEvent);

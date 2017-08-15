@@ -8,9 +8,6 @@ using System.Windows;
 
 namespace ANAConversationStudio
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
     public partial class App : Application
     {
         private void Application_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
@@ -78,12 +75,11 @@ namespace ANAConversationStudio
                 BsonClassMap.RegisterClassMap<CarouselItemContent>();
             #endregion
 
-
             #region This applies the default font
             FrameworkElement.StyleProperty.OverrideMetadata(typeof(Window), new FrameworkPropertyMetadata
             {
                 DefaultValue = FindResource(typeof(Window))
-            }); 
+            });
             #endregion
         }
     }

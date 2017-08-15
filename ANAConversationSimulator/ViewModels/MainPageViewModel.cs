@@ -162,21 +162,15 @@ namespace ANAConversationSimulator.ViewModels
                             }
                             break;
                         default:
-                            Utils.ShowDialog($"{parsedNode.ApiMethod} ApiType Unknown!");
+                            Utils.ShowDialog($"{parsedNode.ApiMethod} ApiMethod Unsupported!");
                             break;
                     }
                     NavigateToNode(nextNodeId);
                 }
-                catch (HttpRequestException ex)
-                {
-                    ToggleTyping(false);
-                    Utils.ShowDialog(ex.ToString());
-                    NavigateToNode(parsedNode.NextNodeId);
-                }
                 catch (Exception ex)
                 {
                     ToggleTyping(false);
-                    Utils.ShowDialog(ex.ToString());
+                    Utils.ShowDialog($"API[{parsedNode.ApiMethod}]: {parsedNode.ApiUrl }\r\nRequired Vars: {(parsedNode.RequiredVariables == null ? "" : string.Join(",", parsedNode.RequiredVariables))}\r\nError: " + ex.Message + "\r\n\r\n" + ex.ToString());
                     NavigateToNode(parsedNode.NextNodeId);
                 }
             }
@@ -562,41 +556,48 @@ namespace ANAConversationSimulator.ViewModels
         private Socket socket;
         public void SetupSocketConnection()
         {
-            if (socket != null)
-                socket.Close();
-            Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
-            if (string.IsNullOrWhiteSpace(socketServer + ""))
+            try
             {
-                Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
-                return;
-            }
-            socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
-
-            socket.On(Socket.EVENT_CONNECT, () =>
-            {
-                Debug.WriteLine("Connected");
-                socket.Emit("join", Utils.DeviceId);
-            });
-
-            socket.On(Socket.EVENT_DISCONNECT, () =>
-            {
-                Debug.WriteLine("Disconnected");
-            });
-
-            socket.On(Socket.EVENT_MESSAGE, (data) =>
-            {
-                var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
-                Debug.WriteLine(dataString);
-
-                Dispatcher.Dispatch(() =>
+                if (socket != null)
+                    socket.Close();
+                Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
+                if (string.IsNullOrWhiteSpace(socketServer + ""))
                 {
-                    if (data is JObject jData)
-                    {
-                        chatNodes.Add(jData);
-                        ProcessNode(jData);
-                    }
+                    //Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
+                    return;
+                }
+                socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
+
+                socket.On(Socket.EVENT_CONNECT, () =>
+                {
+                    Debug.WriteLine("Connected");
+                    socket.Emit("join", Utils.DeviceId);
                 });
-            });
+
+                socket.On(Socket.EVENT_DISCONNECT, () =>
+                {
+                    Debug.WriteLine("Disconnected");
+                });
+
+                socket.On(Socket.EVENT_MESSAGE, (data) =>
+                {
+                    var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
+                    Debug.WriteLine(dataString);
+
+                    Dispatcher.Dispatch(() =>
+                    {
+                        if (data is JObject jData)
+                        {
+                            chatNodes.Add(jData);
+                            ProcessNode(jData);
+                        }
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                //TODO: Handle error
+            }
         }
         #endregion
     }

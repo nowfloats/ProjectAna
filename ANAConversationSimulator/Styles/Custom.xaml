@@ -20,7 +20,7 @@
     <SolidColorBrush x:Key="TextForegroundBrush" Color="Gray" />
     <SolidColorBrush x:Key="PaleWhiteBrush" Color="#eaedf2" />
     <SolidColorBrush x:Key="NFYellowBrush" Color="#00ADEF" />
-    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#eaedf2" />
+    <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#ccc" />
 
     <Style TargetType="TextBlock" x:Key="NormalTextStyle" >
         <!--//TextWrapping="Wrap" FontSize="15" Foreground="White"-->

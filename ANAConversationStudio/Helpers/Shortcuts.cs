@@ -13,7 +13,6 @@ namespace ANAConversationStudio.Helpers
     {
         public static void CloneNode(NodeViewModel node)
         {
-            if (StudioContext.Current?.ChatFlow?.ChatContent == null) return;
             if (node == null) return;
 
             var copyChatNode = node.ChatNode.DeepCopy();
@@ -54,9 +53,8 @@ namespace ANAConversationStudio.Helpers
                     foreach (var sectionContent in sectionContents.Where(x => x is SectionContent && (x as SectionContent).SectionId == oldSectionId))
                         (sectionContent as SectionContent).SectionId = section._id;
             }
-
-            StudioContext.Current.ChatFlow.ChatContent.AddRange(contentBankOfNode);
-            MainWindow.Current.ViewModel.CreateNode(copyChatNode, new Point(node.X + 100, node.Y + 100));
+            if (MainWindow.Current != null)
+                MainWindow.Current.ViewModel.CreateNode(copyChatNode, new Point(node.X + 100, node.Y + 100));
         }
     }
 }
