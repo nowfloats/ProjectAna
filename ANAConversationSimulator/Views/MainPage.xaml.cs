@@ -97,31 +97,3 @@ namespace ANAConversationSimulator.Views
         }
     }
 }
-
-/*
- private async void SaveChatAsImage()
-        {
-            RenderTargetBitmap renderTarget = new RenderTargetBitmap();
-            await renderTarget.RenderAsync(ThreadScrollViewer, (int)ThreadScrollViewer.ScrollableWidth, (int)ThreadScrollViewer.ScrollableHeight);
-
-            IBuffer pixelBuffer = await renderTarget.GetPixelsAsync();
-
-            InMemoryRandomAccessStream stream = new InMemoryRandomAccessStream();
-            var buffer = await renderTarget.GetPixelsAsync();
-
-            WriteableBitmap img = new WriteableBitmap(renderTarget.PixelWidth, renderTarget.PixelHeight);
-            var encoder = await BitmapEncoder.CreateAsync(BitmapEncoder.PngEncoderId, stream);
-            encoder.SetPixelData(BitmapPixelFormat.Bgra8, BitmapAlphaMode.Straight, (uint)renderTarget.PixelWidth, (uint)renderTarget.PixelHeight, DisplayInformation.GetForCurrentView().LogicalDpi, DisplayInformation.GetForCurrentView().LogicalDpi, buffer.ToArray());
-            await encoder.FlushAsync();
-
-            await img.SetSourceAsync(stream);
-
-            //SoftwareBitmap bitmap = SoftwareBitmap.CreateCopyFromBuffer(pixelBuffer, BitmapPixelFormat.Bgra8, (int)ThreadScrollViewer.ScrollableWidth, (int)ThreadScrollViewer.ScrollableHeight, BitmapAlphaMode.Premultiplied);
-
-            StorageFolder sFolder = await KnownFolders.PicturesLibrary.CreateFolderAsync("ANA Chat Flows", CreationCollisionOption.OpenIfExists);
-            var sFile = await sFolder.CreateFileAsync((DateTime.Now.ToString("dd-MM-yyyy HH-mm-ss") + ".png"), CreationCollisionOption.GenerateUniqueName);
-            using (var fileStream = await sFile.OpenStreamForWriteAsync())
-            using (var s = img.PixelBuffer.AsStream())
-                s.CopyTo(fileStream);
-        }
-     */
