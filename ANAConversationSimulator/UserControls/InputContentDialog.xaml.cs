@@ -9,20 +9,6 @@ namespace ANAConversationSimulator.UserControls
         {
             InitializeComponent();
             DataContext = this;
-
-            Loaded += InputContentDialog_Loaded;
-        }
-
-        private void InputContentDialog_Loaded(object sender, RoutedEventArgs e)
-        {
-            if (string.IsNullOrWhiteSpace(ChatFlowAPI))
-                ChatFlowAPI = "http://<your-server.com>/api/Conversation/Chat";
-            if (string.IsNullOrWhiteSpace(UploadFileAPI))
-                UploadFileAPI = "http://<your-server.com>/api/Services/ReceiveFile?fileName={fileName}";
-            if (string.IsNullOrWhiteSpace(ActivityTrackAPI))
-                ActivityTrackAPI = "http://<your-server.com>/api/Activity/Track";
-            if (string.IsNullOrWhiteSpace(SocketServer))
-                SocketServer = "http://<your-socket-server.com>/";
         }
 
         public string ChatFlowAPI

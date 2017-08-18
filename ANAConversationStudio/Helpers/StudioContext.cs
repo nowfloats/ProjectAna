@@ -36,6 +36,15 @@ namespace ANAConversationStudio.Helpers
             if (projsResp.Status)
             {
                 ChatFlowProjects = projsResp.Data;
+                try
+                {
+                    if (ChatFlowProjects == null || ChatFlowProjects.Count <= 0)
+                    {
+                        ChatFlowProjects = new List<ANAProject> { new ANAProject { Name = "My First ANA Project", _id = ObjectId.GenerateNewId().ToString() } };
+                        await SaveProjectsAsync();
+                    }
+                }
+                catch { }
                 return true;
             }
             MessageBox.Show("Error: " + projsResp.Message, "Unable to load projects from chat server.");
@@ -73,7 +82,7 @@ namespace ANAConversationStudio.Helpers
 
         public async Task<bool> SaveProjectsAsync()
         {
-            if (ChatFlow != null)
+            if (ChatFlowProjects != null)
             {
                 var saveProjectsResp = await HitPost<DataListResponse<ANAProject>, List<ANAProject>>(SaveProjectsAPI, ChatFlowProjects);
                 if (saveProjectsResp.Status)

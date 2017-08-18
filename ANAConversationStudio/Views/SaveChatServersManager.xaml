@@ -6,7 +6,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Closing="Window_Closing"
-        Title="Char Server Connection Manager" Height="600" Width="800" WindowStyle="ToolWindow">
+        Title="Chat Server Connection Manager" Height="600" Width="800" WindowStyle="ToolWindow">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition/>

@@ -60,7 +60,7 @@ namespace ANAConversationStudio.Helpers
                 case SectionTypeEnum.Image:
                 case SectionTypeEnum.Gif:
                     var imgSection = emptySection as ImageSection;
-                    var imgContent = contents.GetFor(imgSection) as ImageSectionContent;
+                    var imgContent = contents.GetFor(imgSection) as TitleCaptionSectionContent;
                     if (imgContent != null)
                     {
                         imgSection.Title = imgContent.Title;

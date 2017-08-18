@@ -56,9 +56,6 @@ namespace ANAConversationStudio
             if (!BsonClassMap.IsClassMapRegistered(typeof(TitleCaptionSectionContent)))
                 BsonClassMap.RegisterClassMap<TitleCaptionSectionContent>();
 
-            if (!BsonClassMap.IsClassMapRegistered(typeof(ImageSectionContent)))
-                BsonClassMap.RegisterClassMap<ImageSectionContent>();
-
             if (!BsonClassMap.IsClassMapRegistered(typeof(GraphSectionContent)))
                 BsonClassMap.RegisterClassMap<GraphSectionContent>();
 

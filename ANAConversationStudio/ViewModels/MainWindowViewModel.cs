@@ -507,6 +507,11 @@ namespace ANAConversationStudio.ViewModels
         #endregion
         public NodeViewModel CreateNode(ChatNode chatNode, Point nodeLocation)
         {
+            if (this.Network?.Nodes == null)
+            {
+                MessageBox.Show("Not connected to chat server or no project is loaded. If this is the first time, create a new project from file menu and get started. Please close the app and try again if the issue continues.");
+                return null;
+            }
             var node = new NodeViewModel(chatNode, nodeLocation);
             this.Network.Nodes.Add(node);
             return node;
@@ -552,7 +557,7 @@ namespace ANAConversationStudio.ViewModels
             {
                 if (StudioContext.Current?.ChatFlow?.ChatNodes == null)
                 {
-                    MessageBox.Show("Connection with chat server is not established. Please restart the application and try again.", "Oops!");
+                    MessageBox.Show("Connection with chat server is not established or no project is selected. If this is the first time, create a new project from file menu and get started. Please restart the application and try again if the issue continues.", "Oops!");
                     return false;
                 }
 

@@ -140,22 +140,6 @@ namespace ANAConversationStudio.Models
             }
         }
     }
-    public class ImageSectionContent : TitleCaptionSectionContent
-    {
-        private string _AltText;
-        public string AltText
-        {
-            get { return _AltText; }
-            set
-            {
-                if (_AltText != value)
-                {
-                    _AltText = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-    }
     public class GraphSectionContent : SectionContent
     {
         private string _XLabel;

@@ -22,10 +22,7 @@
         public string Title { get; set; }
         public string Caption { get; set; }
     }
-    public class ImageSectionContent : TitleCaptionSectionContent
-    {
-        public string AltText { get; set; }
-    }
+    
     public class ButtonContent : BaseContent
     {
         public string ButtonId { get; set; }
