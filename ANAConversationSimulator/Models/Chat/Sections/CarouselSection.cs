@@ -21,6 +21,14 @@ namespace ANAConversationSimulator.Models.Chat.Sections
         public string Caption { get; set; }
         public string ImageUrl { get; set; }
         public List<CarouselButton> Buttons { get; set; } = new List<CarouselButton>();
+
+        #region Repeat
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
+        #endregion
     }
 
     public class CarouselButton : BaseEntity
@@ -38,6 +46,14 @@ namespace ANAConversationSimulator.Models.Chat.Sections
         public string VariableName { get; set; }
         [JsonIgnore]
         public string NodeId { get; set; }
+
+        #region Repeat
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
+        #endregion
     }
 
     public enum CardButtonType

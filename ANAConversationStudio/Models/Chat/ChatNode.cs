@@ -1,31 +1,28 @@
 ﻿using MongoDB.Bson;
 using ANAConversationStudio.Models.Chat.Sections;
-using ANAConversationStudio.Controls;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 using MongoDB.Bson.Serialization.Attributes;
-using Newtonsoft.Json.Converters;
 using Newtonsoft.Json;
+using System.Windows.Input;
+using ANAConversationStudio.UIHelpers;
+using System.Windows;
+using ANAConversationStudio.Helpers;
 
 namespace ANAConversationStudio.Models.Chat
 {
-    [CategoryOrder("Important", 1)]
-    [CategoryOrder("For NodeType ApiCall", 2)]
-    [CategoryOrder("For NodeType Card", 3)]
-    [CategoryOrder("Misc", 4)]
     public class ChatNode : INotifyPropertyChanged
     {
         public ChatNode()
         {
-            Buttons.CollectionChanged += ButtonsCollectionChanged;
+            FillAlias();
         }
 
         #region Important
         private string _Name;
         [Category("Important")]
-        [PropertyOrder(1)]
         public string Name
         {
             get { return _Name; }
@@ -34,6 +31,7 @@ namespace ANAConversationStudio.Models.Chat
                 if (_Name != value)
                 {
                     _Name = value;
+                    FillAlias();
                     OnPropertyChanged();
                 }
             }
@@ -41,7 +39,6 @@ namespace ANAConversationStudio.Models.Chat
 
         private NodeTypeEnum _NodeType = NodeTypeEnum.Combination;
         [Category("Important")]
-        [PropertyOrder(2)]
         public NodeTypeEnum NodeType
         {
             get { return _NodeType; }
@@ -50,16 +47,14 @@ namespace ANAConversationStudio.Models.Chat
                 if (_NodeType != value)
                 {
                     _NodeType = value;
+                    FillAlias();
                     OnPropertyChanged();
                 }
             }
         }
 
         private ObservableCollection<Section> _Sections = new ObservableCollection<Section>();
-        [NewItemTypes(typeof(TextSection), typeof(GifSection), typeof(ImageSection), typeof(EmbeddedHtmlSection), typeof(GraphSection), typeof(AudioSection), typeof(VideoSection), typeof(CarouselSection), typeof(PrintOTPSection))]
         [Category("Important")]
-        [PropertyOrder(3)]
-        [Editor(typeof(ChatNodeCollectionEditor<Section>), typeof(ChatNodeCollectionEditor<Section>))]
         public ObservableCollection<Section> Sections
         {
             get { return _Sections; }
@@ -75,8 +70,6 @@ namespace ANAConversationStudio.Models.Chat
 
         private ObservableCollection<Button> _Buttons = new ObservableCollection<Button>();
         [Category("Important")]
-        [Editor(typeof(ChatNodeCollectionEditor<Button>), typeof(ChatNodeCollectionEditor<Button>))]
-        [PropertyOrder(4)]
         public ObservableCollection<Button> Buttons
         {
             get { return _Buttons; }
@@ -94,7 +87,6 @@ namespace ANAConversationStudio.Models.Chat
         #region Misc
         private string _Id;
         [Category("Misc")]
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string Id
         {
             get { return _Id; }
@@ -215,6 +207,21 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private string _ApiResponseDataRoot;
+        [Category("For NodeType ApiCall")]
+        public string ApiResponseDataRoot
+        {
+            get { return _ApiResponseDataRoot; }
+            set
+            {
+                if (_ApiResponseDataRoot != value)
+                {
+                    _ApiResponseDataRoot = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         private string _NextNodeId;
         [Category("For NodeType ApiCall")]
         public string NextNodeId
@@ -281,21 +288,160 @@ namespace ANAConversationStudio.Models.Chat
         }
         #endregion
 
+        private string _Alias;
+        [JsonIgnore]
+        [BsonIgnore]
+        public string Alias
+        {
+            get { return _Alias; }
+            set
+            {
+                if (_Alias != value)
+                {
+                    _Alias = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand AddSection => new ActionCommand((param) =>
+        {
+            var type = (SectionTypeEnum)param;
+            switch (type)
+            {
+                case SectionTypeEnum.Image:
+                    Sections.Add(new ImageSection
+                    {
+                        Alias = "New Image",
+                        Caption = "Image Caption",
+                        Title = "Image Title",
+                        Url = "http://",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.Text:
+                    Sections.Add(new TextSection
+                    {
+                        Alias = "New Text",
+                        Text = "Text Section",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.Gif:
+                    Sections.Add(new GifSection
+                    {
+                        Alias = "New Gif",
+                        Caption = "Gif Caption",
+                        Title = "Gif Title",
+                        Url = "http://",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.Audio:
+                    Sections.Add(new AudioSection
+                    {
+                        Alias = "New Audio",
+                        Caption = "Audio Caption",
+                        Title = "Audio Title",
+                        Url = "http://",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.Video:
+                    Sections.Add(new VideoSection
+                    {
+                        Alias = "New Video",
+                        Caption = "Video Caption",
+                        Title = "Video Title",
+                        Url = "http://",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.EmbeddedHtml:
+                    Sections.Add(new EmbeddedHtmlSection
+                    {
+                        Alias = "New Html",
+                        Caption = "HTML Caption",
+                        Title = "HTML Title",
+                        Url = "http://",
+                        _id = ObjectId.GenerateNewId().ToString(),
+                        ParentNode = this,
+                        ContentId = ObjectId.GenerateNewId().ToString(),
+                    });
+                    break;
+                case SectionTypeEnum.Carousel:
+                    {
+                        var carSec = new CarouselSection
+                        {
+                            _id = ObjectId.GenerateNewId().ToString(),
+                            Alias = "New Carousel",
+                            Title = "Carousel Title",
+                            Caption = "Carousel Caption",
+                            ParentNode = this,
+                            ContentId = ObjectId.GenerateNewId().ToString(),
+                        };
+                        var carItem = new CarouselItem
+                        {
+                            Title = "Carousel Item Title",
+                            Caption = "Carousel Item Caption",
+                            ImageUrl = "http://",
+                            ParentCarouselSection = carSec,
+                            _id = ObjectId.GenerateNewId().ToString(),
+                            ContentId = ObjectId.GenerateNewId().ToString(),
+                        };
+                        carItem.Buttons = new ObservableCollection<CarouselButton>
+                        {
+                            new CarouselButton
+                            {
+                                ContentId = ObjectId.GenerateNewId().ToString(),
+                                ParentCarouselItem = carItem,
+                                Text = "Carousel Button Text",
+                                _id = ObjectId.GenerateNewId().ToString(),
+                            }
+                        };
+                        carSec.Items = new ObservableCollection<CarouselItem> { carItem };
+                        Sections.Add(carSec);
+                    }
+                    break;
+                default:
+                    MessageBox.Show($"Section Type: '{type}' not yet supported!");
+                    break;
+            }
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand AddButton => new ActionCommand((param) =>
+        {
+            Buttons.Add(new Button
+            {
+                ParentNode = this,
+                _id = ObjectId.GenerateNewId().ToString()
+            });
+        });
+
+        private void FillAlias()
+        {
+            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(Name) ? NodeType + "" : Name);
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
         private void OnPropertyChanged([CallerMemberName]string propertyName = null) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         public override string ToString()
         {
             return Name;
-        }
-
-        private void ButtonsCollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            if (e.NewItems != null)
-                foreach (Button item in e.NewItems)
-                {
-                    item._id = ObjectId.GenerateNewId().ToString();
-                    item.Alias = "New Button";
-                }
         }
     }
 

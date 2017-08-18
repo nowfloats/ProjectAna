@@ -10,13 +10,13 @@ using ANAConversationStudio.Helpers;
 using MongoDB.Bson;
 using ANAConversationStudio.ViewModels;
 using System.Reflection;
-using Xceed.Wpf.Toolkit;
 using System.Linq;
 using System.Windows.Media;
 using System.Net;
 using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace ANAConversationStudio.Views
 {
@@ -182,7 +182,7 @@ namespace ANAConversationStudio.Views
         {
             if (networkControl.SelectedNode == null)
             {
-                System.Windows.MessageBox.Show("Please select a node to clone it", "No node selected");
+                MessageBox.Show("Please select a node to clone it", "No node selected");
                 return;
             }
             if (networkControl.SelectedNodes != null)
@@ -196,7 +196,7 @@ namespace ANAConversationStudio.Views
 
         private void ConvSimMenuClick(object sender, RoutedEventArgs e)
         {
-            var p = System.Diagnostics.Process.Start("anaconsim://");
+            var p = Process.Start("anaconsim://");
         }
 
         private async void UpdateMenuClick(object sender, RoutedEventArgs e)
@@ -218,7 +218,7 @@ namespace ANAConversationStudio.Views
                     Status("Downloading...");
                     await wc.DownloadFileTaskAsync(updateInfo.DownloadLink, tempFile);
                     Status("Download Complete");
-                    if (System.Windows.MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    if (MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                     {
                         var tempPath = Path.GetTempPath();
                         var srcPath = Path.Combine(Environment.CurrentDirectory, "Tools");
@@ -279,6 +279,38 @@ namespace ANAConversationStudio.Views
             if (Keyboard.IsKeyDown(Key.D4))
                 position = 4;
             GotoPreviousNode(position);
+        }
+
+        private void NewChatFlowClick(object sender, RoutedEventArgs e)
+        {
+            ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
+            w.ShowDialog();
+        }
+
+        private void ManageChatFlowsClick(object sender, RoutedEventArgs e)
+        {
+            ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
+            w.ShowDialog();
+        }
+
+        private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
+        {
+            StartChatInSimulator();
+        }
+
+        private void StartChatInSimulator()
+        {
+            if (StudioContext.Current?.ChatServer?.ServerUrl == null)
+            {
+                System.Windows.MessageBox.Show("No project is loaded at the moment");
+                return;
+            }
+            Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
+        }
+
+        private void StartInSimulator_Executed(object sender, ExecutedRoutedEventArgs e)
+        {
+            StartChatInSimulator();
         }
     }
 
@@ -475,7 +507,7 @@ namespace ANAConversationStudio.Views
             else if (mouseHandlingMode == MouseHandlingMode.DragZooming)
             {
                 //
-                // When in drag zooming mode continously update the position of the rectangle
+                // When in drag zooming mode continuously update the position of the rectangle
                 // that the user is dragging out.
                 //
                 Point curContentMousePoint = e.GetPosition(networkControl);
@@ -522,7 +554,10 @@ namespace ANAConversationStudio.Views
         private void OpenNodeEditor()
         {
             if (this.ViewModel.SelectedChatNode != null)
-                NodeEditorLayoutAnchorable.IsActive = true;
+            {
+                var editor = new NodeEditWindow(this.ViewModel.SelectedChatNode);
+                editor.ShowDialog();
+            }
         }
 
         /// <summary>
@@ -688,7 +723,7 @@ namespace ANAConversationStudio.Views
             double x, y, width, height;
 
             //
-            // Deterine x,y,width and height of the rect inverting the points if necessary.
+            // Determine x,y,width and height of the rect inverting the points if necessary.
             // 
 
             if (pt2.X < pt1.X)
@@ -734,7 +769,7 @@ namespace ANAConversationStudio.Views
             SavePrevZoomRect();
 
             //
-            // Retreive the rectangle that the user draggged out and zoom in on it.
+            // Retrieve the rectangle that the user dragged out and zoom in on it.
             //
             double contentX = Canvas.GetLeft(dragZoomBorder);
             double contentY = Canvas.GetTop(dragZoomBorder);
@@ -781,15 +816,6 @@ namespace ANAConversationStudio.Views
     /// </summary>
     public partial class MainWindow : Window
     {
-        public CollectionControl NodeCollectionControl
-        {
-            get { return SectionButtonEditor.Content as CollectionControl; }
-            set
-            {
-                SectionButtonEditor.Content = null;
-                SectionButtonEditor.Content = value;
-            }
-        }
         private bool AskPass()
         {
             if (!Settings.IsEncrypted())
@@ -807,23 +833,33 @@ namespace ANAConversationStudio.Views
         }
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
-            Title += " " + GetVersion();
             this.IsEnabled = false;
             if (!AskPass()) return;
 
             this.IsEnabled = true;
-            LoadSavedConnections();
+            AskToSelectChatServer();
+            LoadProjects();
             CheckForUpdates();
+            UpdateTitle();
 
-            #region Overview Windows Commented
-            //OverviewWindow overviewWindow = new OverviewWindow();
-            //overviewWindow.Left = this.Left;
-            //overviewWindow.Top = this.Top + this.Height + 5;
-            //overviewWindow.Owner = this;
-            //overviewWindow.DataContext = this.ViewModel; // Pass the view model onto the overview window.
-            //overviewWindow.Show(); 
-            #endregion
         }
+        private void UpdateTitle()
+        {
+            var chatServerName = StudioContext.Current?.ChatServer?.Name;
+            var chatProjectName = StudioContext.Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == StudioContext.Current?.ChatFlow?.ProjectId)?.Name;
+
+            var title = $"{chatServerName} : {chatProjectName}";
+            if (string.IsNullOrWhiteSpace(chatServerName) || string.IsNullOrWhiteSpace(chatProjectName))
+                Title = $"ANA Conversation Studio {GetVersion()}";
+            else
+                Title = $"{title} - ANA Conversation Studio {GetVersion()}";
+        }
+        private void AskToSelectChatServer()
+        {
+            SaveChatServersManager man = new SaveChatServersManager();
+            man.ShowDialog();
+        }
+
         private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
         private async void CheckForUpdates()
         {
@@ -840,15 +876,16 @@ namespace ANAConversationStudio.Views
             else
             {
                 HelpMenu.Background = null;
-                HelpMenu.Foreground = new SolidColorBrush(Colors.Black);
+                HelpMenu.Foreground = App.Current.Resources["FileMenuForegroundBrush"] as SolidColorBrush;
                 UpdateMenuItem.Header = $"No update available!";
                 UpdateMenuItem.IsEnabled = false;
             }
         }
         public bool AskAlert = true;
-        private void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             if (!AskAlert) return;
+            if (StudioContext.Current == null) return;
             var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {
@@ -857,7 +894,7 @@ namespace ANAConversationStudio.Views
             }
             if (op == MessageBoxResult.Yes)
             {
-                SaveEdits();
+                await SaveEditsAsync();
             }
         }
 
@@ -872,7 +909,6 @@ namespace ANAConversationStudio.Views
                 this.ViewModel.SelectedChatNode = null;
                 this.ViewModel.SelectedChatNode = node.ChatNode;
                 this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
-                NodeCollectionControl = null;
             }
         }
 
@@ -883,116 +919,72 @@ namespace ANAConversationStudio.Views
                 this.ViewModel.Network.Nodes.Select(x => x.ChatNode).Where(x => x.Id != senderNode.Id && x.IsStartNode).ToList().ForEach(x => x.IsStartNode = false);
         }
 
-        private void SaveButtonClick(object sender, RoutedEventArgs e)
+        private async void SaveButtonClick(object sender, RoutedEventArgs e)
         {
-            SaveEdits();
+            await SaveEditsAsync();
         }
-        private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+        private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
         {
-            SaveEdits();
+            await SaveEditsAsync();
         }
 
-        #region TODO: Window Layout Save and Load Functions 
-        //private void dockingManager_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    if (File.Exists(Constants.WindowLayoutFileName))
-        //    {
-        //        try
-        //        {
-        //            XmlLayoutSerializer layoutSerializer = new XmlLayoutSerializer(dockingManager);
-        //            layoutSerializer.Deserialize(Constants.WindowLayoutFileName);
-        //        }
-        //        catch (Exception ex)
-        //        {
-        //            System.Windows.MessageBox.Show(ex.StackTrace, "Window Layout Read Error: " + ex.Message);
-        //        }
-        //    }
-        //}
-
-        //private void LoadWindowLayout()
-        //{
-        //    try
-        //    {
-        //        XmlLayoutSerializer layoutSerializer = new XmlLayoutSerializer(dockingManager);
-        //        layoutSerializer.Serialize(Constants.WindowLayoutFileName);
-        //    }
-        //    catch { }
-        //} 
-        #endregion
-
-        private void SaveEdits()
+        private async Task SaveEditsAsync()
         {
             try
             {
                 if (this.ViewModel.Network == null) return;
-
-                this.ViewModel.SaveNetworkLayout();
-                this.ViewModel.SaveChatNodes();
-                MongoHelper.Current.SaveChatContent();
+                await this.ViewModel.SaveLoadedChat();
                 StatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString();
             }
             catch (Exception ex)
             {
-                System.Windows.MessageBox.Show(ex.StackTrace, "Error: " + ex.Message);
+                MessageBox.Show(ex.StackTrace, "Error: " + ex.Message);
             }
         }
 
-        private bool LoadFileMenuSavedConnections()
+        public bool LoadFileMenuSavedConnections()
         {
-            if (Utilities.Settings.SavedConnections.Count <= 0)
+            if (StudioContext.Current?.ChatFlowProjects == null || StudioContext.Current?.ChatFlowProjects.Count <= 0)
             {
                 SavedConnectionsFileMenu.IsEnabled = false;
                 return false;
             }
-            SavedConnectionsFileMenu.ItemsSource = Utilities.Settings.SavedConnections;
+            SavedConnectionsFileMenu.ItemsSource = StudioContext.Current.ChatFlowProjects;
             SavedConnectionsFileMenu.IsEnabled = true;
             return true;
         }
-        private void LoadSavedConnections()
+        private async void LoadProjects()
         {
             if (LoadFileMenuSavedConnections())
-                LoadConnection(Utilities.Settings.SavedConnections.First());
+                await LoadProjectAsync(StudioContext.Current.ChatFlowProjects.First());
         }
         public void Status(string txt)
         {
             StatusTextblock.Text = txt;
         }
-        private void SavedConnectionClick(object sender, RoutedEventArgs e)
+        private async void SavedConnectionClick(object sender, RoutedEventArgs e)
         {
-            LoadConnection((sender as MenuItem).Tag as DatabaseConnection);
+            await LoadProjectAsync((sender as MenuItem).Tag as ANAProject);
         }
 
-        private void LoadConnection(DatabaseConnection conn)
+        public async Task LoadProjectAsync(ANAProject proj)
         {
-            if (conn == null)
-            {
-                Status("Unable to load.");
-                return;
-            }
-            if (!conn.IsValid())
-            {
-                Status("Invalid Connection. Please edit and complete it.");
-                return;
-            }
-            MongoHelper.Current = new MongoHelper(conn);
-            this.ViewModel.LoadNodesFromDB();
+            await StudioContext.Current.LoadChatFlowAsync(proj._id);
+            this.ViewModel.LoadNodes();
             Status("Loaded");
-            System.Threading.Tasks.Task.Delay(500).ContinueWith((s) =>
+            UpdateTitle();
+
+#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
+            Task.Delay(500).ContinueWith((s) =>
             {
                 Dispatcher.Invoke(() => this.FitContent_Executed(null, null));
             });
+#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        private void ManageConnectionClick(object sender, RoutedEventArgs e)
-        {
-            DBConnectionManager man = new DBConnectionManager(Utilities.Settings.SavedConnections);
-            man.ShowDialog();
-            LoadFileMenuSavedConnections();
-        }
         private void ResetEditors()
         {
             this.ViewModel.SelectedChatNode = null;
-            NodeCollectionControl = null;
         }
 
         public void GotoNextNode(int position = 1)

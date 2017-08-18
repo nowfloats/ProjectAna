@@ -13,7 +13,7 @@ Web & Messenger SDK
 
 ----------
 
-[![Studio and Simulator Image](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ANA-Studio-Simulator.jpg)](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ANA-Studio-Simulator.jpg)
+[![Studio and Simulator Image](https://github.com/Kitsune-tools/ProjectANA/blob/master/Assets/anaflow.png)](https://github.com/Kitsune-tools/ProjectANA/blob/master/Assets/anaflow.png)
 
 ----------
 
@@ -42,31 +42,28 @@ Web & Messenger SDK
 2.  In ANA Conversation Platform project, open appsettings-Sample.json and edit DatabaseConnectionSettings section to match your MongoDB details.
 3.  Change Collection names to new/empty collections.
 4.  Save and Rename appsettings-Sample.json to appsettings.json
-4.  Build and publish the project to the server as usual. It's an ASP.NET Core 1.1 project, which can be hosted on Windows, Linux and Mac.
+5.  Build and publish the project to the server as usual. It's an ASP.NET Core 1.1 project, which can be hosted on Windows, Linux and Mac.
+6.  Note down the base URL of your hosted project.
+7.  Optionally, Set the APIKey and APISecret in appsettings.json under BasicAuth section for security.
 
 **Setup Studio:**
 
-1.  Build the ANA Conversation Studio project yourself or download the binary directly. Open the exe once done.
-2.  Add the details of the same collections and MongoDB connection string used in the Platform Setup in (File -> Manage Connections->Add. Click 'Save and close'.
-3.  An additional MongoDB Collection name is asked as "LayoutCollectionName", this should be a new/empty collection.
-3.  To create a sample chat flow, right click on the studio document(white area) and click 'Create new node'.
-    1.  Add buttons and sections to it using the Node Editor and Section Button Editor. Also, add content to each button and section you have added with the help of Content Editor.
-    2.  Set the 'IsStartNode' of the Node to 'true'.
+1.  Build the ANA Conversation Studio project yourself or download the binary directly from releases section. Open the exe once done.
+2.  Enter the above noted chat server base URL, APIKey and APISecret (if you have set them) in the 'Chat Server Connection Manager' Window which appears, by clicking on 'Add' button present in the top center of the window.
+3.  As soon as you are connected to the chat server, your first project will be created and loaded for you. 
+4.  To create a sample chat flow, right click on the studio document(white area) and click 'Create new node'.
+    1.  Add sections and buttons to it by double clicking it.
+    2.  Check the 'Mark as start node' check box of the node. 
 3.  Save the flow.
 
 **Setup Simulator:**
 
 1.  To build the ANA Conversation Simulator project, you will need Visual Studio 2017 + UWP SDK.
-2.  Already built app package is also provided in releases section. Download, extract and run the .ps1 script as admin using PowerShell. That will install the Simulator into your system as a Windows 10 App. *Developer mode* should be turned on on your PC.
-3.  Open the app by searching in the Start Menu or from ANA Conversation Studio->Tools->Launch ANA Conversation Simulator.
-4.  First time of the launch, you will be asked for the Chat and UploadFile APIs. Edit it to match the URL of your hosted ANA Conversation Platform.
-5.  If everything went as it should, your chat should have started and you should see the content of the first node -> first section.
+2.  Already built app package is also provided in releases section. Download, extract and run the .ps1 script as admin using PowerShell. That will install the Simulator into your system as a Windows 10 App. *Developer mode* should be turned on in your PC.
+3.  You can launch the flow in the simulator directly from the studio by going to ANA Conversation Studio -> Tools -> Launch Current Chat in Simulator option, or by just pressing the F5 button. This will fill the chat flow API directly and lets the chat flow start directly without any manual effort.
+4.  If everything went as it should, your chat should have started and you should see the content of the first node -> first section.
+5.  Additional chat server related configurations can be done in top right menu -> Configure Chat Server.
 6.  If you choose to build the app instead of using the built package, obtain your own MapToken required by the UWP Map Control from your developer.microsoft.com account and place it in Config-Sample.json. Then rename the file to Config.json and build the project.
-
-**Creating your first flow**
-
-[![ProjectANA Sample Chat Flow](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)](https://s3-ap-southeast-1.amazonaws.com/nfcontent-cdn/public-assets/github/ProjectANA/ProjectANA-Sample-Chat-Flow.gif)
-
 ----------
 
 ## Agent Chat

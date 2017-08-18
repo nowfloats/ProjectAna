@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Windows;
 using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Models;
+using System.Windows.Media;
 
 namespace ANAConversationStudio.ViewModels
 {

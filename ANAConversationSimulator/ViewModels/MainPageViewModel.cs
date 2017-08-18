@@ -112,7 +112,7 @@ namespace ANAConversationSimulator.ViewModels
             }
             ClearButtonTimer();
 
-            //Replaceing verbs
+            //Replacing verbs
             node = JToken.Parse(VerbProcessor.Process(node.ToString()));
 
             var parsedNode = node.ToObject<ChatNode>();
@@ -163,21 +163,15 @@ namespace ANAConversationSimulator.ViewModels
                             }
                             break;
                         default:
-                            Utils.ShowDialog($"{parsedNode.ApiMethod} ApiType Unknown!");
+                            Utils.ShowDialog($"{parsedNode.ApiMethod} ApiMethod Unsupported!");
                             break;
                     }
                     NavigateToNode(nextNodeId);
                 }
-                catch (HttpRequestException ex)
-                {
-                    ToggleTyping(false);
-                    Utils.ShowDialog(ex.ToString());
-                    NavigateToNode(parsedNode.NextNodeId);
-                }
                 catch (Exception ex)
                 {
                     ToggleTyping(false);
-                    Utils.ShowDialog(ex.ToString());
+                    Utils.ShowDialog($"API[{parsedNode.ApiMethod}]: {parsedNode.ApiUrl }\r\nRequired Vars: {(parsedNode.RequiredVariables == null ? "" : string.Join(",", parsedNode.RequiredVariables))}\r\nError: " + ex.Message + "\r\n\r\n" + ex.ToString());
                     NavigateToNode(parsedNode.NextNodeId);
                 }
             }
@@ -191,7 +185,7 @@ namespace ANAConversationSimulator.ViewModels
                 var sectionsSource = node["Sections"];
                 var currentSectionSource = section ?? sectionsSource.First;
 
-                //Replaceing verbs
+                //Replacing verbs
                 currentSectionSource = JToken.Parse(VerbProcessor.Process(currentSectionSource.ToString()));
 
                 SectionTypeEnum secType = (SectionTypeEnum)Enum.Parse(typeof(SectionTypeEnum), currentSectionSource["SectionType"].ToString());
@@ -223,15 +217,10 @@ namespace ANAConversationSimulator.ViewModels
                         parsedSection = currentSectionSource.ToObject<PrintOTPSection>();
                         break;
                     case SectionTypeEnum.Carousel:
-                        parsedSection = currentSectionSource.ToObject<CarouselSection>();
-                        (parsedSection as CarouselSection).Items
-                            .SelectMany(x => x.Buttons)
-                            .Where(X => X != null).ToList()
-                            .ForEach(x =>
-                            {
-                                x.VariableName = parsedNode.VariableName;
-                                x.NodeId = parsedNode.Id;
-                            });
+                        {
+                            parsedSection = currentSectionSource.ToObject<CarouselSection>();
+                            (parsedSection as CarouselSection).Items = VerbProcessor.ProcessCarousalItems((parsedSection as CarouselSection).Items, parsedNode);
+                        }
                         break;
                     case SectionTypeEnum.Link:
                     case SectionTypeEnum.Graph:
@@ -249,7 +238,7 @@ namespace ANAConversationSimulator.ViewModels
 #endif
                 if (parsedSection != null)
                 {
-                    if (parsedSection.DelayInMs > 50 || showTyping) //Add 'typing' bubble if delay is grather than 50 ms
+                    if (parsedSection.DelayInMs > 50 || showTyping) //Add 'typing' bubble if delay is greater than 50 ms
                         ToggleTyping(true);
 
                     //Wait for delay MilliSeconds and then continue with chat
@@ -335,14 +324,39 @@ namespace ANAConversationSimulator.ViewModels
 
             ClearButtons();
             var allButtons = node["Buttons"].ToObject<List<Button>>();
-            foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
+            foreach (var btnSrc in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
             {
-                btn.VariableName = node["VariableName"] + "";
-                btn.NodeId = parsedNode.Id;
-                btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
-                btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
-                CurrentClickButtons.Add(btn);
+                var btn = btnSrc.DeepCopy();
+                if (btn.DoesRepeat)
+                {
+                    var repeatOn = ButtonActionHelper.GetSavedArray(btn.RepeatOn);
+                    if (repeatOn != null)
+                    {
+                        var max = btn.MaxRepeats == 0 ? repeatOn.Count - 1 : btn.MaxRepeats;
+                        for (int i = btn.StartPosition; i <= max; i++)
+                        {
+                            var b = btn.DeepCopy();
+                            b.VariableName = node["VariableName"] + "";
+                            b.NodeId = parsedNode.Id;
+                            ButtonActionHelper.ClearSavedValue(b.RepeatAs);
+                            ButtonActionHelper.HandleSaveTextInput(b.RepeatAs, repeatOn[i] + "");
+                            b.ButtonName = VerbProcessor.Process(b.ButtonName, false);
+                            b.ButtonText = VerbProcessor.Process(b.ButtonText, false);
+                            ButtonActionHelper.ClearSavedValue(b.RepeatAs);
+                            CurrentClickButtons.Add(b);
+                        }
+                    }
+                }
+                else
+                {
+                    btn.VariableName = node["VariableName"] + "";
+                    btn.NodeId = parsedNode.Id;
+                    btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
+                    btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
+                    CurrentClickButtons.Add(btn);
+                }
             }
+
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.TextInput))
             {
                 btn.VariableName = node["VariableName"] + "";
@@ -379,7 +393,7 @@ namespace ANAConversationSimulator.ViewModels
                 };
                 buttonTimeoutTimer.Tick += (s, e) =>
                 {
-                    ClearButtons();
+                    //ClearButtons();
                     ClearButtonTimer();
                     defaultBtn.Action.Execute(defaultBtn);
                 };
@@ -541,41 +555,48 @@ namespace ANAConversationSimulator.ViewModels
         private Socket socket;
         public void SetupSocketConnection()
         {
-            if (socket != null)
-                socket.Close();
-            Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
-            if (string.IsNullOrWhiteSpace(socketServer + ""))
+            try
             {
-                Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
-                return;
-            }
-            socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
-
-            socket.On(Socket.EVENT_CONNECT, () =>
-            {
-                Debug.WriteLine("Connected");
-                socket.Emit("join", Utils.DeviceId);
-            });
-
-            socket.On(Socket.EVENT_DISCONNECT, () =>
-            {
-                Debug.WriteLine("Disconnected");
-            });
-
-            socket.On(Socket.EVENT_MESSAGE, (data) =>
-            {
-                var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
-                Debug.WriteLine(dataString);
-
-                Dispatcher.Dispatch(() =>
+                if (socket != null)
+                    socket.Close();
+                Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
+                if (string.IsNullOrWhiteSpace(socketServer + ""))
                 {
-                    if (data is JObject jData)
-                    {
-                        chatNodes.Add(jData);
-                        ProcessNode(jData);
-                    }
+                    //Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
+                    return;
+                }
+                socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
+
+                socket.On(Socket.EVENT_CONNECT, () =>
+                {
+                    Debug.WriteLine("Connected");
+                    socket.Emit("join", Utils.DeviceId);
                 });
-            });
+
+                socket.On(Socket.EVENT_DISCONNECT, () =>
+                {
+                    Debug.WriteLine("Disconnected");
+                });
+
+                socket.On(Socket.EVENT_MESSAGE, (data) =>
+                {
+                    var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
+                    Debug.WriteLine(dataString);
+
+                    Dispatcher.Dispatch(() =>
+                    {
+                        if (data is JObject jData)
+                        {
+                            chatNodes.Add(jData);
+                            ProcessNode(jData);
+                        }
+                    });
+                });
+            }
+            catch (Exception ex)
+            {
+                //TODO: Handle error
+            }
         }
         #endregion
     }

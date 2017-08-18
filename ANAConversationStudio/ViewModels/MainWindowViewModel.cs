@@ -9,6 +9,7 @@ using System.Diagnostics;
 using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Helpers;
 using System.ComponentModel;
+using System.Threading.Tasks;
 
 namespace ANAConversationStudio.ViewModels
 {
@@ -506,6 +507,11 @@ namespace ANAConversationStudio.ViewModels
         #endregion
         public NodeViewModel CreateNode(ChatNode chatNode, Point nodeLocation)
         {
+            if (this.Network?.Nodes == null)
+            {
+                MessageBox.Show("Not connected to chat server or no project is loaded. If this is the first time, create a new project from file menu and get started. Please close the app and try again if the issue continues.");
+                return null;
+            }
             var node = new NodeViewModel(chatNode, nodeLocation);
             this.Network.Nodes.Add(node);
             return node;
@@ -537,21 +543,21 @@ namespace ANAConversationStudio.ViewModels
             }
         }
 
-        public void SaveNetworkLayout()
+        public async Task SaveLoadedChat()
         {
-            MongoHelper.Current.SaveNodeLocations(this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new Point(x.X, x.Y)));
+            StudioContext.Current.ChatFlow.NodeLocations = this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new LayoutPoint(x.X, x.Y));
+            StudioContext.Current.ChatFlow.ChatNodes = this.Network.Nodes.Select(x => x.ChatNode).ToList();
+            StudioContext.Current.ChatFlow.ChatContent = Utilities.ExtractContentFromChatNodes(StudioContext.Current.ChatFlow.ChatNodes);
+            await StudioContext.Current.SaveChatFlowAsync();
         }
-        public void SaveChatNodes()
-        {
-            MongoHelper.Current.SaveChatNodes(this.Network.Nodes.Select(x => x.ChatNode).ToList());
-        }
-        public bool LoadNodesFromDB()
+
+        public bool LoadNodes()
         {
             try
             {
-                if (MongoHelper.Current == null)
+                if (StudioContext.Current?.ChatFlow?.ChatNodes == null)
                 {
-                    MessageBox.Show("Database Connection is not yet selected.", "Oops!");
+                    MessageBox.Show("Connection with chat server is not established or no project is selected. If this is the first time, create a new project from file menu and get started. Please restart the application and try again if the issue continues.", "Oops!");
                     return false;
                 }
 
@@ -559,10 +565,10 @@ namespace ANAConversationStudio.ViewModels
                 this.Network.Connections.CollectionChanged += Connections_CollectionChanged;
 
                 var start = new Point(100, 60);
-                var allChatNodes = MongoHelper.Current.ChatNodes;
+                var allChatNodes = StudioContext.Current.ChatFlow.ChatNodes;
                 var uniqueChatNodes = allChatNodes.GroupBy(x => x.Id).SelectMany(x => x).OrderByDescending(x => x.IsStartNode).ToList();
 
-                var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, MongoHelper.Current.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
+                var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, StudioContext.Current.ChatFlow.NodeLocations.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
                 this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections  
 
                 foreach (var node in nodeVMs)

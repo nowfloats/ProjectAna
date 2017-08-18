@@ -1,0 +1,467 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:uc="clr-namespace:ANAConversationStudio.UserControls"
+                    xmlns:ui="clr-namespace:ANAConversationStudio.UIHelpers"
+                    xmlns:views="clr-namespace:ANAConversationStudio.Views"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
+    <Style x:Key="EditorItemBorderStyle" TargetType="Border" >
+        <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="10"/>
+        <Setter Property="Margin" Value="10"/>
+    </Style>
+    <ui:ButtonSectionTypeSymbolConverter x:Key="ButtonSectionTypeSymbolConverter"/>
+    <views:ButtonTypeToFieldVisibilityConverter x:Key="ButtonTypeToFieldVisibilityConverter"/>
+    <BooleanToVisibilityConverter x:Key="B2V"/>
+    
+    <Style x:Key="SectionTypeIconTextblockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="ToolTip" >
+            <Setter.Value>
+                <TextBlock>
+                    <Run Text="{Binding SectionType}" /><Run Text=" Section" />
+                </TextBlock>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="0,0,10,0"/>
+        <Setter Property="Text" Value="{Binding SectionType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="ButtonTypeIconTextblockStyle" TargetType="TextBlock">
+        <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}"/>
+        <Setter Property="FontSize" Value="20"/>
+        <Setter Property="ToolTip" >
+            <Setter.Value>
+                <TextBlock>
+                    <Run Text="{Binding ButtonType}" /><Run Text=" Button" />
+                </TextBlock>
+            </Setter.Value>
+        </Setter>
+        <Setter Property="Margin" Value="0,0,15,0"/>
+        <Setter Property="Text" Value="{Binding ButtonType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+    </Style>
+    <Style x:Key="ToolButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignToolButton}" >
+        <Setter Property="Margin" Value="5,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="Height" Value="Auto" />
+        <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}" />
+        <Setter Property="Foreground" Value="White" />
+        <Setter Property="VerticalAlignment" Value="Center" />
+    </Style>
+    
+    <Style x:Key="MoveUpButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE96D;" />
+        <Setter Property="Command" Value="{Binding MoveUp}" />
+        <Setter Property="ToolTip" Value="Move Up" />
+    </Style>
+    <Style x:Key="MoveDownButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE96E;" />
+        <Setter Property="Command" Value="{Binding MoveDown}" />
+        <Setter Property="ToolTip" Value="Move Down" />
+    </Style>
+    <Style x:Key="MoveLeftButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE96F;" />
+        <Setter Property="Command" Value="{Binding MoveUp}" />
+        <Setter Property="ToolTip" Value="Move Left" />
+    </Style>
+    <Style x:Key="MoveRightButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE970;" />
+        <Setter Property="Command" Value="{Binding MoveDown}" />
+        <Setter Property="ToolTip" Value="Move Right" />
+    </Style>
+    <Style x:Key="DeleteButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE74D;" />
+        <Setter Property="Command" Value="{Binding Remove}" />
+        <Setter Property="Margin" Value="5,0,0,0" />
+        <Setter Property="ToolTip" Value="Remove" />
+    </Style>
+    <Style x:Key="GroupHeaderTextBlockStyle" TargetType="TextBlock">
+        <Setter Property="Height" Value="14.7"/>
+    </Style>
+    <Style x:Key="AddButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+        <Setter Property="Content" Value="&#xE948;" />
+    </Style>
+    <DataTemplate x:Key="TextSectionEditTemplate">
+        <Grid Margin="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" Grid.Column="0"/>
+            <TextBox Grid.Column="1" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+            <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
+            <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
+            <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
+        </Grid>
+    </DataTemplate>
+    <DataTemplate x:Key="TitleCaptionUrlSectionEditTemplate">
+        <GroupBox Header="{Binding}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" Grid.Column="0"/>
+                        <TextBlock VerticalAlignment="Center" Grid.Column="1">
+                            <Run  Text="Section: "/><Run  Text="{Binding Alias}"/>
+                        </TextBlock>
+                        <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}"/>
+                        <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}"/>
+                        <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}"/>
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel>
+                <uc:TableRowUserControl Label="Title">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Url">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Caption">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+            </StackPanel>
+        </GroupBox>
+    </DataTemplate>
+    <DataTemplate x:Key="ChatButtonEditTemplate">
+        <GroupBox Header="{Binding}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource ButtonTypeIconTextblockStyle}" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="1">
+                            <Run Text="Button: "/><Run  Text="{Binding Alias}"/>
+                        </TextBlock>
+                        <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}"/>
+                        <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}"/>
+                        <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}"/>
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel>
+                <uc:TableRowUserControl Label="Type">
+                    <uc:TableRowUserControl.Field>
+                        <ComboBox SelectedItem="{Binding ButtonType, Mode=TwoWay}" ItemsSource="{Binding ButtonTypes}"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Text">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding ButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Placeholder" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=PlaceholderText}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding PlaceholderText, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="DeepLink Url" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=DeepLinkUrl}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding DeepLinkUrl, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Url" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=Url}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+
+                <uc:TableRowUserControl Label="Variable Value">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding VariableValue, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Prefix" Visibility="{Binding ButtonType,Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=PrefixText}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding PrefixText, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Postfix" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=PostfixText}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding PostfixText, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+
+                <uc:TableRowUserControl Label="API Response Match Key" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=APIResponseMatchKey}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding APIResponseMatchKey, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="API Response Match Value" Visibility="{Binding ButtonType,Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=APIResponseMatchValue}">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding APIResponseMatchValue, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+
+                <uc:TableRowUserControl Label="Does Repeat" >
+                    <uc:TableRowUserControl.Field>
+                        <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
+                    <uc:TableRowUserControl Label="Repeat On">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Repeat As">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Start Position">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Max Repeats">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                </StackPanel>
+
+                <Grid HorizontalAlignment="Stretch" Margin="0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.Resources>
+                        <Style TargetType="CheckBox" BasedOn="{StaticResource {x:Type CheckBox}}">
+                            <Setter Property="FontWeight" Value="Bold" />
+                            <Setter Property="HorizontalAlignment" Value="Center" />
+                        </Style>
+                    </Grid.Resources>
+                    <CheckBox IsChecked="{Binding DefaultButton, Mode=TwoWay}" Content="Is Default" Grid.Column="0"/>
+                    <CheckBox IsChecked="{Binding PostToChat, Mode=TwoWay}" Content="Post To Chat" Grid.Column="1"/>
+                    <CheckBox IsChecked="{Binding Hidden, Mode=TwoWay}" Content="Is Hidden" Grid.Column="2"/>
+                </Grid>
+            </StackPanel>
+        </GroupBox>
+    </DataTemplate>
+
+    <DataTemplate x:Key="CarouselSectionEditTemplate">
+        <GroupBox Header="{Binding}">
+            <GroupBox.HeaderTemplate>
+                <DataTemplate>
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" />
+                        <TextBlock VerticalAlignment="Center" Grid.Column="1">
+                            <Run Text="Section: "/><Run  Text="{Binding Alias}"/>
+                        </TextBlock>
+                        <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}"/>
+                        <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}"/>
+                        <Button Grid.Column="4" Style="{StaticResource AddButtonStyle}" ToolTip="Add Carousel Item" Command="{Binding AddItem}"/>
+                        <Button Grid.Column="5" Style="{StaticResource DeleteButtonStyle}"/>
+                    </Grid>
+                </DataTemplate>
+            </GroupBox.HeaderTemplate>
+            <StackPanel Grid.Column="0">
+                <uc:TableRowUserControl Label="Title">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Caption">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Padding="-10,0" HorizontalAlignment="Center">
+                    <ItemsControl ItemsSource="{Binding Items}">
+                        <ItemsControl.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <VirtualizingStackPanel Orientation="Horizontal"/>
+                            </ItemsPanelTemplate>
+                        </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate>
+                                <GroupBox Header="{Binding}">
+                                    <GroupBox.HeaderTemplate>
+                                        <DataTemplate>
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <TextBlock VerticalAlignment="Center">
+                                                    <Run Text="Carousel Item: "/><Run Text="{Binding Title}"/>
+                                                </TextBlock>
+                                                <Button Grid.Column="1" Style="{StaticResource MoveLeftButtonStyle}"/>
+                                                <Button Grid.Column="2" Style="{StaticResource MoveRightButtonStyle}"/>
+                                                <Button Grid.Column="3" Style="{StaticResource AddButtonStyle}" ToolTip="Add Carousel Button" Command="{Binding AddButton}"/>
+                                                <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}"/>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </GroupBox.HeaderTemplate>
+                                    <StackPanel>
+                                        <uc:TableRowUserControl Label="Title">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="Caption">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="ImageUrl">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+
+                                        <uc:TableRowUserControl Label="Does Repeat" >
+                                            <uc:TableRowUserControl.Field>
+                                                <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
+                                            <uc:TableRowUserControl Label="Repeat On">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                            <uc:TableRowUserControl Label="Repeat As">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                            <uc:TableRowUserControl Label="Start Position">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                            <uc:TableRowUserControl Label="Max Repeats">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                        </StackPanel>
+                                        <ItemsControl ItemsSource="{Binding Buttons}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate>
+                                                    <GroupBox Header="{Binding}">
+                                                        <GroupBox.HeaderTemplate>
+                                                            <DataTemplate>
+                                                                <Grid >
+                                                                    <Grid.ColumnDefinitions>
+                                                                        <ColumnDefinition/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                        <ColumnDefinition Width="Auto"/>
+                                                                    </Grid.ColumnDefinitions>
+                                                                    <TextBlock VerticalAlignment="Center">
+                                                                        <Run Text="Carousel Button: "/><Run Text="{Binding Text}"/>
+                                                                    </TextBlock>
+                                                                    <Button Grid.Column="1" Style="{StaticResource MoveUpButtonStyle}"/>
+                                                                    <Button Grid.Column="2" Style="{StaticResource MoveDownButtonStyle}"/>
+                                                                    <Button Grid.Column="3" Style="{StaticResource DeleteButtonStyle}"/>
+                                                                </Grid>
+                                                            </DataTemplate>
+                                                        </GroupBox.HeaderTemplate>
+                                                        <StackPanel>
+                                                            <uc:TableRowUserControl Label="Text">
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+                                                            <uc:TableRowUserControl Label="Url">
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+                                                            <uc:TableRowUserControl Label="Variable Value">
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <TextBox Text="{Binding VariableValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+                                                            <uc:TableRowUserControl Label="Next Node Id">
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <TextBox Text="{Binding NextNodeId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+
+                                                            <uc:TableRowUserControl Label="Type">
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+
+                                                            <uc:TableRowUserControl Label="Does Repeat" >
+                                                                <uc:TableRowUserControl.Field>
+                                                                    <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
+                                                                </uc:TableRowUserControl.Field>
+                                                            </uc:TableRowUserControl>
+                                                            <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
+                                                                <uc:TableRowUserControl Label="Repeat On">
+                                                                    <uc:TableRowUserControl.Field>
+                                                                        <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                                                                    </uc:TableRowUserControl.Field>
+                                                                </uc:TableRowUserControl>
+                                                                <uc:TableRowUserControl Label="Repeat As">
+                                                                    <uc:TableRowUserControl.Field>
+                                                                        <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
+                                                                    </uc:TableRowUserControl.Field>
+                                                                </uc:TableRowUserControl>
+                                                                <uc:TableRowUserControl Label="Start Position">
+                                                                    <uc:TableRowUserControl.Field>
+                                                                        <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
+                                                                    </uc:TableRowUserControl.Field>
+                                                                </uc:TableRowUserControl>
+                                                                <uc:TableRowUserControl Label="Max Repeats">
+                                                                    <uc:TableRowUserControl.Field>
+                                                                        <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
+                                                                    </uc:TableRowUserControl.Field>
+                                                                </uc:TableRowUserControl>
+                                                            </StackPanel>
+                                                        </StackPanel>
+                                                    </GroupBox>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
+                                </GroupBox>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+            </StackPanel>
+        </GroupBox>
+    </DataTemplate>
+</ResourceDictionary>

@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.12
+VisualStudioVersion = 15.0.26430.16
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANAConversationStudio", "ANAConversationStudio\ANAConversationStudio.csproj", "{964D06C1-81E3-438D-9DCE-CFA8FB87F04D}"
 EndProject
@@ -15,6 +15,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	EndProjectSection
 EndProject
 Project("{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}") = "LiveClientSocketsManager", "LiveClientSocketsManager\LiveClientSocketsManager.njsproj", "{B43F2F05-9680-4749-BB5E-29AF01B08B11}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{0D4612DF-0B2B-4801-A0A0-136641B54E4C}"
+	ProjectSection(SolutionItems) = preProject
+		Assets\anaflow.png = Assets\anaflow.png
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

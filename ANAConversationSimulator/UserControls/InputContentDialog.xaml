@@ -6,17 +6,17 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
-    Title="Update APIs"
+    Title="Configure Chat Server"
     PrimaryButtonText="Ok"
     SecondaryButtonText="Cancel"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
     <ScrollViewer>
         <StackPanel>
-            <TextBox Text="{Binding ChatFlowAPI, Mode=TwoWay}" Header="Chat Flow API" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding UploadFileAPI, Mode=TwoWay}" Header="Upload File API" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding ActivityTrackAPI, Mode=TwoWay}" Header="Activity Track API" Margin="0,10,0,0"/>
-            <TextBox Text="{Binding SocketServer, Mode=TwoWay}" Header="Socket Server" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding ChatFlowAPI, Mode=TwoWay}" PlaceholderText="http://[your-server.com]/api/Conversation/Chat" Header="Chat Flow API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding UploadFileAPI, Mode=TwoWay}" PlaceholderText="http://[your-server.com]/api/Services/ReceiveFile?fileName={fileName}" Header="Upload File API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding ActivityTrackAPI, Mode=TwoWay}" PlaceholderText="http://[your-server.com]/api/Activity/Track" Header="Activity Track API" Margin="0,10,0,0"/>
+            <TextBox Text="{Binding SocketServer, Mode=TwoWay}" PlaceholderText="http://[your-socket-server.com]/" Header="Socket Server" Margin="0,10,0,0"/>
         </StackPanel>
     </ScrollViewer>
 </ContentDialog>

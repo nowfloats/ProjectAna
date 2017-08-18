@@ -1,12 +1,10 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
 using ANAConversationStudio.Models;
 using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Models.Chat.Sections;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows;
 using System.ComponentModel;
 using Serilog;
@@ -15,92 +13,15 @@ using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using System.Reflection;
 using System.Security.Cryptography;
 using System.Text;
+using Newtonsoft.Json.Converters;
 
 namespace ANAConversationStudio.Helpers
 {
     public static class Utilities
     {
         public static Settings Settings { get; set; }
-        
-        public static BaseContent GetContentObject(object contentOwner)
-        {
-            BaseContent contentObj = null;
-            if (contentOwner is TextSection)
-                contentObj = new TextSectionContent();
-            else if (contentOwner is ImageSection)
-                contentObj = new ImageSectionContent();
-            else if (contentOwner is AudioSection || contentOwner is VideoSection || contentOwner is EmbeddedHtmlSection || contentOwner is GifSection)
-                contentObj = new TitleCaptionSectionContent();
-            else if (contentOwner is ChatNode)
-                contentObj = new NodeContent();
-            else if (contentOwner is Button)
-                contentObj = new ButtonContent();
-            return contentObj;
-        }
-        public static IEnumerable<BaseContent> GetContentBank(object choosenOwner)
-        {
-            if (choosenOwner is ChatNode node)
-                return MongoHelper.Current.Contents.Where(x => x is NodeContent).Cast<NodeContent>().Where(x => x.NodeId == node.Id).ToList();
-
-            if (choosenOwner is Section section)
-                return MongoHelper.Current.Contents.Where(x => x is SectionContent).Cast<SectionContent>().Where(x => x.SectionId == section._id).ToList();
-
-            if (choosenOwner is Button btn)
-                return MongoHelper.Current.Contents.Where(x => x is ButtonContent).Cast<ButtonContent>().Where(x => x.ButtonId == btn._id).ToList();
-
-            if (choosenOwner is CarouselItem cItem)
-                return MongoHelper.Current.Contents.Where(x => x is CarouselItemContent).Cast<CarouselItemContent>().Where(x => x.CarouselItemId == cItem._id).ToList();
-
-            if (choosenOwner is CarouselButton cButton)
-                return MongoHelper.Current.Contents.Where(x => x is CarouselButtonContent).Cast<CarouselButtonContent>().Where(x => x.CarouselButtonId == cButton._id).ToList();
-
-            return new List<BaseContent>();
-        }
-        public static void UpdateContentBank(IEnumerable<BaseContent> editedContentEntries)
-        {
-            if (editedContentEntries != null && editedContentEntries.Count() > 0)
-            {
-                MongoHelper.Current.Contents.RemoveAll(x => editedContentEntries.Select(y => y._id).Contains(x._id));
-                MongoHelper.Current.Contents.AddRange(editedContentEntries);
-            }
-        }
-        public static BaseContent GetContentObjectV2(object contentOwner)
-        {
-            BaseContent contentObj = null;
-            if (contentOwner is Section sec)
-            {
-                switch (sec.SectionType)
-                {
-                    case SectionTypeEnum.Image:
-                        contentObj = new ImageSectionContent();
-                        break;
-                    case SectionTypeEnum.Text:
-                        contentObj = new TextSectionContent();
-                        break;
-                    default:
-                        contentObj = new TitleCaptionSectionContent();
-                        break;
-                }
-            }
-            else if (contentOwner is ChatNode)
-                contentObj = new NodeContent();
-            else if (contentOwner is Button)
-                contentObj = new ButtonContent();
-            else if (contentOwner is CarouselItem)
-                contentObj = new CarouselItemContent();
-            else if (contentOwner is CarouselButton)
-                contentObj = new CarouselButtonContent();
-            return contentObj;
-        }
-
-        static Random rand = new Random();
-        public static int Rand()
-        {
-            return rand.Next(700, 1000);
-        }
 
         public static bool IsDesignMode()
         {
@@ -170,6 +91,144 @@ namespace ANAConversationStudio.Helpers
             return cipherText;
         }
 
+        public static readonly JsonSerializerSettings StrictTypeHandlingJsonSettings = new JsonSerializerSettings
+        {
+            TypeNameHandling = TypeNameHandling.All,
+            Converters = new List<JsonConverter> { new StringEnumConverter() }
+        };
+
+        public static List<BaseContent> ExtractContentFromChatNodes(List<ChatNode> chatNodes)
+        {
+            var contentBank = new List<BaseContent>();
+            foreach (var node in chatNodes)
+            {
+                if (node.Buttons != null)
+                    foreach (var btn in node.Buttons)
+                    {
+                        contentBank.Add(new ButtonContent
+                        {
+                            ButtonId = btn._id,
+                            ButtonText = btn.ButtonText,
+                            NodeId = node.Id,
+                            _id = btn.ContentId,
+                            Emotion = btn.ContentEmotion,
+                            CreatedOn = DateTime.Now,
+                            UpdatedOn = DateTime.Now
+                        });
+                    }
+
+                if (node.Sections != null)
+                    foreach (var section in node.Sections)
+                    {
+                        switch (section.SectionType)
+                        {
+                            case SectionTypeEnum.Image:
+                            case SectionTypeEnum.Gif:
+                            case SectionTypeEnum.Audio:
+                            case SectionTypeEnum.Video:
+                            case SectionTypeEnum.EmbeddedHtml:
+                                {
+                                    var titleCaptionSection = section as TitleCaptionSection;
+                                    contentBank.Add(new TitleCaptionSectionContent
+                                    {
+                                        Caption = titleCaptionSection.Caption,
+                                        Title = titleCaptionSection.Title,
+                                        _id = titleCaptionSection.ContentId,
+                                        SectionId = titleCaptionSection._id,
+                                        NodeId = node.Id,
+                                        CreatedOn = DateTime.Now,
+                                        UpdatedOn = DateTime.Now,
+                                        Emotion = titleCaptionSection.ContentEmotion
+                                    });
+                                }
+                                break;
+                            case SectionTypeEnum.Text:
+                                {
+                                    var ts = section as TextSection;
+                                    contentBank.Add(new TextSectionContent
+                                    {
+                                        CreatedOn = DateTime.Now,
+                                        UpdatedOn = DateTime.Now,
+                                        Emotion = ts.ContentEmotion,
+                                        NodeId = node.Id,
+                                        SectionId = ts._id,
+                                        SectionText = ts.Text,
+                                        _id = ts.ContentId
+                                    });
+                                }
+                                break;
+                            case SectionTypeEnum.Graph:
+                                break;
+                            case SectionTypeEnum.Link:
+                                break;
+                            case SectionTypeEnum.Carousel:
+                                {
+                                    var car = section as CarouselSection;
+                                    contentBank.Add(new TitleCaptionSectionContent
+                                    {
+                                        _id = car.ContentId,
+                                        Caption = car.Caption,
+                                        Title = car.Title,
+                                        Emotion = car.ContentEmotion,
+                                        NodeId = node.Id,
+                                        SectionId = car._id,
+                                        CreatedOn = DateTime.Now,
+                                        UpdatedOn = DateTime.Now
+                                    });
+
+                                    foreach (var carItem in car.Items)
+                                    {
+                                        contentBank.Add(new CarouselItemContent
+                                        {
+                                            Caption = carItem.Caption,
+                                            CarouselItemId = carItem._id,
+                                            _id = carItem.ContentId,
+                                            Emotion = car.ContentEmotion,
+                                            NodeId = node.Id,
+                                            Title = carItem.Title,
+                                            CreatedOn = DateTime.Now,
+                                            UpdatedOn = DateTime.Now
+                                        });
+
+                                        foreach (var carItemButton in carItem.Buttons)
+                                        {
+                                            contentBank.Add(new CarouselButtonContent
+                                            {
+                                                _id = carItemButton.ContentId,
+                                                ButtonText = carItemButton.Text,
+                                                CarouselButtonId = carItemButton._id,
+                                                CreatedOn = DateTime.Now,
+                                                UpdatedOn = DateTime.Now,
+                                                Emotion = car.ContentEmotion,
+                                                NodeId = node.Id
+                                            });
+                                        }
+                                    }
+                                }
+                                break;
+                            case SectionTypeEnum.PrintOTP:
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+
+            }
+            return contentBank;
+        }
+
+        public static string TrimText(string text, int length = Constants.GroupHeaderTextMaxLength, bool removeNewLines = true)
+        {
+            if (text == null) return null;
+
+            if (removeNewLines)
+                text = text.Replace("\r\n", " ");
+
+            bool trimNeeded = text.Length > Constants.GroupHeaderTextMaxLength;
+            if (trimNeeded)
+                text = text.Substring(0, Constants.GroupHeaderTextMaxLength) + "...";
+            return text;
+        }
     }
 
     public static class Exts
@@ -178,6 +237,13 @@ namespace ANAConversationStudio.Helpers
         {
             var json = source.ToJson();
             return BsonSerializer.Deserialize<T>(json);
+        }
+
+        public static Point? GetPointForNode(this Dictionary<string, LayoutPoint> nodeLocations, string chatNodeId)
+        {
+            if (nodeLocations.ContainsKey(chatNodeId) && nodeLocations[chatNodeId] != null)
+                return new Point(nodeLocations[chatNodeId].X, nodeLocations[chatNodeId].Y);
+            return null;
         }
     }
     public static class Logger
@@ -198,7 +264,6 @@ namespace ANAConversationStudio.Helpers
     }
     public static class Constants
     {
-        //TODO: Implement Window Layout save and restore function.
-        public const string WindowLayoutFileName = "WindowLayout.xml";
+        public const int GroupHeaderTextMaxLength = 50;
     }
 }

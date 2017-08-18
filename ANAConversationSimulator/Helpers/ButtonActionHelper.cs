@@ -13,6 +13,7 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI.Popups;
+using Newtonsoft.Json.Linq;
 
 namespace ANAConversationSimulator.Helpers
 {
@@ -23,10 +24,37 @@ namespace ANAConversationSimulator.Helpers
             if (string.IsNullOrWhiteSpace(varName)) return;
             Utils.LocalStore[varName] = varValue?.Trim();
         }
+        public static void ClearSavedValue(string varName)
+        {
+            if (string.IsNullOrWhiteSpace(varName)) return;
+            if (Utils.LocalStore.ContainsKey(varName))
+                Utils.LocalStore.Remove(varName);
+        }
         public static object GetSavedValue(string varName)
         {
+            if (string.IsNullOrWhiteSpace(varName))
+                return null;
+
+            if (varName.Contains('.'))
+            {
+                var all = varName.Split('.');
+                var baseName = all[0];
+                if (Utils.LocalStore.ContainsKey(baseName))
+                {
+                    var stripped = string.Join(".", varName.Split('.').Skip(1).ToArray());
+                    var obj = JToken.Parse(Utils.LocalStore[baseName] + "");
+                    return obj.SelectToken(stripped) + "";
+                }
+            }
+
             if (Utils.LocalStore.ContainsKey(varName))
                 return Utils.LocalStore[varName];
+            return null;
+        }
+        public static JArray GetSavedArray(string varName)
+        {
+            if (Utils.LocalStore.ContainsKey(varName) && !string.IsNullOrWhiteSpace(Utils.LocalStore[varName] + ""))
+                return JArray.Parse(Utils.LocalStore[varName] + "");
             return null;
         }
         public static void HandleSaveMultiple(Dictionary<string, object> dict)

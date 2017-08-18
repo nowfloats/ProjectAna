@@ -29,7 +29,6 @@ namespace ANAConversationStudio.Models
         }
 
         private string _NodeId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NodeId
         {
             get { return _NodeId; }
@@ -77,7 +76,6 @@ namespace ANAConversationStudio.Models
     public class SectionContent : BaseContent
     {
         private string _SectionId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string SectionId
         {
             get { return _SectionId; }
@@ -137,22 +135,6 @@ namespace ANAConversationStudio.Models
                 if (_Caption != value)
                 {
                     _Caption = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-    }
-    public class ImageSectionContent : TitleCaptionSectionContent
-    {
-        private string _AltText;
-        public string AltText
-        {
-            get { return _AltText; }
-            set
-            {
-                if (_AltText != value)
-                {
-                    _AltText = value;
                     OnPropertyChanged();
                 }
             }
@@ -233,7 +215,6 @@ namespace ANAConversationStudio.Models
     public class ButtonContent : BaseContent
     {
         private string _ButtonId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string ButtonId
         {
             get { return _ButtonId; }
@@ -266,7 +247,6 @@ namespace ANAConversationStudio.Models
     public class CarouselButtonContent : BaseContent
     {
         private string _CarouselButtonId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string CarouselButtonId
         {
             get { return _CarouselButtonId; }
@@ -299,7 +279,6 @@ namespace ANAConversationStudio.Models
     public class CarouselItemContent : BaseContent
     {
         private string _CarouselItemId;
-        [Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string CarouselItemId
         {
             get { return _CarouselItemId; }

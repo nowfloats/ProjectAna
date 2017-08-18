@@ -20,6 +20,7 @@ namespace ANAConversationSimulator.Models.Chat
         public string VariableName { get; set; }
         public string ApiMethod { get; set; }
         public string ApiUrl { get; set; }
+        public string ApiResponseDataRoot { get; set; }
         public string[] RequiredVariables { get; set; }
         public string NextNodeId { get; set; }
         public bool IsStartNode { get; set; }

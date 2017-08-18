@@ -1,13 +1,15 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using ANAConversationPlatform.Helpers;
-using System.Diagnostics;
-using MongoDB.Bson;
-using Newtonsoft.Json;
 using ANAConversationPlatform.Models;
 using ANAConversationPlatform.Models.Sections;
 using Microsoft.Extensions.Logging;
 using static ANAConversationPlatform.Helpers.Constants;
+using System.Threading.Tasks;
+using MongoDB.Bson;
+using MongoDB.Bson.Serialization;
+using System.IO;
+using ANAConversationPlatform.Attributes;
 
 namespace ANAConversationPlatform.Controllers
 {
@@ -22,19 +24,30 @@ namespace ANAConversationPlatform.Controllers
         }
 
         [HttpGet]
-        public ActionResult Chat()
+        public async Task<ActionResult> Chat([FromQuery]string projectId = null, [FromQuery]string projectName = null, [FromQuery]bool enableAgentChat = true)
         {
             try
             {
-                var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
+                if (string.IsNullOrWhiteSpace(projectId) && string.IsNullOrWhiteSpace(projectName))
+                    return BadRequest(new { Message = "Either project id or project name has to be provided" });
+
+                ChatFlowPack chatFlowPack = null;
+                if (!string.IsNullOrWhiteSpace(projectId))
+                    chatFlowPack = await MongoHelper.GetChatFlowPackAsync(projectId);
+                else if (!string.IsNullOrWhiteSpace(projectName))
+                    chatFlowPack = await MongoHelper.GetChatFlowPackByProjectNameAsync(projectName);
+
+                if (chatFlowPack == null)
+                    return BadRequest(new { Message = "No chat flow found by the given project id or name" });
+
+                var chatNodes = ChatFlowBuilder.Build(chatFlowPack);
                 if (chatNodes == null || chatNodes.Count == 0)
                     return Ok(new object[] { });
 
-                return Json(chatNodes, new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
-                });
+                if (enableAgentChat)
+                    AddAgentChatNodes(chatNodes);
+
+                return Json(chatNodes, PublishJsonSettings);
             }
             catch (System.Exception ex)
             {
@@ -44,20 +57,49 @@ namespace ANAConversationPlatform.Controllers
         }
 
         [HttpGet]
-        public ActionResult RefreshContent()
+        public ActionResult HybridChat()
         {
-            MongoHelper.RefreshContentInMemory();
-            return Ok(new { Message = "Done" });
+            return RedirectToAction(nameof(Chat));
         }
 
-        [HttpGet]
-        public ActionResult HybridChat()
+        [Produces("text/plain"), HttpPost, BasicAuthentication]
+        public async Task<ActionResult> SaveChatFlow()
         {
             try
             {
-                var chatNodes = MongoHelper.RetrieveRecordsFromChatNode();
+                ChatFlowPack req = null;
+                using (var s = new StreamReader(Request.Body))
+                    req = BsonSerializer.Deserialize<ChatFlowPack>(s.ReadToEnd());
 
-                chatNodes.AddRange(new[]
+                if (req == null)
+                    return BadRequest(new { Message = "No chat flow received to save!" });
+
+                var saved = await MongoHelper.SaveChatFlowAsync(req);
+                if (saved)
+                    return Content(new { Message = "Chat flow saved", Data = req }.ToJson(), "text/plain");
+            }
+            catch (System.Exception ex)
+            {
+                return BadRequest(new { Message = "Unable to save chat flow!. Ex: " + ex.Message });
+            }
+            return BadRequest(new { Message = "Unable to save chat flow!" });
+        }
+
+        [Produces("text/plain"), HttpGet, BasicAuthentication]
+        public async Task<ActionResult> FetchChatFlow([FromQuery] string projectId)
+        {
+            if (string.IsNullOrWhiteSpace(projectId))
+                return BadRequest(new { Message = "Project Id is not provided!" });
+
+            var proj = await MongoHelper.GetChatFlowPackAsync(projectId);
+            if (proj != null)
+                return Content(new { Message = "Fetched", Data = proj }.ToJson(), "text/plain");
+            return BadRequest(new { Message = "Project with the given id was not found or could not be retrieved!" });
+        }
+
+        private void AddAgentChatNodes(List<ChatNode> chatNodes)
+        {
+            chatNodes.AddRange(new[]
                 {
                     new ChatNode("INIT_CHAT_NODE")
                     {
@@ -115,21 +157,6 @@ namespace ANAConversationPlatform.Controllers
                         VariableName = "TEXT"
                     }
                 });
-
-                if (chatNodes == null || chatNodes.Count == 0)
-                    return Ok(new object[] { });
-
-                return Json(chatNodes, new JsonSerializerSettings()
-                {
-                    NullValueHandling = NullValueHandling.Ignore,
-                    Converters = new List<JsonConverter> { new CustomStringEnumConverter() }
-                });
-            }
-            catch (System.Exception ex)
-            {
-                _log.LogError(new EventId((int)LoggerEventId.HYBRID_CHAT_ACTION_ERROR), ex, ex.Message);
-                return StatusCode(500, new { Message = ex.Message });
-            }
         }
     }
 }

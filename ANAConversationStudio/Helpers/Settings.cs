@@ -1,8 +1,8 @@
-﻿using ANAConversationStudio.Models;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -10,7 +10,7 @@ namespace ANAConversationStudio.Helpers
     {
         const string FILE_NAME = "Settings.json";
 
-        public List<DatabaseConnection> SavedConnections { get; set; } = new List<DatabaseConnection>();
+        public List<ChatServerConnection> SavedChatServerConnections { get; set; } = new List<ChatServerConnection>();
         public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
         public static bool IsEncrypted()
         {
@@ -40,26 +40,30 @@ namespace ANAConversationStudio.Helpers
         }
     }
 
-    public class DatabaseConnection
+    public class ChatServerConnection
     {
-        public string TemplateCollectionName { get; set; }
-        public string ContentCollectionName { get; set; }
-        public string LayoutCollectionName { get; set; }
-
-        public string DatabaseName { get; set; }
-        public string ConnectionString { get; set; }
+        [PropertyOrder(1)]
         public string Name { get; set; }
+        [PropertyOrder(2)]
+        public string ServerUrl { get; set; }
+        
+        [PropertyOrder(3)]
+        public string APIKey { get; set; }
+        [PropertyOrder(4)]
+        public string APISecret { get; set; }
 
         public override string ToString()
         {
-            if (string.IsNullOrWhiteSpace(Name))
-                return "Unnamed Connection";
-            return Name;
+            if (!string.IsNullOrWhiteSpace(Name))
+                return Name;
+            if (!string.IsNullOrWhiteSpace(ServerUrl))
+                return ServerUrl;
+            return "New Chat Server Connection";
         }
 
         public bool IsValid()
         {
-            return Utilities.ValidateStrings(TemplateCollectionName, ContentCollectionName, LayoutCollectionName, DatabaseName, ConnectionString, Name);
+            return Utilities.ValidateStrings(ServerUrl, Name);
         }
     }
 

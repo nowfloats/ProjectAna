@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace ANAConversationStudio
+﻿namespace ANAConversationStudio
 {
     /// <summary>
     /// Defines the current state of the mouse handling logic.

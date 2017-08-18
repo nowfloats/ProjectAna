@@ -6,6 +6,8 @@ using Template10.Common;
 using System;
 using Windows.UI.Xaml.Data;
 using ANAConversationSimulator.Helpers;
+using Windows.Foundation;
+using ANAConversationSimulator.ViewModels;
 
 namespace ANAConversationSimulator
 {
@@ -52,6 +54,23 @@ namespace ANAConversationSimulator
 
         public override async Task OnStartAsync(StartKind startKind, IActivatedEventArgs args)
         {
+            if (args is ProtocolActivatedEventArgs pArgs)
+            {
+                if (!string.IsNullOrWhiteSpace(pArgs.Uri.Query))
+                {
+                    try
+                    {
+                        var parsedQuery = new WwwFormUrlDecoder(pArgs.Uri.Query);
+                        if (parsedQuery.Count > 0)
+                        {
+                            var chatUrl = parsedQuery.GetFirstValueByName("chatflow");
+                            Utils.APISettings.Values["API"] = chatUrl;
+                            MainPageViewModel.CurrentInstance?.StartChatting();
+                        }
+                    }
+                    catch { }
+                }
+            }
             // long-running startup tasks go here
             await Utils.LoadConfig();
 
