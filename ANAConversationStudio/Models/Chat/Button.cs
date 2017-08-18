@@ -1,15 +1,21 @@
-﻿using ANAConversationStudio.Controls;
+﻿using ANAConversationStudio.Helpers;
+using ANAConversationStudio.UIHelpers;
+using MongoDB.Bson.Serialization.Attributes;
+using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
+using System.Linq;
+using System.Windows.Input;
 
 namespace ANAConversationStudio.Models.Chat
 {
-    [CategoryOrder("Important", 1)]
-    [CategoryOrder("For ButtonType Get[X]", 2)]
-    [CategoryOrder("Misc", 3)]
-    public class Button : BaseEntity
+    public class Button : RepeatableBaseEntity
     {
-        public Button() { }
+        public Button()
+        {
+            FillAlias();
+        }
 
         #region Important
         private ButtonTypeEnum _ButtonType = ButtonTypeEnum.NextNode;
@@ -22,6 +28,8 @@ namespace ANAConversationStudio.Models.Chat
                 if (_ButtonType != value)
                 {
                     _ButtonType = value;
+
+                    FillAlias();
                     OnPropertyChanged();
                 }
             }
@@ -212,7 +220,6 @@ namespace ANAConversationStudio.Models.Chat
         }
 
         private string _NextNodeId;
-        //[Editor(typeof(ReadonlyTextBoxEditor), typeof(ReadonlyTextBoxEditor))]
         public string NextNodeId
         {
             get { return _NextNodeId; }
@@ -226,6 +233,82 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
         #endregion
+
+        //Content
+        private string _ButtonText;
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ButtonText
+        {
+            get { return _ButtonText; }
+            set
+            {
+                if (_ButtonText != value)
+                {
+                    _ButtonText = value;
+
+                    FillAlias();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public IEnumerable<ButtonTypeEnum> ButtonTypes => Enum.GetValues(typeof(ButtonTypeEnum)).Cast<ButtonTypeEnum>();
+
+        private ChatNode _ParentNode;
+        [JsonIgnore]
+        [BsonIgnore]
+        public ChatNode ParentNode
+        {
+            get { return _ParentNode; }
+            set
+            {
+                if (_ParentNode != value)
+                {
+                    _ParentNode = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand Remove => new ActionCommand((p) => ParentNode.Buttons.Remove(this));
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveUp => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Buttons.IndexOf(this);
+            if (oldIdx <= 0) return;
+
+            ParentNode.Buttons.Move(oldIdx, oldIdx - 1);
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand MoveDown => new ActionCommand((p) =>
+        {
+            var oldIdx = ParentNode.Buttons.IndexOf(this);
+            if (oldIdx >= ParentNode.Buttons.Count - 1) return;
+
+            ParentNode.Buttons.Move(oldIdx, oldIdx + 1);
+        });
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentId { get; set; }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public string ContentEmotion { get; set; }
+
+        private void FillAlias()
+        {
+            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText);
+        }
 
         public override string ToString()
         {

@@ -29,6 +29,13 @@ namespace ANAConversationSimulator.Models.Chat
 
         public bool PostToChat { get; set; } = true;
 
+        public bool DoesRepeat { get; set; }
+        public string RepeatOn { get; set; }
+        public string RepeatAs { get; set; }
+        public int StartPosition { get; set; }
+        public int MaxRepeats { get; set; }
+
+
         private Dictionary<string, string> _items;
         /// <summary>
         /// Contains visible/filtered items in case of <see cref="ButtonTypeEnum.GetItemFromSource"/>

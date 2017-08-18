@@ -1,0 +1,16 @@
+﻿<ContentDialog
+    x:Class="ANAConversationSimulator.UserControls.TextInputDialog"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:ANAConversationSimulator.UserControls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    PrimaryButtonText="Ok"
+    SecondaryButtonText="Cancel"
+    PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
+    SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
+    <Grid>
+        <TextBox Text="{Binding Text, Mode= TwoWay}" HorizontalAlignment="Stretch" Margin="0,20,0,0" PlaceholderText="{Binding PlaceholderText}"/>
+    </Grid>
+</ContentDialog>

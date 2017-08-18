@@ -8,6 +8,7 @@ using ANAConversationPlatform.Models.AgentChat;
 using ANAConversationPlatform.Helpers;
 using System.Threading.Tasks;
 using static ANAConversationPlatform.Helpers.Constants;
+using Newtonsoft.Json.Serialization;
 
 namespace ANAConversationPlatform
 {
@@ -29,12 +30,15 @@ namespace ANAConversationPlatform
             RocketChatSDK.Settings = Configuration.GetSection(nameof(AgentChatSettings)).Get<AgentChatSettings>();
             LiveClientSocketsHelper.Settings = Configuration.GetSection(nameof(LiveClientSocketsServerSettings)).Get<LiveClientSocketsServerSettings>();
             Utils.Settings = Configuration.GetSection(nameof(Helpers.Settings)).Get<Helpers.Settings>();
+            Utils.BasicAuth = Configuration.GetSection(nameof(Helpers.BasicAuth)).Get<Helpers.BasicAuth>();
         }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services
+                .AddMvc()
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); ;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -45,8 +49,8 @@ namespace ANAConversationPlatform
                 .AddFile(Configuration.GetSection("FileLogging"));
 
             RocketChatSDK.Logger = loggerFactory.CreateLogger<RocketChatSDK>();
-            MongoHelper.Logger = loggerFactory.CreateLogger("MongoHelper");
-
+            MongoHelper.Logger = loggerFactory.CreateLogger(nameof(MongoHelper));
+            ChatFlowBuilder.Logger = loggerFactory.CreateLogger(nameof(ChatFlowBuilder));
             Task.Run(async () =>
             {
                 try

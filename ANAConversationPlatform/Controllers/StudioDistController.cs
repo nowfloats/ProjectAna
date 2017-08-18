@@ -29,7 +29,7 @@ namespace ANAConversationPlatform.Controllers
                     });
                 }
             }
-            return BadRequest("Studio Distribution Status Unknown");
+            return BadRequest(new { Message = "Studio Distribution Status Unknown" });
         }
 
         [HttpGet]

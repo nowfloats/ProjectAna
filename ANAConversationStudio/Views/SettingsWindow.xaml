@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
-        xmlns:local="clr-namespace:ANAConversationStudio.Views"
         mc:Ignorable="d"
         Title="Settings" Height="500" Width="600">
     <Grid>
@@ -12,7 +11,7 @@
             <RowDefinition />
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <xctk:PropertyGrid Margin="10" x:Name="SettingsEditor" SelectedObject="{Binding Config}"/>
+        <xctk:PropertyGrid x:Name="SettingsEditor" SelectedObject="{Binding Config}"/>
         <Button Content="Save" Click="SaveClick" Grid.Row="1" Margin="10" HorizontalAlignment="Center" Padding="30,5"/>
     </Grid>
 </Window>

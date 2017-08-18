@@ -1,8 +1,6 @@
-﻿using ANAConversationStudio.Models;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
 namespace ANAConversationStudio.Models.Chat.Sections
 {
@@ -10,9 +8,7 @@ namespace ANAConversationStudio.Models.Chat.Sections
     {
         public ObservableCollection<Coordinates> CoordinatesSet { get; set; } = new ObservableCollection<Coordinates>();
 
-        [ExpandableObject]
         public Axis X { get; set; } = new Axis();
-        [ExpandableObject]
         public Axis Y { get; set; } = new Axis();
         public string Caption { get; set; }
         public GraphTypeEnum GraphType { get; set; }

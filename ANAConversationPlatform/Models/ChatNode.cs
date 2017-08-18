@@ -26,9 +26,11 @@ namespace ANAConversationPlatform.Models
         public string VariableName { get; set; }
         public string ApiMethod { get; set; }
         public string ApiUrl { get; set; }
+        public string ApiResponseDataRoot { get; set; }
         public string NextNodeId { get; set; }
         public string[] RequiredVariables { get; set; }
         public string GroupName { get; set; }
+        public string FlowId { get; set; }
 
         #region Card Node
         public string CardHeader { get; set; }
