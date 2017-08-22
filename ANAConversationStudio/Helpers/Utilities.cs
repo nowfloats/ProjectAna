@@ -16,6 +16,8 @@ using Newtonsoft.Json;
 using System.Security.Cryptography;
 using System.Text;
 using Newtonsoft.Json.Converters;
+using ANAConversationStudio.ViewModels;
+using System.Linq;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -228,6 +230,39 @@ namespace ANAConversationStudio.Helpers
             if (trimNeeded)
                 text = text.Substring(0, Constants.GroupHeaderTextMaxLength) + "...";
             return text;
+        }
+
+        public static void FillConnectionsFromButtonsOfChatNode(NodeViewModel node)
+        {
+            if (node.Network != null)
+                foreach (var btn in node.ChatNode.Buttons)
+                {
+                    if (!string.IsNullOrWhiteSpace(btn.NextNodeId))
+                    {
+                        var destNode = node.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == btn.NextNodeId);
+                        if (destNode != null)
+                        {
+                            var conn = new ConnectionViewModel { SourceConnector = node.OutputConnectors.FirstOrDefault(x => x.Button._id == btn._id), DestConnector = destNode.InputConnectors.FirstOrDefault() };
+                            conn.ConnectionChanged += ConnectionViewModelConnectionChanged;
+                            if (conn.SourceConnector == null || conn.DestConnector == null) continue;
+                            node.Network.Connections.Add(conn);
+                        }
+                    }
+                }
+        }
+
+        public static void ConnectionViewModelConnectionChanged(object s, EventArgs e)
+        {
+            var connection = s as ConnectionViewModel;
+            if (connection.SourceConnector != null)
+            {
+                var sourceBtn = connection.SourceConnector.Button;
+                if (connection.DestConnector != null)
+                {
+                    var destinationNode = connection.DestConnector.ParentNode.ChatNode;
+                    sourceBtn.NextNodeId = destinationNode.Id;
+                }
+            }
         }
     }
 

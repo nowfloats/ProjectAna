@@ -5,6 +5,7 @@ using Utils;
 using System.Windows;
 using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Models;
+using ANAConversationStudio.Helpers;
 
 namespace ANAConversationStudio.ViewModels
 {
@@ -92,21 +93,18 @@ namespace ANAConversationStudio.ViewModels
                 else
                     this.Name = ChatNode.NodeType.ToString();
             }
-
-            foreach (var button in ChatNode.Buttons)
+            if (this.Network != null)
             {
-                if (!this.OutputConnectors.Any(x => x.Button._id == button._id)) //Add only new
-                    this.OutputConnectors.Add(new ConnectorViewModel(button));
-                else
-                    this.OutputConnectors.FirstOrDefault(x => x.Button._id == button._id)?.Invalidate();
+                var connsToRemove = this.Network.Connections.Where(x => this.OutputConnectors.Contains(x.DestConnector) || this.OutputConnectors.Contains(x.SourceConnector)).ToArray();
+                this.Network.Connections.RemoveRange(connsToRemove);
             }
 
-            foreach (var oldConn in this.OutputConnectors.Where(x => !ChatNode.Buttons.Any(y => y._id == x.Button._id)).ToList())
-                this.OutputConnectors.Remove(oldConn);
 
-            var leafConns = this.OutputConnectors.Where(x => !ChatNode.Buttons.Select(y => y._id).Contains(x.Button._id));
-            foreach (var one in leafConns.SelectMany(x => x.AttachedConnections).ToList())
-                this.Network?.Connections.Remove(one);
+            this.OutputConnectors.Clear();
+            foreach (var button in ChatNode.Buttons)
+                this.OutputConnectors.Add(new ConnectorViewModel(button));
+
+            Utilities.FillConnectionsFromButtonsOfChatNode(this);
         }
 
         private ChatNode _chatNode { get; set; }
@@ -120,22 +118,30 @@ namespace ANAConversationStudio.ViewModels
             {
                 if (_chatNode == value) return;
                 _chatNode = value;
+
+                OnChatNodeChanged();
                 OnPropertyChanged("ChatNode");
+            }
+        }
+
+        private void OnChatNodeChanged()
+        {
+            if (ChatNode != null)
+            {
+                ChatNode.PropertyChanged -= ChatNode_PropertyChanged;
+                ChatNode.PropertyChanged += ChatNode_PropertyChanged;
+
+                ChatNode.Buttons.CollectionChanged -= Buttons_CollectionChanged;
+                ChatNode.Buttons.CollectionChanged += Buttons_CollectionChanged;
+
+                InvalidateNode();
             }
         }
 
         public NodeViewModel(ChatNode chatNode, Point? location)
         {
             ChatNode = chatNode;
-
-            ChatNode.PropertyChanged -= ChatNode_PropertyChanged;
-            ChatNode.PropertyChanged += ChatNode_PropertyChanged;
-
-            ChatNode.Buttons.CollectionChanged -= Buttons_CollectionChanged;
-            ChatNode.Buttons.CollectionChanged += Buttons_CollectionChanged;
-
             InputConnectors.Add(new ConnectorViewModel(""));
-            InvalidateNode();
             if (location != null)
             {
                 X = location.Value.X;

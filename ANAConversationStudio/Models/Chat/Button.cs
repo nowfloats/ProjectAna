@@ -237,7 +237,6 @@ namespace ANAConversationStudio.Models.Chat
         //Content
         private string _ButtonText;
         [JsonIgnore]
-        [BsonIgnore]
         public string ButtonText
         {
             get { return _ButtonText; }

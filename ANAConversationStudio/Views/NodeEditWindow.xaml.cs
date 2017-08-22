@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
-using System.Windows.Threading;
+using ANAConversationStudio.Helpers;
 
 namespace ANAConversationStudio.Views
 {
@@ -15,7 +15,7 @@ namespace ANAConversationStudio.Views
         public NodeEditWindow(ChatNode chatNode)
         {
             InitializeComponent();
-            ChatNode = chatNode;
+            ChatNode = chatNode.DeepCopy();
             DataContext = this;
         }
 
@@ -70,6 +70,7 @@ namespace ANAConversationStudio.Views
 
         private void DoneButtonClick(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
         }
 

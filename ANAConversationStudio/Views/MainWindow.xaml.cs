@@ -556,7 +556,16 @@ namespace ANAConversationStudio.Views
             if (this.ViewModel.SelectedChatNode != null)
             {
                 var editor = new NodeEditWindow(this.ViewModel.SelectedChatNode);
-                editor.ShowDialog();
+                var result = editor.ShowDialog();
+                if (result == true)
+                {
+                    var nodeVM = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == editor.ChatNode.Id);
+                    if (nodeVM != null)
+                    {
+                        nodeVM.ChatNode = editor.ChatNode;
+                    }
+                    SetSelectedChatNode(nodeVM.ChatNode);
+                }
             }
         }
 
@@ -901,17 +910,17 @@ namespace ANAConversationStudio.Views
         private void networkControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (networkControl.SelectedNode != null)
-            {
-                var node = (networkControl.SelectedNode as NodeViewModel);
-                if (this.ViewModel.SelectedChatNode != null)
-                    this.ViewModel.SelectedChatNode.PropertyChanged -= SelectedChatNode_PropertyChanged; //Remove old event handler
-
-                this.ViewModel.SelectedChatNode = null;
-                this.ViewModel.SelectedChatNode = node.ChatNode;
-                this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
-            }
+                SetSelectedChatNode((networkControl.SelectedNode as NodeViewModel).ChatNode);
         }
+        private void SetSelectedChatNode(ChatNode chatNode)
+        {
+            if (this.ViewModel.SelectedChatNode != null)
+                this.ViewModel.SelectedChatNode.PropertyChanged -= SelectedChatNode_PropertyChanged; //Remove old event handler
 
+            this.ViewModel.SelectedChatNode = null;
+            this.ViewModel.SelectedChatNode = chatNode;
+            this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
+        }
         private void SelectedChatNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
         {
             var senderNode = sender as ChatNode;

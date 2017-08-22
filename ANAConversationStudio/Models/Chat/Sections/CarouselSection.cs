@@ -78,7 +78,6 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         private string _Title;
         [JsonIgnore]
-        [BsonIgnore]
         public string Title
         {
             get { return _Title; }
@@ -94,7 +93,6 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         private string _Caption;
         [JsonIgnore]
-        [BsonIgnore]
         public string Caption
         {
             get { return _Caption; }
@@ -174,7 +172,6 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
         private string _Text;
         [JsonIgnore]
-        [BsonIgnore]
         public string Text
         {
             get { return _Text; }
