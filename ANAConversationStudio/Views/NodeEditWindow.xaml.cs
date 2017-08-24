@@ -117,7 +117,13 @@ namespace ANAConversationStudio.Views
                 case ButtonTypeEnum.GetEmail:
                 case ButtonTypeEnum.GetPhoneNumber:
                     //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-                    hidden = new[] { nameof(Button.NextNodeId),  nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    break;
+                case ButtonTypeEnum.GetTime:
+                case ButtonTypeEnum.GetDate:
+                case ButtonTypeEnum.GetDateTime:
+                case ButtonTypeEnum.GetLocation:
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue), nameof(Button.PostfixText), nameof(Button.PrefixText) }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.GetImage:
                 case ButtonTypeEnum.GetAudio:
