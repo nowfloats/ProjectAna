@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.16
+VisualStudioVersion = 15.0.26730.10
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ANAConversationStudio", "ANAConversationStudio\ANAConversationStudio.csproj", "{964D06C1-81E3-438D-9DCE-CFA8FB87F04D}"
 EndProject
@@ -19,7 +19,10 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{0D4612DF-0B2B-4801-A0A0-136641B54E4C}"
 	ProjectSection(SolutionItems) = preProject
 		Assets\anaflow.png = Assets\anaflow.png
+		Assets\installer-banner.jpg = Assets\installer-banner.jpg
 	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ANAConversationStudio.Setup", "ANAConversationStudio.Setup\ANAConversationStudio.Setup.vdproj", "{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -101,8 +104,19 @@ Global
 		{B43F2F05-9680-4749-BB5E-29AF01B08B11}.Release|x64.Build.0 = Release|Any CPU
 		{B43F2F05-9680-4749-BB5E-29AF01B08B11}.Release|x86.ActiveCfg = Release|Any CPU
 		{B43F2F05-9680-4749-BB5E-29AF01B08B11}.Release|x86.Build.0 = Release|Any CPU
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Debug|Any CPU.ActiveCfg = Debug
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Debug|ARM.ActiveCfg = Debug
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Debug|x64.ActiveCfg = Debug
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Debug|x86.ActiveCfg = Debug
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Release|Any CPU.ActiveCfg = Release
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Release|ARM.ActiveCfg = Release
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Release|x64.ActiveCfg = Release
+		{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}.Release|x86.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {878CE18B-DBF7-412A-91DB-99EA8BB13325}
 	EndGlobalSection
 EndGlobal
