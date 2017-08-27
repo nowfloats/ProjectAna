@@ -97,6 +97,18 @@ namespace ANAConversationPlatform.Controllers
             return BadRequest(new { Message = "Project with the given id was not found or could not be retrieved!" });
         }
 
+        [HttpGet, BasicAuthentication]
+        public async Task<ActionResult> FetchChatFlowPack([FromQuery] string projectId)
+        {
+            if (string.IsNullOrWhiteSpace(projectId))
+                return BadRequest(new { Message = "Project Id is not provided!" });
+
+            var proj = await MongoHelper.GetChatFlowPackAsync(projectId);
+            if (proj != null)
+                return Ok(proj);
+            return BadRequest(new { Message = "Project with the given id was not found or could not be retrieved!" });
+        }
+
         private void AddAgentChatNodes(List<ChatNode> chatNodes)
         {
             chatNodes.AddRange(new[]

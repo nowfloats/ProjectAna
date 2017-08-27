@@ -9,6 +9,7 @@ using ANAConversationPlatform.Helpers;
 using System.Threading.Tasks;
 using static ANAConversationPlatform.Helpers.Constants;
 using Newtonsoft.Json.Serialization;
+using ANAConversationPlatform.Middleware;
 
 namespace ANAConversationPlatform
 {
@@ -38,7 +39,7 @@ namespace ANAConversationPlatform
         {
             services
                 .AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver()); ;
+                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,6 +48,7 @@ namespace ANAConversationPlatform
             loggerFactory
                 .AddConsole(Configuration.GetSection("Logging"))
                 .AddFile(Configuration.GetSection("FileLogging"));
+            app.UseCors();
 
             RocketChatSDK.Logger = loggerFactory.CreateLogger<RocketChatSDK>();
             MongoHelper.Logger = loggerFactory.CreateLogger(nameof(MongoHelper));
