@@ -301,12 +301,8 @@ namespace ANAConversationStudio.Views
 
         private void StartChatInSimulator()
         {
-            if (StudioContext.Current?.ChatServer?.ServerUrl == null)
-            {
-                System.Windows.MessageBox.Show("No project is loaded at the moment");
-                return;
-            }
-            Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
+            if (StudioContext.IsProjectLoaded(true))
+                Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
         }
 
         private void StartInSimulator_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -332,13 +328,10 @@ namespace ANAConversationStudio.Views
             //Add some margin to the image
             cropRect.Inflate(cropRect.Width / 40, cropRect.Height / 40);
 
-            var currentProj = StudioContext.Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == StudioContext.Current?.ChatFlow?.ProjectId);
-
-            if (currentProj == null)
-            {
-                MessageBox.Show("No chat flow is loaded. Please load a chat flow and try again.");
+            if (!StudioContext.IsProjectLoaded(true))
                 return;
-            }
+
+            var currentProj = StudioContext.CurrentProject();
 
             var resolution = 200;
             var scale = resolution / 96d;
@@ -382,6 +375,18 @@ namespace ANAConversationStudio.Views
                 graphics.DrawImage(originalImage, destinationRectangle.Value, sourceRectangle, System.Drawing.GraphicsUnit.Pixel);
             }
             return croppedImage;
+        }
+
+        private void CopyProjectIdClick(object sender, RoutedEventArgs e)
+        {
+            if (StudioContext.IsProjectLoaded(true))
+                Clipboard.SetText(StudioContext.CurrentProjectId());
+        }
+
+        private void CopyChatURLClick(object sender, RoutedEventArgs e)
+        {
+            if (StudioContext.IsProjectLoaded(true))
+                Clipboard.SetText(StudioContext.CurrentProjectUrl());
         }
     }
 
