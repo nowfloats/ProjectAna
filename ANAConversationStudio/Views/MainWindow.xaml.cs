@@ -17,6 +17,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Windows.Media.Imaging;
 
 namespace ANAConversationStudio.Views
 {
@@ -300,17 +301,92 @@ namespace ANAConversationStudio.Views
 
         private void StartChatInSimulator()
         {
-            if (StudioContext.Current?.ChatServer?.ServerUrl == null)
-            {
-                System.Windows.MessageBox.Show("No project is loaded at the moment");
-                return;
-            }
-            Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.Current.ChatServer.ServerUrl + "/api/Conversation/chat?projectId=" + StudioContext.Current.ChatFlow.ProjectId));
+            if (StudioContext.IsProjectLoaded(true))
+                Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
         }
 
         private void StartInSimulator_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             StartChatInSimulator();
+        }
+
+        private void ExportAsImageClick(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                Rect actualContentRect = DetermineAreaOfNodes(this.networkControl.Nodes);
+                ExportUIElementAsImage(this.networkControl, actualContentRect);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Oops! Something went wrong!");
+            }
+        }
+
+        public void ExportUIElementAsImage(UIElement element, Rect cropRect)
+        {
+            //Add some margin to the image
+            cropRect.Inflate(cropRect.Width / 40, cropRect.Height / 40);
+
+            if (!StudioContext.IsProjectLoaded(true))
+                return;
+
+            var currentProj = StudioContext.CurrentProject();
+
+            var resolution = 200;
+            var scale = resolution / 96d;
+            var target = new RenderTargetBitmap((int)(scale * (element.RenderSize.Width)), (int)(scale * (element.RenderSize.Height)), scale * 96, scale * 96, PixelFormats.Pbgra32);
+            target.Render(element);
+
+            var encoder = new PngBitmapEncoder();
+            var outputFrame = BitmapFrame.Create(target);
+            encoder.Frames.Add(outputFrame);
+
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "ANA Conversation Studio");
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            var fileName = currentProj.Name + " " + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + ".png";
+
+            var fullPath = Path.Combine(dir, fileName);
+
+            using (var ms = new MemoryStream())
+            {
+                encoder.Save(ms);
+                ms.Position = 0;
+                var bmp = new System.Drawing.Bitmap(ms);
+                var croppedBmp = CropImage(bmp, new System.Drawing.Rectangle((int)(cropRect.X * scale), (int)(cropRect.Y * scale), (int)(cropRect.Width * scale), (int)(cropRect.Height * scale)));
+                using (var file = File.OpenWrite(fullPath))
+                    croppedBmp.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+            }
+
+            Process.Start("explorer", "/select," + fullPath);
+        }
+
+        static System.Drawing.Bitmap CropImage(System.Drawing.Image originalImage, System.Drawing.Rectangle sourceRectangle, System.Drawing.Rectangle? destinationRectangle = null)
+        {
+            if (destinationRectangle == null)
+                destinationRectangle = new System.Drawing.Rectangle(System.Drawing.Point.Empty, sourceRectangle.Size);
+
+            var croppedImage = new System.Drawing.Bitmap(destinationRectangle.Value.Width,
+                destinationRectangle.Value.Height);
+            using (var graphics = System.Drawing.Graphics.FromImage(croppedImage))
+            {
+                graphics.FillRectangle(new System.Drawing.SolidBrush(System.Drawing.Color.White), 0, 0, croppedImage.Width, croppedImage.Height);
+                graphics.DrawImage(originalImage, destinationRectangle.Value, sourceRectangle, System.Drawing.GraphicsUnit.Pixel);
+            }
+            return croppedImage;
+        }
+
+        private void CopyProjectIdClick(object sender, RoutedEventArgs e)
+        {
+            if (StudioContext.IsProjectLoaded(true))
+                Clipboard.SetText(StudioContext.CurrentProjectId());
+        }
+
+        private void CopyChatURLClick(object sender, RoutedEventArgs e)
+        {
+            if (StudioContext.IsProjectLoaded(true))
+                Clipboard.SetText(StudioContext.CurrentProjectUrl());
         }
     }
 

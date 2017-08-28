@@ -191,6 +191,32 @@ namespace ANAConversationStudio.Helpers
                 return respParsed;
             }
         }
+
+        public static bool IsProjectLoaded(bool showMsg)
+        {
+            if (Current?.ChatServer?.ServerUrl == null)
+            {
+                if (showMsg)
+                    MessageBox.Show("No chat flow is loaded. Please load a chat flow and try again.");
+                return false;
+            }
+            return true;
+        }
+
+        public static string CurrentProjectUrl()
+        {
+            return Current?.ChatServer?.ServerUrl + "/api/Conversation/chat?projectId=" + CurrentProjectId();
+        }
+
+        public static string CurrentProjectId()
+        {
+            return Current?.ChatFlow?.ProjectId;
+        }
+
+        public static ANAProject CurrentProject()
+        {
+            return Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == Current?.ChatFlow?.ProjectId);
+        }
     }
 
     public class APIResponse

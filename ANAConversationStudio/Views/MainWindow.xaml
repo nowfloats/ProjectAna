@@ -671,13 +671,15 @@
                     </MenuItem.ItemTemplate>
                 </MenuItem>
                 <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick"/>
+                <MenuItem Header="Export as image" Click="ExportAsImageClick"/>
                 <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
             <MenuItem Header="Tools" Height="30">
                 <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
                 <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
-
+                <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick"/>
+                <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick"/>
             </MenuItem>
             <MenuItem Header="Help" Name="HelpMenu" Height="30">
                 <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
