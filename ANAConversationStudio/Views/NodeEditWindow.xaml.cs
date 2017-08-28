@@ -6,7 +6,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Data;
 using System.Globalization;
-using System.Windows.Threading;
+using ANAConversationStudio.Helpers;
 
 namespace ANAConversationStudio.Views
 {
@@ -15,7 +15,7 @@ namespace ANAConversationStudio.Views
         public NodeEditWindow(ChatNode chatNode)
         {
             InitializeComponent();
-            ChatNode = chatNode;
+            ChatNode = chatNode.DeepCopy();
             DataContext = this;
         }
 
@@ -70,6 +70,7 @@ namespace ANAConversationStudio.Views
 
         private void DoneButtonClick(object sender, RoutedEventArgs e)
         {
+            DialogResult = true;
             Close();
         }
 
@@ -116,22 +117,28 @@ namespace ANAConversationStudio.Views
                 case ButtonTypeEnum.GetEmail:
                 case ButtonTypeEnum.GetPhoneNumber:
                     //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-                    hidden = new[] { nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    break;
+                case ButtonTypeEnum.GetTime:
+                case ButtonTypeEnum.GetDate:
+                case ButtonTypeEnum.GetDateTime:
+                case ButtonTypeEnum.GetLocation:
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue), nameof(Button.PostfixText), nameof(Button.PrefixText) }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.GetImage:
                 case ButtonTypeEnum.GetAudio:
                 case ButtonTypeEnum.GetVideo:
                     //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-                    hidden = new[] { nameof(Button.DeepLinkUrl), nameof(Button.PlaceholderText), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.PlaceholderText), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.GetItemFromSource:
-                    hidden = new[] { nameof(Button.DeepLinkUrl), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.NextNode:
-                    hidden = new[] { nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.PlaceholderText), }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.PlaceholderText), }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.DeepLink:
-                    hidden = new[] { nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.PlaceholderText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+                    hidden = new[] { nameof(Button.NextNodeId), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.PlaceholderText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
                     break;
                 case ButtonTypeEnum.GetAgent:
                     hidden = true; //Hide all. Probably!

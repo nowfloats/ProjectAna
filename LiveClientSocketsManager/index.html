@@ -59,7 +59,7 @@
     <script>
         var socket = io();
         socket.on('connect', function () {
-            socket.emit('join', "NIZAM " + Math.trunc(Math.random()*1000));
+            socket.emit('join', "Client " + Math.trunc(Math.random()*1000));
         });
         socket.on('message', function (msg) {
             document.getElementById('messages').innerHTML += "<li>" + msg + "</li>";

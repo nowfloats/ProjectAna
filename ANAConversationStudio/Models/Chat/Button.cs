@@ -237,7 +237,6 @@ namespace ANAConversationStudio.Models.Chat
         //Content
         private string _ButtonText;
         [JsonIgnore]
-        [BsonIgnore]
         public string ButtonText
         {
             get { return _ButtonText; }
@@ -332,6 +331,22 @@ namespace ANAConversationStudio.Models.Chat
         DeepLink,
         GetAgent,
         ShowConfirmation,
-        FetchChatFlow
+        FetchChatFlow,
+        /// <summary>
+        /// Format: yyyy-MM-dd
+        /// </summary>
+        GetDate,
+        /// <summary>
+        /// Format: HH:mm:ss
+        /// </summary>
+        GetTime,
+        /// <summary>
+        /// Format: yyyy-MM-ddTHH:mm:ss
+        /// </summary>
+        GetDateTime,
+        /// <summary>
+        /// Format: [Latitude],[Longitude]
+        /// </summary>
+        GetLocation
     }
 }

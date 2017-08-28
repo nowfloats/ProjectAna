@@ -28,7 +28,12 @@ namespace ANAConversationStudio.Helpers
                         foreach (Section section in chatNode.Sections)
                             FillSectionWithContent(section, content);
                         foreach (Button button in chatNode.Buttons)
-                            button.ButtonText = content.GetFor(button)?.ButtonText;
+                        {
+                            var cnt = content.GetFor(button);
+                            button.ButtonText = cnt?.ButtonText;
+                            button.ContentId = cnt?._id;
+                            button.ContentEmotion = cnt?.Emotion;
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -66,6 +71,7 @@ namespace ANAConversationStudio.Helpers
                         imgSection.Title = imgContent.Title;
                         imgSection.Caption = imgContent.Caption;
                         imgSection.ContentId = imgContent._id;
+                        imgSection.ContentEmotion = imgContent.Emotion;
                     }
                     break;
 
@@ -75,7 +81,8 @@ namespace ANAConversationStudio.Helpers
                     if (textContent != null)
                     {
                         textSection.Text = textContent.SectionText;
-                        textSection.ContentId = textSection._id;
+                        textSection.ContentId = textContent._id;
+                        textSection.ContentEmotion = textContent.Emotion;
                     }
                     break;
 
@@ -87,6 +94,7 @@ namespace ANAConversationStudio.Helpers
                         audioSection.Title = audioContent.Title;
                         audioSection.Caption = audioContent.Caption;
                         audioSection.ContentId = audioContent._id;
+                        audioSection.ContentEmotion = audioContent.Emotion;
                     }
                     break;
 
@@ -98,6 +106,7 @@ namespace ANAConversationStudio.Helpers
                         videoSection.Title = videoContent.Title;
                         videoSection.Caption = videoContent.Caption;
                         videoSection.ContentId = videoContent._id;
+                        videoSection.ContentEmotion = videoContent.Emotion;
                     }
                     break;
 
@@ -109,6 +118,7 @@ namespace ANAConversationStudio.Helpers
                         embeddedHtmlSection.Title = embeddedHtmlContent.Title;
                         embeddedHtmlSection.Caption = embeddedHtmlContent.Caption;
                         embeddedHtmlSection.ContentId = embeddedHtmlContent._id;
+                        embeddedHtmlSection.ContentEmotion = embeddedHtmlContent.Emotion;
                     }
                     break;
 
@@ -120,6 +130,7 @@ namespace ANAConversationStudio.Helpers
                         carouselSection.Title = carContent.Title;
                         carouselSection.Caption = carContent.Caption;
                         carouselSection.ContentId = carContent._id;
+                        carouselSection.ContentEmotion = carContent.Emotion;
                     }
                     if (carouselSection.Items != null)
                         foreach (var carItem in carouselSection.Items)

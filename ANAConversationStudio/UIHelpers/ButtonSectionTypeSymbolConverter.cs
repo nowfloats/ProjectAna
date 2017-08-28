@@ -76,6 +76,15 @@ namespace ANAConversationStudio.UIHelpers
                         break;
                     case ButtonTypeEnum.FetchChatFlow:
                         return "\uE167";
+
+                    case ButtonTypeEnum.GetDateTime:
+                        return "\uE163";
+                    case ButtonTypeEnum.GetDate:
+                        return "\uE163";
+                    case ButtonTypeEnum.GetTime:
+                        return "\uE121";
+                    case ButtonTypeEnum.GetLocation:
+                        return "\uE81D";
                     default:
                         break;
                 }

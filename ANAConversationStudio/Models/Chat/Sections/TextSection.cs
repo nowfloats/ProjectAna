@@ -15,7 +15,6 @@ namespace ANAConversationStudio.Models.Chat.Sections
         //Content
         private string _Text;
         [JsonIgnore]
-        [BsonIgnore]
         public string Text
         {
             get { return _Text; }

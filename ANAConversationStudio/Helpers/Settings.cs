@@ -8,7 +8,33 @@ namespace ANAConversationStudio.Helpers
 {
     public class Settings
     {
-        const string FILE_NAME = "Settings.json";
+        const string SettingsFile = "Settings";
+        const string SettingsFileExtention = ".json";
+        private static string SettingsJsonDirectory
+        {
+            get
+            {
+#if STANDALONE
+                return ""; //Use current directory to save settings when in standalone mode
+#else
+                var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "ANAConversationStudio");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+#endif
+            }
+        }
+        public static string SettingsJsonBackupDirectory
+        {
+            get
+            {
+                var dir = Path.Combine(SettingsJsonDirectory, "SettingsBackups");
+                if (!Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                return dir;
+            }
+        }
+        private static string SettingsJsonPath => Path.Combine(SettingsJsonDirectory, SettingsFile + SettingsFileExtention);
 
         public List<ChatServerConnection> SavedChatServerConnections { get; set; } = new List<ChatServerConnection>();
         public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
@@ -16,9 +42,9 @@ namespace ANAConversationStudio.Helpers
         {
             try
             {
-                if (!File.Exists(FILE_NAME)) return false;
+                if (!File.Exists(SettingsJsonPath)) return false;
 
-                JsonConvert.DeserializeObject<Settings>(File.ReadAllText(FILE_NAME));
+                JsonConvert.DeserializeObject<Settings>(File.ReadAllText(SettingsJsonPath));
                 //If the settings file gets parsed without decryption, it means, the password is not set yet.
                 return false;
             }
@@ -29,14 +55,20 @@ namespace ANAConversationStudio.Helpers
         }
         public static Settings Load(string password)
         {
-            if (File.Exists(FILE_NAME))
-                return JsonConvert.DeserializeObject<Settings>(Utilities.Decrypt(File.ReadAllText(FILE_NAME), password));
+            if (File.Exists(SettingsJsonPath))
+                return JsonConvert.DeserializeObject<Settings>(Utilities.Decrypt(File.ReadAllText(SettingsJsonPath), password));
             return new Settings();
         }
 
         public void Save(string password)
         {
-            File.WriteAllText(FILE_NAME, Utilities.Encrypt(JsonConvert.SerializeObject(this), password));
+            File.WriteAllText(SettingsJsonPath, Utilities.Encrypt(JsonConvert.SerializeObject(this), password));
+        }
+
+        public static void Delete()
+        {
+            if (File.Exists(SettingsJsonPath))
+                File.Move(SettingsJsonPath, Path.Combine(SettingsJsonBackupDirectory, SettingsFile + "-" + Guid.NewGuid().ToString() + SettingsFileExtention));
         }
     }
 
@@ -46,7 +78,7 @@ namespace ANAConversationStudio.Helpers
         public string Name { get; set; }
         [PropertyOrder(2)]
         public string ServerUrl { get; set; }
-        
+
         [PropertyOrder(3)]
         public string APIKey { get; set; }
         [PropertyOrder(4)]

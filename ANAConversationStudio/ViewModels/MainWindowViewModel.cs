@@ -217,7 +217,7 @@ namespace ANAConversationStudio.ViewModels
             // Create a new connection to add to the view-model.
             //
             var connection = new ConnectionViewModel();
-            connection.ConnectionChanged += Conn_ConnectionChanged;
+            connection.ConnectionChanged += Utilities.ConnectionViewModelConnectionChanged;
 
             if (draggedOutConnector.Type == ConnectorType.Output)
             {
@@ -572,22 +572,8 @@ namespace ANAConversationStudio.ViewModels
                 this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections  
 
                 foreach (var node in nodeVMs)
-                {
-                    foreach (var btn in node.ChatNode.Buttons)
-                    {
-                        if (!string.IsNullOrWhiteSpace(btn.NextNodeId))
-                        {
-                            var destNode = nodeVMs.FirstOrDefault(x => x.ChatNode.Id == btn.NextNodeId);
-                            if (destNode != null)
-                            {
-                                var conn = new ConnectionViewModel { SourceConnector = node.OutputConnectors.FirstOrDefault(x => x.Button._id == btn._id), DestConnector = destNode.InputConnectors.FirstOrDefault() };
-                                conn.ConnectionChanged += Conn_ConnectionChanged;
-                                if (conn.SourceConnector == null || conn.DestConnector == null) continue;
-                                this.Network.Connections.Add(conn);
-                            }
-                        }
-                    }
-                }
+                    Utilities.FillConnectionsFromButtonsOfChatNode(node);
+
                 return true;
             }
             catch (Exception ex)
@@ -626,18 +612,5 @@ namespace ANAConversationStudio.ViewModels
             }
         }
 
-        private void Conn_ConnectionChanged(object sender, EventArgs e)
-        {
-            var connection = sender as ConnectionViewModel;
-            if (connection.SourceConnector != null)
-            {
-                var sourceBtn = connection.SourceConnector.Button;
-                if (connection.DestConnector != null)
-                {
-                    var destinationNode = connection.DestConnector.ParentNode.ChatNode;
-                    sourceBtn.NextNodeId = destinationNode.Id;
-                }
-            }
-        }
     }
 }
