@@ -671,6 +671,7 @@
                     </MenuItem.ItemTemplate>
                 </MenuItem>
                 <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick"/>
+                <MenuItem Header="Export as image" Click="ExportAsImageClick"/>
                 <MenuItem Header="Settings" Click="SettingsClick"/>
                 <MenuItem Header="Exit" Click="ExitClick"/>
             </MenuItem>
