@@ -125,6 +125,22 @@ namespace ANAConversationSimulator.Models.Chat
         GetAgent,
         ApiCall,
         ShowConfirmation,
-        FetchChatFlow
+        FetchChatFlow,
+        /// <summary>
+        /// Format: yyyy-MM-dd
+        /// </summary>
+        GetDate,
+        /// <summary>
+        /// Format: HH:mm:ss
+        /// </summary>
+        GetTime,
+        /// <summary>
+        /// Format: yyyy-MM-ddTHH:mm:ss
+        /// </summary>
+        GetDateTime,
+        /// <summary>
+        /// Format: [Latitude],[Longitude]
+        /// </summary>
+        GetLocation
     }
 }
