@@ -96,7 +96,10 @@ namespace ANAConversationStudio.ViewModels
             if (this.Network != null)
             {
                 var connsToRemove = this.Network.Connections.Where(x => this.OutputConnectors.Contains(x.DestConnector) || this.OutputConnectors.Contains(x.SourceConnector)).ToArray();
+                //Normally, when connections are removed, Button.NextNodeId will be set to null. We don't want that behaviour here. 
+                this.Network.ActOnButtonNextNodeIds = false;
                 this.Network.Connections.RemoveRange(connsToRemove);
+                this.Network.ActOnButtonNextNodeIds = true;
             }
 
 

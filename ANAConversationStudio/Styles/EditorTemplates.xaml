@@ -13,7 +13,7 @@
     <ui:ButtonSectionTypeSymbolConverter x:Key="ButtonSectionTypeSymbolConverter"/>
     <views:ButtonTypeToFieldVisibilityConverter x:Key="ButtonTypeToFieldVisibilityConverter"/>
     <BooleanToVisibilityConverter x:Key="B2V"/>
-    
+
     <Style x:Key="SectionTypeIconTextblockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}"/>
         <Setter Property="FontSize" Value="20"/>
@@ -50,7 +50,7 @@
         <Setter Property="Foreground" Value="White" />
         <Setter Property="VerticalAlignment" Value="Center" />
     </Style>
-    
+
     <Style x:Key="MoveUpButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
         <Setter Property="Content" Value="&#xE96D;" />
         <Setter Property="Command" Value="{Binding MoveUp}" />
@@ -169,6 +169,11 @@
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Text">
+                    <uc:TableRowUserControl.Field>
+                        <TextBox Text="{Binding ButtonName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Message">
                     <uc:TableRowUserControl.Field>
                         <TextBox Text="{Binding ButtonText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
                     </uc:TableRowUserControl.Field>

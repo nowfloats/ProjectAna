@@ -10,6 +10,7 @@ using ANAConversationStudio.Models.Chat;
 using ANAConversationStudio.Helpers;
 using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections.ObjectModel;
 
 namespace ANAConversationStudio.ViewModels
 {
@@ -529,18 +530,28 @@ namespace ANAConversationStudio.ViewModels
 
     public partial class MainWindowViewModel : AbstractModelBase
     {
-        private ChatNode _SelectedChatNode;
-        public ChatNode SelectedChatNode
+        private ObservableCollection<ChatFlowSearchItem> _SearchResults;
+        public ObservableCollection<ChatFlowSearchItem> SearchResults
         {
-            get { return _SelectedChatNode; }
+            get { return _SearchResults; }
             set
             {
-                if (_SelectedChatNode != value)
+                if (_SearchResults != value)
                 {
-                    _SelectedChatNode = value;
-                    OnPropertyChanged(nameof(SelectedChatNode));
+                    _SearchResults = value;
+                    OnPropertyChanged(nameof(SearchResults));
                 }
             }
+        }
+
+        public void SearchInNodes(string keywords)
+        {
+            SearchResults = new ObservableCollection<ChatFlowSearchItem>(Network.Nodes.Select(node => node.ChatNode.SearchNode(keywords)).Where(x => x != null));
+            if (SearchResults.Count == 0)
+                SearchResults = new ObservableCollection<ChatFlowSearchItem>
+                {
+                    new ChatFlowSearchItem { NoResults = true  }
+                };
         }
 
         public async Task SaveLoadedChat()
@@ -588,6 +599,7 @@ namespace ANAConversationStudio.ViewModels
         {
             try
             {
+                if (!this.Network.ActOnButtonNextNodeIds) return;
                 if (e.NewItems != null)
                     foreach (ConnectionViewModel item in e.NewItems)
                     {

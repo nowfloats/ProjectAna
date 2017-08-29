@@ -32,6 +32,9 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
                 if (Utils.IsSectionTypePresentInNode(parentNode, SectionTypeEnum.PrintOTP))
                     button.VariableValue = PrintOTPSection.OTP;
 
+                if (string.IsNullOrWhiteSpace(button.ButtonText))
+                    button.ButtonText = button.ButtonName;
+
                 var userData = new Dictionary<string, string>();
                 switch (button.ButtonType)
                 {

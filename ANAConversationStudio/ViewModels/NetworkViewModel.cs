@@ -39,6 +39,7 @@ namespace ANAConversationStudio.ViewModels
                 return nodes;
             }
         }
+        public bool ActOnButtonNextNodeIds = true;
 
         private void Nodes_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {

@@ -5,6 +5,7 @@
     xmlns:Controls="clr-namespace:ANAConversationStudio.Controls"
     xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
     xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
+    xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:ZoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
     xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"
     Title="ANA Conversation Studio" 
@@ -319,7 +320,7 @@
                         SizeChanged="Node_SizeChanged"
                         Background="{StaticResource nodeFillBrush}"
                         BorderThickness="1.3"
-                        BorderBrush="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}"
+                        BorderBrush="{StaticResource nodeBorderBrush}"
                         CornerRadius="10"
                         >
 
@@ -354,13 +355,13 @@
                             <Border 
                                 CornerRadius="8"
                                 Margin="6,0,6,0"
-                                Background="{StaticResource nodeHeaderBorderBrush}"
+                                Background="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
                                 Grid.Row="0">
                                 <!-- The name of the node. -->
                                 <Grid>
-                                    <Grid Height="18" Background="{StaticResource nodeHeaderBorderBrush}" VerticalAlignment="Bottom"/>
+                                    <Grid Height="18" Background="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}" VerticalAlignment="Bottom"/>
                                     <StackPanel
                                         Orientation="Horizontal"
                                         HorizontalAlignment="Center"
@@ -660,31 +661,72 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Menu BorderBrush="{StaticResource PrimaryHueLightBrush}" Foreground="{StaticResource FileMenuForegroundBrush}" BorderThickness="0,0,0,1" Grid.Row="0" x:Name="menu" HorizontalAlignment="Stretch" VerticalAlignment="Top" >
-            <MenuItem Header="File" x:Name="FileMenu" Height="30">
-                <MenuItem Header="New Chat Flow" Click="NewChatFlowClick"/>
-                <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
-                    <MenuItem.ItemTemplate>
-                        <DataTemplate>
-                            <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="SavedConnectionClick"/>
-                        </DataTemplate>
-                    </MenuItem.ItemTemplate>
-                </MenuItem>
-                <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick"/>
-                <MenuItem Header="Export as image" Click="ExportAsImageClick"/>
-                <MenuItem Header="Settings" Click="SettingsClick"/>
-                <MenuItem Header="Exit" Click="ExitClick"/>
-            </MenuItem>
-            <MenuItem Header="Tools" Height="30">
-                <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
-                <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
-                <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick"/>
-                <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick"/>
-            </MenuItem>
-            <MenuItem Header="Help" Name="HelpMenu" Height="30">
-                <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
-            </MenuItem>
-        </Menu>
+        <Border Grid.Row="0" BorderBrush="{StaticResource PrimaryHueLightBrush}" BorderThickness="0,0,0,1"  HorizontalAlignment="Stretch" VerticalAlignment="Top" >
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Menu Foreground="{StaticResource FileMenuForegroundBrush}" x:Name="menu" >
+                    <MenuItem Header="File" x:Name="FileMenu" Height="30">
+                        <MenuItem Header="New Chat Flow" Click="NewChatFlowClick"/>
+                        <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
+                            <MenuItem.ItemTemplate>
+                                <DataTemplate>
+                                    <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="SavedConnectionClick"/>
+                                </DataTemplate>
+                            </MenuItem.ItemTemplate>
+                        </MenuItem>
+                        <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick"/>
+                        <MenuItem Header="Export as image" Click="ExportAsImageClick"/>
+                        <MenuItem Header="Settings" Click="SettingsClick"/>
+                        <MenuItem Header="Exit" Click="ExitClick"/>
+                    </MenuItem>
+                    <MenuItem Header="Tools" Height="30">
+                        <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
+                        <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
+                        <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick"/>
+                        <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick"/>
+                    </MenuItem>
+                    <MenuItem Header="Help" Name="HelpMenu" Height="30">
+                        <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
+                    </MenuItem>
+                </Menu>
+                <Grid Grid.Column="1" Margin="0,0,20,0">
+                    <toolkit:WatermarkTextBox VerticalAlignment="Center" Watermark="Search nodes" Width="200" KeyUp="SearchTextboxKeyUp" GotFocus="SearchTextboxGotFocus" />
+                    <Popup IsOpen="{Binding SearchResults, Converter={StaticResource N2B}}" MaxHeight="400" MaxWidth="300">
+                        <ListBox x:Name="SearchResultsListBox" Background="White" BorderThickness="1,1,1,0" BorderBrush="{StaticResource PrimaryHueDarkBrush}" ItemsSource="{Binding SearchResults}" SelectionChanged="SearchResultSelectedChanged">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Margin" Value="0"/>
+                                    <Setter Property="Padding" Value="10"/>
+                                    <Setter Property="BorderBrush" Value="{StaticResource PrimaryHueDarkBrush}" />
+                                    <Setter Property="BorderThickness" Value="0,0,0,1" />
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel>
+                                        <TextBlock TextWrapping="Wrap" Visibility="{Binding NodeText, Converter={StaticResource N2V}}">
+                                            <Run FontStyle="Italic" Text="Node: "/><Run Text="{Binding NodeText}"/>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" Visibility="{Binding SectionText, Converter={StaticResource N2V}}">
+                                            <Run FontStyle="Italic" Text="Section: "/><Run Text="{Binding SectionText}"/>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" Visibility="{Binding ButtonText, Converter={StaticResource N2V}}">
+                                            <Run FontStyle="Italic" Text="Button: "/><Run Text="{Binding ButtonText}"/>
+                                        </TextBlock>
+                                        <TextBlock TextWrapping="Wrap" Foreground="Gray" Visibility="{Binding NoResults, Converter={StaticResource B2V}}">
+                                            <Run FontStyle="Italic" Text="No results"/>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                    </Popup>
+                </Grid>
+            </Grid>
+        </Border>
         <DockPanel Grid.Row="1" >
 
             <!-- Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons. -->
@@ -757,7 +799,31 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save"/>
                 <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
-                <Button Grid.Column="2" Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)"/>
+                <ItemsControl Grid.Column="2" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemContainerStyle>
+                        <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                            <Setter Property="Margin" Value="5,0"/>
+                        </Style>
+                    </ItemsControl.ItemContainerStyle>
+                    <Button Padding="5,0" Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)">
+                        <TextBlock>
+                            <Run Text="&#xE96F;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
+                            <Run Text="Previous Node"/>
+                        </TextBlock>
+                    </Button>
+                    <Button Padding="5,0" Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)">
+                        <TextBlock>
+                            <Run Text="Next Node"/>
+                            <Run Text="&#xE970;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
+                        </TextBlock>
+                    </Button>
+                    <Button Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)"/>
+                </ItemsControl>
                 <!-- 
             The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
             -->
@@ -896,7 +962,6 @@
                             QueryConnectionFeedback="networkControl_QueryConnectionFeedback"
                             ConnectionDragging="networkControl_ConnectionDragging"                            
                             ConnectionDragCompleted="networkControl_ConnectionDragCompleted"
-                            SelectionChanged="networkControl_SelectionChanged"
                             MouseDown="networkControl_MouseDown"
                             MouseUp="networkControl_MouseUp"
                             MouseMove="networkControl_MouseMove"

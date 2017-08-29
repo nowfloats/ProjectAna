@@ -60,7 +60,7 @@ namespace ANAConversationStudio.Models.Chat.Sections
             }
         }
 
-        protected virtual void FillAlias()
+        protected override void FillAlias()
         {
             Alias = Utilities.TrimText(SectionType + "");
         }

@@ -18,6 +18,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
+using System.Windows.Threading;
 
 namespace ANAConversationStudio.Views
 {
@@ -117,7 +118,6 @@ namespace ANAConversationStudio.Views
         private void DeleteSelectedNodes_Executed(object sender, ExecutedRoutedEventArgs e)
         {
             this.ViewModel.DeleteSelectedNodes();
-            ResetEditors();
         }
 
         /// <summary>
@@ -135,7 +135,6 @@ namespace ANAConversationStudio.Views
         {
             var node = (NodeViewModel)e.Parameter;
             this.ViewModel.DeleteNode(node);
-            ResetEditors();
         }
 
         /// <summary>
@@ -388,6 +387,52 @@ namespace ANAConversationStudio.Views
             if (StudioContext.IsProjectLoaded(true))
                 Clipboard.SetText(StudioContext.CurrentProjectUrl());
         }
+
+        private void SearchTextboxKeyUp(object sender, KeyEventArgs e)
+        {
+            var tb = sender as TextBox;
+            if (e.Key == Key.Escape || string.IsNullOrWhiteSpace(tb.Text))
+                this.ViewModel.SearchResults = null;
+            else
+                this.ViewModel.SearchInNodes(tb.Text);
+        }
+
+        DispatcherTimer searchTimer;
+        private void SearchResultSelectedChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var selectedItem = (sender as ListBox).SelectedItem as Models.ChatFlowSearchItem;
+            if (selectedItem == null) return;
+
+            if (!string.IsNullOrWhiteSpace(selectedItem.NodeId))
+            {
+                var selectedNode = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == selectedItem.NodeId);
+                networkControl.SelectedNode = selectedNode;
+                ZoomToNode(selectedNode);
+                //networkControl.BringSelectedNodesIntoView();
+
+                searchTimer = new DispatcherTimer() { Interval = TimeSpan.FromSeconds(1) };
+                searchTimer.Tick += (s, args) =>
+                {
+                    var t = s as DispatcherTimer;
+                    t.Stop();
+                    this.ViewModel.SearchResults = null;
+                };
+                searchTimer.Start();
+            }
+        }
+
+        private void ZoomToNode(NodeViewModel selectedNode)
+        {
+            var actualContentRect = DetermineAreaOfNodes(new List<NodeViewModel>() { selectedNode });
+            actualContentRect.Inflate(networkControl.ActualWidth / 40, networkControl.ActualHeight / 40);
+            zoomAndPanControl.AnimatedZoomTo(actualContentRect);
+        }
+
+        private void SearchTextboxGotFocus(object sender, RoutedEventArgs e)
+        {
+            if (sender is TextBox tb && !string.IsNullOrWhiteSpace(tb.Text))
+                this.ViewModel.SearchInNodes(tb.Text);
+        }
     }
 
     /// <summary>
@@ -629,18 +674,39 @@ namespace ANAConversationStudio.Views
 
         private void OpenNodeEditor()
         {
-            if (this.ViewModel.SelectedChatNode != null)
+            var selectedNode = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.IsSelected);
+            if (selectedNode != null)
             {
-                var editor = new NodeEditWindow(this.ViewModel.SelectedChatNode);
+                var editor = new NodeEditWindow(selectedNode.ChatNode);
                 var result = editor.ShowDialog();
+
+                //when editor window is opened, mouse is left captured with the selected node item, it has to be released.
+                var nodeUIItem = this.networkControl.FindAssociatedNodeItem(selectedNode);
+                if (nodeUIItem != null)
+                {
+                    if (Mouse.PrimaryDevice != null)
+                    {
+                        nodeUIItem.RaiseEvent(new MouseButtonEventArgs(Mouse.PrimaryDevice, 0, MouseButton.Left)
+                        {
+                            RoutedEvent = Mouse.MouseUpEvent,
+                            Source = this
+                        });
+                    }
+                }
+
                 if (result == true)
                 {
                     var nodeVM = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == editor.ChatNode.Id);
                     if (nodeVM != null)
                     {
                         nodeVM.ChatNode = editor.ChatNode;
+
+                        if (nodeVM.ChatNode.IsStartNode)
+                        {
+                            foreach (var otherStartNode in this.ViewModel.Network.Nodes.Where(x => x.ChatNode.Id != nodeVM.ChatNode.Id && x.ChatNode.IsStartNode))
+                                otherStartNode.ChatNode.IsStartNode = false;
+                        }
                     }
-                    SetSelectedChatNode(nodeVM.ChatNode);
                 }
             }
         }
@@ -983,26 +1049,7 @@ namespace ANAConversationStudio.Views
             }
         }
 
-        private void networkControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (networkControl.SelectedNode != null)
-                SetSelectedChatNode((networkControl.SelectedNode as NodeViewModel).ChatNode);
-        }
-        private void SetSelectedChatNode(ChatNode chatNode)
-        {
-            if (this.ViewModel.SelectedChatNode != null)
-                this.ViewModel.SelectedChatNode.PropertyChanged -= SelectedChatNode_PropertyChanged; //Remove old event handler
 
-            this.ViewModel.SelectedChatNode = null;
-            this.ViewModel.SelectedChatNode = chatNode;
-            this.ViewModel.SelectedChatNode.PropertyChanged += SelectedChatNode_PropertyChanged;
-        }
-        private void SelectedChatNode_PropertyChanged(object sender, System.ComponentModel.PropertyChangedEventArgs e)
-        {
-            var senderNode = sender as ChatNode;
-            if (e.PropertyName == nameof(ChatNode.IsStartNode)) //When is start node is changed
-                this.ViewModel.Network.Nodes.Select(x => x.ChatNode).Where(x => x.Id != senderNode.Id && x.IsStartNode).ToList().ForEach(x => x.IsStartNode = false);
-        }
 
         private async void SaveButtonClick(object sender, RoutedEventArgs e)
         {
@@ -1018,6 +1065,13 @@ namespace ANAConversationStudio.Views
             try
             {
                 if (this.ViewModel.Network == null) return;
+
+                if (this.ViewModel.Network.Nodes.Count > 0 && !this.ViewModel.Network.Nodes.Any(x => x.ChatNode.IsStartNode))
+                {
+                    MessageBox.Show("Please mark a node in the chat flow as start node.", "Start node is not set!", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
+                }
+
                 await this.ViewModel.SaveLoadedChat();
                 StatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString();
             }
@@ -1067,31 +1121,31 @@ namespace ANAConversationStudio.Views
 #pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
         }
 
-        private void ResetEditors()
-        {
-            this.ViewModel.SelectedChatNode = null;
-        }
-
         public void GotoNextNode(int position = 1)
         {
             try
             {
-                if (this.ViewModel.SelectedChatNode != null)
+                var selectedNode = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.IsSelected);
+                if (selectedNode != null)
                 {
                     var nextNodeIds = new List<string>();
-                    if (this.ViewModel.SelectedChatNode.Buttons != null && this.ViewModel.SelectedChatNode.Buttons.Count > 0)
-                        nextNodeIds.AddRange(this.ViewModel.SelectedChatNode.Buttons.Select(x => x.NextNodeId));
-                    if (!string.IsNullOrWhiteSpace(this.ViewModel.SelectedChatNode.NextNodeId))
-                        nextNodeIds.Add(this.ViewModel.SelectedChatNode.NextNodeId);
+                    if (selectedNode.ChatNode.Buttons != null && selectedNode.ChatNode.Buttons.Count > 0)
+                        nextNodeIds.AddRange(selectedNode.ChatNode.Buttons.Select(x => x.NextNodeId));
+                    if (!string.IsNullOrWhiteSpace(selectedNode.ChatNode.NextNodeId))
+                        nextNodeIds.Add(selectedNode.ChatNode.NextNodeId);
                     if (position <= nextNodeIds.Count)
                     {
                         var node = networkControl.Nodes.Cast<NodeViewModel>().FirstOrDefault(x => x.ChatNode.Id == nextNodeIds[position - 1]);
                         if (node != null)
                         {
                             networkControl.SelectedNode = node;
-                            networkControl.BringSelectedNodesIntoView();
+                            ZoomToNode(node);
                         }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a node and then try to go to the next one", "No node selected!", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch { }
@@ -1101,9 +1155,10 @@ namespace ANAConversationStudio.Views
         {
             try
             {
-                if (this.ViewModel.SelectedChatNode != null)
+                var selectedNode = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.IsSelected);
+                if (selectedNode != null)
                 {
-                    var currentNodeId = this.ViewModel.SelectedChatNode.Id;
+                    var currentNodeId = selectedNode.ChatNode.Id;
 
                     var prevNodeIds = networkControl.Nodes.Cast<NodeViewModel>()
                         .Where(x => x.ChatNode.NextNodeId == currentNodeId ||
@@ -1115,9 +1170,13 @@ namespace ANAConversationStudio.Views
                         if (node != null)
                         {
                             networkControl.SelectedNode = node;
-                            networkControl.BringSelectedNodesIntoView();
+                            ZoomToNode(node);
                         }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("Please select a node and then try to go to the previous one", "No node selected!", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
             catch { }

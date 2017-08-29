@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -58,10 +59,15 @@ namespace ANAConversationStudio.Models
     public class BaseEntity : BaseIdEntity
     {
         private string _Alias;
-        [Category("Important")]
+        [JsonIgnore]
         public string Alias
         {
-            get { return _Alias; }
+            get
+            {
+                if (string.IsNullOrWhiteSpace(_Alias))
+                    FillAlias();
+                return _Alias;
+            }
             set
             {
                 if (_Alias != value)
@@ -72,6 +78,7 @@ namespace ANAConversationStudio.Models
             }
         }
 
+        protected virtual void FillAlias() { }
         public override string ToString()
         {
             return Alias;
