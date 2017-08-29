@@ -40,7 +40,7 @@ Web & Messenger SDK
 2.  In ANA Conversation Platform project, open appsettings-Sample.json and edit DatabaseConnectionSettings section to match your MongoDB details.
 3.  Change Collection names to new/empty collections.
 4.  Save and Rename appsettings-Sample.json to appsettings.json
-5.  Build and publish the project to the server as usual. It's an ASP.NET Core 1.1 project, which can be hosted on Windows, Linux and Mac.
+5.  Build and publish the project to the server as usual. It's a .NET Core project, which can be hosted on Windows, Linux and Mac.
 6.  Note down the base URL of your hosted project.
 7.  Optionally, Set the APIKey and APISecret in appsettings.json under BasicAuth section for security.
 
