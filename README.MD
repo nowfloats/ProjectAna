@@ -2,9 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
-World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**. Absolutely modular architecture, ability to add your own customizations and infinitely scalable. 
-
-Setup time less than 30 minutes. Edit content and flow without changing any code.
+World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**.
 Android & iOS SDK available on request. 
 
 **Launching soon:**
@@ -24,7 +22,7 @@ Web & Messenger SDK
 **ANA Conversation Suite contains 3 components:**
 
 1.  **Platform:** Backend API which serves the chat requests. This component is responsible for merging the chat flow template with the chat content and returning the flow when requested by the clients.
-2.  **Studio:** Graphical designer of the chat flow. This can be helpful when designing the chat flow and reduce the amount of unnecessary effort needed down by 80%. This also enables non-devs to edit the flow and it's content at any given point of time, changes being reflected instantly.
+2.  **Studio:** Graphical designer of the chat flow. This can be helpful when designing the chat flow and reduces the amount of unnecessary effort needed down by 80%. This also enables non-devs to edit the flow and it's content at any given point of time, changes being reflected instantly.
 3.  **Simulator:** Used to test and experience the chat flow.
 
 ## Installation
@@ -38,7 +36,7 @@ Web & Messenger SDK
 
 **Setup Platform:**
 
-1.  Clone the repo.
+1.  Download the pre-built binary from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or Clone the repo.
 2.  In ANA Conversation Platform project, open appsettings-Sample.json and edit DatabaseConnectionSettings section to match your MongoDB details.
 3.  Change Collection names to new/empty collections.
 4.  Save and Rename appsettings-Sample.json to appsettings.json
@@ -48,7 +46,7 @@ Web & Messenger SDK
 
 **Setup Studio:**
 
-1.  Build the ANA Conversation Studio project yourself or download the binary directly from releases section. Open the exe once done.
+1.  Download the binary directly from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or build the ANA Conversation Studio project yourself. Open the exe once done.
 2.  Enter the above noted chat server base URL, APIKey and APISecret (if you have set them) in the 'Chat Server Connection Manager' Window which appears, by clicking on 'Add' button present in the top center of the window.
 3.  As soon as you are connected to the chat server, your first project will be created and loaded for you. 
 4.  To create a sample chat flow, right click on the studio document(white area) and click 'Create new node'.
@@ -58,10 +56,10 @@ Web & Messenger SDK
 
 **Setup Simulator:**
 
-1.  To build the ANA Conversation Simulator project, you will need Visual Studio 2017 + UWP SDK.
-2.  Already built app package is also provided in releases section. Download, extract and run the .ps1 script as admin using PowerShell. That will install the Simulator into your system as a Windows 10 App. *Developer mode* should be turned on in your PC.
-3.  You can launch the flow in the simulator directly from the studio by going to ANA Conversation Studio -> Tools -> Launch Current Chat in Simulator option, or by just pressing the F5 button. This will fill the chat flow API directly and lets the chat flow start directly without any manual effort.
-4.  If everything went as it should, your chat should have started and you should see the content of the first node -> first section.
+1.  Built app package is provided in [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest). Download, extract and run the .ps1 script as admin using PowerShell. That will install the Simulator into your system as a Windows 10 App. *Developer mode* should be turned on in your PC.
+2.  If you choose to build the ANA Conversation Simulator project, you will need Visual Studio 2017 + UWP SDK.
+3.  You can launch the flow in the simulator directly from the studio by going to ANA Conversation Studio -> Tools -> Launch Current Chat in Simulator option, or by just pressing the F5 button. This will fill the chat flow API and lets the chat flow start without any manual effort.
+4.  If everything went as it should, your chat will start and you will see the content of the first node -> first section.
 5.  Additional chat server related configurations can be done in top right menu -> Configure Chat Server.
 6.  If you choose to build the app instead of using the built package, obtain your own MapToken required by the UWP Map Control from your developer.microsoft.com account and place it in Config-Sample.json. Then rename the file to Config.json and build the project.
 ----------
@@ -71,7 +69,7 @@ The ability to switch from a predefined structured flow to a live chat agent is 
 
 1. **Pre-requisites**:
  
-	*[Rocket Chat](https://rocket.chat/) server*: Rocket Chat is a full flege open source chat application. This is used as the agent chat platform here. A running Rocket Chat Server with admin access is needed to configure Agent Chat. Follow their docs and setup your rocket chat server. Note down the server URL, admin username and password.
+	*[Rocket Chat](https://rocket.chat/) server*: Rocket Chat is a full-fledge open source chat application. This is used as the agent chat platform here. A running Rocket Chat Server with admin access is needed to configure Agent Chat. Follow their docs and setup your rocket chat server. Note down the server URL, admin username and password.
 
 2. **Agent Chat Setup**:
  
@@ -116,7 +114,7 @@ The ability to switch from a predefined structured flow to a live chat agent is 
 		1. Login to a user in rocket chat. Make sure the status is online if the user is not the default agent chat user!
 		2. Open the simulator app. Assuming you have your own chat flow setup and working, simulator will start the structured chat as usual. After completing 1-2 steps of your chat flow, to switch to an agent, click the 'Agent Chat' option in the top right options menu. 
 		3. If everything is working fine, the current chat flow history should come into the rocket chat thread, text input box should appear in the simulator. From now on, Simulator and Rocket Chat user can chat two ways. Whatever typed in the simulator will be sent to the rocket chat user and vice versa. 
-		4. Sending the chat flow user (simulator user) back to a structured flow from agent chat is a planned feature comming soon.
+		4. Sending the chat flow user (simulator user) back to a structured flow from agent chat is a planned feature coming soon.
 
 ----------
 
