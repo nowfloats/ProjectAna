@@ -315,6 +315,7 @@ namespace ANAConversationStudio.Helpers
         }
         public static bool IsMatch(this string text, string searchKeywords)
         {
+            if (string.IsNullOrWhiteSpace(text) || string.IsNullOrWhiteSpace(searchKeywords)) return false;
             return Regex.IsMatch(text,
                 string.Join("|", searchKeywords.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(x => x.Trim())), RegexOptions.IgnoreCase);

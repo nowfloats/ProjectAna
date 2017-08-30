@@ -546,6 +546,7 @@ namespace ANAConversationStudio.ViewModels
 
         public void SearchInNodes(string keywords)
         {
+            if (string.IsNullOrWhiteSpace(keywords)) return;
             SearchResults = new ObservableCollection<ChatFlowSearchItem>(Network.Nodes.Select(node => node.ChatNode.SearchNode(keywords)).Where(x => x != null));
             if (SearchResults.Count == 0)
                 SearchResults = new ObservableCollection<ChatFlowSearchItem>
