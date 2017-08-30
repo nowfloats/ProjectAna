@@ -1,0 +1,85 @@
+<div style="background-color: #F0F0F0;">
+  <div [hidden]="_isLayoutUpdated">
+      <div style="padding: 10px 50px">
+          <img src="/assets/img/loading.svg" style="width: 100px;height: 100px" />
+          <br />
+          <span>Loading designer...</span>
+      </div>
+  </div>
+  <div style="overflow: hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="_isLayoutUpdated?'visible':'collapse'" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" style="overflow:hidden;" [attr.width]="designerWidth()+20" [attr.height]="designerHeight()">
+          <defs>
+              <linearGradient id="NodeBG">
+                  <stop offset="0" stop-color="#CCC" />
+              </linearGradient>
+              <linearGradient id="NodeFG">
+                  <stop offset="0" stop-color="black" />
+              </linearGradient>
+              <linearGradient id="NodeHeaderBG">
+                  <stop offset="0" stop-color="gray" />
+              </linearGradient>
+              <linearGradient id="NodeHeaderFG">
+                  <stop offset="0" stop-color="white" />
+              </linearGradient>
+          </defs>
+          <!--<rect [attr.width]="designerWidth()" [attr.height]="designerHeight()" width="0" height="0" fill="#F0F0F0"></rect>-->
+
+          <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
+              <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)">
+                  <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id">
+                      <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect" style="background: none;cursor:move">
+                          <xhtml:div style="background-color: gray; height: 30px; border-radius: 10px 10px 0 0">
+                              <xhtml:p style="padding: 5px; text-align:center;color:white">
+                                  {{chatNodeVM.chatNode.Name}}
+                              </xhtml:p>
+                          </xhtml:div>
+                          <xhtml:div style="background-color: #ccc;">
+                              <xhtml:div style="height: 100%; padding: 0 5px">
+                                  <xhtml:table style="width:100%;">
+                                      <xhtml:tr *ngFor="let section of chatNodeVM.chatNode.Sections" style="border-bottom:1px dashed white;">
+                                          <xhtml:td valign="middle" class="section-icon" style="padding-left: 5px">
+                                              <xhtml:i class="fa fa-file-text-o" style="font-size: 20px; "></xhtml:i>
+                                          </xhtml:td>
+                                          <xhtml:td valign="middle" style="padding-right: 5px">
+                                              <xhtml:div style="margin: 10px 0px 10px 5px">{{section.Alias}}</xhtml:div>
+                                          </xhtml:td>
+                                      </xhtml:tr>
+                                  </xhtml:table>
+                              </xhtml:div>
+                              <xhtml:div style="background-color: #ccc; height: 100%; text-align:center;width: 100%; margin-top: 10px">
+                                  <xhtml:table style="width: 100%" class="buttons-table" [attr.node-id]="chatNodeVM.chatNode.Id">
+                                      <xhtml:tr>
+                                          <xhtml:td *ngFor="let chatButton of chatNodeVM.chatNode.Buttons" style="width: auto; padding:10px" valign="middle">
+                                              <xhtml:div style="text-align:center">
+                                                  <xhtml:i class="fa fa-link" style="font-size: 20px;"></xhtml:i>
+                                                  <br />
+                                                  <xhtml:div>{{chatButton.Alias}}</xhtml:div>
+                                              </xhtml:div>
+                                          </xhtml:td>
+                                      </xhtml:tr>
+                                  </xhtml:table>
+                              </xhtml:div>
+                          </xhtml:div>
+                      </xhtml:div>
+                  </xhtml:div>
+              </foreignObject>
+
+              <g *ngFor="let connector of chatNodeVM.chatButtonConnectors()" transform="translate(-7,0)">
+                  <circle r="0" [attr.r]="connector.circleRadius-3" [attr.cx]="connector.x()" [attr.cy]="connector.y()" fill="darkgray" stroke="#F0F0F0" stroke-width="3" (mousedown)="connector.mouseDown($event)" (mouseup)="connector.mouseUp($event)"></circle>
+              </g>
+
+              <circle r="0" [attr.r]="chatNodeVM.circleRadius-3" [attr.cx]="chatNodeVM.nodeConnectorX()" [attr.cy]="chatNodeVM.nodeConnectorY()" fill="darkgray" stroke="#F0F0F0" stroke-width="3" transform="translate(-7,0)"></circle>
+          </g>
+
+          <g *ngFor="let connection of chatFlowNetwork.chatNodeConnections" transform="translate(15,20)">
+              <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-width="3" d="M 0,0"></path>
+              <!--<path [attr.visibility]="'visible'" [attr.transform]="ngTr(connection.closeButtonPointX, connection.closeButtonPointY)" style="width: 24px;height: 24px" fill="red" d="M12,2C17.53,2 22,6.47 22,12C22,17.53 17.53,22 12,22C6.47,22 2,17.53 2,12C2,6.47 6.47,2 12,2M15.59,7L12,10.59L8.41,7L7,8.41L10.59,12L7,15.59L8.41,17L12,13.41L15.59,17L17,15.59L13.41,12L17,8.41L15.59,7Z" />-->
+          </g>
+
+          <g transform="translate(15,20)" [attr.visibility]="chatFlowNetwork.newChatNodeConnection.isHidden?'collapse':'visible'">
+              <path [attr.d]="chatFlowNetwork.newChatNodeConnection.path()" fill="transparent" [attr.stroke]="chatFlowNetwork.newChatNodeConnection.canConnect?'green':'red'" stroke="red" stroke-width="3" d="M 0,0"></path>
+              <circle r="3" [attr.cx]="chatFlowNetwork.newChatNodeConnection.destX" [attr.cy]="chatFlowNetwork.newChatNodeConnection.destY" fill="darkgray" [attr.fill]="chatFlowNetwork.newChatNodeConnection.canConnect?'green':'red'"></circle>
+          </g>
+      </svg>
+  </div>
+</div>

@@ -1,0 +1,12 @@
+* {
+    position: static !important;
+    top: auto !important;
+}
+
+.moving-cursor {
+    cursor: grab;
+}
+
+.section-icon {
+    width: 23px;
+}
