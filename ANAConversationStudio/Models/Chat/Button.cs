@@ -12,10 +12,6 @@ namespace ANAConversationStudio.Models.Chat
 {
     public class Button : RepeatableBaseEntity
     {
-        public Button()
-        {
-            FillAlias();
-        }
 
         #region Important
         private ButtonTypeEnum _ButtonType = ButtonTypeEnum.NextNode;
@@ -252,6 +248,23 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private string _ButtonName;
+        [JsonIgnore]
+        public string ButtonName
+        {
+            get { return _ButtonName; }
+            set
+            {
+                if (_ButtonName != value)
+                {
+                    _ButtonName = value;
+
+                    FillAlias();
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         [JsonIgnore]
         [BsonIgnore]
         public IEnumerable<ButtonTypeEnum> ButtonTypes => Enum.GetValues(typeof(ButtonTypeEnum)).Cast<ButtonTypeEnum>();
@@ -304,9 +317,9 @@ namespace ANAConversationStudio.Models.Chat
         [BsonIgnore]
         public string ContentEmotion { get; set; }
 
-        private void FillAlias()
+        protected override void FillAlias()
         {
-            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText);
+            Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonName) ? (string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText) : ButtonName);
         }
 
         public override string ToString()

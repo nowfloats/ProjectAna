@@ -65,7 +65,7 @@
             <!-- Chat Designer Colors -->
             <!-- The border brush for nodes. -->
             <SolidColorBrush x:Key="nodeBorderBrush" Color="Transparent" />
-            <SolidColorBrush x:Key="startNodeBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
+            <SolidColorBrush x:Key="startNodeHeaderBrush" Color="#AD4833" />
             <SolidColorBrush x:Key="nodeHeaderBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
             <!-- The fill brush for nodes. -->
             <SolidColorBrush x:Key="nodeFillBrush" Color="{Binding Color, Source={StaticResource PrimaryHueLightBrush}}"/>

@@ -242,6 +242,20 @@ namespace ANAConversationStudio.Models
                 }
             }
         }
+
+        private string _ButtonName;
+        public string ButtonName
+        {
+            get { return _ButtonName; }
+            set
+            {
+                if (_ButtonName != value)
+                {
+                    _ButtonName = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
     }
 
     public class CarouselButtonContent : BaseContent

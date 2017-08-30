@@ -195,7 +195,7 @@
     <DataTemplate x:Key="ClickChatButtonTemplate">
         <!--Content="{Binding ButtonText}"-->
         <Button HorizontalAlignment="Stretch" Visibility="{Binding Visible, Converter={StaticResource C4FB2V}}" MinWidth="150" HorizontalContentAlignment="Stretch" Command="{Binding Action}" CommandParameter="{Binding}" Background="{StaticResource ButtonBackgroundBrush}">
-            <TextBlock Text="{Binding ButtonText}" TextWrapping="Wrap" TextAlignment="Center" />
+            <TextBlock Text="{Binding ButtonName}" TextWrapping="Wrap" TextAlignment="Center" />
         </Button>
     </DataTemplate>
 
@@ -218,7 +218,7 @@
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
             </TextBox>
-            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonText, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
+            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonName, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:EventTriggerBehaviorBase EventName="Tapped" >
                         <Core:InvokeCommandAction Command="{Binding Action}" CommandParameter="{Binding}"/>
@@ -252,7 +252,7 @@
                     <TextBlock Text="{Binding PostfixText}" VerticalAlignment="Center"/>
                 </StackPanel>
             </ScrollViewer>
-            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonText, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
+            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonName, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:EventTriggerBehaviorBase EventName="Tapped" >
                         <Core:InvokeCommandAction Command="{Binding Action}" CommandParameter="{Binding}"/>
@@ -294,7 +294,7 @@
                     <TextBlock Text="{Binding PostfixText}" VerticalAlignment="Center"/>
                 </StackPanel>
             </ScrollViewer>
-            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonText, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
+            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonName, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:EventTriggerBehaviorBase EventName="Tapped" >
                         <Core:InvokeCommandAction Command="{Binding Action}" CommandParameter="{Binding}"/>
@@ -330,7 +330,7 @@
                     </Core:EventTriggerBehavior>
                 </Interactivity:Interaction.Behaviors>
             </AutoSuggestBox>
-            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonText, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
+            <Button Grid.Column="1" MaxWidth="120" Content="{Binding ButtonName, FallbackValue=Send}" Margin="5,0,0,0" Background="{StaticResource ButtonBackgroundBrush}">
                 <Interactivity:Interaction.Behaviors>
                     <Behaviors:EventTriggerBehaviorBase EventName="Tapped" >
                         <Core:InvokeCommandAction Command="{Binding Action}" CommandParameter="{Binding}"/>

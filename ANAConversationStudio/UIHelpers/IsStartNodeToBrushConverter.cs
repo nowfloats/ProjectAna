@@ -15,7 +15,7 @@ namespace ANAConversationStudio.UIHelpers
         {
             var isStartNode = (bool)value;
 
-            return isStartNode ? Application.Current.Resources["startNodeBorderBrush"] : Application.Current.Resources["nodeBorderBrush"];
+            return isStartNode ? Application.Current.Resources["startNodeHeaderBrush"] : Application.Current.Resources["nodeHeaderBorderBrush"];
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

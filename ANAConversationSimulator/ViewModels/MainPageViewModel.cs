@@ -326,6 +326,9 @@ namespace ANAConversationSimulator.ViewModels
             var allButtons = node["Buttons"].ToObject<List<Button>>();
             foreach (var btnSrc in allButtons.Where(x => x.Kind == ButtonKind.ClickInput))
             {
+                if (string.IsNullOrWhiteSpace(btnSrc.ButtonName))
+                    btnSrc.ButtonName = btnSrc.ButtonText;
+
                 var btn = btnSrc.DeepCopy();
                 if (btn.DoesRepeat)
                 {
@@ -359,6 +362,9 @@ namespace ANAConversationSimulator.ViewModels
 
             foreach (var btn in allButtons.Where(x => x.Kind == ButtonKind.TextInput))
             {
+                if (string.IsNullOrWhiteSpace(btn.ButtonName))
+                    btn.ButtonName = btn.ButtonText;
+
                 btn.VariableName = node["VariableName"] + "";
                 btn.NodeId = parsedNode.Id;
                 btn.ButtonName = VerbProcessor.Process(btn.ButtonName);

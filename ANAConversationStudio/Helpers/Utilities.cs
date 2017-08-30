@@ -18,6 +18,7 @@ using System.Text;
 using Newtonsoft.Json.Converters;
 using ANAConversationStudio.ViewModels;
 using System.Linq;
+using System.Text.RegularExpressions;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -111,6 +112,7 @@ namespace ANAConversationStudio.Helpers
                         {
                             ButtonId = btn._id,
                             ButtonText = btn.ButtonText,
+                            ButtonName = btn.ButtonName,
                             NodeId = node.Id,
                             _id = btn.ContentId,
                             Emotion = btn.ContentEmotion,
@@ -242,7 +244,11 @@ namespace ANAConversationStudio.Helpers
                         var destNode = node.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == btn.NextNodeId);
                         if (destNode != null)
                         {
-                            var conn = new ConnectionViewModel { SourceConnector = node.OutputConnectors.FirstOrDefault(x => x.Button._id == btn._id), DestConnector = destNode.InputConnectors.FirstOrDefault() };
+                            var conn = new ConnectionViewModel
+                            {
+                                SourceConnector = node.OutputConnectors.FirstOrDefault(x => x.Button._id == btn._id),
+                                DestConnector = destNode.InputConnectors.FirstOrDefault()
+                            };
                             conn.ConnectionChanged += ConnectionViewModelConnectionChanged;
                             if (conn.SourceConnector == null || conn.DestConnector == null) continue;
                             node.Network.Connections.Add(conn);
@@ -268,6 +274,52 @@ namespace ANAConversationStudio.Helpers
 
     public static class Exts
     {
+        public static Models.ChatFlowSearchItem SearchNode(this ChatNode node, string searchKeywords)
+        {
+            if (node.ToString().IsMatch(searchKeywords))
+            {
+                return new Models.ChatFlowSearchItem
+                {
+                    NodeId = node.Id,
+                    NodeText = node.ToString()
+                };
+            }
+
+            foreach (var btn in node.Buttons)
+            {
+                if (btn.ToString().IsMatch(searchKeywords))
+                {
+                    return (new Models.ChatFlowSearchItem
+                    {
+                        NodeId = node.Id,
+                        NodeText = node.ToString(),
+                        ButtonText = btn.ToString()
+                    });
+                }
+            }
+
+            foreach (var sec in node.Sections)
+            {
+                if (sec.ToString().IsMatch(searchKeywords))
+                {
+                    return (new Models.ChatFlowSearchItem
+                    {
+                        NodeId = node.Id,
+                        NodeText = node.ToString(),
+                        SectionText = sec.ToString()
+                    });
+                }
+            }
+
+            return null;
+        }
+        public static bool IsMatch(this string text, string searchKeywords)
+        {
+            return Regex.IsMatch(text,
+                string.Join("|", searchKeywords.Split(new[] { " " }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(x => x.Trim())), RegexOptions.IgnoreCase);
+        }
+
         public static T DeepCopy<T>(this T source)
         {
             var json = source.ToJson();
