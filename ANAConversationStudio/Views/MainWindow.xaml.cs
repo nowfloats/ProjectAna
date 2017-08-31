@@ -448,7 +448,10 @@ namespace ANAConversationStudio.Views
             if (this.networkControl.SelectedNode is NodeViewModel nodeVM)
             {
                 NodeEditor.ChatNode = nodeVM.ChatNode;
-                NodeEditorLayoutAnchorable.IsActive = true;
+
+                if (NodeEditorLayoutAnchorable.IsAutoHidden)
+                    NodeEditorLayoutAnchorable.Dock();
+                //NodeEditorLayoutAnchorable.IsActive = true;
             }
         }
     }
@@ -1008,6 +1011,9 @@ namespace ANAConversationStudio.Views
         }
         private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            if (!NodeEditorLayoutAnchorable.IsAutoHidden)
+                NodeEditorLayoutAnchorable.ToggleAutoHide();
+
             UpdateTitle(); //Update title here so that version number is visible even before login.
             this.IsEnabled = false;
             if (!AskPass()) return;

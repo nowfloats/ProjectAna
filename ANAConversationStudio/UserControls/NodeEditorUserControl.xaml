@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:uc="clr-namespace:ANAConversationStudio.UserControls"
+             xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
         xmlns:local="clr-namespace:ANAConversationStudio.Views"
         xmlns:ui="clr-namespace:ANAConversationStudio.UIHelpers"
         xmlns:chat="clr-namespace:ANAConversationStudio.Models.Chat"
@@ -81,6 +82,8 @@
                 </Setter.Value>
             </Setter>
             <Setter Property="ToolTip" Value="Add Section"/>
+        </Style>
+        <Style TargetType="tk:WatermarkTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
         </Style>
     </UserControl.Resources>
     <Grid>

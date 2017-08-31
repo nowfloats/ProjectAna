@@ -62,5 +62,10 @@ namespace ANAConversationStudio.Views
                 Application.Current.Shutdown();
             }
         }
+
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            PwdBox.Focus();
+        }
     }
 }

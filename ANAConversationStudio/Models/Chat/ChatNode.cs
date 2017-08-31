@@ -313,10 +313,10 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.Image:
                     Sections.Add(new ImageSection
                     {
-                        Alias = "New Image",
-                        Caption = "Image Caption",
-                        Title = "Image Title",
-                        Url = "http://",
+                        //Alias = "New Image",
+                        //Caption = "Image Caption",
+                        //Title = "Image Title",
+                        //Url = "http://",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -325,8 +325,8 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.Text:
                     Sections.Add(new TextSection
                     {
-                        Alias = "New Text",
-                        Text = "Text Section",
+                        //Alias = "New Text",
+                        //Text = "Text Section",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -335,10 +335,10 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.Gif:
                     Sections.Add(new GifSection
                     {
-                        Alias = "New Gif",
-                        Caption = "Gif Caption",
-                        Title = "Gif Title",
-                        Url = "http://",
+                        //Alias = "New Gif",
+                        //Caption = "Gif Caption",
+                        //Title = "Gif Title",
+                        //Url = "http://",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -347,10 +347,10 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.Audio:
                     Sections.Add(new AudioSection
                     {
-                        Alias = "New Audio",
-                        Caption = "Audio Caption",
-                        Title = "Audio Title",
-                        Url = "http://",
+                        //Alias = "New Audio",
+                        //Caption = "Audio Caption",
+                        //Title = "Audio Title",
+                        //Url = "http://",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -359,10 +359,10 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.Video:
                     Sections.Add(new VideoSection
                     {
-                        Alias = "New Video",
-                        Caption = "Video Caption",
-                        Title = "Video Title",
-                        Url = "http://",
+                        //Alias = "New Video",
+                        //Caption = "Video Caption",
+                        //Title = "Video Title",
+                        //Url = "http://",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -371,10 +371,10 @@ namespace ANAConversationStudio.Models.Chat
                 case SectionTypeEnum.EmbeddedHtml:
                     Sections.Add(new EmbeddedHtmlSection
                     {
-                        Alias = "New Html",
-                        Caption = "HTML Caption",
-                        Title = "HTML Title",
-                        Url = "http://",
+                        //Alias = "New Html",
+                        //Caption = "HTML Caption",
+                        //Title = "HTML Title",
+                        //Url = "http://",
                         _id = ObjectId.GenerateNewId().ToString(),
                         ParentNode = this,
                         ContentId = ObjectId.GenerateNewId().ToString(),
@@ -385,17 +385,17 @@ namespace ANAConversationStudio.Models.Chat
                         var carSec = new CarouselSection
                         {
                             _id = ObjectId.GenerateNewId().ToString(),
-                            Alias = "New Carousel",
-                            Title = "Carousel Title",
-                            Caption = "Carousel Caption",
+                            //Alias = "New Carousel",
+                            //Title = "Carousel Title",
+                            //Caption = "Carousel Caption",
                             ParentNode = this,
                             ContentId = ObjectId.GenerateNewId().ToString(),
                         };
                         var carItem = new CarouselItem
                         {
-                            Title = "Carousel Item Title",
-                            Caption = "Carousel Item Caption",
-                            ImageUrl = "http://",
+                            //Title = "Carousel Item Title",
+                            //Caption = "Carousel Item Caption",
+                            //ImageUrl = "http://",
                             ParentCarouselSection = carSec,
                             _id = ObjectId.GenerateNewId().ToString(),
                             ContentId = ObjectId.GenerateNewId().ToString(),
@@ -406,7 +406,7 @@ namespace ANAConversationStudio.Models.Chat
                             {
                                 ContentId = ObjectId.GenerateNewId().ToString(),
                                 ParentCarouselItem = carItem,
-                                Text = "Carousel Button Text",
+                                //Text = "Carousel Button Text",
                                 _id = ObjectId.GenerateNewId().ToString(),
                             }
                         };

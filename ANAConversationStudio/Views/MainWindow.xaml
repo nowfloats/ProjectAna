@@ -738,160 +738,58 @@
                     <avalonDock:LayoutDocumentPane>
                         <avalonDock:LayoutDocument ContentId="NodeNetworkView" Title=" Chat Flow " CanClose="False" CanFloat="False">
                             <DockPanel Grid.Row="1" >
-
-                                <!-- Grid placed below the zoom and pan control that contains the zoom slider, zoom label and some buttons. -->
-
-                                <Grid
-            Margin="5,5,5,5"
-            DockPanel.Dock="Bottom"
-            >
+                                <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
                                     <Grid.Resources>
                                         <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                            <Setter Property="Padding" Value="0"/>
+                                            <Setter Property="Padding" Value="10,0"/>
                                         </Style>
                                     </Grid.Resources>
                                     <Grid.ColumnDefinitions>
-
-                                        <!-- empty space -->
-                                        <ColumnDefinition Width="75" />
+                                        <ColumnDefinition Width="auto" />
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="Auto"/>
-                                        <ColumnDefinition Width="5"/>
-
-                                        <!-- the fit content button -->
-                                        <ColumnDefinition Width="40" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the fill button -->
-                                        <ColumnDefinition Width="40" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the 100% button -->
-                                        <ColumnDefinition Width="40" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the zoom percentage label -->
-                                        <ColumnDefinition Width="25" />
-
-                                        <!-- the % symbol -->
-                                        <ColumnDefinition Width="15" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the zoom out button -->
-                                        <ColumnDefinition Width="20" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the zoom slider -->
-                                        <ColumnDefinition Width="120" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="5" />
-
-                                        <!-- the zoom in button -->
-                                        <ColumnDefinition Width="20" />
-
-                                        <!-- spacer -->
-                                        <ColumnDefinition Width="10" />
-
-                                        <!-- resize grip -->
                                         <ColumnDefinition Width="Auto" />
-
                                     </Grid.ColumnDefinitions>
-                                    <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                                    <Button Padding="20,0" Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                                     <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
-                                    <ItemsControl Grid.Column="2" >
+                                    <ItemsControl Grid.Column="2">
+                                        <ItemsControl.Resources>
+                                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+                                                <Setter Property="Padding" Value="10,0" />
+                                                <Setter Property="Margin" Value="5,0" />
+                                            </Style>
+                                        </ItemsControl.Resources>
                                         <ItemsControl.ItemsPanel>
                                             <ItemsPanelTemplate>
                                                 <VirtualizingStackPanel Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-                                        <ItemsControl.ItemContainerStyle>
-                                            <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
-                                                <Setter Property="Margin" Value="5,0"/>
-                                            </Style>
-                                        </ItemsControl.ItemContainerStyle>
-                                        <Button Padding="5,0" Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
+                                        <Button  Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
                                             <TextBlock>
-                            <Run Text="&#xE96F;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
-                            <Run Text="Previous Node"/>
+                                                <Run Text="&#xE96F;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
+                                                <Run Text="Previous Node"/>
                                             </TextBlock>
                                         </Button>
-                                        <Button Padding="5,0" Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
+                                        <Button  Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
                                             <TextBlock>
-                            <Run Text="Next Node"/>
-                            <Run Text="&#xE970;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
+                                                <Run Text="Next Node"/>
+                                                <Run Text="&#xE970;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
                                             </TextBlock>
                                         </Button>
-                                        <Button Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                                        <Button Content="Clone Node"  Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                                        <Button Grid.Column="4"  Command="{StaticResource Commands.FitContent}" ToolTip="Fit all nodes to the viewport">Fit</Button>
+                                        <Button Grid.Column="6" Command="{StaticResource Commands.Fill}" ToolTip="Fit the entire content area to the viewport" >
+                                            Full board
+                                        </Button>
                                     </ItemsControl>
-                                    <!-- 
-            The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.
-            -->
-                                    <Button
-                Grid.Column="4"
-                Command="{StaticResource Commands.FitContent}"
-                ToolTip="Fit all nodes to the viewport"
-                >
-                                        Fit
-                                    </Button>
-
-                                    <!-- 
-            The fill button.  Causes the content to be scaled so that it fits in the viewport.
-            -->
-                                    <Button
-                Grid.Column="6"
-                Command="{StaticResource Commands.Fill}"
-                ToolTip="Fit the entire content area to the viewport"
-                >
-                                        Fill
-                                    </Button>
-
-                                    <!-- 
-            The 100% button.  Causes the content to be scaled to 100 percent.
-            -->
-                                    <Button
-                Grid.Column="8"
-                Command="{StaticResource Commands.OneHundredPercent}"
-                ToolTip="Scale the content to 100%"
-                >
-                                        100%
-                                    </Button>
-
-                                    <!--
-            This is the label that shows what the current zoom level
-            is while zooming in and out.
-            -->
-                                    <TextBlock
-                Grid.Column="10"
-                VerticalAlignment="Center"
-                HorizontalAlignment="Center"
-                Grid.ColumnSpan="2"
-                >
+                                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" HorizontalAlignment="Center">
                                             <Run Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"/>%
-                                    </TextBlock>
-
-                                    <!-- Button to zoom out. -->
-                                    <Button
-                Grid.Column="13"
-                Command="{StaticResource Commands.ZoomOut}"
-                ToolTip="Zoom out from the content"
-                >
-                                        -
-                                    </Button>
-
-                                    <!-- Slider to change the current zoom level. -->
-                                    <Slider
-                Grid.Column="15"
+                                        </TextBlock>
+                                        <Button Padding="10,0" Width="30" Command="{StaticResource Commands.ZoomOut}" ToolTip="Zoom out from the content">-</Button>
+                                        <Slider
+                                            Width="100"
+                                            Margin="10,0"
                 Minimum="10" 
                 LargeChange="20" 
                 TickFrequency="10" 
@@ -901,36 +799,10 @@
                 Value="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"
                 ToolTip="Change the zoom level of the content"
                 />
-
-                                    <!--
-            Button to zoom in.
-            -->
-                                    <Button
-                Grid.Column="17"
-                Command="{StaticResource Commands.ZoomIn}"
-                ToolTip="Zoom in on the content"
-                >
-                                        +
-                                    </Button>
-
-                                    <!-- Stick a resize grip in the bottom right corner of the window. -->
-                                    <ResizeGrip
-                Grid.Column="19"
-                />
-
+                                        <Button Padding="10,0" Width="30" Command="{StaticResource Commands.ZoomIn}" ToolTip="Zoom in on the content">+</Button>
+                                    </StackPanel>
                                 </Grid>
-
-                                <!-- 
-        The ScrollViewer displays scrollbars when the content is too big to fit in the viewport. 
-        Focusable is set to False because it is only that NetworkView that I want to be focusable.
-        -->
-                                <ScrollViewer
-            CanContentScroll="True"
-            VerticalScrollBarVisibility="Visible"
-            HorizontalScrollBarVisibility="Visible"
-            Focusable="False"
-            >
-
+                                <ScrollViewer CanContentScroll="True" VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Visible" Focusable="False">
                                     <!-- 
             The ZoomAndPanControl displays the NetworkView as its content.
             We can use the mouse to zoom and pan about the NetworkView.
@@ -1004,19 +876,14 @@
                                     </ZoomAndPan:ZoomAndPanControl>
                                 </ScrollViewer>
                             </DockPanel>
-
                         </avalonDock:LayoutDocument>
                     </avalonDock:LayoutDocumentPane>
+                    <avalonDock:LayoutAnchorablePane DockWidth="400" IsMaximized="False" x:Name="NodeEditorLayoutAnchorablePane" >
+                        <avalonDock:LayoutAnchorable AutoHideMinWidth="400" ContentId="NodeEditorLayoutAnchorable" x:Name="NodeEditorLayoutAnchorable" Title="Node Editor" CanHide="False" CanClose="False">
+                            <UC:NodeEditorUserControl x:Name="NodeEditor" />
+                        </avalonDock:LayoutAnchorable>
+                    </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
-                <avalonDock:LayoutRoot.RightSide>
-                    <avalonDock:LayoutAnchorSide>
-                        <avalonDock:LayoutAnchorGroup>
-                            <avalonDock:LayoutAnchorable AutoHideMinWidth="400" x:Name="NodeEditorLayoutAnchorable" Title="Node Editor" CanHide="False" CanClose="False" >
-                                <UC:NodeEditorUserControl x:Name="NodeEditor" />
-                            </avalonDock:LayoutAnchorable>
-                        </avalonDock:LayoutAnchorGroup>
-                    </avalonDock:LayoutAnchorSide>
-                </avalonDock:LayoutRoot.RightSide>
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
         <TextBlock Grid.Row="2" x:Name="StatusTextblock" Text=" " Margin="5"/>

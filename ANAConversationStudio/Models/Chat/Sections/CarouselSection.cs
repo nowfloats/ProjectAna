@@ -158,8 +158,8 @@ namespace ANAConversationStudio.Models.Chat.Sections
         {
             ContentId = ObjectId.GenerateNewId().ToString(),
             ParentCarouselItem = this,
-            _id = ObjectId.GenerateNewId().ToString(),
-            Text = "New Carousel Button",
+            _id = ObjectId.GenerateNewId().ToString()
+            //Text = "New Carousel Button",
         }));
     }
 

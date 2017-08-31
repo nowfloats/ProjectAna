@@ -1,6 +1,7 @@
 ﻿<Application x:Class="ANAConversationStudio.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:tk="http://schemas.xceed.com/wpf/xaml/toolkit"
              xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
              DispatcherUnhandledException="Application_DispatcherUnhandledException"
              Startup="Application_Startup"
@@ -48,7 +49,8 @@
             <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
-
+            <Style TargetType="tk:WatermarkTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
+            </Style>
             <!-- primary hues  -->
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#ccc"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
@@ -65,7 +67,7 @@
             <!-- Chat Designer Colors -->
             <!-- The border brush for nodes. -->
             <SolidColorBrush x:Key="nodeBorderBrush" Color="Transparent" />
-            <!--#AD4833-->
+            <!-- #AD4833 -->
             <SolidColorBrush x:Key="startNodeHeaderBrush" Color="Teal" />
             <SolidColorBrush x:Key="nodeHeaderBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
             <!-- The fill brush for nodes. -->
