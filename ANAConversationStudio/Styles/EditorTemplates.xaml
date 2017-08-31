@@ -4,6 +4,30 @@
                     xmlns:views="clr-namespace:ANAConversationStudio.Views"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
+    <Style x:Key="PlaceHolderTB" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type TextBox}">
+                    <Grid>
+                        <TextBox VerticalAlignment="Center" Margin="0" Padding="0" Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="textSource" Background="Transparent" Panel.ZIndex="2" />
+                        <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Panel.ZIndex="1">
+                            <TextBlock.Style>
+                                <Style TargetType="{x:Type TextBlock}">
+                                    <Setter Property="Foreground" Value="Transparent"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Path=Text, Source={x:Reference textSource}}" Value="">
+                                            <Setter Property="Foreground" Value="LightGray"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <Style x:Key="EditorItemBorderStyle" TargetType="Border" >
         <Setter Property="BorderBrush" Value="{DynamicResource PrimaryHueDarkBrush}"/>
         <Setter Property="BorderThickness" Value="1"/>
@@ -81,8 +105,24 @@
     <Style x:Key="GroupHeaderTextBlockStyle" TargetType="TextBlock">
         <Setter Property="Height" Value="14.7"/>
     </Style>
-    <Style x:Key="AddButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
+    <!--<Style x:Key="AddButtonStyle" BasedOn="{StaticResource ToolButtonStyle}" TargetType="Button">
         <Setter Property="Content" Value="&#xE948;" />
+    </Style>-->
+    <Style x:Key="AddButtonStyle" BasedOn="{StaticResource MaterialDesignFloatingActionButton}" TargetType="Button">
+        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}" />
+        <Setter Property="Content" Value="&#xE948;" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="20"/>
+    </Style>
+    <Style x:Key="AddCarouselItemStyle" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
+        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Padding" Value="0" />
+        <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}" />
+        <Setter Property="Content" Value="&#xE948;" />
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="20"/>
     </Style>
     <DataTemplate x:Key="TextSectionEditTemplate">
         <Grid Margin="5">
@@ -94,7 +134,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" Grid.Column="0"/>
-            <TextBox Grid.Column="1" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+            <TextBox Style="{StaticResource PlaceHolderTB}" Tag="Enter chat text here" Grid.Column="1" Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
             <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
             <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
             <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center"/>
@@ -125,7 +165,7 @@
             <StackPanel>
                 <uc:TableRowUserControl Label="Title">
                     <uc:TableRowUserControl.Field>
-                        <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                        <TextBox Style="{StaticResource PlaceHolderTB}" Tag="Enter title here" Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Url">
@@ -139,7 +179,7 @@
                                 <ColumnDefinition/>
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
-                            <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                            <TextBox Style="{StaticResource PlaceHolderTB}" Tag="http://" Text="{Binding Url, Mode=TwoWay}" />
                             <Button ToolTip="Upload from your computer" Grid.Column="1" Style="{StaticResource ToolButtonStyle}" Content="&#xE898;" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center" Command="{Binding UploadMedia}"/>
                             <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding UploadProgress, Converter={StaticResource N2V}}" Text="{Binding UploadProgress}" ToolTip="{Binding UploadProgress}" Margin="5,0" FontStyle="Italic"/>
                         </Grid>
@@ -147,7 +187,7 @@
                 </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Caption">
                     <uc:TableRowUserControl.Field>
-                        <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                        <TextBox Style="{StaticResource PlaceHolderTB}" Tag="Enter caption here" Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
             </StackPanel>
@@ -246,7 +286,7 @@
                         </uc:TableRowUserControl.Field>
                     </uc:TableRowUserControl>
                 </StackPanel>
-                
+
                 <uc:TableRowUserControl Label="Does Repeat" >
                     <uc:TableRowUserControl.Field>
                         <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
@@ -306,7 +346,6 @@
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
-                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
                         <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" />
                         <TextBlock VerticalAlignment="Center" Grid.Column="1">
@@ -314,8 +353,7 @@
                         </TextBlock>
                         <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}"/>
                         <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}"/>
-                        <Button Grid.Column="4" Style="{StaticResource AddButtonStyle}" ToolTip="Add Carousel Item" Command="{Binding AddItem}"/>
-                        <Button Grid.Column="5" Style="{StaticResource DeleteButtonStyle}"/>
+                        <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}"/>
                     </Grid>
                 </DataTemplate>
             </GroupBox.HeaderTemplate>
@@ -331,166 +369,170 @@
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
                 <ScrollViewer HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Disabled" Padding="-10,0" HorizontalAlignment="Center">
-                    <ItemsControl ItemsSource="{Binding Items}">
-                        <ItemsControl.ItemsPanel>
-                            <ItemsPanelTemplate>
-                                <VirtualizingStackPanel Orientation="Horizontal"/>
-                            </ItemsPanelTemplate>
-                        </ItemsControl.ItemsPanel>
-                        <ItemsControl.ItemTemplate>
-                            <DataTemplate>
-                                <GroupBox Header="{Binding}">
-                                    <GroupBox.HeaderTemplate>
-                                        <DataTemplate>
-                                            <Grid>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                    <ColumnDefinition Width="Auto"/>
-                                                </Grid.ColumnDefinitions>
-                                                <TextBlock VerticalAlignment="Center">
+                    <StackPanel>
+                        <ItemsControl ItemsSource="{Binding Items}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <VirtualizingStackPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <GroupBox Header="{Binding}">
+                                        <GroupBox.HeaderTemplate>
+                                            <DataTemplate>
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    <TextBlock VerticalAlignment="Center">
                                                     <Run Text="Carousel Item: "/><Run Text="{Binding Title}"/>
-                                                </TextBlock>
-                                                <Button Grid.Column="1" Style="{StaticResource MoveLeftButtonStyle}"/>
-                                                <Button Grid.Column="2" Style="{StaticResource MoveRightButtonStyle}"/>
-                                                <Button Grid.Column="3" Style="{StaticResource AddButtonStyle}" ToolTip="Add Carousel Button" Command="{Binding AddButton}"/>
-                                                <Button Grid.Column="4" Style="{StaticResource DeleteButtonStyle}"/>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </GroupBox.HeaderTemplate>
-                                    <StackPanel>
-                                        <uc:TableRowUserControl Label="Title">
-                                            <uc:TableRowUserControl.Field>
-                                                <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
-                                            </uc:TableRowUserControl.Field>
-                                        </uc:TableRowUserControl>
-                                        <uc:TableRowUserControl Label="Caption">
-                                            <uc:TableRowUserControl.Field>
-                                                <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
-                                            </uc:TableRowUserControl.Field>
-                                        </uc:TableRowUserControl>
-                                        <uc:TableRowUserControl Label="ImageUrl">
-                                            <uc:TableRowUserControl.Field>
-                                                <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                            </uc:TableRowUserControl.Field>
-                                        </uc:TableRowUserControl>
+                                                    </TextBlock>
+                                                    <Button Grid.Column="1" Style="{StaticResource MoveLeftButtonStyle}"/>
+                                                    <Button Grid.Column="2" Style="{StaticResource MoveRightButtonStyle}"/>
+                                                    <Button Grid.Column="3" Style="{StaticResource DeleteButtonStyle}"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </GroupBox.HeaderTemplate>
+                                        <StackPanel>
+                                            <uc:TableRowUserControl Label="Title">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                            <uc:TableRowUserControl Label="Caption">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding Caption, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
+                                            <uc:TableRowUserControl Label="ImageUrl">
+                                                <uc:TableRowUserControl.Field>
+                                                    <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                </uc:TableRowUserControl.Field>
+                                            </uc:TableRowUserControl>
 
-                                        <uc:TableRowUserControl Label="Does Repeat" >
-                                            <uc:TableRowUserControl.Field>
-                                                <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
-                                            </uc:TableRowUserControl.Field>
-                                        </uc:TableRowUserControl>
-                                        <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
-                                            <uc:TableRowUserControl Label="Repeat On">
+                                            <uc:TableRowUserControl Label="Does Repeat" >
                                                 <uc:TableRowUserControl.Field>
-                                                    <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                                                    <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
                                                 </uc:TableRowUserControl.Field>
                                             </uc:TableRowUserControl>
-                                            <uc:TableRowUserControl Label="Repeat As">
-                                                <uc:TableRowUserControl.Field>
-                                                    <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
-                                                </uc:TableRowUserControl.Field>
-                                            </uc:TableRowUserControl>
-                                            <uc:TableRowUserControl Label="Start Position">
-                                                <uc:TableRowUserControl.Field>
-                                                    <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
-                                                </uc:TableRowUserControl.Field>
-                                            </uc:TableRowUserControl>
-                                            <uc:TableRowUserControl Label="Max Repeats">
-                                                <uc:TableRowUserControl.Field>
-                                                    <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
-                                                </uc:TableRowUserControl.Field>
-                                            </uc:TableRowUserControl>
-                                        </StackPanel>
-                                        <ItemsControl ItemsSource="{Binding Buttons}">
-                                            <ItemsControl.ItemTemplate>
-                                                <DataTemplate>
-                                                    <GroupBox Header="{Binding}">
-                                                        <GroupBox.HeaderTemplate>
-                                                            <DataTemplate>
-                                                                <Grid >
-                                                                    <Grid.ColumnDefinitions>
-                                                                        <ColumnDefinition/>
-                                                                        <ColumnDefinition Width="Auto"/>
-                                                                        <ColumnDefinition Width="Auto"/>
-                                                                        <ColumnDefinition Width="Auto"/>
-                                                                    </Grid.ColumnDefinitions>
-                                                                    <TextBlock VerticalAlignment="Center">
+                                            <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
+                                                <uc:TableRowUserControl Label="Repeat On">
+                                                    <uc:TableRowUserControl.Field>
+                                                        <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                                                    </uc:TableRowUserControl.Field>
+                                                </uc:TableRowUserControl>
+                                                <uc:TableRowUserControl Label="Repeat As">
+                                                    <uc:TableRowUserControl.Field>
+                                                        <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
+                                                    </uc:TableRowUserControl.Field>
+                                                </uc:TableRowUserControl>
+                                                <uc:TableRowUserControl Label="Start Position">
+                                                    <uc:TableRowUserControl.Field>
+                                                        <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
+                                                    </uc:TableRowUserControl.Field>
+                                                </uc:TableRowUserControl>
+                                                <uc:TableRowUserControl Label="Max Repeats">
+                                                    <uc:TableRowUserControl.Field>
+                                                        <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
+                                                    </uc:TableRowUserControl.Field>
+                                                </uc:TableRowUserControl>
+                                            </StackPanel>
+                                            <StackPanel>
+                                                <ItemsControl ItemsSource="{Binding Buttons}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <GroupBox Header="{Binding}">
+                                                                <GroupBox.HeaderTemplate>
+                                                                    <DataTemplate>
+                                                                        <Grid >
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                            </Grid.ColumnDefinitions>
+                                                                            <TextBlock VerticalAlignment="Center">
                                                                         <Run Text="Carousel Button: "/><Run Text="{Binding Text}"/>
-                                                                    </TextBlock>
-                                                                    <Button Grid.Column="1" Style="{StaticResource MoveUpButtonStyle}"/>
-                                                                    <Button Grid.Column="2" Style="{StaticResource MoveDownButtonStyle}"/>
-                                                                    <Button Grid.Column="3" Style="{StaticResource DeleteButtonStyle}"/>
-                                                                </Grid>
-                                                            </DataTemplate>
-                                                        </GroupBox.HeaderTemplate>
-                                                        <StackPanel>
-                                                            <uc:TableRowUserControl Label="Text">
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
-                                                            <uc:TableRowUserControl Label="Url">
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
-                                                            <uc:TableRowUserControl Label="Variable Value">
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <TextBox Text="{Binding VariableValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
-                                                            <uc:TableRowUserControl Label="Next Node Id">
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <TextBox Text="{Binding NextNodeId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
+                                                                            </TextBlock>
+                                                                            <Button Grid.Column="1" Style="{StaticResource MoveUpButtonStyle}"/>
+                                                                            <Button Grid.Column="2" Style="{StaticResource MoveDownButtonStyle}"/>
+                                                                            <Button Grid.Column="3" Style="{StaticResource DeleteButtonStyle}"/>
+                                                                        </Grid>
+                                                                    </DataTemplate>
+                                                                </GroupBox.HeaderTemplate>
+                                                                <StackPanel>
+                                                                    <uc:TableRowUserControl Label="Text">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
+                                                                    <uc:TableRowUserControl Label="Url">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
+                                                                    <uc:TableRowUserControl Label="Variable Value">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <TextBox Text="{Binding VariableValue, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
+                                                                    <uc:TableRowUserControl Label="Next Node Id">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <TextBox Text="{Binding NextNodeId, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
 
-                                                            <uc:TableRowUserControl Label="Type">
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
+                                                                    <uc:TableRowUserControl Label="Type">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
 
-                                                            <uc:TableRowUserControl Label="Does Repeat" >
-                                                                <uc:TableRowUserControl.Field>
-                                                                    <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
-                                                                </uc:TableRowUserControl.Field>
-                                                            </uc:TableRowUserControl>
-                                                            <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
-                                                                <uc:TableRowUserControl Label="Repeat On">
-                                                                    <uc:TableRowUserControl.Field>
-                                                                        <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
-                                                                    </uc:TableRowUserControl.Field>
-                                                                </uc:TableRowUserControl>
-                                                                <uc:TableRowUserControl Label="Repeat As">
-                                                                    <uc:TableRowUserControl.Field>
-                                                                        <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
-                                                                    </uc:TableRowUserControl.Field>
-                                                                </uc:TableRowUserControl>
-                                                                <uc:TableRowUserControl Label="Start Position">
-                                                                    <uc:TableRowUserControl.Field>
-                                                                        <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
-                                                                    </uc:TableRowUserControl.Field>
-                                                                </uc:TableRowUserControl>
-                                                                <uc:TableRowUserControl Label="Max Repeats">
-                                                                    <uc:TableRowUserControl.Field>
-                                                                        <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
-                                                                    </uc:TableRowUserControl.Field>
-                                                                </uc:TableRowUserControl>
-                                                            </StackPanel>
-                                                        </StackPanel>
-                                                    </GroupBox>
-                                                </DataTemplate>
-                                            </ItemsControl.ItemTemplate>
-                                        </ItemsControl>
-                                    </StackPanel>
-                                </GroupBox>
-                            </DataTemplate>
-                        </ItemsControl.ItemTemplate>
-                    </ItemsControl>
+                                                                    <uc:TableRowUserControl Label="Does Repeat" >
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
+                                                                    <StackPanel Visibility="{Binding DoesRepeat, Converter={StaticResource B2V}}">
+                                                                        <uc:TableRowUserControl Label="Repeat On">
+                                                                            <uc:TableRowUserControl.Field>
+                                                                                <TextBox Text="{Binding RepeatOn, Mode=TwoWay}" />
+                                                                            </uc:TableRowUserControl.Field>
+                                                                        </uc:TableRowUserControl>
+                                                                        <uc:TableRowUserControl Label="Repeat As">
+                                                                            <uc:TableRowUserControl.Field>
+                                                                                <TextBox Text="{Binding RepeatAs, Mode=TwoWay}" />
+                                                                            </uc:TableRowUserControl.Field>
+                                                                        </uc:TableRowUserControl>
+                                                                        <uc:TableRowUserControl Label="Start Position">
+                                                                            <uc:TableRowUserControl.Field>
+                                                                                <TextBox Text="{Binding StartPosition, Mode=TwoWay}" InputScope="Number"/>
+                                                                            </uc:TableRowUserControl.Field>
+                                                                        </uc:TableRowUserControl>
+                                                                        <uc:TableRowUserControl Label="Max Repeats">
+                                                                            <uc:TableRowUserControl.Field>
+                                                                                <TextBox Text="{Binding MaxRepeats, Mode=TwoWay}" InputScope="Number"/>
+                                                                            </uc:TableRowUserControl.Field>
+                                                                        </uc:TableRowUserControl>
+                                                                    </StackPanel>
+                                                                </StackPanel>
+                                                            </GroupBox>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
+                                                <Button Style="{StaticResource AddCarouselItemStyle}" ToolTip="Add Carousel Button" Command="{Binding AddButton}"/>
+                                            </StackPanel>
+                                        </StackPanel>
+                                    </GroupBox>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        <Button Style="{StaticResource AddCarouselItemStyle}" ToolTip="Add Carousel Item" Command="{Binding AddItem}"/>
+                    </StackPanel>
                 </ScrollViewer>
             </StackPanel>
         </GroupBox>

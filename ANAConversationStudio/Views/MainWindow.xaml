@@ -783,7 +783,7 @@
                                         </Button>
                                     </ItemsControl>
                                     <StackPanel Grid.Column="3" Orientation="Horizontal">
-                                        <TextBlock VerticalAlignment="Center" Margin="0,0,4,0" HorizontalAlignment="Center">
+                                        <TextBlock Width="40" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,4,0" HorizontalAlignment="Center">
                                             <Run Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"/>%
                                         </TextBlock>
                                         <Button Padding="10,0" Width="30" Command="{StaticResource Commands.ZoomOut}" ToolTip="Zoom out from the content">-</Button>

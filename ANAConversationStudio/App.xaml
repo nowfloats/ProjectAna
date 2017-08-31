@@ -49,8 +49,7 @@
             <VisualBrush x:Key="GridlinesVBrush" TileMode="Tile" 
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
-            <Style TargetType="tk:WatermarkTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-            </Style>
+
             <!-- primary hues  -->
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#ccc"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>

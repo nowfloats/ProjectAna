@@ -62,7 +62,7 @@
             <Setter Property="Text" Value="{Binding NodeType, Converter={StaticResource ButtonSectionTypeSymbolConverter}}"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
-        <Style x:Key="AddSectionButtonStyle" TargetType="Button" BasedOn="{StaticResource ToolButtonStyle}">
+        <Style x:Key="AddSectionButtonStyle" TargetType="Button" BasedOn="{StaticResource MaterialDesignFloatingActionButton}">
             <Style.Triggers>
                 <EventTrigger RoutedEvent="Click">
                     <EventTrigger.Actions>
@@ -78,13 +78,13 @@
             </Style.Triggers>
             <Setter Property="Content" >
                 <Setter.Value>
-                    <TextBlock Text="&#xE948;" VerticalAlignment="Center" FontFamily="{StaticResource MDL2Assets}"/>
+                    <TextBlock Text="&#xE948;" FontSize="20" VerticalAlignment="Center" FontFamily="{StaticResource MDL2Assets}"/>
                 </Setter.Value>
             </Setter>
             <Setter Property="ToolTip" Value="Add Section"/>
+            <Setter Property="Margin" Value="0,5,0,0"/>
         </Style>
-        <Style TargetType="tk:WatermarkTextBox" BasedOn="{StaticResource {x:Type TextBox}}">
-        </Style>
+
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
@@ -208,23 +208,25 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                    <Button Style="{StaticResource AddSectionButtonStyle}" Grid.Column="1">
-                                        <Button.ContextMenu>
-                                            <ContextMenu>
-                                                <MenuItem Header="Text" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Text}"/>
-                                                <MenuItem Header="Image" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Image}" />
-                                                <MenuItem Header="Gif" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Gif}"/>
-                                                <MenuItem Header="Audio" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Audio}"/>
-                                                <MenuItem Header="Video" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Video}"/>
-                                                <MenuItem Header="Carousel" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Carousel}"/>
-                                                <MenuItem Header="Embedded HTML" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.EmbeddedHtml}"/>
-                                            </ContextMenu>
-                                        </Button.ContextMenu>
-                                    </Button>
                                 </Grid>
                             </DataTemplate>
                         </GroupBox.HeaderTemplate>
-                        <ItemsControl ItemsSource="{Binding ChatNode.Sections}" ItemTemplateSelector="{StaticResource EditSectionTemplateSelector}"/>
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding ChatNode.Sections}" ItemTemplateSelector="{StaticResource EditSectionTemplateSelector}"/>
+                            <Button Style="{StaticResource AddSectionButtonStyle}" Grid.Column="1">
+                                <Button.ContextMenu>
+                                    <ContextMenu>
+                                        <MenuItem Header="Text" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Text}"/>
+                                        <MenuItem Header="Image" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Image}" />
+                                        <MenuItem Header="Gif" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Gif}"/>
+                                        <MenuItem Header="Audio" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Audio}"/>
+                                        <MenuItem Header="Video" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Video}"/>
+                                        <MenuItem Header="Carousel" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Carousel}"/>
+                                        <MenuItem Header="Embedded HTML" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.EmbeddedHtml}"/>
+                                    </ContextMenu>
+                                </Button.ContextMenu>
+                            </Button>
+                        </StackPanel>
                     </GroupBox>
                 </ScrollViewer>
             </TabItem>
@@ -239,11 +241,13 @@
                                         <ColumnDefinition Width="Auto"/>
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                    <Button Style="{StaticResource AddButtonStyle}" Grid.Column="1" Click="AddButtonClick" ToolTip="Add Button"/>
                                 </Grid>
                             </DataTemplate>
                         </GroupBox.HeaderTemplate>
-                        <ItemsControl ItemsSource="{Binding ChatNode.Buttons}" ItemTemplate="{StaticResource ChatButtonEditTemplate}"/>
+                        <StackPanel>
+                            <ItemsControl ItemsSource="{Binding ChatNode.Buttons}" ItemTemplate="{StaticResource ChatButtonEditTemplate}"/>
+                            <Button Style="{StaticResource AddButtonStyle}" Grid.Column="1" Click="AddButtonClick" ToolTip="Add Button"/>
+                        </StackPanel>
                     </GroupBox>
                 </ScrollViewer>
             </TabItem>
