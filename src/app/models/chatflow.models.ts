@@ -5,23 +5,167 @@ export interface ANAProject {
     _id: string;
 }
 
-export interface Section {
-    Text: string;
-    SectionType: number;
-    DelayInMs: number;
-    Hidden: boolean;
-    Alias: string;
-    _id: string;
-    Title: string;
-    Caption: string;
-    AltText?: any;
-    HeightInPixels?: number;
-    WidthInPixels?: number;
-    Url: string;
-    SizeInKb?: number;
+//Enum Start
+export enum SectionType {
+    Image = 'Image',
+    Text = 'Text',
+    Graph = 'Graph',
+    Gif = 'Gif',
+    Audio = 'Audio',
+    Video = 'Video',
+    Link = 'Link',
+    EmbeddedHtml = 'EmbeddedHtml',
+    Carousel = 'Carousel',
+    PrintOTP = 'PrintOTP'
 }
 
-export interface Button {
+export enum CarouselButtonType {
+    NextNode = 'NextNode',
+    DeepLink = 'DeepLink',
+    OpenUrl = 'OpenUrl'
+}
+
+export enum NodeType {
+    ApiCall = 'ApiCall',
+    Combination = 'Combination',
+    Card = 'Card'
+}
+
+export enum APIMethod {
+    GET = 'GET',
+    POST = 'POST',
+}
+
+export enum CardPlacement {
+    Incoming = 'Incoming',
+    Outgoing = 'Outgoing',
+    Center = 'Center'
+}
+//Enums End
+
+// Sections - Start
+export interface TitleCaptionEntity {
+    Title: string;
+    Caption: string;
+}
+
+export abstract class BaseIdEntity {
+    _id: string;
+}
+
+export abstract class BaseEntity extends BaseIdEntity {
+    abstract Alias(): string;
+}
+
+export class Section extends BaseEntity {
+    SectionType: SectionType;
+    DelayInMs: number;
+    Hidden: boolean;
+
+    Alias(): string {
+        return this.SectionType;
+    }
+}
+
+export abstract class RepeatableBaseEntity extends BaseEntity {
+    DoesRepeat: boolean;
+    RepeatOn: string;
+    RepeatAs: string;
+    StartPosition: string;
+    MaxRepeats: number;
+}
+
+export class TextSection extends Section {
+    constructor() {
+        super();
+        this.SectionType = SectionType.Text;
+    }
+
+    Text: string;
+
+    Alias(): string {
+        return this.Text || this.SectionType;
+    }
+}
+
+export abstract class TitleCaptionSection extends Section implements TitleCaptionEntity {
+    Title: string;
+    Caption: string;
+
+    Alias(): string {
+        return this.Title || this.Caption || this.SectionType;
+    }
+}
+
+export abstract class TitleCaptionUrlSection extends TitleCaptionSection {
+    Url: string;
+
+    Alias(): string {
+        return this.Title || this.Caption || this.SectionType;
+    }
+}
+
+export class ImageSection extends TitleCaptionUrlSection {
+    constructor() {
+        super();
+        this.SectionType = SectionType.Image;
+    }
+}
+
+export class VideoSection extends TitleCaptionUrlSection {
+    constructor() {
+        super();
+        this.SectionType = SectionType.Video;
+    }
+}
+
+export class AudioSection extends TitleCaptionUrlSection {
+    constructor() {
+        super();
+        this.SectionType = SectionType.Audio;
+    }
+}
+
+export class EmbeddedHtmlSection extends TitleCaptionUrlSection {
+    constructor() {
+        super();
+        this.SectionType = SectionType.EmbeddedHtml;
+    }
+}
+
+export class CarouselButton extends RepeatableBaseEntity {
+
+    Url: string;
+    Type: CarouselButtonType;
+    VariableValue: string;
+    NextNodeId: string;
+    Text: string;
+
+    Alias(): string {
+        return this.Text || this.Type;
+    }
+}
+
+export class CarouselItem extends RepeatableBaseEntity implements TitleCaptionEntity {
+    Title: string;
+    Caption: string;
+
+    Alias(): string {
+        return this.Title || this.Caption || 'Carousel Item';
+    }
+}
+
+export class CarouselSection extends TitleCaptionSection {
+    constructor() {
+        super();
+        this.SectionType = SectionType.Carousel;
+    }
+
+    Items: CarouselItem[];
+}
+// Sections - End
+
+export class Button {
     ButtonName?: any;
     ButtonText: string;
     Emotion: number;
@@ -48,28 +192,28 @@ export interface Button {
     _id: string;
 }
 
-export interface ChatNode {
+export class ChatNode {
     Name: string;
     Id: string;
-    Emotion: number;
+    Emotion: string;
     TimeoutInMs: number;
-    NodeType: number;
+    NodeType: NodeType;
     Sections: Section[];
     Buttons: Button[];
-    VariableName?: any;
-    ApiMethod?: any;
-    ApiUrl?: any;
-    ApiResponseDataRoot?: any;
-    NextNodeId?: any;
-    RequiredVariables?: any;
-    GroupName?: any;
-    FlowId?: any;
-    CardHeader?: any;
-    CardFooter?: any;
-    Placement?: any;
+    VariableName?: string;
+    ApiMethod?: APIMethod;
+    ApiUrl?: string;
+    ApiResponseDataRoot?: string;
+    NextNodeId?: string;
+    RequiredVariables?: string[];
+    GroupName?: string;
+    CardHeader?: string;
+    CardFooter?: string;
+    Placement?: CardPlacement;
+    IsStartNode: boolean;
 }
 
-export interface ChatContent {
+export class ChatContent {
     ButtonId: string;
     ButtonText: string;
     NodeName?: string;
@@ -84,7 +228,7 @@ export interface ChatContent {
     Caption: string;
 }
 
-export interface ChatFlowPack {
+export class ChatFlowPack {
     ProjectId: string;
     ChatNodes: ChatNode[];
     ChatContent: ChatContent[];

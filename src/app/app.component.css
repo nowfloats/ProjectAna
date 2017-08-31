@@ -32,8 +32,8 @@ li.link-active a:focus {
     display: flex;
     height: 100%;
     min-height: 95vh !important;
-    align-items: center;
-    justify-content: center;
+    /*align-items: center;*/
+    /*justify-content: center;*/
 }
 
 md-sidenav-container {
@@ -44,7 +44,7 @@ md-sidenav-container {
 
 md-sidenav {
     width: 250px;
-    background-color: gray;
+    background-color: gray !important;
 }
 
 li .glyphicon {

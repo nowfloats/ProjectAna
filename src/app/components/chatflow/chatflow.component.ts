@@ -19,8 +19,6 @@ export class ChatFlowComponent implements AfterViewInit {
         this._viewBoxY = 0;
         this._viewBoxWidth = this.designerWidth();
         this._viewBoxHeight = this.designerHeight();
-        //debugging
-        //this.mockChatFlow();
 
         this.loadChatFlow();
     }
@@ -185,132 +183,18 @@ export class ChatFlowComponent implements AfterViewInit {
         this._isMouseDown = false;
     }
     //599647fa460b500d9c4cb11c
-    private loadChatFlow(projectId: string = '5996231a460b50abbc083b71') { //5996231a460b50abbc083b71
+    private loadChatFlow(projectId: string = '599c3caa460b5053e4b09869') { //5996231a460b50abbc083b71
         //this.chatFlowService.loadProjectsList().subscribe(projects => {
         //    console.log(projects.Data.map(x => x.Name).join(", "));
         //}, err => console.error(err));
         this.chatFlowService.fetchChatFlowPack(projectId).subscribe(x => {
             x.ChatNodes.forEach(cn => {
-                //if (cn.Buttons.length == 4) {
-                //    cn.Buttons.push(JSON.parse(JSON.stringify(cn.Buttons[0])) as ChatFlowModels.Button);
-                //    cn.Buttons.push(JSON.parse(JSON.stringify(cn.Buttons[0])) as ChatFlowModels.Button);
-                //    cn.Buttons.push(JSON.parse(JSON.stringify(cn.Buttons[0])) as ChatFlowModels.Button);
-                //    cn.Buttons.push(JSON.parse(JSON.stringify(cn.Buttons[0])) as ChatFlowModels.Button);
-                //}
                 new ChatNodeVM(this.chatFlowNetwork, cn);
             });
             this.chatFlowNetwork.updateChatNodeConnections();
             this.updateLayout();
 
         }, err => console.error(err));
-    }
-
-    private mockChatFlow() {
-        /*
-        new ChatNodeVM(this.chatFlowNetwork, {
-            Id: "1",
-            Name: "abcdcba",
-            Buttons: [
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-            ],
-            Sections: [
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-            ]
-        });
-
-        new ChatNodeVM(this.chatFlowNetwork, {
-            Id: "2",
-            Name: "Node 2",
-            Buttons: [
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '1' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '3' },
-            ],
-            Sections: [
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-            ]
-        });
-
-        new ChatNodeVM(this.chatFlowNetwork, {
-            Id: "3",
-            Name: "Node 3",
-            Buttons: [
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '1' },
-            ],
-            Sections: [
-                { Alias: 'Section 1', _id: '1' },
-            ]
-        });
-
-        new ChatNodeVM(this.chatFlowNetwork, {
-            Id: "4",
-            Name: "abcdcba",
-            Buttons: [
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-                { Alias: 'Btn 1', _id: '1', NextNodeId: '2' },
-            ],
-            Sections: [
-                { Alias: 'Section 1', _id: '1' },
-                { Alias: 'Section 1', _id: '1' },
-            ]
-        });
-        */
-        //let chatNode2 = new ChatNodeVM(this.chatFlowNetwork, {
-        //    Id: "2",
-        //    Name: "abcdcba",
-        //    Buttons: [],
-        //    Sections: []
-        //});
-        //new ChatButtonVM(chatNode2, "Node 2 Btn 1", "100");
-        //new ChatButtonVM(chatNode2, "Node 2 Btn 2", "100");
-        //new ChatSectionVM(chatNode2, "Node 2 Section 1 Section 1 Section 1 Section 1 Section 1 Section 1");
-        //new ChatSectionVM(chatNode2, "Node 2 Section 2");
-
-        //let chatNode3 = new ChatNodeVM(this.chatFlowNetwork, {
-        //    Id: "3",
-        //    Name: "abcdcba",
-        //    Buttons: [],
-        //    Sections: []
-        //});
-        //new ChatButtonVM(chatNode3, "abcpcba", "100");
-        //new ChatSectionVM(chatNode3, "Node 3 Section 1 Section 1 Section 1 Section 1 Section 1 Section 1");
-
-        //let chatNode4 = new ChatNodeVM(this.chatFlowNetwork, {
-        //    Id: "4",
-        //    Name: "12345654321",
-        //    Buttons: [],
-        //    Sections: []
-        //});
-        //new ChatButtonVM(chatNode4, "Node 4 Btn 1", "100");
-        //new ChatButtonVM(chatNode4, "Node 4 Btn 2", "100");
-        //new ChatButtonVM(chatNode4, "Node 4 Btn 2", "100");
-        //new ChatSectionVM(chatNode4, "Node 4 Section 1 Section 1 Section 1 Section 1 Section 1 Section 1");
-        //new ChatSectionVM(chatNode4, "Node 4 Section 2");
-        //new ChatSectionVM(chatNode4, "Node 4 Section 2");
     }
 }
 
@@ -514,7 +398,6 @@ export class ChatNodeVM {
         this.network.chatNodeVMs.push(this);
 
         this._x = (this.network.chatNodeVMs.indexOf(this)) * Config.defaultNodeWidth;
-        //this._y = (this.parent.chatNodeVMs.indexOf(this)) * Config.defaultNodeHeight;
     }
 
     _x: number = 0;

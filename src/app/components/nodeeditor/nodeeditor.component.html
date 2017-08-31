@@ -1,52 +1,96 @@
-<div>
-    <form>
-        <md-form-field>
-            <input mdInput placeholder="Company (disabled)" disabled value="Google">
-        </md-form-field>
-    
-        <table cellspacing="0">
-            <tr>
-                <td>
-                    <md-form-field>
-                        <input mdInput placeholder="First name">
-                    </md-form-field>
-                </td>
-                <td>
-                    <md-form-field>
-                        <input mdInput placeholder="Long Last Name That Will Be Truncated">
-                    </md-form-field>
-                </td>
-            </tr>
-        </table>
-    
-        <p>
+<div class="container root">
+  <div class="row">
+    <div class="col-md-8">
+      <form class="form-horizontal" role="form">
+        <div class="node-details">
+          <div class="form-group">
             <md-form-field>
-                <textarea mdInput placeholder="Address">1600 Amphitheatre Pkwy</textarea>
+              <input mdInput type="text" placeholder="Node Name" [(ngModel)]="chatNode.Name" name="nodeName">
             </md-form-field>
+          </div>
+          <div class="form-group">
+            <md-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
+              <md-option *ngFor="let nType of nodeTypes" [value]="nType">
+                {{ nType }}
+              </md-option>
+            </md-select>
+          </div>
+          <div class="form-group">
+            <md-checkbox [(ngModel)]="chatNode.IsStartNode" name="isStartNode" align="end">Mark as start node</md-checkbox>
+          </div>
+          <div class="form-group">
             <md-form-field>
-                <textarea mdInput placeholder="Address 2"></textarea>
+              <input mdInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
             </md-form-field>
-        </p>
-    
-        <table cellspacing="0">
-            <tr>
-                <td>
-                    <md-form-field>
-                        <input mdInput placeholder="City">
-                    </md-form-field>
-                </td>
-                <td>
-                    <md-form-field>
-                        <input mdInput placeholder="State">
-                    </md-form-field>
-                </td>
-                <td>
-                    <md-form-field>
-                        <input mdInput #postalCode maxlength="5" placeholder="Postal Code" value="94043">
-                        <md-hint align="end"> / 5</md-hint>
-                    </md-form-field>
-                </td>
-            </tr>
-        </table>
-    </form>
+          </div>
+          <div class="form-group">
+            <md-form-field>
+              <input mdInput type="number" placeholder="Timeout (ms)" [(ngModel)]="chatNode.TimeoutInMs" name="timeout">
+            </md-form-field>
+          </div>
+
+          <div class="node-api-details" [hidden]="chatNode.NodeType!='ApiCall'">
+            <div class="form-group">
+              <md-select placeholder="API Method" [(ngModel)]="chatNode.ApiMethod" name="ApiMethod">
+                <md-option *ngFor="let apiMethod of apiMethods" [value]="apiMethod">
+                  {{ apiMethod || 'None' }}
+                </md-option>
+              </md-select>
+            </div>
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="url" placeholder="API Url" [(ngModel)]="chatNode.ApiUrl" name="ApiUrl">
+              </md-form-field>
+            </div>
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="text" placeholder="Next Node Id" [(ngModel)]="chatNode.NextNodeId" name="NextNodeId">
+              </md-form-field>
+            </div>
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="text" placeholder="API Response Data Root" [(ngModel)]="chatNode.ApiResponseDataRoot" name="ApiResponseDataRoot">
+              </md-form-field>
+            </div>
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="text" placeholder="Required Variables" [(ngModel)]="chatNode.RequiredVariables" name="RequiredVariables">
+              </md-form-field>
+            </div>
+          </div>
+          <div class="node-card-details">
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="text" placeholder="Card Header" [(ngModel)]="chatNode.CardHeader" name="CardHeader">
+              </md-form-field>
+            </div>
+            <div class="form-group">
+              <md-form-field>
+                <input mdInput type="text" placeholder="Card Footer" [(ngModel)]="chatNode.CardFooter" name="CardFooter">
+              </md-form-field>
+            </div>
+            <div class="form-group">
+              <md-select placeholder="Card Placement" [(ngModel)]="chatNode.Placement" name="Placement">
+                <md-option *ngFor="let cardPlacement of cardPlacements" [value]="cardPlacement">
+                  {{ cardPlacement || 'None' }}
+                </md-option>
+              </md-select>
+            </div>
+          </div>
+        </div>
+        <div class="node-section-details">
+          <div class="node-section" *ngFor="let section of chatNode.Sections">
+            <div [ngSwitch]="section.SectionType">
+              <ng-container *ngSwitchCase="'Text'">
+                Text section
+              </ng-container>
+              <ng-container *ngSwitchCase="'Image'">
+                Image Section
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
 </div>
