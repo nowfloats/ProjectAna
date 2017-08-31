@@ -15,7 +15,7 @@ namespace ANAConversationPlatform.Models
         public string Name { get; set; }
         public string Id { get; set; }
 
-        [JsonIgnore] //bsonIgnore should NOT be used here
+        //[JsonIgnore] //JsonIgnore should not be here //bsonIgnore should NOT be used here
         public bool IsStartNode { get; set; }
 
         public EmotionEnum Emotion { get; set; }
