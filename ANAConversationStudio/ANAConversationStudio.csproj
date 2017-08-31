@@ -148,6 +148,9 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\ChatFlowBuilder.cs" />
     <Compile Include="Models\ChatFlowSearchItem.cs" />
+    <Compile Include="UserControls\NodeEditorUserControl.xaml.cs">
+      <DependentUpon>NodeEditorUserControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\NodeEditWindow.xaml.cs">
       <DependentUpon>NodeEditWindow.xaml</DependentUpon>
     </Compile>
@@ -206,6 +209,10 @@
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Page Include="UserControls\NodeEditorUserControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\NodeEditWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

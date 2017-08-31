@@ -442,6 +442,15 @@ namespace ANAConversationStudio.Views
         {
             OpenChatServersManager();
         }
+
+        private void networkControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (this.networkControl.SelectedNode is NodeViewModel nodeVM)
+            {
+                NodeEditor.ChatNode = nodeVM.ChatNode;
+                NodeEditorLayoutAnchorable.IsActive = true;
+            }
+        }
     }
 
     /// <summary>
@@ -678,9 +687,12 @@ namespace ANAConversationStudio.Views
             //    zoomAndPanControl.AnimatedSnapTo(doubleClickPoint);
             //}
 
+#if false
             OpenNodeEditor();
+#endif
         }
 
+#if false
         private void OpenNodeEditor()
         {
             if (this.ViewModel?.Network?.Nodes == null) return;
@@ -720,7 +732,8 @@ namespace ANAConversationStudio.Views
                     }
                 }
             }
-        }
+        } 
+#endif
 
         /// <summary>
         /// The 'ZoomIn' command (bound to the plus key) was executed.
@@ -993,15 +1006,15 @@ namespace ANAConversationStudio.Views
                 return wp.Success;
             }
         }
-        private void MainWindow_Loaded(object sender, RoutedEventArgs e)
+        private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
         {
+            UpdateTitle(); //Update title here so that version number is visible even before login.
             this.IsEnabled = false;
             if (!AskPass()) return;
-
             this.IsEnabled = true;
-            AskToSelectChatServer();
+            await SelectDefaultOrAskForChatServerAsync();
             CheckForUpdates();
-            UpdateTitle();
+            UpdateTitle(); //Update title here so that chosen chat server name, project name fill up.
         }
         private void UpdateTitle()
         {
@@ -1015,9 +1028,23 @@ namespace ANAConversationStudio.Views
                 Title = $"{title} - ANA Conversation Studio {GetVersion()}";
         }
 
-        private void AskToSelectChatServer()
+        private async Task SelectDefaultOrAskForChatServerAsync()
         {
-            OpenChatServersManager();
+            ChatServerConnection chatServer = null;
+            if (Utilities.Settings.SavedChatServerConnections.Count == 1)
+                chatServer = Utilities.Settings.SavedChatServerConnections.First();
+            else if (Utilities.Settings.SavedChatServerConnections.Any(x => x.IsDefault))
+                chatServer = Utilities.Settings.SavedChatServerConnections.First(x => x.IsDefault);
+
+            if (chatServer != null)
+            {
+                var done = await StudioContext.LoadFromChatServerConnectionAsync(chatServer);
+                if (!done)
+                    return;
+                new ChatFlowsManagerWindow().Show();
+            }
+            else
+                OpenChatServersManager();
         }
 
         private void OpenChatServersManager()
@@ -1063,8 +1090,6 @@ namespace ANAConversationStudio.Views
                 await SaveEditsAsync();
             }
         }
-
-
 
         private async void SaveButtonClick(object sender, RoutedEventArgs e)
         {

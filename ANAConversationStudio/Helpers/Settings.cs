@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using Xceed.Wpf.Toolkit.PropertyGrid.Attributes;
 
@@ -75,16 +76,21 @@ namespace ANAConversationStudio.Helpers
     public class ChatServerConnection
     {
         [PropertyOrder(1)]
+        [DisplayName("Connection Name")]
         public string Name { get; set; }
         [PropertyOrder(2)]
+        [DisplayName("Server URL")]
         public string ServerUrl { get; set; }
 
         [PropertyOrder(3)]
+        [DisplayName("API Key")]
         public string APIKey { get; set; }
         [PropertyOrder(4)]
+        [DisplayName("API Secret")]
         public string APISecret { get; set; }
 
         [PropertyOrder(5)]
+        [DisplayName("Set as default")]
         public bool IsDefault { get; set; }
 
         public override string ToString()
