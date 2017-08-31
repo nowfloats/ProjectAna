@@ -17,7 +17,7 @@
         <ui:EditSectionTemplateSelector x:Key="EditSectionTemplateSelector" />
         <ui:ObservableCollectionStringJoinConverter x:Key="ObservableCollectionStringJoinConverter"/>
         <Style TargetType="GroupBox" BasedOn="{StaticResource {x:Type GroupBox}}">
-            <Setter Property="Margin" Value="5"/>
+            <Setter Property="Margin" Value="0,0,0,5"/>
         </Style>
         <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
             <Setter Property="Margin" Value="0,5" />
@@ -88,153 +88,165 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <ScrollViewer VerticalScrollBarVisibility="Auto">
-            <StackPanel>
-                <GroupBox Header="{Binding ChatNode}" Margin="0">
-                    <GroupBox.HeaderTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-                                <TextBlock Style="{StaticResource NodeTypeIconTextblockStyle}" Grid.Column="0"/>
-                                <TextBlock VerticalAlignment="Center" Grid.Column="1">
+        <TabControl>
+            <TabItem Header="General">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <GroupBox Header="{Binding ChatNode}" Margin="0">
+                            <GroupBox.HeaderTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Style="{StaticResource NodeTypeIconTextblockStyle}" Grid.Column="0"/>
+                                        <TextBlock VerticalAlignment="Center" Grid.Column="1">
                                     <Run  Text="Node: "/><Run  Text="{Binding Alias}"/>
-                                </TextBlock>
-                                <Button Grid.Column="2" Style="{DynamicResource ToolTextButtonStyle}" Content="Copy Id" ToolTip="Copy node id to clipboard" Click="CopyNodeIdClick"/>
-                            </Grid>
-                        </DataTemplate>
-                    </GroupBox.HeaderTemplate>
-                    <StackPanel>
-                        <StackPanel Margin="10">
-                            <uc:TableRowUserControl Label="Name">
-                                <uc:TableRowUserControl.Field>
-                                    <TextBox Text="{Binding ChatNode.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
-                                </uc:TableRowUserControl.Field>
-                            </uc:TableRowUserControl>
-                            <uc:TableRowUserControl Label="Type">
-                                <uc:TableRowUserControl.Field>
-                                    <ComboBox ItemsSource="{Binding NodeTypes}" SelectedItem="{Binding ChatNode.NodeType, Mode=TwoWay}" />
-                                </uc:TableRowUserControl.Field>
-                            </uc:TableRowUserControl>
-                            <uc:TableRowUserControl Label="Mark as start node">
-                                <uc:TableRowUserControl.Field>
-                                    <CheckBox IsChecked="{Binding ChatNode.IsStartNode, Mode=TwoWay}" />
-                                </uc:TableRowUserControl.Field>
-                            </uc:TableRowUserControl>
-                            <uc:TableRowUserControl Label="Variable Name">
-                                <uc:TableRowUserControl.Field>
-                                    <TextBox Text="{Binding ChatNode.VariableName, Mode=TwoWay}" />
-                                </uc:TableRowUserControl.Field>
-                            </uc:TableRowUserControl>
-                            <uc:TableRowUserControl Label="Timeout (ms)" ToolTip="Timeout in milliseconds. After this time, the default button of this node will be activated automatically">
-                                <uc:TableRowUserControl.Field>
-                                    <TextBox Text="{Binding ChatNode.TimeoutInMs, Mode=TwoWay}" />
-                                </uc:TableRowUserControl.Field>
-                            </uc:TableRowUserControl>
-                        </StackPanel>
-                        <GroupBox Header="API Call Details"  Visibility="{Binding ChatNode.NodeType, Converter={StaticResource NodeTypeToGroupVisibilityConverter}, ConverterParameter={x:Static chat:NodeTypeEnum.ApiCall}}">
-                            <StackPanel>
-                                <uc:TableRowUserControl Label="API Method">
-                                    <uc:TableRowUserControl.Field>
-                                        <ComboBox SelectedItem="{Binding ChatNode.ApiMethod, Mode=TwoWay}" ItemsSource="{Binding APIMethods}" >
-                                            <ComboBox.ItemTemplate>
-                                                <DataTemplate>
-                                                    <TextBlock Text="{Binding}" Padding="4"/>
-                                                </DataTemplate>
-                                            </ComboBox.ItemTemplate>
-                                        </ComboBox>
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="API Url">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.ApiUrl, Mode=TwoWay}" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="Next Node Id">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.NextNodeId, Mode=TwoWay}" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="API Response Data Root">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.ApiResponseDataRoot, Mode=TwoWay}" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="Required Variables">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.RequiredVariables, Converter={StaticResource ObservableCollectionStringJoinConverter}, Mode=TwoWay}" AcceptsReturn="True" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Card Details" Visibility="{Binding ChatNode.NodeType, Converter={StaticResource NodeTypeToGroupVisibilityConverter}, ConverterParameter={x:Static chat:NodeTypeEnum.Card}}">
-                            <StackPanel>
-                                <uc:TableRowUserControl Label="Header">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.CardHeader, Mode=TwoWay}" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="Footer">
-                                    <uc:TableRowUserControl.Field>
-                                        <TextBox Text="{Binding ChatNode.ApiResponseDataRoot, Mode=TwoWay}" />
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                                <uc:TableRowUserControl Label="Placement">
-                                    <uc:TableRowUserControl.Field>
-                                        <ComboBox SelectedItem="{Binding ChatNode.Placement, Mode=TwoWay}" ItemsSource="{Binding PlacementOptions}"/>
-                                    </uc:TableRowUserControl.Field>
-                                </uc:TableRowUserControl>
-                            </StackPanel>
-                        </GroupBox>
-                        <GroupBox Header="Sections">
-                            <GroupBox.HeaderTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                        <Button Style="{StaticResource AddSectionButtonStyle}" Grid.Column="1">
-                                            <Button.ContextMenu>
-                                                <ContextMenu>
-                                                    <MenuItem Header="Text" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Text}"/>
-                                                    <MenuItem Header="Image" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Image}" />
-                                                    <MenuItem Header="Gif" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Gif}"/>
-                                                    <MenuItem Header="Audio" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Audio}"/>
-                                                    <MenuItem Header="Video" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Video}"/>
-                                                    <MenuItem Header="Carousel" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Carousel}"/>
-                                                    <MenuItem Header="Embedded HTML" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.EmbeddedHtml}"/>
-                                                </ContextMenu>
-                                            </Button.ContextMenu>
-                                        </Button>
+                                        </TextBlock>
+                                        <Button Grid.Column="2" Style="{DynamicResource ToolTextButtonStyle}" Content="Copy Id" ToolTip="Copy node id to clipboard" Click="CopyNodeIdClick"/>
                                     </Grid>
                                 </DataTemplate>
                             </GroupBox.HeaderTemplate>
-                            <ItemsControl ItemsSource="{Binding ChatNode.Sections}" ItemTemplateSelector="{StaticResource EditSectionTemplateSelector}"/>
+                            <StackPanel>
+                                <StackPanel Margin="10">
+                                    <uc:TableRowUserControl Label="Name">
+                                        <uc:TableRowUserControl.Field>
+                                            <TextBox Text="{Binding ChatNode.Name, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                                        </uc:TableRowUserControl.Field>
+                                    </uc:TableRowUserControl>
+                                    <uc:TableRowUserControl Label="Type">
+                                        <uc:TableRowUserControl.Field>
+                                            <ComboBox ItemsSource="{Binding NodeTypes}" SelectedItem="{Binding ChatNode.NodeType, Mode=TwoWay}" />
+                                        </uc:TableRowUserControl.Field>
+                                    </uc:TableRowUserControl>
+                                    <uc:TableRowUserControl Label="Mark as start node">
+                                        <uc:TableRowUserControl.Field>
+                                            <CheckBox IsChecked="{Binding ChatNode.IsStartNode, Mode=TwoWay}" />
+                                        </uc:TableRowUserControl.Field>
+                                    </uc:TableRowUserControl>
+                                    <uc:TableRowUserControl Label="Variable Name">
+                                        <uc:TableRowUserControl.Field>
+                                            <TextBox Text="{Binding ChatNode.VariableName, Mode=TwoWay}" />
+                                        </uc:TableRowUserControl.Field>
+                                    </uc:TableRowUserControl>
+                                    <uc:TableRowUserControl Label="Timeout (ms)" ToolTip="Timeout in milliseconds. After this time, the default button of this node will be activated automatically">
+                                        <uc:TableRowUserControl.Field>
+                                            <TextBox Text="{Binding ChatNode.TimeoutInMs, Mode=TwoWay}" />
+                                        </uc:TableRowUserControl.Field>
+                                    </uc:TableRowUserControl>
+                                </StackPanel>
+                                <GroupBox Header="API Call Details"  Visibility="{Binding ChatNode.NodeType, Converter={StaticResource NodeTypeToGroupVisibilityConverter}, ConverterParameter={x:Static chat:NodeTypeEnum.ApiCall}}">
+                                    <StackPanel>
+                                        <uc:TableRowUserControl Label="API Method">
+                                            <uc:TableRowUserControl.Field>
+                                                <ComboBox SelectedItem="{Binding ChatNode.ApiMethod, Mode=TwoWay}" ItemsSource="{Binding APIMethods}" >
+                                                    <ComboBox.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding}" Padding="4"/>
+                                                        </DataTemplate>
+                                                    </ComboBox.ItemTemplate>
+                                                </ComboBox>
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="API Url">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.ApiUrl, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="Next Node Id">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.NextNodeId, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="API Response Data Root">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.ApiResponseDataRoot, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="Required Variables">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.RequiredVariables, Converter={StaticResource ObservableCollectionStringJoinConverter}, Mode=TwoWay}" AcceptsReturn="True" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                    </StackPanel>
+                                </GroupBox>
+                                <GroupBox Header="Card Details" Visibility="{Binding ChatNode.NodeType, Converter={StaticResource NodeTypeToGroupVisibilityConverter}, ConverterParameter={x:Static chat:NodeTypeEnum.Card}}">
+                                    <StackPanel>
+                                        <uc:TableRowUserControl Label="Header">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.CardHeader, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="Footer">
+                                            <uc:TableRowUserControl.Field>
+                                                <TextBox Text="{Binding ChatNode.ApiResponseDataRoot, Mode=TwoWay}" />
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                        <uc:TableRowUserControl Label="Placement">
+                                            <uc:TableRowUserControl.Field>
+                                                <ComboBox SelectedItem="{Binding ChatNode.Placement, Mode=TwoWay}" ItemsSource="{Binding PlacementOptions}"/>
+                                            </uc:TableRowUserControl.Field>
+                                        </uc:TableRowUserControl>
+                                    </StackPanel>
+                                </GroupBox>
+                            </StackPanel>
                         </GroupBox>
-                        <GroupBox Header="Buttons">
-                            <GroupBox.HeaderTemplate>
-                                <DataTemplate>
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition/>
-                                            <ColumnDefinition Width="Auto"/>
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
-                                        <Button Style="{StaticResource AddButtonStyle}" Grid.Column="1" Click="AddButtonClick" ToolTip="Add Button"/>
-                                    </Grid>
-                                </DataTemplate>
-                            </GroupBox.HeaderTemplate>
-                            <ItemsControl ItemsSource="{Binding ChatNode.Buttons}" ItemTemplate="{StaticResource ChatButtonEditTemplate}"/>
-                        </GroupBox>
-                    </StackPanel>
-                </GroupBox>
-            </StackPanel>
-        </ScrollViewer>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Sections">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <GroupBox Header="Sections" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource AddSectionButtonStyle}" Grid.Column="1">
+                                        <Button.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Text" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Text}"/>
+                                                <MenuItem Header="Image" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Image}" />
+                                                <MenuItem Header="Gif" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Gif}"/>
+                                                <MenuItem Header="Audio" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Audio}"/>
+                                                <MenuItem Header="Video" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Video}"/>
+                                                <MenuItem Header="Carousel" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.Carousel}"/>
+                                                <MenuItem Header="Embedded HTML" Click="AddSectionClick" Tag="{x:Static chatSections:SectionTypeEnum.EmbeddedHtml}"/>
+                                            </ContextMenu>
+                                        </Button.ContextMenu>
+                                    </Button>
+                                </Grid>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <ItemsControl ItemsSource="{Binding ChatNode.Sections}" ItemTemplateSelector="{StaticResource EditSectionTemplateSelector}"/>
+                    </GroupBox>
+                </ScrollViewer>
+            </TabItem>
+            <TabItem Header="Buttons">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <GroupBox Header="Buttons" Margin="0">
+                        <GroupBox.HeaderTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Text="{Binding}" VerticalAlignment="Center"/>
+                                    <Button Style="{StaticResource AddButtonStyle}" Grid.Column="1" Click="AddButtonClick" ToolTip="Add Button"/>
+                                </Grid>
+                            </DataTemplate>
+                        </GroupBox.HeaderTemplate>
+                        <ItemsControl ItemsSource="{Binding ChatNode.Buttons}" ItemTemplate="{StaticResource ChatButtonEditTemplate}"/>
+                    </GroupBox>
+
+                </ScrollViewer>
+            </TabItem>
+        </TabControl>
+
         <!--<Grid Grid.Row="1">
             <Button Content="Done" Click="DoneButtonClick" HorizontalAlignment="Center" Margin="10,5"/>
         </Grid>-->

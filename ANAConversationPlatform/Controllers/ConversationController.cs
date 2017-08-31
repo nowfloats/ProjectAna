@@ -105,7 +105,7 @@ namespace ANAConversationPlatform.Controllers
 
             var proj = await MongoHelper.GetChatFlowPackAsync(projectId);
             if (proj != null)
-                return Ok(proj);
+                return Json(proj, PublishJsonSettings);
             return BadRequest(new { Message = "Project with the given id was not found or could not be retrieved!" });
         }
 
