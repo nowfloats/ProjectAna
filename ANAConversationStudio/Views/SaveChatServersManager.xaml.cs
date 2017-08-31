@@ -28,17 +28,11 @@ namespace ANAConversationStudio.Views
             {
                 Save();
                 HideConfirm = true;
-                if (MainWindow.Current != null)
-                    MainWindow.Current.AskAlert = false;
-                Application.Current.Shutdown();
             }
             else if (op == MessageBoxResult.No)
-            {
                 HideConfirm = true;
-                if (MainWindow.Current != null)
-                    MainWindow.Current.AskAlert = false;
-                Application.Current.Shutdown();
-            }
+            else if (op == MessageBoxResult.Cancel)
+                e.Cancel = true;
         }
         private bool HideConfirm = false;
 
@@ -59,7 +53,7 @@ namespace ANAConversationStudio.Views
         private void CancelClick(object sender, RoutedEventArgs e)
         {
             HideConfirm = true;
-            Application.Current.Shutdown();
+            Close();
         }
 
         private async void SaveAndConnectClick(object sender, RoutedEventArgs e)
@@ -78,21 +72,19 @@ namespace ANAConversationStudio.Views
                     if (!done) return;
                     if (Save())
                     {
+                        ChatFlowsManagerWindow chatFlows = new ChatFlowsManagerWindow();
+                        chatFlows.Show();
+
                         HideConfirm = true;
                         Close();
                     }
                 }
                 catch (Exception ex)
                 {
-                    StudioContext.Current = null;
+                    StudioContext.ClearCurrent();
                     MessageBox.Show("Unable to connect to the chat server");
                 }
             }
         }
     }
 }
-
-//var connected = MainWindow.Current.ViewModel.LoadNodes();
-//                    if (connected)
-//                    {
-//                        MainWindow.Current.Status("Chat flow loaded");

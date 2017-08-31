@@ -5,6 +5,7 @@
     xmlns:Controls="clr-namespace:ANAConversationStudio.Controls"
     xmlns:NetworkUI="clr-namespace:NetworkUI;assembly=NetworkUI"
     xmlns:UI="clr-namespace:ANAConversationStudio.UIHelpers"
+    xmlns:Helpers="clr-namespace:ANAConversationStudio.Helpers"
     xmlns:toolkit="http://schemas.xceed.com/wpf/xaml/toolkit"
     xmlns:ZoomAndPan="clr-namespace:ZoomAndPan;assembly=ZoomAndPan"
     xmlns:ac="clr-namespace:AdornedControl;assembly=AdornedControl"
@@ -611,6 +612,7 @@
                 Header="Create Node"
                 Command="{StaticResource Commands.CreateNode}"
                 ToolTip="Creates a new node"
+                IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"
                 />
 
             <Separator />
@@ -669,31 +671,32 @@
                 </Grid.ColumnDefinitions>
                 <Menu Foreground="{StaticResource FileMenuForegroundBrush}" x:Name="menu" >
                     <MenuItem Header="File" x:Name="FileMenu" Height="30">
-                        <MenuItem Header="New Chat Flow" Click="NewChatFlowClick"/>
-                        <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" x:Name="SavedConnectionsFileMenu">
+                        <MenuItem Header="New Chat Flow" Click="NewChatFlowClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
+                        <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" ItemsSource="{Binding CurrentStudioContext.ChatFlowProjects}" IsEnabled="{Binding CurrentStudioContext.ChatFlowProjects, FallbackValue=false, Converter={StaticResource N2B}}">
                             <MenuItem.ItemTemplate>
                                 <DataTemplate>
                                     <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="SavedConnectionClick"/>
                                 </DataTemplate>
                             </MenuItem.ItemTemplate>
                         </MenuItem>
-                        <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick"/>
-                        <MenuItem Header="Export as image" Click="ExportAsImageClick"/>
+                        <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
+                        <MenuItem Header="Manage Chat Servers" Click="ManageChatServersClick"/>
+                        <MenuItem Header="Export as image" Click="ExportAsImageClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Settings" Click="SettingsClick"/>
                         <MenuItem Header="Exit" Click="ExitClick"/>
                     </MenuItem>
                     <MenuItem Header="Tools" Height="30">
                         <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
-                        <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick"/>
-                        <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick"/>
-                        <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick"/>
+                        <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                        <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                        <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                     </MenuItem>
                     <MenuItem Header="Help" Name="HelpMenu" Height="30">
                         <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>
                     </MenuItem>
                 </Menu>
                 <Grid Grid.Column="1" Margin="0,0,20,0">
-                    <toolkit:WatermarkTextBox VerticalAlignment="Center" Watermark="Search nodes" Width="200" KeyUp="SearchTextboxKeyUp" GotFocus="SearchTextboxGotFocus" />
+                    <toolkit:WatermarkTextBox VerticalAlignment="Center" Watermark="Search nodes" Width="200" KeyUp="SearchTextboxKeyUp" GotFocus="SearchTextboxGotFocus" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" />
                     <Popup IsOpen="{Binding SearchResults, Converter={StaticResource N2B}}" MaxHeight="400" MaxWidth="300">
                         <ListBox x:Name="SearchResultsListBox" Background="White" BorderThickness="1,1,1,0" BorderBrush="{StaticResource PrimaryHueDarkBrush}" ItemsSource="{Binding SearchResults}" SelectionChanged="SearchResultSelectedChanged">
                             <ListBox.ItemContainerStyle>
@@ -797,7 +800,7 @@
                     <ColumnDefinition Width="Auto" />
 
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save"/>
+                <Button Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                 <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
                 <ItemsControl Grid.Column="2" >
                     <ItemsControl.ItemsPanel>
@@ -810,19 +813,19 @@
                             <Setter Property="Margin" Value="5,0"/>
                         </Style>
                     </ItemsControl.ItemContainerStyle>
-                    <Button Padding="5,0" Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)">
+                    <Button Padding="5,0" Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
                         <TextBlock>
                             <Run Text="&#xE96F;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
                             <Run Text="Previous Node"/>
                         </TextBlock>
                     </Button>
-                    <Button Padding="5,0" Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)">
+                    <Button Padding="5,0" Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
                         <TextBlock>
                             <Run Text="Next Node"/>
                             <Run Text="&#xE970;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
                         </TextBlock>
                     </Button>
-                    <Button Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)"/>
+                    <Button Content="Clone Node" Padding="5,0" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                 </ItemsControl>
                 <!-- 
             The 'fit content' button.  Causes the content to be scaled so that all the graph nodes fit in the viewport.

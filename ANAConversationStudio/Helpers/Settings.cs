@@ -84,6 +84,9 @@ namespace ANAConversationStudio.Helpers
         [PropertyOrder(4)]
         public string APISecret { get; set; }
 
+        [PropertyOrder(5)]
+        public bool IsDefault { get; set; }
+
         public override string ToString()
         {
             if (!string.IsNullOrWhiteSpace(Name))

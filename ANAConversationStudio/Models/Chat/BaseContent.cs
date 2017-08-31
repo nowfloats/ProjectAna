@@ -18,7 +18,7 @@ namespace ANAConversationStudio.Models
                 {
                     if (MainWindow.Current != null)
                     {
-                        var node = MainWindow.Current.ViewModel.Network.Nodes.FirstOrDefault(x => x.ChatNode.Id == NodeId);
+                        var node = MainWindow.Current?.ViewModel?.Network?.Nodes?.FirstOrDefault(x => x.ChatNode.Id == NodeId);
                         if (node != null)
                             return node.Name;
                     }

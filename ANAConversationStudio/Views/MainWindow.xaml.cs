@@ -281,16 +281,20 @@ namespace ANAConversationStudio.Views
             GotoPreviousNode(position);
         }
 
-        private void NewChatFlowClick(object sender, RoutedEventArgs e)
+        private void OpenChatFlowManager()
         {
             ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
             w.ShowDialog();
         }
 
+        private void NewChatFlowClick(object sender, RoutedEventArgs e)
+        {
+            OpenChatFlowManager();
+        }
+
         private void ManageChatFlowsClick(object sender, RoutedEventArgs e)
         {
-            ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
-            w.ShowDialog();
+            OpenChatFlowManager();
         }
 
         private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
@@ -432,6 +436,11 @@ namespace ANAConversationStudio.Views
         {
             if (sender is TextBox tb && !string.IsNullOrWhiteSpace(tb.Text))
                 this.ViewModel.SearchInNodes(tb.Text);
+        }
+
+        private void ManageChatServersClick(object sender, RoutedEventArgs e)
+        {
+            OpenChatServersManager();
         }
     }
 
@@ -674,6 +683,8 @@ namespace ANAConversationStudio.Views
 
         private void OpenNodeEditor()
         {
+            if (this.ViewModel?.Network?.Nodes == null) return;
+
             var selectedNode = this.ViewModel.Network.Nodes.FirstOrDefault(x => x.IsSelected);
             if (selectedNode != null)
             {
@@ -989,10 +1000,8 @@ namespace ANAConversationStudio.Views
 
             this.IsEnabled = true;
             AskToSelectChatServer();
-            LoadProjects();
             CheckForUpdates();
             UpdateTitle();
-
         }
         private void UpdateTitle()
         {
@@ -1005,7 +1014,13 @@ namespace ANAConversationStudio.Views
             else
                 Title = $"{title} - ANA Conversation Studio {GetVersion()}";
         }
+
         private void AskToSelectChatServer()
+        {
+            OpenChatServersManager();
+        }
+
+        private void OpenChatServersManager()
         {
             SaveChatServersManager man = new SaveChatServersManager();
             man.ShowDialog();
@@ -1081,22 +1096,6 @@ namespace ANAConversationStudio.Views
             }
         }
 
-        public bool LoadFileMenuSavedConnections()
-        {
-            if (StudioContext.Current?.ChatFlowProjects == null || StudioContext.Current?.ChatFlowProjects.Count <= 0)
-            {
-                SavedConnectionsFileMenu.IsEnabled = false;
-                return false;
-            }
-            SavedConnectionsFileMenu.ItemsSource = StudioContext.Current.ChatFlowProjects;
-            SavedConnectionsFileMenu.IsEnabled = true;
-            return true;
-        }
-        private async void LoadProjects()
-        {
-            if (LoadFileMenuSavedConnections())
-                await LoadProjectAsync(StudioContext.Current.ChatFlowProjects.First());
-        }
         public void Status(string txt)
         {
             StatusTextblock.Text = txt;
@@ -1109,7 +1108,7 @@ namespace ANAConversationStudio.Views
         public async Task LoadProjectAsync(ANAProject proj)
         {
             await StudioContext.Current.LoadChatFlowAsync(proj._id);
-            this.ViewModel.LoadNodes();
+            this.ViewModel.LoadNodesIntoDesigner();
             Status("Loaded");
             UpdateTitle();
 

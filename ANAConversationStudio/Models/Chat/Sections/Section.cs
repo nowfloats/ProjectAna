@@ -1,5 +1,6 @@
 ﻿using ANAConversationStudio.Helpers;
 using ANAConversationStudio.UIHelpers;
+using Microsoft.Win32;
 using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -181,6 +182,78 @@ namespace ANAConversationStudio.Models.Chat.Sections
                 }
             }
         }
+
+        private string _UploadProgress;
+        [JsonIgnore]
+        [BsonIgnore]
+        public string UploadProgress
+        {
+            get { return _UploadProgress; }
+            set
+            {
+                if (_UploadProgress != value)
+                {
+                    _UploadProgress = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        [JsonIgnore]
+        [BsonIgnore]
+        public ICommand UploadMedia => new ActionCommand(async (s) =>
+        {
+            OpenFileDialog ofd = new OpenFileDialog()
+            {
+                Title = "Please choose a media file to upload",
+                CheckFileExists = true,
+                CheckPathExists = true,
+                Multiselect = false,
+                ValidateNames = true,
+            };
+
+            switch (SectionType)
+            {
+                case SectionTypeEnum.Image:
+                    ofd.Filter = "Image Files (*.jpg, *.jpeg, *.bmp, *.png) | *.jpg; *.jpeg; *.bmp; *.png |All Files (*.*) | *.*";
+                    break;
+                case SectionTypeEnum.Gif:
+                    ofd.Filter = "GIF Files (*.gif) | *.gif |All Files (*.*) | *.*";
+                    break;
+                case SectionTypeEnum.Audio:
+                    ofd.Filter = "Audio Files (*.mp3, *.wav, *.wma, *.ogg) | *.mp3; *.wav; *.wma; *.ogg |All Files (*.*) | *.*";
+                    break;
+                case SectionTypeEnum.Video:
+                    ofd.Filter = "Video Files (*.mp4, *.avi, *.wmv) | *.mp4; *.avi; *.wmv |All Files (*.*) | *.*";
+                    break;
+                default:
+                    {
+                        System.Windows.MessageBox.Show("Media upload can only be done for Image, GIF, Video, Audio section types");
+                        return;
+                    }
+            }
+
+            var done = ofd.ShowDialog();
+            if (done == true)
+            {
+                try
+                {
+                    UploadProgress = "Uploading...";
+                    var upload = await StudioContext.Current.UploadFile(ofd.FileName);
+                    if (upload != null && !string.IsNullOrWhiteSpace(upload.Url))
+                    {
+                        Url = upload.Url;
+                        UploadProgress = null;
+                    }
+                    else
+                        UploadProgress = "Something went wrong!";
+                }
+                catch (System.Exception ex)
+                {
+                    UploadProgress = "Unable to upload: " + ex.Message;
+                }
+            }
+        });
     }
     public enum SectionTypeEnum
     {

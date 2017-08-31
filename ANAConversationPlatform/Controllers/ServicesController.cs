@@ -30,7 +30,10 @@ namespace ANAConversationPlatform.Controllers
                 var fullFileName = Path.Combine(_env.WebRootPath, Constants.CHAT_MEDIA_FOLDER_NAME, fileName);
                 var done = FileSaveHelper.Save(fullFileName, fileStream);
                 if (done)
-                    return Ok(new { Url = $"{Request.Scheme}://{Request.Host}/{Constants.CHAT_MEDIA_FOLDER_NAME}/{fileName}" });
+                    return Ok(new
+                    {
+                        Url = $"{Request.Scheme}://{Request.Host}" + Url.Content($"~/{Constants.CHAT_MEDIA_FOLDER_NAME}/{fileName}")
+                    });
                 else
                     return StatusCode(500, "Unable to save received file");
             }

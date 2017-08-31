@@ -47,10 +47,7 @@ namespace ANAConversationStudio.Views
                 return;
             }
             if (op == MessageBoxResult.Yes)
-            {
                 await SaveAsync();
-                Application.Current.Shutdown();
-            }
         }
         private bool HideConfirm = false;
 
@@ -63,11 +60,10 @@ namespace ANAConversationStudio.Views
                 MessageBox.Show("The following chat flows are invalid, please correct them: \r\n" + string.Join("\r\n", conns.Where(x => !x.IsValid())), "Oops!");
                 return false;
             }
-            StudioContext.Current.ChatFlowProjects = conns;
+            StudioContext.Current.ChatFlowProjects = new ObservableCollection<ANAProject>(conns);
             await StudioContext.Current.SaveProjectsAsync();
             CollectionControl.Items.Clear();
             CollectionControl.ItemsSource = StudioContext.Current.ChatFlowProjects.DeepCopy();
-            MainWindow.Current?.LoadFileMenuSavedConnections();
             return true;
         }
 

@@ -530,6 +530,50 @@ namespace ANAConversationStudio.ViewModels
 
     public partial class MainWindowViewModel : AbstractModelBase
     {
+        public MainWindowViewModel()
+        {
+            StudioContext.StaticPropertyChanged -= StudioContext_StaticPropertyChanged;
+            StudioContext.StaticPropertyChanged += StudioContext_StaticPropertyChanged; ;
+        }
+
+        private void StudioContext_StaticPropertyChanged(object sender, EventArgs e)
+        {
+            CurrentStudioContext = StudioContext.Current;
+            if (CurrentStudioContext != null)
+            {
+                CurrentStudioContext.PropertyChanged -= Current_PropertyChanged;
+                CurrentStudioContext.PropertyChanged += Current_PropertyChanged;
+            }
+        }
+
+        private void Current_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(StudioContext.ChatFlow))
+            {
+                if (CurrentStudioContext.ChatFlow == null)
+                    ClearDesigner();
+            }
+        }
+
+        ~MainWindowViewModel()
+        {
+            StudioContext.StaticPropertyChanged -= StudioContext_StaticPropertyChanged;
+        }
+
+        private StudioContext _CurrentStudioContext;
+        public StudioContext CurrentStudioContext
+        {
+            get { return _CurrentStudioContext; }
+            set
+            {
+                if (_CurrentStudioContext != value)
+                {
+                    _CurrentStudioContext = value;
+                    OnPropertyChanged(nameof(CurrentStudioContext));
+                }
+            }
+        }
+
         private ObservableCollection<ChatFlowSearchItem> _SearchResults;
         public ObservableCollection<ChatFlowSearchItem> SearchResults
         {
@@ -546,7 +590,7 @@ namespace ANAConversationStudio.ViewModels
 
         public void SearchInNodes(string keywords)
         {
-            if (string.IsNullOrWhiteSpace(keywords)) return;
+            if (string.IsNullOrWhiteSpace(keywords) || Network?.Nodes == null) return;
             SearchResults = new ObservableCollection<ChatFlowSearchItem>(Network.Nodes.Select(node => node.ChatNode.SearchNode(keywords)).Where(x => x != null));
             if (SearchResults.Count == 0)
                 SearchResults = new ObservableCollection<ChatFlowSearchItem>
@@ -563,7 +607,7 @@ namespace ANAConversationStudio.ViewModels
             await StudioContext.Current.SaveChatFlowAsync();
         }
 
-        public bool LoadNodes()
+        public bool LoadNodesIntoDesigner()
         {
             try
             {
@@ -595,7 +639,10 @@ namespace ANAConversationStudio.ViewModels
             }
             return false;
         }
-
+        public void ClearDesigner()
+        {
+            this.Network = null;
+        }
         private void Connections_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
         {
             try

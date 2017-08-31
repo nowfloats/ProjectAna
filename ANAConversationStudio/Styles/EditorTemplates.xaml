@@ -13,6 +13,7 @@
     <ui:ButtonSectionTypeSymbolConverter x:Key="ButtonSectionTypeSymbolConverter"/>
     <views:ButtonTypeToFieldVisibilityConverter x:Key="ButtonTypeToFieldVisibilityConverter"/>
     <BooleanToVisibilityConverter x:Key="B2V"/>
+    <ui:NullToVisibilityConverter x:Key="N2V"/>
 
     <Style x:Key="SectionTypeIconTextblockStyle" TargetType="TextBlock">
         <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}"/>
@@ -129,7 +130,19 @@
                 </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Url">
                     <uc:TableRowUserControl.Field>
-                        <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBox Text="{Binding Url, Mode=TwoWay}" />
+                            <Button ToolTip="Upload from your computer" Grid.Column="1" Style="{StaticResource ToolButtonStyle}" Content="&#xE898;" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center" Command="{Binding UploadMedia}"/>
+                            <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding UploadProgress, Converter={StaticResource N2V}}" Text="{Binding UploadProgress}" ToolTip="{Binding UploadProgress}" Margin="5,0" FontStyle="Italic"/>
+                        </Grid>
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Caption">

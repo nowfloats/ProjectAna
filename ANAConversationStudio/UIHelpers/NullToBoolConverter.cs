@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace ANAConversationStudio.UIHelpers
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
+            if (value is IEnumerable enumerableVal)
+                return (enumerableVal == null || enumerableVal.Cast<object>().Count() == 0) ? false : true;
             return value != null;
         }
 

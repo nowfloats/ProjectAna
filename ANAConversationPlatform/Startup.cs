@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using static ANAConversationPlatform.Helpers.Constants;
 using Newtonsoft.Json.Serialization;
 using ANAConversationPlatform.Middleware;
+using System.IO;
 
 namespace ANAConversationPlatform
 {
@@ -69,6 +70,18 @@ namespace ANAConversationPlatform
             app.UseMvc(routes => routes.MapRoute("default", "api/{controller=Conversation}/{action=Chat}/{id?}"));
 
             app.UseStaticFiles();
+
+            var chatMediaDir = Path.Combine(env.WebRootPath, CHAT_MEDIA_FOLDER_NAME);
+            try
+            {
+                if (!Directory.Exists(chatMediaDir))
+                    Directory.CreateDirectory(chatMediaDir);
+            }
+            catch (System.Exception ex)
+            {
+                var logger = loggerFactory.CreateLogger<Startup>();
+                logger.LogError(ex, $"Error creating the chat media folder ({chatMediaDir}). Services/ReceiveFile API might not work!");
+            }
         }
     }
 }
