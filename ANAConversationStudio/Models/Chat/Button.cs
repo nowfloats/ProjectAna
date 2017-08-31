@@ -285,6 +285,22 @@ namespace ANAConversationStudio.Models.Chat
             }
         }
 
+        private bool _AdvancedOptions;
+        [JsonIgnore]
+        [BsonIgnore]
+        public bool AdvancedOptions
+        {
+            get { return _AdvancedOptions; }
+            set
+            {
+                if (_AdvancedOptions != value)
+                {
+                    _AdvancedOptions = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         [JsonIgnore]
         [BsonIgnore]
         public ICommand Remove => new ActionCommand((p) => ParentNode.Buttons.Remove(this));
