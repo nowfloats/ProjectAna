@@ -2,11 +2,10 @@
 using ANAConversationStudio.Views;
 using System.ComponentModel;
 using System.Linq;
-using ANAConversationStudio.Controls;
 
 namespace ANAConversationStudio.Models
 {
-    public class BaseContent : BaseIdTimeStampEntity
+    public class BaseContent : BaseIdEntity
     {
         public BaseContent() { _id = ObjectId.GenerateNewId().ToString(); }
 

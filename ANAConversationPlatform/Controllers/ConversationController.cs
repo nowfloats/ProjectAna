@@ -62,7 +62,7 @@ namespace ANAConversationPlatform.Controllers
             return RedirectToAction(nameof(Chat));
         }
 
-        [Produces("text/plain"), HttpPost, BasicAuthentication]
+        [HttpPost, BasicAuthentication]
         public async Task<ActionResult> SaveChatFlow()
         {
             try
@@ -85,7 +85,7 @@ namespace ANAConversationPlatform.Controllers
             return BadRequest(new { Message = "Unable to save chat flow!" });
         }
 
-        [Produces("text/plain"), HttpGet, BasicAuthentication]
+        [HttpGet, BasicAuthentication]
         public async Task<ActionResult> FetchChatFlow([FromQuery] string projectId)
         {
             if (string.IsNullOrWhiteSpace(projectId))

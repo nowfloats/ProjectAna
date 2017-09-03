@@ -159,8 +159,12 @@ namespace ANAConversationStudio.Models.Chat.Sections
             ContentId = ObjectId.GenerateNewId().ToString(),
             ParentCarouselItem = this,
             _id = ObjectId.GenerateNewId().ToString()
-            //Text = "New Carousel Button",
         }));
+
+        protected override void FillAlias()
+        {
+            Alias = string.IsNullOrWhiteSpace(Title) ? (string.IsNullOrWhiteSpace(Caption) ? "Carousel Item" : Caption) : Title;
+        }
     }
 
     public class CarouselButton : RepeatableBaseEntity
@@ -233,6 +237,11 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
             ParentCarouselItem.Buttons.Move(oldIdx, oldIdx + 1);
         });
+
+        protected override void FillAlias()
+        {
+            Alias = (string.IsNullOrWhiteSpace(Text) ? "Carousel Button" : Text);
+        }
     }
 
     public enum CardButtonType

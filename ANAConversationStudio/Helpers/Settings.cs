@@ -96,9 +96,9 @@ namespace ANAConversationStudio.Helpers
         public override string ToString()
         {
             if (!string.IsNullOrWhiteSpace(Name))
-                return Name;
+                return Name + (IsDefault ? " (Default)" : "");
             if (!string.IsNullOrWhiteSpace(ServerUrl))
-                return ServerUrl;
+                return ServerUrl + (IsDefault ? " (Default)" : "");
             return "New Chat Server Connection";
         }
 

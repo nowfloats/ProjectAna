@@ -211,14 +211,57 @@ namespace ANAConversationPlatform.Helpers
                 if (string.IsNullOrWhiteSpace(chatFlow.ProjectId))
                     chatFlow.ProjectId = ObjectId.GenerateNewId().ToString();
 
-                if (await chatsColl.CountAsync(x => x.ProjectId == chatFlow.ProjectId, new CountOptions { Limit = 1 }) > 0)
+                if (chatFlow.ChatContent != null)
+                    foreach (var content in chatFlow.ChatContent)
+                    {
+                        if (string.IsNullOrWhiteSpace(content._id))
+                            content._id = ObjectId.GenerateNewId().ToString();
+                    }
+
+                var existingFlow = await chatsColl.Find(x => x.ProjectId == chatFlow.ProjectId).FirstOrDefaultAsync();
+                if (existingFlow != null)
                 {
+                    #region Existing Chat Flow
+                    if (chatFlow.ChatContent != null)
+                    {
+                        if (existingFlow.ChatContent != null)//If old content is not null, COMPARE
+                        {
+                            foreach (var content in chatFlow.ChatContent)
+                            {
+                                var existingContent = existingFlow.ChatContent.FirstOrDefault(x => x._id == content._id);
+                                if (existingContent != null) //Means Old content exists, its just updated
+                                {
+                                    content.UpdatedOn = DateTime.UtcNow;
+                                    content.CreatedOn = existingContent.CreatedOn;
+                                }
+                                else
+                                {
+                                    content.UpdatedOn = DateTime.UtcNow;
+                                    content.CreatedOn = DateTime.UtcNow;
+                                }
+                            }
+                        }
+                        else
+                        {
+                            foreach (var content in chatFlow.ChatContent)
+                                content.UpdatedOn = content.CreatedOn = DateTime.UtcNow;
+                        }
+                    }
                     chatFlow.UpdatedOn = DateTime.UtcNow;
+                    chatFlow.CreatedOn = existingFlow.CreatedOn;
                     await chatsColl.ReplaceOneAsync(x => x.ProjectId == chatFlow.ProjectId, chatFlow);
                     return true;
+                    #endregion
                 }
+
+                #region New Chat Flow
                 chatFlow.CreatedOn = chatFlow.UpdatedOn = DateTime.UtcNow;
+                if (chatFlow.ChatContent != null)
+                    foreach (var content in chatFlow.ChatContent)
+                        content.UpdatedOn = content.CreatedOn = DateTime.UtcNow;
+
                 await chatsColl.InsertOneAsync(chatFlow);
+                #endregion
             }
             catch (Exception ex)
             {

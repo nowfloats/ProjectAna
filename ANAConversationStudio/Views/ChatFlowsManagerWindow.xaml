@@ -13,8 +13,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <xctk:CollectionControl Margin="10" x:Name="CollectionControl"/>
-        <!--<TextBlock Grid.Row="1" Text="Note: First connection will be the default connection and is loaded automatically. Use 'Up' and 'Down' arrows to re-order the connections." Margin="10,0"/>-->
+        <xctk:CollectionControl Margin="10" x:Name="CollectionControl" />
         <StackPanel Grid.Row="2" Margin="5" Orientation="Horizontal" HorizontalAlignment="Center">
             <StackPanel.Resources>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">

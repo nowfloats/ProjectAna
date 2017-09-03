@@ -32,8 +32,6 @@ namespace ANAConversationStudio.Helpers
             foreach (var nodeRelatedContent in contentBankOfNode)
             {
                 nodeRelatedContent.NodeId = copyChatNode.Id;
-                nodeRelatedContent.UpdatedOn = DateTime.Now;
-                nodeRelatedContent.CreatedOn = DateTime.Now;
                 nodeRelatedContent._id = ObjectId.GenerateNewId().ToString();
             }
             foreach (var btn in copyChatNode.Buttons)

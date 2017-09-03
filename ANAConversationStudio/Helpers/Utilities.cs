@@ -116,8 +116,6 @@ namespace ANAConversationStudio.Helpers
                             NodeId = node.Id,
                             _id = btn.ContentId,
                             Emotion = btn.ContentEmotion,
-                            CreatedOn = DateTime.Now,
-                            UpdatedOn = DateTime.Now
                         });
                     }
 
@@ -140,8 +138,6 @@ namespace ANAConversationStudio.Helpers
                                         _id = titleCaptionSection.ContentId,
                                         SectionId = titleCaptionSection._id,
                                         NodeId = node.Id,
-                                        CreatedOn = DateTime.Now,
-                                        UpdatedOn = DateTime.Now,
                                         Emotion = titleCaptionSection.ContentEmotion
                                     });
                                 }
@@ -151,8 +147,6 @@ namespace ANAConversationStudio.Helpers
                                     var ts = section as TextSection;
                                     contentBank.Add(new TextSectionContent
                                     {
-                                        CreatedOn = DateTime.Now,
-                                        UpdatedOn = DateTime.Now,
                                         Emotion = ts.ContentEmotion,
                                         NodeId = node.Id,
                                         SectionId = ts._id,
@@ -176,8 +170,6 @@ namespace ANAConversationStudio.Helpers
                                         Emotion = car.ContentEmotion,
                                         NodeId = node.Id,
                                         SectionId = car._id,
-                                        CreatedOn = DateTime.Now,
-                                        UpdatedOn = DateTime.Now
                                     });
 
                                     foreach (var carItem in car.Items)
@@ -190,8 +182,6 @@ namespace ANAConversationStudio.Helpers
                                             Emotion = car.ContentEmotion,
                                             NodeId = node.Id,
                                             Title = carItem.Title,
-                                            CreatedOn = DateTime.Now,
-                                            UpdatedOn = DateTime.Now
                                         });
 
                                         foreach (var carItemButton in carItem.Buttons)
@@ -201,8 +191,6 @@ namespace ANAConversationStudio.Helpers
                                                 _id = carItemButton.ContentId,
                                                 ButtonText = carItemButton.Text,
                                                 CarouselButtonId = carItemButton._id,
-                                                CreatedOn = DateTime.Now,
-                                                UpdatedOn = DateTime.Now,
                                                 Emotion = car.ContentEmotion,
                                                 NodeId = node.Id
                                             });
@@ -268,6 +256,15 @@ namespace ANAConversationStudio.Helpers
                     var destinationNode = connection.DestConnector.ParentNode.ChatNode;
                     sourceBtn.NextNodeId = destinationNode.Id;
                 }
+            }
+        }
+
+        public static string GenerateHash(string data)
+        {
+            using (var hashAlgo = MD5.Create())
+            {
+                hashAlgo.Initialize();
+                return Convert.ToBase64String(hashAlgo.ComputeHash(Encoding.UTF8.GetBytes(data)));
             }
         }
     }

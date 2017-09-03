@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
@@ -21,36 +20,6 @@ namespace ANAConversationStudio.Models
                 if (__id != value)
                 {
                     __id = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-    }
-    public class BaseIdTimeStampEntity : BaseIdEntity
-    {
-        private DateTime _CreatedOn;
-        public DateTime CreatedOn
-        {
-            get { return _CreatedOn; }
-            set
-            {
-                if (_CreatedOn != value)
-                {
-                    _CreatedOn = value;
-                    OnPropertyChanged();
-                }
-            }
-        }
-
-        private DateTime _UpdatedOn;
-        public DateTime UpdatedOn
-        {
-            get { return _UpdatedOn; }
-            set
-            {
-                if (_UpdatedOn != value)
-                {
-                    _UpdatedOn = value;
                     OnPropertyChanged();
                 }
             }

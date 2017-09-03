@@ -141,7 +141,7 @@
         </Grid>
     </DataTemplate>
     <DataTemplate x:Key="TitleCaptionUrlSectionEditTemplate">
-        <GroupBox Header="{Binding}">
+        <GroupBox Header="{Binding}" Margin="0,10,0,10">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid >
@@ -194,7 +194,7 @@
         </GroupBox>
     </DataTemplate>
     <DataTemplate x:Key="ChatButtonEditTemplate">
-        <GroupBox Header="{Binding}">
+        <GroupBox Header="{Binding}" Margin="0,0,0,10">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
                     <Grid >

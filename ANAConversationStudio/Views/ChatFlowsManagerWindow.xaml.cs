@@ -17,6 +17,12 @@ namespace ANAConversationStudio.Views
         {
             InitializeComponent();
 
+            CollectionControl.PropertyGrid.ShowSearchBox = false;
+            CollectionControl.PropertyGrid.ShowSortOptions = false;
+            CollectionControl.PropertyGrid.ShowPreview = false;
+            CollectionControl.PropertyGrid.ShowDescriptionByTooltip = false;
+            CollectionControl.PropertyGrid.UpdateTextBoxSourceOnEnterKey = true;
+
             CollectionControl.ItemsSource = StudioContext.Current.ChatFlowProjects.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<ANAProject>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(ANAProject) };
@@ -39,6 +45,7 @@ namespace ANAConversationStudio.Views
         private async void Window_Closing(object sender, CancelEventArgs e)
         {
             if (HideConfirm) return;
+            if (!StudioContext.Current.AreChatFlowProjectChangesMadeAfterLastSave(CollectionControl.ItemsSource as ObservableCollection<ANAProject>)) return;
 
             var op = MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)

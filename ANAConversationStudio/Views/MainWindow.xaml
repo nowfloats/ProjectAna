@@ -677,7 +677,7 @@
                         <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" ItemsSource="{Binding CurrentStudioContext.ChatFlowProjects}" IsEnabled="{Binding CurrentStudioContext.ChatFlowProjects, FallbackValue=false, Converter={StaticResource N2B}}">
                             <MenuItem.ItemTemplate>
                                 <DataTemplate>
-                                    <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="SavedConnectionClick"/>
+                                    <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="LoadProjectClick"/>
                                 </DataTemplate>
                             </MenuItem.ItemTemplate>
                         </MenuItem>

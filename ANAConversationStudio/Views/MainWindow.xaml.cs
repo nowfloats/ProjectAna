@@ -19,6 +19,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
+using System.ComponentModel;
 
 namespace ANAConversationStudio.Views
 {
@@ -152,7 +153,7 @@ namespace ANAConversationStudio.Views
         private void CreateNode()
         {
             var newNodePosition = Mouse.GetPosition(networkControl);
-            this.ViewModel.CreateNode(new ChatNode() { Id = ObjectId.GenerateNewId().ToString() }, newNodePosition);
+            this.ViewModel.CreateNode(new ChatNode() { Id = ObjectId.GenerateNewId().ToString(), Name = "New Node" }, newNodePosition);
         }
 
         /// <summary>
@@ -281,20 +282,25 @@ namespace ANAConversationStudio.Views
             GotoPreviousNode(position);
         }
 
-        private void OpenChatFlowManager()
+        private async Task OpenChatFlowManagerAsync()
         {
+            var eventArgs = new CancelEventArgs();
+            await AskToSaveChangesIfAny(eventArgs);
+            if (eventArgs.Cancel)
+                return;
+
             ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
             w.ShowDialog();
         }
 
-        private void NewChatFlowClick(object sender, RoutedEventArgs e)
+        private async void NewChatFlowClick(object sender, RoutedEventArgs e)
         {
-            OpenChatFlowManager();
+            await OpenChatFlowManagerAsync();
         }
 
-        private void ManageChatFlowsClick(object sender, RoutedEventArgs e)
+        private async void ManageChatFlowsClick(object sender, RoutedEventArgs e)
         {
-            OpenChatFlowManager();
+            await OpenChatFlowManagerAsync();
         }
 
         private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
@@ -438,20 +444,26 @@ namespace ANAConversationStudio.Views
                 this.ViewModel.SearchInNodes(tb.Text);
         }
 
-        private void ManageChatServersClick(object sender, RoutedEventArgs e)
+        private async void ManageChatServersClick(object sender, RoutedEventArgs e)
         {
-            OpenChatServersManager();
+            await OpenChatServersManagerAsync();
         }
 
         private void networkControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (this.networkControl.SelectedNode is NodeViewModel nodeVM)
+            if (networkControl.SelectedNode == null)
+            {
+                NodeEditor.ChatNode = null;
+
+                if (!NodeEditorLayoutAnchorable.IsAutoHidden && !NodeEditorLayoutAnchorable.IsFloating)
+                    NodeEditorLayoutAnchorable.ToggleAutoHide();
+            }
+            else if (networkControl.SelectedNode is NodeViewModel nodeVM)
             {
                 NodeEditor.ChatNode = nodeVM.ChatNode;
 
-                if (NodeEditorLayoutAnchorable.IsAutoHidden)
+                if (NodeEditorLayoutAnchorable.IsAutoHidden && !NodeEditorLayoutAnchorable.IsFloating)
                     NodeEditorLayoutAnchorable.Dock();
-                //NodeEditorLayoutAnchorable.IsActive = true;
             }
         }
     }
@@ -783,7 +795,7 @@ namespace ANAConversationStudio.Views
 
                 IList nodes = null;
 
-                if (networkControl.SelectedNodes.Count > 0)
+                if (networkControl.SelectedNodes.Count > 1)
                 {
                     nodes = networkControl.SelectedNodes;
                 }
@@ -804,7 +816,13 @@ namespace ANAConversationStudio.Views
                 // Inflate the content rect by a fraction of the actual size of the total content area.
                 // This puts a nice border around the content we are fitting to the viewport.
                 //
-                actualContentRect.Inflate(networkControl.ActualWidth / 40, networkControl.ActualHeight / 40);
+
+                actualContentRect.Inflate(20, 20);
+
+                if (actualContentRect.Height < 200)
+                    actualContentRect.Inflate(0, 200);
+                if (actualContentRect.Width < 200)
+                    actualContentRect.Inflate(200, 0);
 
                 zoomAndPanControl.AnimatedZoomTo(actualContentRect);
             }
@@ -1050,11 +1068,16 @@ namespace ANAConversationStudio.Views
                 new ChatFlowsManagerWindow().Show();
             }
             else
-                OpenChatServersManager();
+                await OpenChatServersManagerAsync();
         }
 
-        private void OpenChatServersManager()
+        private async Task OpenChatServersManagerAsync()
         {
+            var eventArgs = new CancelEventArgs();
+            await AskToSaveChangesIfAny(eventArgs);
+            if (eventArgs.Cancel)
+                return;
+
             SaveChatServersManager man = new SaveChatServersManager();
             man.ShowDialog();
         }
@@ -1081,20 +1104,25 @@ namespace ANAConversationStudio.Views
             }
         }
         public bool AskAlert = true;
-        private async void MainWindow_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        private async void MainWindow_Closing(object sender, CancelEventArgs e)
         {
             if (!AskAlert) return;
+            await AskToSaveChangesIfAny(e);
+        }
+
+        private async Task AskToSaveChangesIfAny(CancelEventArgs cancelEventArgs)
+        {
             if (StudioContext.Current == null) return;
-            var op = System.Windows.MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
+            if (!StudioContext.Current.AreChatFlowChangesMadeAfterLastSave()) return; //All changes saved
+
+            var op = MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Cancel)
             {
-                e.Cancel = true;
+                cancelEventArgs.Cancel = true;
                 return;
             }
             if (op == MessageBoxResult.Yes)
-            {
                 await SaveEditsAsync();
-            }
         }
 
         private async void SaveButtonClick(object sender, RoutedEventArgs e)
@@ -1112,7 +1140,7 @@ namespace ANAConversationStudio.Views
             {
                 if (this.ViewModel.Network == null) return;
 
-                if (this.ViewModel.Network.Nodes.Count > 0 && !this.ViewModel.Network.Nodes.Any(x => x.ChatNode.IsStartNode))
+                if (this.ViewModel.Network.Nodes.Count > 1 && !this.ViewModel.Network.Nodes.Any(x => x.ChatNode.IsStartNode))
                 {
                     MessageBox.Show("Please mark a node in the chat flow as start node.", "Start node is not set!", MessageBoxButton.OK, MessageBoxImage.Warning);
                     return;
@@ -1131,14 +1159,25 @@ namespace ANAConversationStudio.Views
         {
             StatusTextblock.Text = txt;
         }
-        private async void SavedConnectionClick(object sender, RoutedEventArgs e)
+        private async void LoadProjectClick(object sender, RoutedEventArgs e)
         {
+            var eventArgs = new CancelEventArgs();
+            await AskToSaveChangesIfAny(eventArgs);
+            if (eventArgs.Cancel)
+                return;
+
             await LoadProjectAsync((sender as MenuItem).Tag as ANAProject);
         }
 
         public async Task LoadProjectAsync(ANAProject proj)
         {
-            await StudioContext.Current.LoadChatFlowAsync(proj._id);
+            var (done, msg) = await StudioContext.Current.LoadChatFlowAsync(proj._id);
+            if (!done)
+            {
+                MessageBox.Show(msg);
+                return;
+            }
+
             this.ViewModel.LoadNodesIntoDesigner();
             Status("Loaded");
             UpdateTitle();

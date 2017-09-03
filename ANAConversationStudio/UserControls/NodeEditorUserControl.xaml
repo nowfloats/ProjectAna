@@ -86,7 +86,7 @@
         </Style>
 
     </UserControl.Resources>
-    <Grid>
+    <Grid Visibility="{Binding ChatNode, Converter={StaticResource N2V}}">
         <Grid.RowDefinitions>
             <RowDefinition/>
             <RowDefinition Height="Auto"/>

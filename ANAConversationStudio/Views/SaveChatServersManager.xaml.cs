@@ -1,10 +1,12 @@
 ﻿using ANAConversationStudio.Helpers;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows;
+using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ANAConversationStudio.Views
 {
@@ -14,14 +16,43 @@ namespace ANAConversationStudio.Views
         {
             InitializeComponent();
 
+            CollectionControl.PropertyGrid.ShowSearchBox = false;
+            CollectionControl.PropertyGrid.ShowSortOptions = false;
+            CollectionControl.PropertyGrid.ShowPreview = false;
+            CollectionControl.PropertyGrid.ShowDescriptionByTooltip = false;
+            CollectionControl.PropertyGrid.UpdateTextBoxSourceOnEnterKey = true;
+            CollectionControl.PropertyGrid.PropertyValueChanged += PropertyGrid_PropertyValueChanged;
+
             CollectionControl.ItemsSource = Utilities.Settings.SavedChatServerConnections.DeepCopy();
             CollectionControl.ItemsSourceType = typeof(ObservableCollection<ChatServerConnection>);
             CollectionControl.NewItemTypes = new List<Type>() { typeof(ChatServerConnection) };
+
+            LastSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(Utilities.Settings.SavedChatServerConnections));
         }
 
+        private void PropertyGrid_PropertyValueChanged(object sender, PropertyValueChangedEventArgs e)
+        {
+            if (e.OriginalSource is PropertyItem propertyItem)
+            {
+                if (propertyItem.PropertyName == nameof(ChatServerConnection.IsDefault))
+                {
+                    if ((bool)propertyItem.Value == true)
+                        foreach (var item in (CollectionControl.ItemsSource as List<ChatServerConnection>).Where(x => x != CollectionControl.SelectedItem))
+                            item.IsDefault = false;
+                }
+            }
+        }
+
+        private string LastSavedHash { get; set; }
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (HideConfirm) return;
+
+            if (!string.IsNullOrWhiteSpace(LastSavedHash))
+            {
+                var currentHash = Utilities.GenerateHash(JsonConvert.SerializeObject(CollectionControl.ItemsSource as List<ChatServerConnection>));
+                if (currentHash == LastSavedHash) return; //no changes detected.
+            }
 
             var op = MessageBox.Show("Save changes and exit?", "Hold on!", MessageBoxButton.YesNoCancel);
             if (op == MessageBoxResult.Yes)
@@ -46,6 +77,7 @@ namespace ANAConversationStudio.Views
                 return false;
             }
             Utilities.Settings.SavedChatServerConnections = conns;
+            LastSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(Utilities.Settings.SavedChatServerConnections));
             Utilities.Settings.Save(App.Cryptio);
             return true;
         }
@@ -72,7 +104,7 @@ namespace ANAConversationStudio.Views
                     if (!done) return;
                     if (Save())
                     {
-                        ChatFlowsManagerWindow chatFlows = new ChatFlowsManagerWindow();
+                        var chatFlows = new ChatFlowsManagerWindow();
                         chatFlows.Show();
 
                         HideConfirm = true;

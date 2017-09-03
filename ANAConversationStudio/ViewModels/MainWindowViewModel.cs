@@ -11,6 +11,7 @@ using ANAConversationStudio.Helpers;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using System.Collections.ObjectModel;
+using MongoDB.Bson;
 
 namespace ANAConversationStudio.ViewModels
 {
@@ -626,6 +627,9 @@ namespace ANAConversationStudio.ViewModels
 
                 var nodeVMs = uniqueChatNodes.Select(x => new NodeViewModel(x, StudioContext.Current.ChatFlow.NodeLocations.GetPointForNode(x.Id) ?? new Point(start.X, start.Y += 100))).ToList(); //Dont remove .ToList()
                 this.Network.Nodes.AddRange(nodeVMs); //Add all nodes before adding any connections  
+
+                if (Network.Nodes.Count == 0)
+                    CreateNode(new ChatNode() { Id = ObjectId.GenerateNewId().ToString(), Name = "New Node" }, new Point(ContentWidth / 2, ContentHeight / 2));
 
                 foreach (var node in nodeVMs)
                     Utilities.FillConnectionsFromButtonsOfChatNode(node);

@@ -178,6 +178,7 @@ namespace ANAConversationStudio.Helpers
                     }
                 }
                 catch { }
+                LastChatFlowProjectsSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(ChatFlowProjects));
                 return true;
             }
             MessageBox.Show("Error: " + projsResp.Message, "Unable to load projects from chat server.");
@@ -247,6 +248,13 @@ namespace ANAConversationStudio.Helpers
         #endregion
 
         #region Public
+        /// <summary>
+        /// Use to detect unsaved changes
+        /// </summary>
+        public string LastChatFlowSavedHash { get; set; }
+
+        public string LastChatFlowProjectsSavedHash { get; set; }
+
         private ChatFlowPack _ChatFlow;
         public ChatFlowPack ChatFlow
         {
@@ -289,7 +297,7 @@ namespace ANAConversationStudio.Helpers
             }
         }
 
-        public async Task<bool> LoadChatFlowAsync(string projectId)
+        public async Task<(bool, string)> LoadChatFlowAsync(string projectId)
         {
             if (ChatFlowProjects != null && ChatFlowProjects.Any(x => x._id == projectId))
             {
@@ -297,11 +305,37 @@ namespace ANAConversationStudio.Helpers
                 if (chatFlowResp.Status)
                 {
                     ChatFlow = chatFlowResp.Data;
+                    LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson()); //Serializing the object with Bson Serializer as we use the same while sending the chat flow to the server.
                     ChatFlowBuilder.Build(ChatFlow);
-                    return true;
+                    return (true, "");
                 }
+                return (false, chatFlowResp.Message);
             }
-            return false;
+            return (false, "Not connected to chat server!");
+        }
+
+        public bool AreChatFlowChangesMadeAfterLastSave()
+        {
+            if (string.IsNullOrWhiteSpace(LastChatFlowSavedHash))
+                return true;
+
+            var currentHash = Utilities.GenerateHash(ChatFlow.ToJson());
+            if (LastChatFlowSavedHash == currentHash)
+                return false; //no changes
+
+            return true;
+        }
+
+        public bool AreChatFlowProjectChangesMadeAfterLastSave(ObservableCollection<ANAProject> editedProjects)
+        {
+            if (string.IsNullOrWhiteSpace(LastChatFlowProjectsSavedHash))
+                return true;
+
+            var currentHash = Utilities.GenerateHash(JsonConvert.SerializeObject(editedProjects));
+            if (LastChatFlowProjectsSavedHash == currentHash)
+                return false; //no changes
+
+            return true;
         }
 
         public async Task<bool> SaveChatFlowAsync()
@@ -312,6 +346,7 @@ namespace ANAConversationStudio.Helpers
                 if (saveChatFlowResp.Status)
                 {
                     ChatFlow = saveChatFlowResp.Data;
+                    LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson()); //Serializing the object with Bson Serializer as we use the same while sending the chat flow to the server.
                     return true;
                 }
             }
@@ -326,6 +361,7 @@ namespace ANAConversationStudio.Helpers
                 if (saveProjectsResp.Status)
                 {
                     ChatFlowProjects = new ObservableCollection<ANAProject>(saveProjectsResp.Data);
+                    LastChatFlowProjectsSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(ChatFlowProjects));
                     return true;
                 }
             }
