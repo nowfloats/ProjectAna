@@ -12,6 +12,17 @@ namespace ANAConversationPlatform.Controllers
         [HttpGet]
         public ActionResult Latest()
         {
+            return LatestLink(isSetup: false);
+        }
+
+        [HttpGet]
+        public ActionResult LatestSetup()
+        {
+            return LatestLink(isSetup: true);
+        }
+
+        private ActionResult LatestLink(bool isSetup = false)
+        {
             if (!string.IsNullOrWhiteSpace(Utils.Settings?.StudioDistFolder))
             {
                 Version v;
@@ -24,7 +35,7 @@ namespace ANAConversationPlatform.Controllers
                     var latest = fileVersions.OrderByDescending(x => x).First();
                     return Ok(new
                     {
-                        DownloadLink = Url.Link(nameof(StudioDownload), new { version = latest.ToString() }),
+                        DownloadLink = Url.Link(nameof(StudioDownload), new { version = latest.ToString(), isSetup = isSetup }),
                         Version = latest
                     });
                 }
@@ -34,14 +45,14 @@ namespace ANAConversationPlatform.Controllers
 
         [HttpGet]
         [Route(nameof(StudioDownload), Name = nameof(StudioDownload))]
-        public ActionResult StudioDownload(string version)
+        public ActionResult StudioDownload(string version, bool isSetup = false)
         {
             try
             {
                 var v = Version.Parse(version);
-                var fileName = Path.Combine(Utils.Settings.StudioDistFolder, v.ToString() + ".zip");
+                var fileName = Path.Combine(Utils.Settings.StudioDistFolder, v.ToString() + (isSetup ? ".msi" : ".zip"));
                 if (System.IO.File.Exists(fileName))
-                    return File(System.IO.File.OpenRead(fileName), "application/zip", Path.GetFileName(fileName));
+                    return File(System.IO.File.OpenRead(fileName), (isSetup ? "application/octet-stream" : "application/zip"), Path.GetFileName(fileName));
                 else
                     return NotFound();
             }

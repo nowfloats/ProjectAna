@@ -86,7 +86,7 @@ namespace ANAConversationStudio.Views
             e.FeedbackIndicator = feedbackIndicator;
 
             //
-            // Let NetworkView know if the connection is ok or not ok.
+            // Let NetworkView know if the connection is OK or not OK.
             //
             e.ConnectionOk = connectionOk;
         }
@@ -202,6 +202,11 @@ namespace ANAConversationStudio.Views
 
         private async void UpdateMenuClick(object sender, RoutedEventArgs e)
         {
+            var eventArgs = new CancelEventArgs();
+            await AskToSaveChangesIfAny(eventArgs);
+            if (eventArgs.Cancel)
+                return;
+
             var updateInfo = (AutoUpdateResponse)UpdateMenuItem.Tag;
             if (updateInfo != null)
             {
@@ -219,8 +224,9 @@ namespace ANAConversationStudio.Views
                     Status("Downloading...");
                     await wc.DownloadFileTaskAsync(updateInfo.DownloadLink, tempFile);
                     Status("Download Complete");
-                    if (MessageBox.Show("Update is ready to be installed. Click ok to install. It will close the application. You can start the studio as soon as it's extraction is done", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
+                    if (MessageBox.Show("Update is ready to be installed. Click OK to install. It will close the application. You can start the studio as soon as it's installation is done.", "Update", MessageBoxButton.OKCancel) == MessageBoxResult.OK)
                     {
+#if STANDALONE
                         var tempPath = Path.GetTempPath();
                         var srcPath = Path.Combine(Environment.CurrentDirectory, "Tools");
                         foreach (string newPath in Directory.GetFiles(srcPath, "*.*", SearchOption.AllDirectories))
@@ -229,7 +235,6 @@ namespace ANAConversationStudio.Views
                         var extractorFilePath = Path.Combine(tempPath, "extract.bat");
 
                         var commandLine = $"\"{tempFile}\" \"{Environment.CurrentDirectory}\"";
-                        AskAlert = false;
                         Application.Current.Exit += (s, args) =>
                         {
                             var psi = new ProcessStartInfo
@@ -240,6 +245,14 @@ namespace ANAConversationStudio.Views
                             };
                             Process.Start(psi);
                         };
+#else
+                        Application.Current.Exit += (s, args) =>
+                        {
+                            var commandLine = $"/i \"{tempFile}\"";
+                            Process.Start("msiexec", commandLine);
+                        };
+#endif
+                        AskAlert = false;
                         Application.Current.Shutdown();
                     }
                 }
