@@ -35,7 +35,7 @@
         <Setter Property="Margin" Value="10"/>
     </Style>
     <ui:ButtonSectionTypeSymbolConverter x:Key="ButtonSectionTypeSymbolConverter"/>
-    <views:ButtonTypeToFieldVisibilityConverter x:Key="ButtonTypeToFieldVisibilityConverter"/>
+    <ui:ButtonTypeToFieldVisibilityConverter x:Key="ButtonTypeToFieldVisibilityConverter"/>
     <BooleanToVisibilityConverter x:Key="B2V"/>
     <ui:NullToVisibilityConverter x:Key="N2V"/>
 
