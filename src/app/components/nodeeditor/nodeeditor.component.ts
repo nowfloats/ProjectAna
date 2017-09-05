@@ -56,6 +56,46 @@ export class NodeEditorComponent implements OnInit {
         models.CardPlacement.Incoming,
         models.CardPlacement.Outgoing,
     ];
+
+    editorTypeFromSectionType(secType: models.SectionType): models.EditorType {
+        switch (secType) {
+            case models.SectionType.Text:
+                return models.EditorType.Text;
+            case models.SectionType.Image:
+            case models.SectionType.Audio:
+            case models.SectionType.Video:
+            case models.SectionType.Gif:
+            case models.SectionType.PrintOTP:
+            case models.SectionType.EmbeddedHtml:
+                return models.EditorType.TitleCaptionUrl;
+            case models.SectionType.Carousel:
+                return models.EditorType.Carousel;
+            default:
+                return models.EditorType.Text;
+        }
+    }
+
+    titleCaptionUrlAlias(section: models.TitleCaptionUrlSection) {
+        return section.Title || section.Caption || section.SectionType;
+    }
+    chatButtonAlias(btn: models.Button) {
+        return btn.ButtonName || btn.ButtonText || btn.ButtonType;
+    }
+    chatButtonFieldVisible(btn: models.Button, fieldName: string) {
+        switch (btn.ButtonType) {
+            default:
+                return false;
+        }
+    }
+    sectionIcon(section: models.Section) {
+        switch (section.SectionType) {
+            case models.SectionType.Image:
+                return 'fa-picture-o';
+            default:
+                return 'fa-file-o';
+        }
+    }
+
     ngOnInit(): void {
         this.chatFlowService.fetchChatFlowPack('599c3caa460b5053e4b09869').subscribe(x => {
             this.chatNode = x.ChatNodes[0];

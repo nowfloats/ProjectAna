@@ -5,3 +5,29 @@ md-form-field, md-select {
 .root {
   margin: 20px;
 }
+
+.text-section-icon {
+  font-size: 20px;
+}
+
+.mat-form-field-wrapper {
+  /*padding-bottom: 0px;*/
+}
+
+md-select, md-checkbox {
+  padding-bottom: 1.25em;
+}
+
+.tab-content {
+  margin: 20px 0;
+}
+
+.col-centered {
+  float: none;
+  margin: 0 auto;
+}
+
+.panel-header-icon {
+  margin-top: 2px;
+  margin-right: 5px;
+}

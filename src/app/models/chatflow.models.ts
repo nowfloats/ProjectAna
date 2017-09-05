@@ -165,8 +165,35 @@ export class CarouselSection extends TitleCaptionSection {
 }
 // Sections - End
 
-export class Button {
-    ButtonName?: any;
+export enum ButtonType {
+    PostText = 'PostText',
+    OpenUrl = 'OpenUrl',
+    GetText = 'GetText',
+    GetNumber = 'GetNumber',
+    GetAddress = 'GetAddress',
+    GetEmail = 'GetEmail',
+    GetPhoneNumber = 'GetPhoneNumber',
+    GetItemFromSource = 'GetItemFromSource',
+    GetImage = 'GetImage',
+    GetAudio = 'GetAudio',
+    GetVideo = 'GetVideo',
+    NextNode = 'NextNode',
+    DeepLink = 'DeepLink',
+    GetAgent = 'GetAgent',
+    ShowConfirmation = 'ShowConfirmation',
+    FetchChatFlow = 'FetchChatFlow',
+    /// Format: yyyy-MM-dd
+    GetDate = 'GetDate',
+    /// Format: HH:mm:ss
+    GetTime = 'GetTime',
+    /// Format: yyyy-MM-ddTHH:mm:ss
+    GetDateTime = 'GetDateTime',
+    /// Format: [Latitude],[Longitude]
+    GetLocation = 'GetLocation'
+}
+
+export class Button implements BaseIdEntity {
+    ButtonName: string;
     ButtonText: string;
     Emotion: number;
     ButtonType: number;
@@ -236,4 +263,10 @@ export class ChatFlowPack {
     CreatedOn: Date;
     UpdatedOn: Date;
     _id: string;
+}
+
+export enum EditorType {
+    Text = 'Text',
+    TitleCaptionUrl = 'TitleCaptionUrl',
+    Carousel = 'Carousel'
 }
