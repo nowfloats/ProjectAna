@@ -7,6 +7,8 @@
 
         public string ProjectsCollectionName { get; set; }
         public string ChatFlowPacksCollectionName { get; set; }
-        public string ActivityEventLogCollectionName { get; set; }
+        public string ChatFlowPacksBackupCollectionName { get; set; }
+        public int MaxBackups { get; set; }
+		public string ActivityEventLogCollectionName { get; set; }
     }
 }
