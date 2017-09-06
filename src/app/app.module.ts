@@ -45,10 +45,9 @@ import { ChatFlowService } from './services/chatflow.service';
         MdCheckboxModule,
         MdTabsModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'editor', pathMatch: 'full' },
+            { path: '', redirectTo: 'designer', pathMatch: 'full' },
             { path: 'designer', component: ChatFlowComponent },
-            { path: 'editor', component: NodeEditorComponent },
-            { path: '**', redirectTo: 'editor' }
+            { path: '**', redirectTo: 'designer' }
         ])
     ],
     providers: [
@@ -57,6 +56,9 @@ import { ChatFlowService } from './services/chatflow.service';
     bootstrap: [AppComponent],
     schemas: [
         NO_ERRORS_SCHEMA
+    ],
+    entryComponents: [
+        NodeEditorComponent
     ]
 })
 export class AppModule { }

@@ -3,7 +3,7 @@ md-form-field, md-select {
 }
 
 .root {
-  margin: 20px;
+  margin: 20px 0;
 }
 
 .text-section-icon {
@@ -14,12 +14,13 @@ md-form-field, md-select {
   /*padding-bottom: 0px;*/
 }
 
-md-select, md-checkbox {
+section.form-field {
   padding-bottom: 1.25em;
 }
 
 .tab-content {
   margin: 20px 0;
+  height: 80vh;
 }
 
 .col-centered {
@@ -31,3 +32,4 @@ md-select, md-checkbox {
   margin-top: 2px;
   margin-right: 5px;
 }
+

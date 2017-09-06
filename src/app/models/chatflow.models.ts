@@ -196,27 +196,28 @@ export class Button implements BaseIdEntity {
     ButtonName: string;
     ButtonText: string;
     Emotion: number;
-    ButtonType: number;
-    DeepLinkUrl?: any;
+    ButtonType: ButtonType;
+    DeepLinkUrl: string;
     Url: string;
-    BounceTimeout?: any;
+    BounceTimeout: number;
     NextNodeId: string;
     DefaultButton: boolean;
     Hidden: boolean;
-    VariableValue?: any;
-    PrefixText?: any;
-    PostfixText?: any;
-    PlaceholderText?: any;
-    APIResponseMatchKey?: any;
-    APIResponseMatchValue?: any;
+    VariableValue: string;
+    PrefixText: string;
+    PostfixText: string;
+    PlaceholderText: string;
+    APIResponseMatchKey: string;
+    APIResponseMatchValue: string;
     PostToChat: boolean;
     DoesRepeat: boolean;
-    RepeatOn?: any;
-    RepeatAs?: any;
+    RepeatOn: string;
+    RepeatAs: string;
     StartPosition: number;
     MaxRepeats: number;
     Alias: string;
     _id: string;
+    AdvancedOptions?: boolean;
 }
 
 export class ChatNode {

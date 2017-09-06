@@ -167,7 +167,7 @@ export class ChatFlowComponent implements AfterViewInit {
     openEditor(chatNodeVM: ChatNodeVM) {
         let dialogRef = this.dialog.open(NodeEditorComponent, {
             width: '80%',
-            data: chatNodeVM
+            data: chatNodeVM.chatNode
         });
 
         dialogRef.afterClosed().subscribe(result => {

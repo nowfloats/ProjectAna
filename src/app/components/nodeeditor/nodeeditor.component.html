@@ -1,4 +1,4 @@
-<div class="container root">
+<div class="container root" style="height: 90vh">
   <div>
     <div class="col-md-12">
       <md-tab-group>
@@ -7,12 +7,16 @@
             <md-form-field>
               <input mdInput type="text" placeholder="Node Name" [(ngModel)]="chatNode.Name" name="nodeName">
             </md-form-field>
-            <md-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
-              <md-option *ngFor="let nType of nodeTypes" [value]="nType">
-                {{ nType }}
-              </md-option>
-            </md-select>
-            <md-checkbox [(ngModel)]="chatNode.IsStartNode" name="isStartNode" align="end">Mark as start node</md-checkbox>
+            <section class="form-field">
+              <md-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
+                <md-option *ngFor="let nType of nodeTypes" [value]="nType">
+                  {{ nType }}
+                </md-option>
+              </md-select>
+            </section>
+            <section class="form-field">
+              <md-checkbox [(ngModel)]="chatNode.IsStartNode" name="isStartNode" align="start">Mark as start node</md-checkbox>
+            </section>
             <md-form-field>
               <input mdInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
             </md-form-field>
@@ -104,13 +108,82 @@
         <md-tab label="Buttons">
           <div class="tab-content">
             <div class="node-buttons" *ngFor="let btn of chatNode.Buttons; let i = index">
-              <!--<md-form-field>
-                <input mdInput type="text" placeholder="Title" [(ngModel)]="section.Title" name="sectionTitle-{{i}}">
-              </md-form-field>-->
               <div class="panel panel-default">
                 <div class="panel-heading">Button: {{chatButtonAlias(btn)}}</div>
                 <div class="panel-body">
-
+                  <section class="form-field">
+                    <md-select placeholder="Type" [(ngModel)]="btn.ButtonType" name="btnType-{{i}}">
+                      <md-option *ngFor="let bType of buttonTypes" [value]="bType">
+                        {{ bType }}
+                      </md-option>
+                    </md-select>
+                  </section>
+                  <md-form-field>
+                    <input mdInput type="text" placeholder="Text on button" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}" >
+                  </md-form-field>
+                  <md-form-field>
+                    <input mdInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{{i}}">
+                  </md-form-field>
+                  <md-form-field [hidden]="chatButtonFieldVisible(btn, 'PlaceholderText')">
+                    <input mdInput type="text" placeholder="Placeholder" [(ngModel)]="btn.PlaceholderText" name="btnPlaceholderText-{{i}}">
+                  </md-form-field>
+                  <md-form-field [hidden]="chatButtonFieldVisible(btn, 'DeepLinkUrl')">
+                    <input mdInput type="text" placeholder="Deeplink Url" [(ngModel)]="btn.DeepLinkUrl" name="btnDeepLinkUrl-{{i}}">
+                  </md-form-field>
+                  <md-form-field [hidden]="chatButtonFieldVisible(btn, 'Url')">
+                    <input mdInput type="text" placeholder="Url" [(ngModel)]="btn.Url" name="btnUrl-{{i}}">
+                  </md-form-field>
+                  <md-form-field [hidden]="chatButtonFieldVisible(btn, 'NextNodeId')">
+                    <input mdInput type="text" placeholder="Next Node Id" [(ngModel)]="btn.NextNodeId" name="btnNextNodeId-{{i}}">
+                  </md-form-field>
+                  <section class="form-field">
+                    <md-checkbox [(ngModel)]="btn.AdvancedOptions" name="btnAdvancedOptions-{{i}}" align="start">Advanced Options</md-checkbox>
+                  </section>
+                  <div class="btn-advanced-options" [hidden]="btn.AdvancedOptions==undefined?(!btn.VariableValue||!btn.APIResponseMatchKey||!btn.APIResponseMatchValue):!btn.AdvancedOptions">
+                    <md-form-field>
+                      <input mdInput type="text" placeholder="Variable Value" [(ngModel)]="btn.VariableValue" name="btnVariableValue-{{i}}">
+                    </md-form-field>
+                    <md-form-field [hidden]="chatButtonFieldVisible(btn, 'APIResponseMatchKey')">
+                      <input mdInput type="text" placeholder="API Response Match Key" [(ngModel)]="btn.APIResponseMatchKey" name="btnAPIResponseMatchKey-{{i}}">
+                    </md-form-field>
+                    <md-form-field [hidden]="chatButtonFieldVisible(btn, 'APIResponseMatchValue')">
+                      <input mdInput type="text" placeholder="API Response Match Value" [(ngModel)]="btn.APIResponseMatchValue" name="btnAPIResponseMatchValue-{{i}}">
+                    </md-form-field>
+                    <md-form-field [hidden]="chatButtonFieldVisible(btn, 'PrefixText')">
+                      <input mdInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{{i}}">
+                    </md-form-field>
+                    <md-form-field [hidden]="chatButtonFieldVisible(btn, 'PostfixText')">
+                      <input mdInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{{i}}">
+                    </md-form-field>
+                  </div>
+                  <section class="form-field">
+                    <md-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{{i}}" align="start" >Does Repeat</md-checkbox>
+                  </section>
+                  <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
+                    <md-form-field>
+                      <input mdInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{{i}}" >
+                    </md-form-field>
+                    <md-form-field>
+                      <input mdInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{{i}}" >
+                    </md-form-field>
+                    <md-form-field>
+                      <input mdInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{{i}}" >
+                    </md-form-field>
+                    <md-form-field>
+                      <input mdInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{{i}}" >
+                    </md-form-field>
+                  </div>
+                  <div class="col-md-12 text-center">
+                    <div class="col-md-4">
+                      <md-checkbox [(ngModel)]="btn.DefaultButton" name="btnDefaultButton-{{i}}" align="start" >Is default</md-checkbox>
+                    </div>
+                    <div class="col-md-4">
+                      <md-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{{i}}" align="start" >Post to chat</md-checkbox>
+                    </div>
+                    <div class="col-md-4">
+                      <md-checkbox [(ngModel)]="btn.Hidden" name="btnHidden-{{i}}" align="start" >Is Hidden</md-checkbox>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
