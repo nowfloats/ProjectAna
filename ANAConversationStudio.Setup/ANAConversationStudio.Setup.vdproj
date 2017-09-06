@@ -141,6 +141,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_554096492B990339B0CE4926E34B0F69"
+        "OwnerKey" = "8:_D3BD5164B9CF4AA0E3A198F5E64F1231"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_55510FC3E0831AE353E4AF66667EE3DE"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
@@ -149,6 +155,12 @@
         {
         "MsmKey" = "8:_5FA76B8A62D17F3005FC2A2F780D1FC7"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5FA76B8A62D17F3005FC2A2F780D1FC7"
+        "OwnerKey" = "8:_D3BD5164B9CF4AA0E3A198F5E64F1231"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -191,6 +203,12 @@
         {
         "MsmKey" = "8:_6A764FF6A8122C9FDDAB6D9CC0E0B7DF"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6A764FF6A8122C9FDDAB6D9CC0E0B7DF"
+        "OwnerKey" = "8:_D3BD5164B9CF4AA0E3A198F5E64F1231"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -418,6 +436,12 @@
         "Entry"
         {
         "MsmKey" = "8:_D0ED70977B38915194E70641F0E6E5D9"
+        "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_D3BD5164B9CF4AA0E3A198F5E64F1231"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -2794,6 +2818,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D3BD5164B9CF4AA0E3A198F5E64F1231"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:System.ValueTuple, Version=4.0.2.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_D3BD5164B9CF4AA0E3A198F5E64F1231"
+                    {
+                    "Name" = "8:System.ValueTuple.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.ValueTuple.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_6B854D7E7BAC45F0A7D8892B06AAA81B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D3CC3CA03ECFEE61D4091A8900A6830F"
             {
             "AssemblyRegister" = "3:1"
@@ -3346,19 +3401,19 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ANA Conversation Studio"
-        "ProductCode" = "8:{8C3F071E-ED6B-4C58-8E83-CEB2D8854F01}"
-        "PackageCode" = "8:{CF1D8FDB-99A8-4D61-B9EA-D0B8F40D8175}"
+        "ProductCode" = "8:{30229BB3-B4E6-40AA-A128-693B8492C6BC}"
+        "PackageCode" = "8:{C5817754-AACF-4254-B450-C1826D30DD48}"
         "UpgradeCode" = "8:{1BD9D39A-BCB0-4988-88FE-7481A5494FFF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:4.5.4"
+        "ProductVersion" = "8:4.5.5"
         "Manufacturer" = "8:Project ANA"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:http://ana.chat"
-        "Title" = "8:ANA Conversation Studio 4.5.4"
+        "Title" = "8:ANA Conversation Studio 4.5.5"
         "Subject" = "8:"
         "ARPCONTACT" = "8:Project ANA"
         "Keywords" = "8:"
