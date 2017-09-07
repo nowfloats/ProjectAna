@@ -1,3 +1,4 @@
 ﻿{
-  "MapToken": "[Here goes your windows map token]"
+  "MapToken": "[Here goes your windows map token]",
+  "GoogleMapsAPIKey": "[Here goes your google api key obtained from the https://console.developers.google.com, Google Static Maps API should be enabled]",
 }

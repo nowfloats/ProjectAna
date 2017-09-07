@@ -117,7 +117,7 @@ namespace ANAConversationSimulator.Helpers
 				Text = text,
 			});
 		}
-		public static void HandlePostMediaToThread(string mediaUrl, ButtonTypeEnum mediaType)
+		public static void HandlePostMediaToThread(string mediaUrl, ButtonTypeEnum mediaType, string caption = null)
 		{
 			if (MainPageViewModel.CurrentInstance == null) return;
 
@@ -127,13 +127,15 @@ namespace ANAConversationSimulator.Helpers
 				case ButtonTypeEnum.GetImage:
 					section = new ImageSection
 					{
-						Url = mediaUrl
+						Url = mediaUrl,
+						Caption = caption
 					};
 					break;
 				case ButtonTypeEnum.GetAudio:
 					section = new AudioSection
 					{
-						Url = mediaUrl
+						Url = mediaUrl,
+						Caption = caption
 					};
 					break;
 				case ButtonTypeEnum.GetVideo:

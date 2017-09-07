@@ -241,6 +241,19 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 								return;
 						}
 						break;
+					case ButtonTypeEnum.GetLocation:
+						{
+							var loc = await Utils.GetCurrentGeoLocation();
+							button.VariableValue = $"{(float)loc.Coordinate.Point.Position.Latitude},{(float)loc.Coordinate.Point.Position.Longitude}";
+							ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
+							userData[button.VariableName] = button.VariableValue;
+							if (!button.Hidden && button.PostToChat)
+							{
+								var mapUrl = $"https://maps.googleapis.com/maps/api/staticmap?center={button.VariableValue}&zoom=15&size=300x150&markers=color:red|label:A|{button.VariableValue}&key=" + Utils.Config.GoogleMapsAPIKey;
+								ButtonActionHelper.HandlePostMediaToThread(mapUrl, ButtonTypeEnum.GetImage, button.VariableValue);
+							}
+						}
+						break;
 					default:
 						Utils.ShowDialog($"Button type: {button.ButtonType} not supported");
 						break;
