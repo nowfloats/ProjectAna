@@ -176,6 +176,9 @@
     <Compile Include="UserControls\AddressDialog.xaml.cs">
       <DependentUpon>AddressDialog.xaml</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\DateTimePickerDialog.xaml.cs">
+      <DependentUpon>DateTimePickerDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\InputContentDialog.xaml.cs">
       <DependentUpon>InputContentDialog.xaml</DependentUpon>
     </Compile>
@@ -223,6 +226,10 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="UserControls\AddressDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UserControls\DateTimePickerDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

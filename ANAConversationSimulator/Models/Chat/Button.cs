@@ -84,6 +84,7 @@ namespace ANAConversationSimulator.Models.Chat
                     case ButtonTypeEnum.OpenUrl:
                     case ButtonTypeEnum.GetImage:
                     case ButtonTypeEnum.GetAudio:
+                    case ButtonTypeEnum.GetFile:
                     case ButtonTypeEnum.GetVideo:
                     case ButtonTypeEnum.NextNode:
                     case ButtonTypeEnum.DeepLink:
@@ -120,7 +121,8 @@ namespace ANAConversationSimulator.Models.Chat
         GetImage,
         GetAudio,
         GetVideo,
-        NextNode,
+        GetFile,
+		NextNode,
         DeepLink,
         GetAgent,
         ApiCall,

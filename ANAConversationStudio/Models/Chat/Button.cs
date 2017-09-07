@@ -365,6 +365,7 @@ namespace ANAConversationStudio.Models.Chat
 		GetItemFromSource,
 		GetImage,
 		GetAudio,
+		GetFile,
 		GetVideo,
 		NextNode,
 		DeepLink,
