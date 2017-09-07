@@ -104,12 +104,21 @@
               </div>
             </div>
             <section class="text-center">
-              <button type="button" md-icon-button (click)="MH.addSection(this, 'Image')">
-                <i class="fa fa-plus" style="font-size: 20px"></i>
+              <md-menu #addSectionMenu="mdMenu">
+                <button md-menu-item (click)="MH.addSection(this, 'Text')">Text</button>
+                <button md-menu-item (click)="MH.addSection(this, 'Image')">Image</button>
+                <button md-menu-item (click)="MH.addSection(this, 'Gif')">Gif</button>
+                <button md-menu-item (click)="MH.addSection(this, 'Audio')">Audio</button>
+                <button md-menu-item (click)="MH.addSection(this, 'Video')">Video</button>
+                <button md-menu-item (click)="MH.addSection(this, 'EmbeddedHtml')">Embedded HTML</button>
+              </md-menu>
+
+              <button type="button" [mdMenuTriggerFor]="addSectionMenu" md-fab>
+                <md-icon class="fab-btn-icon">add</md-icon>
               </button>
-              <button type="button" md-icon-button (click)="MH.test(chatNode)">
+              <!--<button type="button" md-icon-button (click)="MH.test(chatNode)">
                 <i class="fa fa-warning" style="font-size: 20px"></i>
-              </button>
+              </button>-->
             </section>
           </div>
         </md-tab>

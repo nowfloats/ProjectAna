@@ -10,3 +10,7 @@ body {
 [hidden] {
   display: none !important;
 }
+
+.fab-btn-icon {
+  color: white;
+}

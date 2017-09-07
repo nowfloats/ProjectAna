@@ -39,8 +39,6 @@ export class ChatFlowComponent implements AfterViewInit {
     chatflowRoot: ElementRef;
 
     ngAfterViewInit() {
-        //async updateLayout to avoid 'ExpressionChangedAfterItHasBeenCheckedError'!
-        //Promise.resolve(null).then(() => this.updateLayout());
     }
 
     chatFlowRootSVG() {
@@ -69,22 +67,6 @@ export class ChatFlowComponent implements AfterViewInit {
                         setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
                         break;
                     }
-
-                    //let btnsTable = this.chatFlowRootSVG().querySelector(`table[node-id='${x.chatNode.Id}']`) as HTMLTableElement;
-                    //if (btnsTable) {
-                    //    x._btnTableWidth = btnsTable.getBoundingClientRect().width;//btnsTable.clientWidth;//
-                    //    x._width = ((x._width > x._btnTableWidth) ? x._width : x._btnTableWidth);
-
-                    //    setTimeout(() => {
-                    //        let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${x.chatNode.Id}']`) as HTMLDivElement;
-                    //        x._height = nodeRoot.clientHeight;
-                    //        this._isLayoutUpdated = true;
-                    //    }, 500);
-                    //}
-                    //else {
-                    //    setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
-                    //    break;
-                    //}
                 }
 
             }
@@ -96,7 +78,7 @@ export class ChatFlowComponent implements AfterViewInit {
         if (btnsTable) {
 
             if (!this._isLayoutUpdated) //If this is not done, when new section is added to the node, node's width is also increasing abnormally!
-                chatNodeVM._btnTableWidth = btnsTable.getBoundingClientRect().width;//btnsTable.getBoundingClientRect().width;//
+                chatNodeVM._btnTableWidth = btnsTable.getBoundingClientRect().width;
             else
                 chatNodeVM._btnTableWidth = btnsTable.clientWidth;
 
@@ -109,12 +91,10 @@ export class ChatFlowComponent implements AfterViewInit {
             }, 500);
             return true;
         }
-        //else {
-        //    //setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
-        //    return false;
-        //}
+        
         return false;
     }
+
     ngTr(x: number, y: number) {
         return `translate(${x},${y})`;
     }
