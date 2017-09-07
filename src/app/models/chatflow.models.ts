@@ -1,3 +1,7 @@
+import { ObjectID } from 'bson';
+import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.component';
+import { GlobalsService } from '../services/globals.service';
+
 export interface ANAProject {
     Name: string;
     CreatedOn: Date;
@@ -49,25 +53,19 @@ export interface TitleCaptionEntity {
     Caption: string;
 }
 
-export abstract class BaseIdEntity {
+export interface BaseIdEntity {
     _id: string;
 }
 
-export abstract class BaseEntity extends BaseIdEntity {
-    abstract Alias(): string;
-}
+export interface BaseEntity extends BaseIdEntity { }
 
-export class Section extends BaseEntity {
+export interface Section extends BaseEntity {
     SectionType: SectionType;
-    DelayInMs: number;
-    Hidden: boolean;
-
-    Alias(): string {
-        return this.SectionType;
-    }
+    DelayInMs?: number;
+    Hidden?: boolean;
 }
 
-export abstract class RepeatableBaseEntity extends BaseEntity {
+export interface RepeatableBaseEntity extends BaseEntity {
     DoesRepeat: boolean;
     RepeatOn: string;
     RepeatAs: string;
@@ -75,92 +73,38 @@ export abstract class RepeatableBaseEntity extends BaseEntity {
     MaxRepeats: number;
 }
 
-export class TextSection extends Section {
-    constructor() {
-        super();
-        this.SectionType = SectionType.Text;
-    }
-
+export interface TextSection extends Section {
     Text: string;
-
-    Alias(): string {
-        return this.Text || this.SectionType;
-    }
 }
 
-export abstract class TitleCaptionSection extends Section implements TitleCaptionEntity {
-    Title: string;
-    Caption: string;
+export interface TitleCaptionSection extends Section, TitleCaptionEntity { }
 
-    Alias(): string {
-        return this.Title || this.Caption || this.SectionType;
-    }
-}
-
-export abstract class TitleCaptionUrlSection extends TitleCaptionSection {
+export interface TitleCaptionUrlSection extends TitleCaptionSection {
     Url: string;
-
-    Alias(): string {
-        return this.Title || this.Caption || this.SectionType;
-    }
 }
 
-export class ImageSection extends TitleCaptionUrlSection {
-    constructor() {
-        super();
-        this.SectionType = SectionType.Image;
-    }
-}
+export interface ImageSection extends TitleCaptionUrlSection { }
 
-export class VideoSection extends TitleCaptionUrlSection {
-    constructor() {
-        super();
-        this.SectionType = SectionType.Video;
-    }
-}
+export interface VideoSection extends TitleCaptionUrlSection { }
 
-export class AudioSection extends TitleCaptionUrlSection {
-    constructor() {
-        super();
-        this.SectionType = SectionType.Audio;
-    }
-}
+export interface AudioSection extends TitleCaptionUrlSection { }
 
-export class EmbeddedHtmlSection extends TitleCaptionUrlSection {
-    constructor() {
-        super();
-        this.SectionType = SectionType.EmbeddedHtml;
-    }
-}
+export interface EmbeddedHtmlSection extends TitleCaptionUrlSection { }
 
-export class CarouselButton extends RepeatableBaseEntity {
-
+export interface CarouselButton extends RepeatableBaseEntity {
     Url: string;
     Type: CarouselButtonType;
     VariableValue: string;
     NextNodeId: string;
     Text: string;
-
-    Alias(): string {
-        return this.Text || this.Type;
-    }
 }
 
-export class CarouselItem extends RepeatableBaseEntity implements TitleCaptionEntity {
-    Title: string;
-    Caption: string;
-
-    Alias(): string {
-        return this.Title || this.Caption || 'Carousel Item';
-    }
+export interface CarouselItem extends RepeatableBaseEntity, TitleCaptionEntity {
+    ImageUrl: string;
+    Buttons: CarouselButton[];
 }
 
-export class CarouselSection extends TitleCaptionSection {
-    constructor() {
-        super();
-        this.SectionType = SectionType.Carousel;
-    }
-
+export interface CarouselSection extends TitleCaptionSection {
     Items: CarouselItem[];
 }
 // Sections - End
@@ -192,7 +136,7 @@ export enum ButtonType {
     GetLocation = 'GetLocation'
 }
 
-export class Button implements BaseIdEntity {
+export interface Button extends BaseIdEntity {
     ButtonName: string;
     ButtonText: string;
     Emotion: number;
@@ -220,7 +164,7 @@ export class Button implements BaseIdEntity {
     AdvancedOptions?: boolean;
 }
 
-export class ChatNode {
+export interface ChatNode {
     Name: string;
     Id: string;
     Emotion: string;
@@ -241,7 +185,7 @@ export class ChatNode {
     IsStartNode: boolean;
 }
 
-export class ChatContent {
+export interface ChatContent {
     ButtonId: string;
     ButtonText: string;
     NodeName?: string;
@@ -256,7 +200,7 @@ export class ChatContent {
     Caption: string;
 }
 
-export class ChatFlowPack {
+export interface ChatFlowPack {
     ProjectId: string;
     ChatNodes: ChatNode[];
     ChatContent: ChatContent[];
@@ -270,4 +214,167 @@ export enum EditorType {
     Text = 'Text',
     TitleCaptionUrl = 'TitleCaptionUrl',
     Carousel = 'Carousel'
+}
+
+export class ModelHelpers {
+    constructor(
+        public globalsService: GlobalsService) { }
+
+    nodeTypes: NodeType[] = [
+        NodeType.ApiCall,
+        NodeType.Combination,
+        NodeType.Card,
+    ];
+    apiMethods: APIMethod[] = [
+        APIMethod.GET,
+        APIMethod.POST,
+    ];
+    cardPlacements: CardPlacement[] = [
+        CardPlacement.Center,
+        CardPlacement.Incoming,
+        CardPlacement.Outgoing,
+    ];
+    buttonTypes: ButtonType[] = [
+        ButtonType.DeepLink,
+        ButtonType.FetchChatFlow,
+        ButtonType.GetAddress,
+        ButtonType.GetAgent,
+        ButtonType.GetAudio,
+        ButtonType.GetDate,
+        ButtonType.GetDateTime,
+        ButtonType.GetEmail,
+        ButtonType.GetImage,
+        ButtonType.GetItemFromSource,
+        ButtonType.GetLocation,
+        ButtonType.GetNumber,
+        ButtonType.GetPhoneNumber,
+        ButtonType.GetText,
+        ButtonType.GetTime,
+        ButtonType.GetVideo,
+        ButtonType.NextNode,
+        ButtonType.OpenUrl,
+        ButtonType.PostText,
+        ButtonType.ShowConfirmation
+    ];
+
+    sectionAlias(section: Section) {
+        switch (section.SectionType) {
+            case SectionType.Text:
+                {
+                    let ts = section as TextSection;
+                    return ts.Text || ts.SectionType;
+                }
+            case SectionType.Image:
+            case SectionType.Audio:
+            case SectionType.Video:
+            case SectionType.EmbeddedHtml:
+            case SectionType.Gif:
+            case SectionType.Graph:
+            case SectionType.Carousel:
+                {
+                    let tcs = section as TitleCaptionSection;
+                    return tcs.Title || tcs.Caption || tcs.SectionType;
+                }
+            default:
+                return section.SectionType;
+        }
+    }
+    chatButtonAlias(btn: Button) {
+        return btn.ButtonName || btn.ButtonText || btn.ButtonType;
+    }
+
+    editorTypeFromSectionType(secType: SectionType): EditorType {
+        switch (secType) {
+            case SectionType.Text:
+                return EditorType.Text;
+            case SectionType.Image:
+            case SectionType.Audio:
+            case SectionType.Video:
+            case SectionType.Gif:
+            case SectionType.PrintOTP:
+            case SectionType.EmbeddedHtml:
+                return EditorType.TitleCaptionUrl;
+            case SectionType.Carousel:
+                return EditorType.Carousel;
+            default:
+                return EditorType.Text;
+        }
+    }
+    chatButtonFieldVisible(btn: Button, fieldName: string) {
+        var hidden = false;
+        switch (btn.ButtonType) {
+            case ButtonType.PostText:
+                hidden = true; //Hide all. Probably!
+                break;
+            case ButtonType.OpenUrl:
+                hidden = !(['Url'].indexOf(fieldName) != -1);//Show only Url field
+                break;
+            case ButtonType.GetText:
+            case ButtonType.GetNumber:
+            case ButtonType.GetAddress:
+            case ButtonType.GetEmail:
+            case ButtonType.GetPhoneNumber:
+                //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
+                hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.GetTime:
+            case ButtonType.GetDate:
+            case ButtonType.GetDateTime:
+            case ButtonType.GetLocation:
+                hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'APIResponseMatchKey', 'APIResponseMatchValue', 'PostfixText', 'PrefixText'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.GetImage:
+            case ButtonType.GetAudio:
+            case ButtonType.GetVideo:
+                //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
+                hidden = ['NextNodeId', 'DeepLinkUrl', 'PlaceholderText', 'Url', 'PostfixText', 'PrefixText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.GetItemFromSource:
+                hidden = ['NextNodeId', 'DeepLinkUrl', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.NextNode:
+                hidden = ['NextNodeId', 'PostfixText', 'PrefixText', 'DeepLinkUrl', 'Url', 'PlaceholderText'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.DeepLink:
+                hidden = ['NextNodeId', 'Url', 'PostfixText', 'PrefixText', 'PlaceholderText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+                break;
+            case ButtonType.GetAgent:
+                hidden = true; //Hide all. Probably!
+                break;
+            case ButtonType.ShowConfirmation:
+                hidden = true; //Hide all. Probably!
+                break;
+            case ButtonType.FetchChatFlow:
+                hidden = ['DeepLinkUrl', 'PlaceholderText', 'PostfixText', 'PrefixText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+                break;
+            default:
+                break;
+        }
+        return hidden;
+    }
+    sectionIcon(section: Section) {
+        switch (section.SectionType) {
+            case SectionType.Image:
+                return 'fa-picture-o';
+            default:
+                return 'fa-file-o';
+        }
+    }
+
+    addSection(chatNodeVM: ChatNodeVM, sectionType: SectionType) {
+        switch (sectionType) {
+            default:
+                chatNodeVM.chatNode.Sections.push({
+                    SectionType: sectionType,
+                    _id: new ObjectID().toHexString()
+                });
+
+                this.globalsService.chatFlowComponent.updateLayout();
+                break;
+        }
+    }
+
+    test(chatNode: ChatNode) {
+        alert(JSON.stringify(chatNode.Sections[chatNode.Sections.length - 1], null, 4));
+    }
 }

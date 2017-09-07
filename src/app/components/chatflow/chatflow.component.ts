@@ -2,6 +2,7 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angula
 import { Http } from '@angular/http';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
+import { GlobalsService } from '../../services/globals.service'
 import * as ChatFlowModels from '../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
 
@@ -12,7 +13,11 @@ import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
 })
 export class ChatFlowComponent implements AfterViewInit {
 
-    constructor(private chatFlowService: ChatFlowService, public dialog: MdDialog) {
+    constructor(
+        private chatFlowService: ChatFlowService,
+        public dialog: MdDialog,
+        public globalsService: GlobalsService) {
+
         this.chatFlowNetwork = new ChatFlowNetwork(this);
         this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
         this._viewBoxX = 0;
@@ -20,9 +25,15 @@ export class ChatFlowComponent implements AfterViewInit {
         this._viewBoxWidth = this.designerWidth();
         this._viewBoxHeight = this.designerHeight();
 
+        this.updateLayout();
         this.loadChatFlow();
+
+        globalsService.chatFlowComponent = this;
+
+        this.MH = new ChatFlowModels.ModelHelpers(globalsService);
     }
     chatFlowNetwork: ChatFlowNetwork;
+    MH: ChatFlowModels.ModelHelpers;
 
     @ViewChild('chatflowRoot')
     chatflowRoot: ElementRef;
@@ -53,27 +64,57 @@ export class ChatFlowComponent implements AfterViewInit {
                 for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
                     let x = this.chatFlowNetwork.chatNodeVMs[i];
 
-                    let btnsTable = this.chatFlowRootSVG().querySelector(`table[node-id='${x.chatNode.Id}']`) as HTMLTableElement;
-                    if (btnsTable) {
-                        x._btnTableWidth = btnsTable.getBoundingClientRect().width;//btnsTable.clientWidth;//
-                        x._width = ((x._width > x._btnTableWidth) ? x._width : x._btnTableWidth);
-
-                        setTimeout(() => {
-                            let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${x.chatNode.Id}']`) as HTMLDivElement;
-                            x._height = nodeRoot.clientHeight;
-                            this._isLayoutUpdated = true;
-                        }, 500);
-                    }
-                    else {
+                    let _updateNodeLayout = this.updateNodeLayout(x);
+                    if (!_updateNodeLayout) {
                         setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
                         break;
                     }
+
+                    //let btnsTable = this.chatFlowRootSVG().querySelector(`table[node-id='${x.chatNode.Id}']`) as HTMLTableElement;
+                    //if (btnsTable) {
+                    //    x._btnTableWidth = btnsTable.getBoundingClientRect().width;//btnsTable.clientWidth;//
+                    //    x._width = ((x._width > x._btnTableWidth) ? x._width : x._btnTableWidth);
+
+                    //    setTimeout(() => {
+                    //        let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${x.chatNode.Id}']`) as HTMLDivElement;
+                    //        x._height = nodeRoot.clientHeight;
+                    //        this._isLayoutUpdated = true;
+                    //    }, 500);
+                    //}
+                    //else {
+                    //    setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
+                    //    break;
+                    //}
                 }
 
             }
         }
     }
 
+    updateNodeLayout(chatNodeVM: ChatNodeVM): boolean {
+        let btnsTable = this.chatFlowRootSVG().querySelector(`table[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLTableElement;
+        if (btnsTable) {
+
+            if (!this._isLayoutUpdated) //If this is not done, when new section is added to the node, node's width is also increasing abnormally!
+                chatNodeVM._btnTableWidth = btnsTable.getBoundingClientRect().width;//btnsTable.getBoundingClientRect().width;//
+            else
+                chatNodeVM._btnTableWidth = btnsTable.clientWidth;
+
+            chatNodeVM._width = ((chatNodeVM._width > chatNodeVM._btnTableWidth) ? chatNodeVM._width : chatNodeVM._btnTableWidth);
+
+            setTimeout(() => {
+                let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLDivElement;
+                chatNodeVM._height = nodeRoot.clientHeight;
+                this._isLayoutUpdated = true;
+            }, 500);
+            return true;
+        }
+        //else {
+        //    //setTimeout(() => this.updateLayout(), 500); //Document not ready yet! Wait 500ms
+        //    return false;
+        //}
+        return false;
+    }
     ngTr(x: number, y: number) {
         return `translate(${x},${y})`;
     }
@@ -151,8 +192,6 @@ export class ChatFlowComponent implements AfterViewInit {
 
     designerWheel(event: WheelEvent) {
         event.preventDefault();
-        console.log(event.wheelDelta);
-
         let change = Config.zoomCoefficient * event.wheelDelta;
         if (this._viewBoxWidth - change < 0 || this._viewBoxHeight - change < 0) {
             return;
@@ -160,8 +199,6 @@ export class ChatFlowComponent implements AfterViewInit {
 
         this._viewBoxWidth -= change;
         this._viewBoxHeight -= change;
-
-        console.log(this.viewBox());
     }
 
     openEditor(chatNodeVM: ChatNodeVM) {
@@ -170,9 +207,9 @@ export class ChatFlowComponent implements AfterViewInit {
             data: chatNodeVM.chatNode
         });
 
-        dialogRef.afterClosed().subscribe(result => {
-            console.log('The dialog was closed');
-        });
+        // dialogRef.afterClosed().subscribe(result => {
+        //     console.log('The dialog was closed');
+        // });
     }
 
     private resetDraggingState() {
@@ -281,7 +318,6 @@ class ChatNodeConnection {
         this.closeButtonPointX = xy.x; //some offset from the cursor
         this.closeButtonPointY = xy.y; //some offset from the cursor
         this.closeButtonVisible = true;
-        console.log(`${this.closeButtonPointX},${this.closeButtonPointY}`);
         //alert(`${this.closeButtonPoint.x},${this.closeButtonPoint.y}`);
         setTimeout(() => {
             this.closeButtonVisible = false;
@@ -366,7 +402,9 @@ class ChatButtonConnector {
     }
 
     y() {
-        return this.chatNodeVM.y() + this.chatNodeVM.height();
+        var _y = this.chatNodeVM.y() + this.chatNodeVM.height();
+        //console.log("YY- " + this.chatNodeVM.chatNode.Name + ": " + this.chatNodeVM.height());
+        return _y;
     }
 
     circleRadius = Config.buttonCircleRadius;

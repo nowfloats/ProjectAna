@@ -22,6 +22,7 @@ import { NodeEditorComponent } from './components/nodeeditor/nodeeditor.componen
 import { HttpClientModule } from '@angular/common/http';
 
 import { ChatFlowService } from './services/chatflow.service';
+import { GlobalsService } from './services/globals.service';
 
 @NgModule({
     declarations: [
@@ -51,7 +52,8 @@ import { ChatFlowService } from './services/chatflow.service';
         ])
     ],
     providers: [
-        ChatFlowService
+        ChatFlowService,
+        GlobalsService
     ],
     bootstrap: [AppComponent],
     schemas: [
