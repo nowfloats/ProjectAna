@@ -125,6 +125,7 @@ export enum ButtonType {
     NextNode = 'NextNode',
     DeepLink = 'DeepLink',
     GetAgent = 'GetAgent',
+    GetFile = 'GetFile',
     ShowConfirmation = 'ShowConfirmation',
     FetchChatFlow = 'FetchChatFlow',
     /// Format: yyyy-MM-dd
@@ -217,7 +218,9 @@ export enum EditorType {
 
 export class ModelHelpers {
     constructor(
-        public globalsService: GlobalsService) { }
+        public globalsService: GlobalsService) {
+
+    }
 
     nodeTypes: NodeType[] = [
         NodeType.ApiCall,
@@ -250,6 +253,7 @@ export class ModelHelpers {
         ButtonType.GetText,
         ButtonType.GetTime,
         ButtonType.GetVideo,
+        ButtonType.GetFile,
         ButtonType.NextNode,
         ButtonType.OpenUrl,
         ButtonType.PostText,
@@ -323,6 +327,7 @@ export class ModelHelpers {
                 hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'APIResponseMatchKey', 'APIResponseMatchValue', 'PostfixText', 'PrefixText'].indexOf(fieldName) != -1;
                 break;
             case ButtonType.GetImage:
+            case ButtonType.GetFile:
             case ButtonType.GetAudio:
             case ButtonType.GetVideo:
                 //if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
@@ -373,6 +378,27 @@ export class ModelHelpers {
         }
     }
 
+    sectionMoveUp(chatNode: ChatNode, section: Section) {
+        var current = chatNode.Sections.indexOf(section);
+        if (current != -1)
+            this.arrayMove(chatNode.Sections, current, current - 1);
+    }
+    sectionMoveDown(chatNode: ChatNode, section: Section) {
+        var current = chatNode.Sections.indexOf(section);
+        if (current != -1)
+            this.arrayMove(chatNode.Sections, current, current + 1);
+    }
+    sectionDelete(chatNode: ChatNode, section: Section) {
+        var current = chatNode.Sections.indexOf(section);
+        if (current != -1) {
+            if (confirm(`Delete section '${this.sectionAlias(section)}'`)) {
+                chatNode.Sections.splice(current, 1);
+
+                this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
+                this.globalsService.chatFlowComponent.updateLayout();
+            }
+        }
+    }
     addButton(chatNode: ChatNode) {
         chatNode.Buttons.push({
             _id: new ObjectID().toHexString(),
@@ -383,6 +409,27 @@ export class ModelHelpers {
         this.globalsService.chatFlowComponent.updateLayout();
     }
 
+    buttonMoveUp(chatNode: ChatNode, btn: Button) {
+        var current = chatNode.Buttons.indexOf(btn);
+        if (current != -1)
+            this.arrayMove(chatNode.Buttons, current, current - 1);
+    }
+    buttonMoveDown(chatNode: ChatNode, btn: Button) {
+        var current = chatNode.Buttons.indexOf(btn);
+        if (current != -1)
+            this.arrayMove(chatNode.Buttons, current, current + 1);
+    }
+    buttonDelete(chatNode: ChatNode, btn: Button) {
+        var current = chatNode.Buttons.indexOf(btn);
+        if (current != -1) {
+            if (confirm(`Delete button '${this.chatButtonAlias(btn)}'?`)) {
+                chatNode.Buttons.splice(current, 1);
+
+                this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
+                this.globalsService.chatFlowComponent.updateLayout();
+            }
+        }
+    }
     nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MdButton) {
         event.preventDefault();
 
@@ -390,7 +437,32 @@ export class ModelHelpers {
         btn.click();
     }
 
+    resetOtherStartNodes(chatNode: ChatNode) {
+        this.globalsService.chatFlowComponent.chatFlowNetwork.chatNodeVMs.forEach(vm => {
+            if (vm.chatNode != chatNode)
+                vm.chatNode.IsStartNode = false;
+        });
+    }
+
     test(chatNode: ChatNode) {
         alert(JSON.stringify(chatNode.Sections[chatNode.Sections.length - 1], null, 4));
+    }
+
+    arrayMove_RAW(array: any[], old_index, new_index) {
+        if (new_index >= array.length) {
+            var k = new_index - array.length;
+            while ((k--) + 1) {
+                array.push(undefined);
+            }
+        }
+        array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+        return array; // for testing purposes
+    }
+
+    arrayMove(array: any[], old_index, new_index) {
+        if (new_index >= array.length || new_index < 0)
+            throw 'new index cannot be greater than or equal to array length or less than zero';
+
+        array.splice(new_index, 0, array.splice(old_index, 1)[0]);
     }
 }

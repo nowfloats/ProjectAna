@@ -15,7 +15,7 @@
               </md-select>
             </section>
             <section class="form-field">
-              <md-checkbox [(ngModel)]="chatNode.IsStartNode" name="isStartNode" align="start">Mark as start node</md-checkbox>
+              <md-checkbox [(ngModel)]="chatNode.IsStartNode" (click)="MH.resetOtherStartNodes(chatNode)" name="isStartNode" align="start">Mark as start node</md-checkbox>
             </section>
             <md-form-field>
               <input mdInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
@@ -84,7 +84,20 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'TitleCaptionUrl'">
                   <div class="panel panel-default">
-                    <div class="panel-heading"><i [mdTooltip]="section.SectionType + ' Section'" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Section: {{MH.sectionAlias(section)}}</div>
+                    <div class="panel-heading">
+                      <i [mdTooltip]="section.SectionType + ' Section'" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Section: {{MH.sectionAlias(section)}}
+                      <div class="pull-right panel-heading-actions">
+                        <button md-icon-button (click)="MH.sectionMoveUp(chatNode, section)">
+                          <md-icon>arrow_upward</md-icon>
+                        </button>
+                        <button md-icon-button (click)="MH.sectionMoveDown(chatNode, section)">
+                          <md-icon>arrow_downward</md-icon>
+                        </button>
+                        <button md-icon-button (click)="MH.sectionDelete(chatNode, section)">
+                          <md-icon>delete</md-icon>
+                        </button>
+                      </div>
+                    </div>
                     <div class="panel-body">
                       <md-form-field>
                         <input mdInput type="text" placeholder="Title" [(ngModel)]="section.Title" name="sectionTitle-{{i}}">
@@ -126,7 +139,20 @@
           <div class="tab-content">
             <div class="node-buttons" *ngFor="let btn of chatNode.Buttons; let i = index">
               <div class="panel panel-default">
-                <div class="panel-heading">Button: {{MH.chatButtonAlias(btn)}}</div>
+                <div class="panel-heading">
+                  Button: {{MH.chatButtonAlias(btn)}}
+                  <div class="pull-right panel-heading-actions">
+                    <button md-icon-button (click)="MH.buttonMoveUp(chatNode, btn)">
+                      <md-icon>arrow_upward</md-icon>
+                    </button>
+                    <button md-icon-button (click)="MH.buttonMoveDown(chatNode, btn)">
+                      <md-icon>arrow_downward</md-icon>
+                    </button>
+                    <button md-icon-button (click)="MH.buttonDelete(chatNode, btn)">
+                      <md-icon>delete</md-icon>
+                    </button>
+                  </div>
+                </div>
                 <div class="panel-body">
                   <section class="form-field">
                     <md-select placeholder="Type" [(ngModel)]="btn.ButtonType" name="btnType-{{i}}">

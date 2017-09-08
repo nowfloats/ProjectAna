@@ -203,8 +203,8 @@ export class ChatFlowComponent implements AfterViewInit {
             NodeType: models.NodeType.Combination,
             TimeoutInMs: 0
         });
-        newNodeVM._x = (this._designerWidth / 2) + (Math.random() * 50);
-        newNodeVM._y = (this._designerHeight / 2) + (Math.random() * 50);
+        newNodeVM._x = (this._viewBoxWidth / 2) + (Math.random() * 50);
+        newNodeVM._y = (this._viewBoxHeight / 2) + (Math.random() * 50);
 
         this.chatFlowNetwork.updateChatNodeConnections();
         this.updateLayout();

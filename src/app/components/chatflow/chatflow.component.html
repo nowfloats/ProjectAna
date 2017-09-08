@@ -30,7 +30,7 @@
         <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)">
           <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id" >
             <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect" style="background: none;cursor:move">
-              <xhtml:div style="background-color: gray; height: 30px; border-radius: 10px 10px 0 0">
+              <xhtml:div [style.background-color]="chatNodeVM.chatNode.IsStartNode?'teal':'gray'" style="height: 30px; border-radius: 10px 10px 0 0">
                 <xhtml:p style="padding: 5px; text-align:center;color:white">
                   {{chatNodeVM.chatNode.Name || chatNodeVM.chatNode.NodeType}}
                 </xhtml:p>
