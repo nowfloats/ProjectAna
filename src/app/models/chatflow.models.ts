@@ -360,10 +360,10 @@ export class ModelHelpers {
         }
     }
 
-    addSection(chatNodeVM: ChatNodeVM, sectionType: SectionType) {
+    addSection(chatNode: ChatNode, sectionType: SectionType) {
         switch (sectionType) {
             default:
-                chatNodeVM.chatNode.Sections.push({
+                chatNode.Sections.push({
                     SectionType: sectionType,
                     _id: new ObjectID().toHexString()
                 });
@@ -373,8 +373,8 @@ export class ModelHelpers {
         }
     }
 
-    addButton(chatNodeVM: ChatNodeVM) {
-        chatNodeVM.chatNode.Buttons.push({
+    addButton(chatNode: ChatNode) {
+        chatNode.Buttons.push({
             _id: new ObjectID().toHexString(),
             ButtonText: "New Button",
             ButtonType: ButtonType.NextNode

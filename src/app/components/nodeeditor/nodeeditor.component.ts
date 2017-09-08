@@ -23,6 +23,7 @@ export class NodeEditorComponent {
 
         this.MH = new models.ModelHelpers(globalsService);
     }
+    SectionType = models.SectionType;
 
     //Model Helpers
     MH: models.ModelHelpers;

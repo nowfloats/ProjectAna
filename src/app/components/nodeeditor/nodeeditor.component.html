@@ -105,12 +105,12 @@
             </div>
             <section class="text-center">
               <md-menu #addSectionMenu="mdMenu">
-                <button md-menu-item (click)="MH.addSection(this, 'Text')">Text</button>
-                <button md-menu-item (click)="MH.addSection(this, 'Image')">Image</button>
-                <button md-menu-item (click)="MH.addSection(this, 'Gif')">Gif</button>
-                <button md-menu-item (click)="MH.addSection(this, 'Audio')">Audio</button>
-                <button md-menu-item (click)="MH.addSection(this, 'Video')">Video</button>
-                <button md-menu-item (click)="MH.addSection(this, 'EmbeddedHtml')">Embedded HTML</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Text)">Text</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Image)">Image</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Gif)">Gif</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Audio)">Audio</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Video)">Video</button>
+                <button md-menu-item (click)="MH.addSection(chatNode, SectionType.EmbeddedHtml)">Embedded HTML</button>
               </md-menu>
 
               <button type="button" mdTooltip="Add Section" [mdMenuTriggerFor]="addSectionMenu" md-fab>
@@ -205,7 +205,7 @@
               </div>
             </div>
             <section class="text-center">
-              <button mdTooltip="Add Button" type="button" md-fab (click)="MH.addButton(this)">
+              <button mdTooltip="Add Button" type="button" md-fab (click)="MH.addButton(chatNode)">
                 <md-icon class="fab-btn-icon">add</md-icon>
               </button>
             </section>
