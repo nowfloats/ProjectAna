@@ -4,25 +4,27 @@
       <md-tab-group>
         <md-tab label="Node Info">
           <div class="node-details tab-content">
-            <md-form-field>
-              <input mdInput type="text" placeholder="Node Name" [(ngModel)]="chatNode.Name" name="nodeName">
-            </md-form-field>
-            <section class="form-field">
-              <md-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
-                <md-option *ngFor="let nType of MH.nodeTypes" [value]="nType">
-                  {{ nType }}
-                </md-option>
-              </md-select>
-            </section>
-            <section class="form-field">
-              <md-checkbox [(ngModel)]="chatNode.IsStartNode" (click)="MH.resetOtherStartNodes(chatNode)" name="isStartNode" align="start">Mark as start node</md-checkbox>
-            </section>
-            <md-form-field>
-              <input mdInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
-            </md-form-field>
-            <md-form-field>
-              <input mdInput type="number" placeholder="Timeout (ms)" [(ngModel)]="chatNode.TimeoutInMs" name="timeout">
-            </md-form-field>
+            <div class="node-basic-info">
+              <md-form-field>
+                <input mdInput type="text" placeholder="Node Name" [(ngModel)]="chatNode.Name" name="nodeName">
+              </md-form-field>
+              <section class="form-field">
+                <md-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
+                  <md-option *ngFor="let nType of MH.nodeTypes" [value]="nType">
+                    {{ nType }}
+                  </md-option>
+                </md-select>
+              </section>
+              <section class="form-field">
+                <md-checkbox [(ngModel)]="chatNode.IsStartNode" (click)="MH.resetOtherStartNodes(chatNode)" name="isStartNode" align="start">Mark as start node</md-checkbox>
+              </section>
+              <md-form-field>
+                <input mdInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
+              </md-form-field>
+              <md-form-field>
+                <input mdInput type="number" placeholder="Timeout (ms)" [(ngModel)]="chatNode.TimeoutInMs" name="timeout">
+              </md-form-field>
+            </div>
             <div class="node-api-details" [hidden]="chatNode.NodeType!='ApiCall'">
               <div class="panel panel-default">
                 <div class="panel-heading">API Details</div>
@@ -74,13 +76,26 @@
             <div class="node-section" *ngFor="let section of chatNode.Sections; let i = index">
               <div [ngSwitch]="MH.editorTypeFromSectionType(section.SectionType)">
                 <ng-container *ngSwitchCase="'Text'">
-                  <md-form-field>
-                    <span mdPrefix>
-                      <i class="fa fa-file-text-o text-section-icon"></i>
-                      &nbsp;
-                    </span>
-                    <input mdInput type="text" placeholder="Section text" [(ngModel)]="section.Text" name="sectionText-{{i}}">
-                  </md-form-field>
+                  <div class="node-text-section">
+                    <md-form-field>
+                      <span mdPrefix>
+                        <i class="fa fa-file-text-o text-section-icon"></i>
+                        &nbsp;
+                      </span>
+                      <input mdInput type="text" placeholder="Section text" [(ngModel)]="section.Text" name="sectionText-{{i}}">
+                      <span mdSuffix style="font-size: 24px">
+                        <button md-icon-button (click)="MH.sectionMoveUp(chatNode, section)">
+                          <md-icon>arrow_upward</md-icon>
+                        </button>
+                        <button md-icon-button (click)="MH.sectionMoveDown(chatNode, section)">
+                          <md-icon>arrow_downward</md-icon>
+                        </button>
+                        <button md-icon-button (click)="MH.sectionDelete(chatNode, section)">
+                          <md-icon>delete</md-icon>
+                        </button>
+                      </span>
+                    </md-form-field>
+                  </div>
                 </ng-container>
                 <ng-container *ngSwitchCase="'TitleCaptionUrl'">
                   <div class="panel panel-default">
