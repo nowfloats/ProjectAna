@@ -84,7 +84,7 @@
                 </ng-container>
                 <ng-container *ngSwitchCase="'TitleCaptionUrl'">
                   <div class="panel panel-default">
-                    <div class="panel-heading" [title]="section.SectionType + ' Section'"><i class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Section: {{MH.sectionAlias(section)}}</div>
+                    <div class="panel-heading"><i [mdTooltip]="section.SectionType + ' Section'" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Section: {{MH.sectionAlias(section)}}</div>
                     <div class="panel-body">
                       <md-form-field>
                         <input mdInput type="text" placeholder="Title" [(ngModel)]="section.Title" name="sectionTitle-{{i}}">
@@ -113,7 +113,7 @@
                 <button md-menu-item (click)="MH.addSection(this, 'EmbeddedHtml')">Embedded HTML</button>
               </md-menu>
 
-              <button type="button" [mdMenuTriggerFor]="addSectionMenu" md-fab>
+              <button type="button" mdTooltip="Add Section" [mdMenuTriggerFor]="addSectionMenu" md-fab>
                 <md-icon class="fab-btn-icon">add</md-icon>
               </button>
               <!--<button type="button" md-icon-button (click)="MH.test(chatNode)">
@@ -204,6 +204,11 @@
                 </div>
               </div>
             </div>
+            <section class="text-center">
+              <button mdTooltip="Add Button" type="button" md-fab (click)="MH.addButton(this)">
+                <md-icon class="fab-btn-icon">add</md-icon>
+              </button>
+            </section>
           </div>
         </md-tab>
       </md-tab-group>

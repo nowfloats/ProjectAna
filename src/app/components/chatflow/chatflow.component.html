@@ -7,6 +7,9 @@
     </div>
   </div>
   <div style="overflow: hidden">
+    <button mdTooltip="Add New Node" style="position: absolute !important; left: 50%; margin: 10px 0;" type="button" md-fab (click)="addNewNode()" [hidden]="!_isLayoutUpdated">
+      <md-icon class="fab-btn-icon">add</md-icon>
+    </button>
     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="_isLayoutUpdated?'visible':'collapse'" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" style="overflow:hidden;" [attr.width]="designerWidth()+20" [attr.height]="designerHeight()">
       <defs>
         <linearGradient id="NodeBG">
@@ -25,7 +28,7 @@
       <!--<rect [attr.width]="designerWidth()" [attr.height]="designerHeight()" width="0" height="0" fill="#F0F0F0"></rect>-->
       <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
         <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)">
-          <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id">
+          <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id" >
             <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect" style="background: none;cursor:move">
               <xhtml:div style="background-color: gray; height: 30px; border-radius: 10px 10px 0 0">
                 <xhtml:p style="padding: 5px; text-align:center;color:white">

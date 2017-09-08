@@ -3,8 +3,11 @@ import { Http } from '@angular/http';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
 import { GlobalsService } from '../../services/globals.service'
-import * as ChatFlowModels from '../../models/chatflow.models';
+import * as models from '../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
+import { MdMenuTrigger } from '@angular/material';
+
+import { ObjectID } from 'bson';
 
 @Component({
     selector: 'app-chatflow',
@@ -30,16 +33,15 @@ export class ChatFlowComponent implements AfterViewInit {
 
         globalsService.chatFlowComponent = this;
 
-        this.MH = new ChatFlowModels.ModelHelpers(globalsService);
+        this.MH = new models.ModelHelpers(globalsService);
     }
     chatFlowNetwork: ChatFlowNetwork;
-    MH: ChatFlowModels.ModelHelpers;
+    MH: models.ModelHelpers;
 
     @ViewChild('chatflowRoot')
     chatflowRoot: ElementRef;
 
-    ngAfterViewInit() {
-    }
+    ngAfterViewInit() { }
 
     chatFlowRootSVG() {
         return this.chatflowRoot.nativeElement as SVGSVGElement;
@@ -91,7 +93,7 @@ export class ChatFlowComponent implements AfterViewInit {
             }, 500);
             return true;
         }
-        
+
         return false;
     }
 
@@ -190,6 +192,22 @@ export class ChatFlowComponent implements AfterViewInit {
         // dialogRef.afterClosed().subscribe(result => {
         //     console.log('The dialog was closed');
         // });
+    }
+
+    addNewNode() {
+        var newNodeVM = new ChatNodeVM(this.chatFlowNetwork, {
+            Name: 'New Node',
+            Id: new ObjectID().toHexString(),
+            Buttons: [],
+            Sections: [],
+            NodeType: models.NodeType.Combination,
+            TimeoutInMs: 0
+        });
+        newNodeVM._x = (this._designerWidth / 2) + (Math.random() * 50);
+        newNodeVM._y = (this._designerHeight / 2) + (Math.random() * 50);
+
+        this.chatFlowNetwork.updateChatNodeConnections();
+        this.updateLayout();
     }
 
     private resetDraggingState() {
@@ -365,7 +383,7 @@ class ChatNodeNewConnection {
 class ChatButtonConnector {
     constructor(
         public chatNodeVM: ChatNodeVM,
-        public button: ChatFlowModels.Button) {
+        public button: models.Button) {
     }
 
     x() {
@@ -412,7 +430,7 @@ class ChatButtonConnector {
 export class ChatNodeVM {
     constructor(
         public network: ChatFlowNetwork,
-        public chatNode: ChatFlowModels.ChatNode) {
+        public chatNode: models.ChatNode) {
         this.network.chatNodeVMs.push(this);
 
         this._x = (this.network.chatNodeVMs.indexOf(this)) * Config.defaultNodeWidth;

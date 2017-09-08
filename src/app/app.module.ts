@@ -14,7 +14,8 @@ import {
     MdSelectModule,
     MdCheckboxModule,
     MdTabsModule,
-    MdIconModule
+    MdIconModule,
+    MdTooltipModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -47,6 +48,7 @@ import { GlobalsService } from './services/globals.service';
         MdCheckboxModule,
         MdTabsModule,
         MdIconModule,
+        MdTooltipModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'designer', pathMatch: 'full' },
             { path: 'designer', component: ChatFlowComponent },

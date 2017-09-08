@@ -1,6 +1,7 @@
 import { ObjectID } from 'bson';
 import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.component';
 import { GlobalsService } from '../services/globals.service';
+import { MdButton } from '@angular/material';
 
 export interface ANAProject {
     Name: string;
@@ -137,37 +138,35 @@ export enum ButtonType {
 }
 
 export interface Button extends BaseIdEntity {
-    ButtonName: string;
+    ButtonName?: string;
     ButtonText: string;
-    Emotion: number;
+    Emotion?: number;
     ButtonType: ButtonType;
-    DeepLinkUrl: string;
-    Url: string;
-    BounceTimeout: number;
-    NextNodeId: string;
-    DefaultButton: boolean;
-    Hidden: boolean;
-    VariableValue: string;
-    PrefixText: string;
-    PostfixText: string;
-    PlaceholderText: string;
-    APIResponseMatchKey: string;
-    APIResponseMatchValue: string;
-    PostToChat: boolean;
-    DoesRepeat: boolean;
-    RepeatOn: string;
-    RepeatAs: string;
-    StartPosition: number;
-    MaxRepeats: number;
-    Alias: string;
-    _id: string;
+    DeepLinkUrl?: string;
+    Url?: string;
+    BounceTimeout?: number;
+    NextNodeId?: string;
+    DefaultButton?: boolean;
+    Hidden?: boolean;
+    VariableValue?: string;
+    PrefixText?: string;
+    PostfixText?: string;
+    PlaceholderText?: string;
+    APIResponseMatchKey?: string;
+    APIResponseMatchValue?: string;
+    PostToChat?: boolean;
+    DoesRepeat?: boolean;
+    RepeatOn?: string;
+    RepeatAs?: string;
+    StartPosition?: number;
+    MaxRepeats?: number;
     AdvancedOptions?: boolean;
 }
 
 export interface ChatNode {
     Name: string;
     Id: string;
-    Emotion: string;
+    Emotion?: string;
     TimeoutInMs: number;
     NodeType: NodeType;
     Sections: Section[];
@@ -182,7 +181,7 @@ export interface ChatNode {
     CardHeader?: string;
     CardFooter?: string;
     Placement?: CardPlacement;
-    IsStartNode: boolean;
+    IsStartNode?: boolean;
 }
 
 export interface ChatContent {
@@ -372,6 +371,23 @@ export class ModelHelpers {
                 this.globalsService.chatFlowComponent.updateLayout();
                 break;
         }
+    }
+
+    addButton(chatNodeVM: ChatNodeVM) {
+        chatNodeVM.chatNode.Buttons.push({
+            _id: new ObjectID().toHexString(),
+            ButtonText: "New Button",
+            ButtonType: ButtonType.NextNode
+        });
+
+        this.globalsService.chatFlowComponent.updateLayout();
+    }
+
+    nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MdButton) {
+        event.preventDefault();
+
+        let btn = options._elementRef.nativeElement as HTMLButtonElement;
+        btn.click();
     }
 
     test(chatNode: ChatNode) {
