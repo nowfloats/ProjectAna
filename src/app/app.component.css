@@ -167,3 +167,9 @@ li .glyphicon {
     height: 100%;
     color: white;
   }
+
+.navbar-actions {
+  float: right;
+  padding: 9px 0;
+  margin-right: 10px;
+}

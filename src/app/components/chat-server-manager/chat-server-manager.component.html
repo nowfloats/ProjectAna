@@ -1,47 +1,45 @@
 <div class="root">
-  <div>
-    <div class="col-md-12">
-      <div>
-        <md-accordion>
-          <md-expansion-panel *ngFor="let conn of savedConnections; let i = index" [expanded]="isExpanded(conn)">
-            <md-expansion-panel-header>
-              <md-panel-title><md-icon>insert_link</md-icon>&nbsp; <i>Chat Server Connection:</i>&nbsp; {{connectionAlias(conn)}}</md-panel-title>
-            </md-expansion-panel-header>
+  <div class="center-block center-content">
+    <md-card [hidden]="savedConnections.length!=0" class="text-center"><h3>Looks like you don't have any saved chat server connections. <br/> Start by adding one.</h3></md-card>
 
-            <md-form-field>
-              <input mdInput type="text" placeholder="Connection Name" [(ngModel)]="conn.Name" name="connName-{{i}}">
-            </md-form-field>
+    <md-accordion>
+      <md-expansion-panel *ngFor="let conn of savedConnections; let i = index" [expanded]="isExpanded(conn)">
+        <md-expansion-panel-header>
+          <md-panel-title><md-icon>insert_link</md-icon>&nbsp; <i>Chat Server Connection:</i>&nbsp; {{connectionAlias(conn)}}</md-panel-title>
+        </md-expansion-panel-header>
 
-            <md-form-field>
-              <input mdInput type="url" placeholder="Server Url" [(ngModel)]="conn.ServerUrl" name="connUrl-{{i}}">
-            </md-form-field>
+        <md-form-field>
+          <input mdInput type="text" placeholder="Connection Name" [(ngModel)]="conn.Name" name="connName-{{i}}">
+        </md-form-field>
 
-            <md-form-field>
-              <input mdInput type="text" placeholder="API Key" [(ngModel)]="conn.APIKey" name="connAPIKey-{{i}}">
-            </md-form-field>
+        <md-form-field>
+          <input mdInput type="url" placeholder="Server Url" [(ngModel)]="conn.ServerUrl" name="connUrl-{{i}}">
+        </md-form-field>
 
-            <md-form-field>
-              <input mdInput type="text" placeholder="API Secret" [(ngModel)]="conn.APISecret" name="connSecret-{{i}}">
-            </md-form-field>
+        <md-form-field>
+          <input mdInput type="text" placeholder="API Key" [(ngModel)]="conn.APIKey" name="connAPIKey-{{i}}">
+        </md-form-field>
 
-            <section>
-              <md-checkbox [(ngModel)]="conn.IsDefault" name="connDefault-{{i}}" align="start">Default</md-checkbox>
-            </section>
+        <md-form-field>
+          <input mdInput type="text" placeholder="API Secret" [(ngModel)]="conn.APISecret" name="connSecret-{{i}}">
+        </md-form-field>
 
-            <md-action-row>
-              <button md-raised-button (click)="testConnection(conn)"><span>Test Connection</span></button>
-              <button md-raised-button (click)="deleteConnection(conn)"><span>Delete</span></button>
-              <button md-raised-button color="primary" (click)="connectToConnection(conn)"><span class="fab-btn-icon">Connect</span></button>
-            </md-action-row>
-
-          </md-expansion-panel>
-        </md-accordion>
-
-        <section class="bottom-actions">
-          <button mdTooltip="Add new connection" md-fab (click)="addConnection()"><md-icon class="fab-btn-icon">add</md-icon></button>
-          <button mdTooltip="Save Changes" md-fab (click)="saveConnections()"><md-icon class="fab-btn-icon">save</md-icon></button>
+        <section>
+          <md-checkbox [(ngModel)]="conn.IsDefault" name="connDefault-{{i}}" align="start">Default</md-checkbox>
         </section>
-      </div>
-    </div>
+
+        <md-action-row>
+          <button md-raised-button (click)="testConnection(conn)"><span>Test Connection</span></button>
+          <button md-raised-button (click)="deleteConnection(conn)"><span>Delete</span></button>
+          <button md-raised-button color="primary" (click)="connectToConnection(conn)"><span class="fab-btn-icon">Connect</span></button>
+        </md-action-row>
+
+      </md-expansion-panel>
+    </md-accordion>
+
+    <section class="bottom-actions">
+      <button mdTooltip="Add new connection" md-fab (click)="addConnection()"><md-icon class="fab-btn-icon">add</md-icon></button>
+      <button mdTooltip="Save Changes" [hidden]="savedConnections.length==0" md-fab (click)="saveConnections()"><md-icon class="fab-btn-icon">save</md-icon></button>
+    </section>
   </div>
 </div>

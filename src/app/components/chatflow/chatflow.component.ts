@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
 import { GlobalsService } from '../../services/globals.service'
@@ -19,6 +20,7 @@ export class ChatFlowComponent implements OnInit {
     constructor(
         private chatFlowService: ChatFlowService,
         public dialog: MdDialog,
+        public route: ActivatedRoute,
         public globalsService: GlobalsService) {
 
         this.chatFlowNetwork = new ChatFlowNetwork(this);
@@ -28,8 +30,7 @@ export class ChatFlowComponent implements OnInit {
         this._viewBoxWidth = this.designerWidth();
         this._viewBoxHeight = this.designerHeight();
 
-        this.updateLayout();
-        this.loadChatFlow();
+        //this.updateLayout();
 
         globalsService.chatFlowComponent = this;
 
@@ -43,6 +44,11 @@ export class ChatFlowComponent implements OnInit {
 
     ngOnInit(): void {
         this.globalsService.currentPageName = 'Chat Flow Designer';
+
+        //var projId = this.route.snapshot.paramMap.get('id');
+        this.route.paramMap.subscribe(params => {
+            this.loadChatFlow(params.get('id'));
+        });
     }
 
     chatFlowRootSVG() {
@@ -219,18 +225,27 @@ export class ChatFlowComponent implements OnInit {
             delete this.chatFlowNetwork.draggingChatNode;
         this._isMouseDown = false;
     }
-    //599647fa460b500d9c4cb11c
-    private loadChatFlow(projectId: string = '599c3caa460b5053e4b09869') { //5996231a460b50abbc083b71
-        //this.chatFlowService.loadProjectsList().subscribe(projects => {
-        //    console.log(projects.Data.map(x => x.Name).join(", "));
-        //}, err => console.error(err));
+    //599647fa460b500d9c4cb11c, projectId: string = '599c3caa460b5053e4b09869'
+    private loadChatFlow(projectId: string) {
         this.chatFlowService.fetchChatFlowPack(projectId).subscribe(x => {
-            x.ChatNodes.forEach(cn => {
-                new ChatNodeVM(this.chatFlowNetwork, cn);
-            });
-            this.chatFlowNetwork.updateChatNodeConnections();
-            this.updateLayout();
+            if (x.ChatNodes) {
+                x.ChatNodes.forEach(cn => {
+                    new ChatNodeVM(this.chatFlowNetwork, cn);
+                });
 
+                this.chatFlowNetwork.chatNodeVMs.forEach(vm => {
+                    var loc = x.NodeLocations[vm.chatNode.Id];
+                    vm._x = loc.X;
+                    vm._y = loc.Y;
+                });
+
+                this.chatFlowNetwork.updateChatNodeConnections();
+                this.updateLayout();
+            }
+            else {
+                //Nothing to load
+                this._isLayoutUpdated = true;
+            }
         }, err => console.error(err));
     }
 }

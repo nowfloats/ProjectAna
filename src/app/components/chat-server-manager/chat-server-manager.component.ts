@@ -45,17 +45,18 @@ export class ChatServerManagerComponent implements OnInit {
         this.chatFlowService.testChatServerConnection(conn).subscribe(resp => {
             this.chatFlowService.setChatServer(conn);
 
-            this.router.navigateByUrl('/designer');
-        }, err => {
-            this.handleConnectionFailed(err);
-        });
+            this.router.navigateByUrl('/projects');
+        }, err => this.handleConnectionFailed(err));
     }
 
     private handleConnectionFailed(err) {
+        console.log(err);
         if (err.status == 404)
             this.snakbar.open('Connection Failed. Unable to connect to remove server! 404 Not Found.', 'Dismiss');
         else if (err.status == 401)
             this.snakbar.open('Connection Failed. Invalid APIKey and APISecret.', 'Dismiss');
+        else
+            this.snakbar.open('Connection Failed.' + (err.data.Message || ''), 'Dismiss');
     }
 
     connectionAlias(conn: ChatServerConnection) {

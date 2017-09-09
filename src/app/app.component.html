@@ -1,14 +1,17 @@
 <nav class="mat-elevation-z6 top-nav">
   <img src="/favicon.ico" style="width: auto;height: 40px; margin: 10px" />
   <span style="font-size: 20px;vertical-align: middle">ANA Conversation Studio - {{pageName()}}</span>
+
+  <md-action-row class="navbar-actions">
+    <button md-button (click)="goto('/')">Connections</button>
+    <button md-button (click)="goto('/projects')">Projects</button>
+  </md-action-row>
 </nav>
 
 <div class="page-content">
   <router-outlet></router-outlet>
-  <!--[hidden]="!loading()"-->
   <div class="fullpage-loading-spinner" [hidden]="!loading()">
     <md-spinner></md-spinner>
-
     <button md-button (click)="hideLoading()">
       <md-icon>close</md-icon>
     </button>

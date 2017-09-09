@@ -23,4 +23,13 @@ body {
 .root {
   margin: 20px 0;
   height: 90vh;
+  width: 98vw;
+}
+
+  .root > .center-content {
+    width: 800px;
+  }
+
+input[type=text] {
+  line-height: normal;
 }

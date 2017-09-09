@@ -19,7 +19,8 @@ import {
     MdTooltipModule,
     MdExpansionModule,
     MdProgressSpinnerModule,
-    MdSnackBarModule
+    MdSnackBarModule,
+    MdCardModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -30,13 +31,17 @@ import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
 import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
+import { ProjectsManagerComponent } from './components/projects-manager/projects-manager.component';
+import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
 @NgModule({
     declarations: [
         AppComponent,
         ChatFlowComponent,
         NodeEditorComponent,
-        ChatServerManagerComponent
+        ChatServerManagerComponent,
+        ProjectsManagerComponent,
+        EllipsisPipe
     ],
     imports: [
         BrowserModule,
@@ -58,9 +63,11 @@ import { ChatServerManagerComponent } from './components/chat-server-manager/cha
         MdExpansionModule,
         MdProgressSpinnerModule,
         MdSnackBarModule,
+        MdCardModule,
         RouterModule.forRoot([
             { path: '', redirectTo: 'connections', pathMatch: 'full' },
-            { path: 'designer', component: ChatFlowComponent },
+            { path: 'designer/:id', component: ChatFlowComponent },
+            { path: 'projects', component: ProjectsManagerComponent },
             { path: 'connections', component: ChatServerManagerComponent },
             { path: '**', redirectTo: 'connections' }
         ])

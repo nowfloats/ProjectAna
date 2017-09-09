@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import * as models from '../models/chatflow.models'
 import * as ServiceResponseModels from '../models/serviceResponse.models'
-import { ChatServerConnection } from '../models/app.models';
+import { ChatServerConnection, ANAProject } from '../models/app.models';
 
 @Injectable()
 export class ChatFlowService {
@@ -29,12 +29,17 @@ export class ChatFlowService {
 
     loadProjectsList() {
         return this.http.get(this.baseUrl + this.loadProjectsAPI, this.getHttpOptions()).map(res =>
-            res.json() as ServiceResponseModels.ProjectListResponse);
+            (res.json() as ServiceResponseModels.ProjectListResponse));
     }
 
     fetchChatFlowPack(projectId: string) {
         return this.http.get(this.baseUrl + this.fetchChatFlowPackAPI.replace("{projectId}", projectId), this.getHttpOptions()).map(res =>
             res.json() as models.ChatFlowPack);
+    }
+
+    saveProjects(projects: ANAProject[]) {
+        return this.http.post(this.baseUrl + this.saveProjectsAPI, projects, this.getHttpOptions()).map(res =>
+            (res.json() as ServiceResponseModels.ProjectListResponse));
     }
 
     setChatServer(conn: ChatServerConnection) {

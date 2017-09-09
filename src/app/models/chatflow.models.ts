@@ -3,13 +3,6 @@ import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.c
 import { GlobalsService } from '../services/globals.service';
 import { MdButton } from '@angular/material';
 
-export interface ANAProject {
-    Name: string;
-    CreatedOn: Date;
-    UpdatedOn: Date;
-    _id: string;
-}
-
 //Enum Start
 export enum SectionType {
     Image = 'Image',
@@ -204,10 +197,19 @@ export interface ChatFlowPack {
     ProjectId: string;
     ChatNodes: ChatNode[];
     ChatContent: ChatContent[];
-    NodeLocations: any;
+    NodeLocations: NodeLocations;
     CreatedOn: Date;
     UpdatedOn: Date;
     _id: string;
+}
+
+export interface NodeLocations {
+    [key: string]: LayoutPoint;
+}
+
+export interface LayoutPoint {
+    X: number;
+    Y: number;
 }
 
 export enum EditorType {

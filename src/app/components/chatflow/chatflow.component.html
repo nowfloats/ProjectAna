@@ -43,7 +43,7 @@
                         <xhtml:i class="fa fa-file-text-o" style="font-size: 20px; "></xhtml:i>
                       </xhtml:td>
                       <xhtml:td valign="middle" style="padding-right: 5px">
-                        <xhtml:div style="margin: 10px 0px 10px 5px">{{MH.sectionAlias(section)}}</xhtml:div>
+                        <xhtml:div style="margin: 10px 0px 10px 5px">{{MH.sectionAlias(section) | ellipsis:50}}</xhtml:div>
                       </xhtml:td>
                     </xhtml:tr>
                   </xhtml:table>
@@ -55,7 +55,7 @@
                         <xhtml:div style="text-align:center">
                           <xhtml:i class="fa fa-link" style="font-size: 20px;"></xhtml:i>
                           <br />
-                          <xhtml:div>{{MH.chatButtonAlias(chatButton)}}</xhtml:div>
+                          <xhtml:div>{{MH.chatButtonAlias(chatButton) | ellipsis:50 }}</xhtml:div>
                         </xhtml:div>
                       </xhtml:td>
                     </xhtml:tr>

@@ -1,6 +1,6 @@
-import * as ChatFlow from './chatflow.models'
+import { ANAProject } from './app.models'
 
 export interface ProjectListResponse {
     Message: string;
-    Data: ChatFlow.ANAProject[];
+    Data: ANAProject[];
 }

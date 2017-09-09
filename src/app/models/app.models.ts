@@ -6,4 +6,9 @@ export interface ChatServerConnection {
     IsDefault: boolean;
 }
 
-
+export interface ANAProject {
+    Name: string;
+    CreatedOn: Date;
+    UpdatedOn: Date;
+    _id: string;
+}
