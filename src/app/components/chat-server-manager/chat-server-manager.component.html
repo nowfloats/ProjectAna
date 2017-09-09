@@ -1,0 +1,47 @@
+<div class="root">
+  <div>
+    <div class="col-md-12">
+      <div>
+        <md-accordion>
+          <md-expansion-panel *ngFor="let conn of savedConnections; let i = index" [expanded]="isExpanded(conn)">
+            <md-expansion-panel-header>
+              <md-panel-title><md-icon>insert_link</md-icon>&nbsp; <i>Chat Server Connection:</i>&nbsp; {{connectionAlias(conn)}}</md-panel-title>
+            </md-expansion-panel-header>
+
+            <md-form-field>
+              <input mdInput type="text" placeholder="Connection Name" [(ngModel)]="conn.Name" name="connName-{{i}}">
+            </md-form-field>
+
+            <md-form-field>
+              <input mdInput type="url" placeholder="Server Url" [(ngModel)]="conn.ServerUrl" name="connUrl-{{i}}">
+            </md-form-field>
+
+            <md-form-field>
+              <input mdInput type="text" placeholder="API Key" [(ngModel)]="conn.APIKey" name="connAPIKey-{{i}}">
+            </md-form-field>
+
+            <md-form-field>
+              <input mdInput type="text" placeholder="API Secret" [(ngModel)]="conn.APISecret" name="connSecret-{{i}}">
+            </md-form-field>
+
+            <section>
+              <md-checkbox [(ngModel)]="conn.IsDefault" name="connDefault-{{i}}" align="start">Default</md-checkbox>
+            </section>
+
+            <md-action-row>
+              <button md-raised-button (click)="testConnection(conn)"><span>Test Connection</span></button>
+              <button md-raised-button (click)="deleteConnection(conn)"><span>Delete</span></button>
+              <button md-raised-button color="primary" (click)="connectToConnection(conn)"><span class="fab-btn-icon">Connect</span></button>
+            </md-action-row>
+
+          </md-expansion-panel>
+        </md-accordion>
+
+        <section class="bottom-actions">
+          <button mdTooltip="Add new connection" md-fab (click)="addConnection()"><md-icon class="fab-btn-icon">add</md-icon></button>
+          <button mdTooltip="Save Changes" md-fab (click)="saveConnections()"><md-icon class="fab-btn-icon">save</md-icon></button>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>

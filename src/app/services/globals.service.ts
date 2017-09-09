@@ -7,4 +7,6 @@ export class GlobalsService {
     constructor() { }
 
     chatFlowComponent: ChatFlowComponent;
+    loading: boolean = false;
+    currentPageName: string = '';
 }

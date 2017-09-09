@@ -20,20 +20,10 @@
   color: white;
 }
 
-/* Highlighting rules for nav menu items */
-/*li.link-active a,
-li.link-active a:hover,
-li.link-active a:focus {
-    background-color: darkgray;
-    color: white;
-}*/
-
 .page-content {
   display: flex;
   height: 100%;
   min-height: 95vh !important;
-  /*align-items: center;*/
-  /*justify-content: center;*/
 }
 
 md-sidenav-container {
@@ -155,3 +145,25 @@ li .glyphicon {
 .title-bar-header {
   margin: 0 0 5px 10px
 }
+
+.fullpage-loading-spinner {
+  position: fixed;
+  background-color: rgba(0, 0, 0, 0.6);
+  width: 100%;
+  top: 0;
+  left: 0;
+  height: 100%;
+}
+
+  .fullpage-loading-spinner > md-spinner {
+    text-align: center;
+    margin: auto;
+    height: 100%;
+  }
+
+  .fullpage-loading-spinner > button {
+    text-align: center;
+    margin: 40px;
+    height: 100%;
+    color: white;
+  }

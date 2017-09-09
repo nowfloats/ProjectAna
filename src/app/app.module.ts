@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
     MdButtonModule,
@@ -15,22 +16,27 @@ import {
     MdCheckboxModule,
     MdTabsModule,
     MdIconModule,
-    MdTooltipModule
+    MdTooltipModule,
+    MdExpansionModule,
+    MdProgressSpinnerModule,
+    MdSnackBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
 import { ChatFlowComponent } from './components/chatflow/chatflow.component';
 import { NodeEditorComponent } from './components/nodeeditor/nodeeditor.component';
-import { HttpClientModule } from '@angular/common/http';
 
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
+import { SettingsService } from './services/settings.service';
+import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
 
 @NgModule({
     declarations: [
         AppComponent,
         ChatFlowComponent,
-        NodeEditorComponent
+        NodeEditorComponent,
+        ChatServerManagerComponent
     ],
     imports: [
         BrowserModule,
@@ -49,15 +55,20 @@ import { GlobalsService } from './services/globals.service';
         MdTabsModule,
         MdIconModule,
         MdTooltipModule,
+        MdExpansionModule,
+        MdProgressSpinnerModule,
+        MdSnackBarModule,
         RouterModule.forRoot([
-            { path: '', redirectTo: 'designer', pathMatch: 'full' },
+            { path: '', redirectTo: 'connections', pathMatch: 'full' },
             { path: 'designer', component: ChatFlowComponent },
-            { path: '**', redirectTo: 'designer' }
+            { path: 'connections', component: ChatServerManagerComponent },
+            { path: '**', redirectTo: 'connections' }
         ])
     ],
     providers: [
         ChatFlowService,
-        GlobalsService
+        GlobalsService,
+        SettingsService
     ],
     bootstrap: [AppComponent],
     schemas: [

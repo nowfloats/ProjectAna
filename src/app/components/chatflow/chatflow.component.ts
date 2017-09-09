@@ -14,7 +14,7 @@ import { ObjectID } from 'bson';
     templateUrl: './chatflow.component.html',
     styleUrls: ['./chatflow.component.css'],
 })
-export class ChatFlowComponent implements AfterViewInit {
+export class ChatFlowComponent implements OnInit {
 
     constructor(
         private chatFlowService: ChatFlowService,
@@ -41,7 +41,9 @@ export class ChatFlowComponent implements AfterViewInit {
     @ViewChild('chatflowRoot')
     chatflowRoot: ElementRef;
 
-    ngAfterViewInit() { }
+    ngOnInit(): void {
+        this.globalsService.currentPageName = 'Chat Flow Designer';
+    }
 
     chatFlowRootSVG() {
         return this.chatflowRoot.nativeElement as SVGSVGElement;

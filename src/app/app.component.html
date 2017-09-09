@@ -1,25 +1,38 @@
 <nav class="mat-elevation-z6 top-nav">
-  <button type="button" md-icon-button (click)="sidenav.toggle()">
-      <i class="fa fa-navicon" style="font-size: 20px"></i>
-  </button>
-  <span style="font-size: 20px">ANA Conversation Studio</span>
+  <img src="/favicon.ico" style="width: auto;height: 40px; margin: 10px" />
+  <span style="font-size: 20px;vertical-align: middle">ANA Conversation Studio - {{pageName()}}</span>
 </nav>
-<md-sidenav-container>
-  <md-sidenav #sidenav mode="push">
-      <div class='navbar'>
-          <div class='clearfix'></div>
-          <div class='navbar-collapse collapse'>
-              <ul class='nav navbar-nav'>
-                  <li [routerLinkActive]="['nav-menu-item-active']">
-                      <a [routerLink]="['/designer']">
-                          <span class='glyphicon glyphicon-edit'></span> Designer
-                      </a>
-                  </li>
-              </ul>
-          </div>
-      </div>
-  </md-sidenav>
-  <div class="page-content">
-      <router-outlet></router-outlet>
+
+<div class="page-content">
+  <router-outlet></router-outlet>
+  <!--[hidden]="!loading()"-->
+  <div class="fullpage-loading-spinner" [hidden]="!loading()">
+    <md-spinner></md-spinner>
+
+    <button md-button (click)="hideLoading()">
+      <md-icon>close</md-icon>
+    </button>
   </div>
-</md-sidenav-container>
+</div>
+<!--<md-sidenav-container>
+  <md-sidenav #sidenav mode="push">
+    <div class='navbar'>
+      <div class='clearfix'></div>
+      <div class='navbar-collapse collapse'>
+        <ul class='nav navbar-nav'>
+          <li [routerLinkActive]="['nav-menu-item-active']">
+            <a [routerLink]="['/designer']">
+              <span class='glyphicon glyphicon-edit'></span> Designer
+            </a>
+          </li>
+          <li [routerLinkActive]="['nav-menu-item-active']">
+            <a [routerLink]="['/connections']">
+              <span class='glyphicon glyphicon-edit'></span> Connections
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </md-sidenav>
+
+</md-sidenav-container>-->

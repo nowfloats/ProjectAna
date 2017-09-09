@@ -5,6 +5,7 @@
 
 body {
   font-family: 'Century Gothic';
+  background-color: #F0F0F0;
 }
 
 [hidden] {
@@ -17,4 +18,9 @@ body {
 
 .panel-heading-actions {
   margin: -10px;
+}
+
+.root {
+  margin: 20px 0;
+  height: 90vh;
 }
