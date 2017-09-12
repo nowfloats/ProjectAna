@@ -375,10 +375,13 @@ namespace ANAConversationStudio.Views
 			{
 				encoder.Save(ms);
 				ms.Position = 0;
-				var bmp = new System.Drawing.Bitmap(ms);
-				var croppedBmp = CropImage(bmp, new System.Drawing.Rectangle((int)(cropRect.X * scale), (int)(cropRect.Y * scale), (int)(cropRect.Width * scale), (int)(cropRect.Height * scale)));
-				using (var file = File.OpenWrite(fullPath))
-					croppedBmp.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+
+				using (var bmp = new System.Drawing.Bitmap(ms))
+				{
+					var croppedBmp = CropImage(bmp, new System.Drawing.Rectangle((int)(cropRect.X * scale), (int)(cropRect.Y * scale), (int)(cropRect.Width * scale), (int)(cropRect.Height * scale)));
+					using (var file = File.OpenWrite(fullPath))
+						croppedBmp.Save(file, System.Drawing.Imaging.ImageFormat.Jpeg);
+				}
 			}
 
 			Process.Start("explorer", "/select," + fullPath);

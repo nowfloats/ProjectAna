@@ -27,6 +27,7 @@
     {
         public string ButtonId { get; set; }
         public string ButtonText { get; set; }
+        public string ButtonName { get; set; }
     }
 
     public class CarouselButtonContent : BaseContent

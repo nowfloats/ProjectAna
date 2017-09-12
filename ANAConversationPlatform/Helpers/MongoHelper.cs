@@ -102,6 +102,7 @@ namespace ANAConversationPlatform.Helpers
 			}
 		}
 
+		#region Project Operations
 		public static async Task<List<ANAProject>> GetProjectsAsync()
 		{
 			try
@@ -182,19 +183,6 @@ namespace ANAConversationPlatform.Helpers
 					}
 				});
 				return projects;
-
-				//if (string.IsNullOrWhiteSpace(project._id))
-				//    project._id = ObjectId.GenerateNewId().ToString();
-
-				//if (coll.Count(x => x._id == project._id, new CountOptions { Limit = 1 }) > 0)
-				//{
-				//    project.UpdatedOn = DateTime.UtcNow;
-				//    await coll.ReplaceOneAsync(x => x._id == project._id, project);
-				//    return project;
-				//}
-
-				//project.CreatedOn = project.UpdatedOn = DateTime.UtcNow;
-				//await coll.InsertOneAsync(project);
 			}
 			catch (Exception ex)
 			{
@@ -202,7 +190,9 @@ namespace ANAConversationPlatform.Helpers
 			}
 			return null;
 		}
+		#endregion
 
+		#region Chat Flow Operations
 		public static async Task<bool> SaveChatFlowAsync(ChatFlowPack chatFlow)
 		{
 			try
@@ -221,7 +211,6 @@ namespace ANAConversationPlatform.Helpers
 				var existingFlow = await chatsColl.Find(x => x.ProjectId == chatFlow.ProjectId).FirstOrDefaultAsync();
 				if (existingFlow != null)
 				{
-
 					#region Existing Chat Flow
 					if (chatFlow.ChatContent != null)
 					{
@@ -270,6 +259,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						Logger.LogError(ex, "Unable to backup");
 					}
+					if ((chatFlow.WebNodeLocations == null || chatFlow.WebNodeLocations.Count <= 0) && (existingFlow.WebNodeLocations != null && existingFlow.WebNodeLocations.Count > 0))
+						chatFlow.WebNodeLocations = existingFlow.WebNodeLocations;
 
 					await chatsColl.ReplaceOneAsync(x => x.ProjectId == chatFlow.ProjectId, chatFlow);
 					return true;
@@ -296,7 +287,11 @@ namespace ANAConversationPlatform.Helpers
 		{
 			try
 			{
-				return await ChatDB.GetCollection<ChatFlowPack>(Settings.ChatFlowPacksCollectionName).Find(x => x.ProjectId == projectId).SingleOrDefaultAsync();
+				var pack = await ChatDB.GetCollection<ChatFlowPack>(Settings.ChatFlowPacksCollectionName).Find(x => x.ProjectId == projectId).SingleOrDefaultAsync();
+
+				if ((pack.NodeLocations != null && pack.NodeLocations.Count > 0) && (pack.WebNodeLocations == null || pack.WebNodeLocations.Count <= 0))
+					pack.WebNodeLocations = pack.NodeLocations;
+				return pack;
 			}
 			catch (Exception ex)
 			{
@@ -320,5 +315,6 @@ namespace ANAConversationPlatform.Helpers
 				return null;
 			}
 		}
+		#endregion
 	}
 }

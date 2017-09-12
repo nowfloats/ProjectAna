@@ -32,9 +32,17 @@ namespace ANAConversationPlatform.Helpers
 							FillSectionWithContent(section, content);
 						foreach (Button button in chatNode.Buttons)
 						{
-							button.ButtonText = content.GetFor(button)?.ButtonText;
-							if (string.IsNullOrWhiteSpace(button.ButtonName))
-								button.ButtonName = button.ButtonText; //For backward comparability
+							var btnContent = content.GetFor(button);
+							if (btnContent != null)
+							{
+								button.ButtonText = btnContent.ButtonText;
+								button.ButtonName = btnContent.ButtonName;
+								button.ContentId = btnContent._id;
+								button.ContentEmotion = btnContent.Emotion;
+
+								if (string.IsNullOrWhiteSpace(button.ButtonName))
+									button.ButtonName = button.ButtonText; //For backward comparability
+							}
 						}
 					}
 					catch (Exception ex)
@@ -72,6 +80,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						imgSection.Title = imgContent.Title;
 						imgSection.Caption = imgContent.Caption;
+						imgSection.ContentId = imgContent._id;
+						imgSection.ContentEmotion = imgContent.Emotion;
 					}
 					break;
 
@@ -81,6 +91,8 @@ namespace ANAConversationPlatform.Helpers
 					if (textContent != null)
 					{
 						textSection.Text = textContent.SectionText;
+						textSection.ContentId = textContent._id;
+						textSection.ContentEmotion = textContent.Emotion;
 						if (textSection.DelayInMs == 0)
 							textSection.DelayInMs = Math.Min(Utils.Settings.MaxCapTimeTakenToType, textSection.Text.Length * (Utils.Settings.BaseTimeTakenToTypePerChar + rand.Next(0, Utils.Settings.VariableTimeTakenToTypePerChar)));
 					}
@@ -93,6 +105,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						audioSection.Title = audioContent.Title;
 						audioSection.Caption = audioContent.Caption;
+						audioSection.ContentId = audioContent._id;
+						audioSection.ContentEmotion = audioContent.Emotion;
 					}
 					break;
 
@@ -103,6 +117,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						videoSection.Title = videoContent.Title;
 						videoSection.Caption = videoContent.Caption;
+						videoSection.ContentId = videoContent._id;
+						videoSection.ContentEmotion = videoContent.Emotion;
 					}
 					break;
 
@@ -113,6 +129,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						embeddedHtmlSection.Title = embeddedHtmlContent.Title;
 						embeddedHtmlSection.Caption = embeddedHtmlContent.Caption;
+						embeddedHtmlSection.ContentId = embeddedHtmlContent._id;
+						embeddedHtmlSection.ContentEmotion = embeddedHtmlContent.Emotion;
 					}
 					break;
 
@@ -123,6 +141,8 @@ namespace ANAConversationPlatform.Helpers
 					{
 						carouselSection.Title = carContent.Title;
 						carouselSection.Caption = carContent.Caption;
+						carouselSection.ContentId = carContent._id;
+						carouselSection.ContentEmotion = carContent.Emotion;
 					}
 					if (carouselSection.Items != null)
 						foreach (var carItem in carouselSection.Items)
@@ -132,12 +152,17 @@ namespace ANAConversationPlatform.Helpers
 							{
 								carItem.Title = content.Title;
 								carItem.Caption = content.Caption;
+								carItem.ContentId = content._id;
 							}
 							if (carItem.Buttons != null)
 								foreach (var carBtn in carItem.Buttons)
 								{
 									var carBtnContent = contents.GetFor(carBtn);
-									carBtn.Text = carBtnContent?.ButtonText;
+									if (carBtnContent != null)
+									{
+										carBtn.Text = carBtnContent.ButtonText;
+										carBtn.ContentId = carBtnContent._id;
+									}
 								}
 						}
 					break;
