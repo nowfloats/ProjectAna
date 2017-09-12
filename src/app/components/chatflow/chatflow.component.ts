@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
@@ -28,10 +28,8 @@ export class ChatFlowComponent implements OnInit {
         this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
         this._viewBoxX = 0;
         this._viewBoxY = 0;
-        this._viewBoxWidth = this.designerWidth();
-        this._viewBoxHeight = this.designerHeight();
-
-        //this.updateLayout();
+        this._viewBoxWidth = Config.defaultDesignerWidth;//this.designerWidth();
+        this._viewBoxHeight = Config.defaultDesignerHeight;//this.designerHeight();
 
         globalsService.chatFlowComponent = this;
 
@@ -42,6 +40,12 @@ export class ChatFlowComponent implements OnInit {
 
     @ViewChild('chatflowRoot')
     chatflowRoot: ElementRef;
+
+    //@HostListener('window:resize', ['$event'])
+    //onResize(event: UIEvent) {
+    //    this._designerWidth = window.innerWidth - Config.designerMargin;
+    //    this._designerHeight = window.innerHeight - Config.designerMargin;
+    //}
 
     ngOnInit(): void {
         this.globalsService.currentPageName = 'Chat Flow Designer';
@@ -64,10 +68,10 @@ export class ChatFlowComponent implements OnInit {
             let ele = this.chatFlowRootSVG();
             if (ele.querySelector) { //Initialization issues, proceed only if querySelector is available.
 
-                if (window && window.screen) {
-                    this._designerHeight = window.screen.height - Config.designerMargin;
-                    this._designerWidth = window.screen.width - Config.designerMargin;
-                }
+                //if (window) {
+                //    this._designerHeight = window.innerHeight - Config.designerMargin;
+                //    this._designerWidth = window.innerWidth - Config.designerMargin;
+                //}
 
                 for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
                     let x = this.chatFlowNetwork.chatNodeVMs[i];
@@ -98,7 +102,6 @@ export class ChatFlowComponent implements OnInit {
                 let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLDivElement;
                 chatNodeVM._height = nodeRoot.clientHeight;
                 chatNodeVM._layoutUpdated = true;
-                //this.updateLoadingIndicator();
             }, 500);
             return true;
         }
@@ -110,15 +113,15 @@ export class ChatFlowComponent implements OnInit {
         return `translate(${x},${y})`;
     }
 
-    _designerHeight: number = Config.defaultDesignerHeight;
-    designerHeight() {
-        return this._designerHeight;
-    }
+    //_designerHeight: number = Config.defaultDesignerHeight;
+    //designerHeight() {
+    //    return this._designerHeight;
+    //}
 
-    _designerWidth: number = Config.defaultDesignerWidth;
-    designerWidth() {
-        return this._designerWidth;
-    }
+    //_designerWidth: number = Config.defaultDesignerWidth;
+    //designerWidth() {
+    //    return this._designerWidth;
+    //}
 
     mouseMove(event: MouseEvent) {
         if (!this.chatFlowNetwork.newChatNodeConnection.isHidden) {
@@ -156,6 +159,10 @@ export class ChatFlowComponent implements OnInit {
 
     _isMouseDown = false;
     mouseDown(event: MouseEvent) {
+
+        //cancel any ongoing animation as user might have interrupted it by doing the mouse down.
+        this.zoomCancel();
+
         //Check if mouse is captured by others
         if (this.chatFlowNetwork.newChatNodeConnection.isHidden && !this.chatFlowNetwork.draggingChatNode)
             this._isMouseDown = true;
@@ -188,18 +195,21 @@ export class ChatFlowComponent implements OnInit {
         this._viewBoxHeight = height;
     }
 
+    animationFrameId: number = 0;
     zoomToRectWithAnimation(x: number, y: number, width: number, height: number) {
         this.zoomToRectAnimIntermediate(
             this._viewBoxX, this._viewBoxY, this._viewBoxWidth, this._viewBoxHeight,
             x, y, width, height);
     }
-
+    zoomCancel() {
+        if (this.animationFrameId)
+            cancelAnimationFrame(this.animationFrameId);
+    }
     zoomToRectAnimIntermediate(
         x1: number, y1: number, width1: number, height1: number,
         x2: number, y2: number, width2: number, height2: number) {
 
         let step = Config.viewBoxAnimStep * ((Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(width1 - width2) + Math.abs(height1 - height2)) / 100);
-        console.log("step: " + step);
 
         this._viewBoxX = this.tendValue(x1, x2, step);
         this._viewBoxY = this.tendValue(y1, y2, step);
@@ -210,27 +220,32 @@ export class ChatFlowComponent implements OnInit {
             !this.approxEquals(this._viewBoxY, y2, step) ||
             !this.approxEquals(this._viewBoxWidth, width2, step) ||
             !this.approxEquals(this._viewBoxHeight, height2, step))
-            requestAnimationFrame(() => {
-                console.log("Animate: " + this.viewBox());
+            this.animationFrameId = requestAnimationFrame(() => {
                 this.zoomToRectAnimIntermediate(
                     this._viewBoxX, this._viewBoxY, this._viewBoxWidth, this._viewBoxHeight,
                     x2, y2, width2, height2);
             });
+        else
+            this.animationFrameId = 0;
     }
 
     tendValue(value: number, tendsTo: number, step: number) {
         return (Math.abs(value - tendsTo) > step ? (value > tendsTo ? value - step : value + step) : value);
     }
     approxEquals(a: number, b: number, approx: number): boolean {
-        console.log(`AE: ${Math.round(a)} !~ ${Math.round(b)} of ${Math.round(approx)}`);
         return Math.abs(Math.round(b) - Math.round(a)) <= Math.round(approx);
     }
-    fitViewToNodes() {
-        var Xs = this.chatFlowNetwork.chatNodeVMs.map(x => x._x);
-        var Ys = this.chatFlowNetwork.chatNodeVMs.map(x => x._y);
 
-        var XsWithWidth = this.chatFlowNetwork.chatNodeVMs.map(x => x._x + x._width);
-        var YsWithHeight = this.chatFlowNetwork.chatNodeVMs.map(x => x._y + x._height);
+    fitViewToAllNodes() {
+        this.fitViewToNodes(this.chatFlowNetwork.chatNodeVMs);
+    }
+
+    fitViewToNodes(chatNodeVMs: ChatNodeVM[]) {
+        var Xs = chatNodeVMs.map(x => x._x);
+        var Ys = chatNodeVMs.map(x => x._y);
+
+        var XsWithWidth = chatNodeVMs.map(x => x._x + x._width);
+        var YsWithHeight = chatNodeVMs.map(x => x._y + x._height);
 
         var minX = Math.min(...Xs)
         var minY = Math.min(...Ys)
@@ -244,6 +259,10 @@ export class ChatFlowComponent implements OnInit {
 
     designerWheel(event: WheelEvent) {
         event.preventDefault();
+
+        //cancel any ongoing animation as user might have interrupted it by doing the mouse down.
+        this.zoomCancel();
+
         let change = Config.zoomCoefficient * event.wheelDelta;
         if (this._viewBoxWidth - change < 0 || this._viewBoxHeight - change < 0) {
             return;
@@ -310,6 +329,8 @@ export class ChatFlowComponent implements OnInit {
 
             this.chatFlowNetwork.updateChatNodeConnections();
             this.updateLayout();
+
+            this.initialZoom();
         }
     }
 
@@ -318,6 +339,13 @@ export class ChatFlowComponent implements OnInit {
             return true;
         else
             return (this.chatFlowNetwork.chatNodeVMs.filter(x => x._layoutUpdated).length == this.chatFlowNetwork.chatNodeVMs.length);
+    }
+
+    initialZoom() {
+        if (this.layoutReady())
+            this.fitViewToAllNodes();
+        else
+            setTimeout(() => this.initialZoom(), 500);
     }
     private loadChatFlow(projectId: string) {
         this.chatFlowService.fetchChatFlowPack(projectId).subscribe(x => {
