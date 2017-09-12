@@ -1,7 +1,7 @@
 <div>
   <div [hidden]="layoutReady()">
-    <div style="padding: 10px 50px">
-      <img src="/assets/img/loading.svg" style="width: 100px;height: 100px" />
+    <div class="chatflow-loading">
+      <img src="/assets/img/loading.svg" />
       <br />
       <span>Loading designer...</span>
     </div>
@@ -22,8 +22,7 @@
       </button>
     </div>
 
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="(layoutReady()?'visible':'collapse')" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" style="overflow:hidden;width:98vw;height:100vh">
-      <!-- [attr.width]="designerWidth()+20" [attr.height]="designerHeight()" -->
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="(layoutReady()?'visible':'collapse')" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" class="chatflow-root-svg">
       <defs>
         <linearGradient id="NodeBG">
           <stop offset="0" stop-color="#CCC" />

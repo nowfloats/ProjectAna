@@ -209,6 +209,7 @@ export interface ChatContent {
 export interface ChatFlowPack {
     ProjectId: string;
     ChatNodes: ChatNode[];
+    NodeLocations?: NodeLocations;
     WebNodeLocations: NodeLocations;
     CreatedOn: Date;
     UpdatedOn: Date;

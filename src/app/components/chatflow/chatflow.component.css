@@ -21,3 +21,18 @@
   .chatflow-actions > button {
     margin: 0 5px;
   }
+
+.chatflow-root-svg {
+  overflow: hidden;
+  width: 98vw;
+  height: 100vh
+}
+
+.chatflow-loading {
+  padding: 10px 50px;
+}
+
+  .chatflow-loading > img {
+    width: 100px;
+    height: 100px
+  }

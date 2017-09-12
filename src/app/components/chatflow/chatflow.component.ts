@@ -28,8 +28,8 @@ export class ChatFlowComponent implements OnInit {
         this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
         this._viewBoxX = 0;
         this._viewBoxY = 0;
-        this._viewBoxWidth = Config.defaultDesignerWidth;//this.designerWidth();
-        this._viewBoxHeight = Config.defaultDesignerHeight;//this.designerHeight();
+        this._viewBoxWidth = Config.defaultDesignerWidth;
+        this._viewBoxHeight = Config.defaultDesignerHeight;
 
         globalsService.chatFlowComponent = this;
 
@@ -40,12 +40,6 @@ export class ChatFlowComponent implements OnInit {
 
     @ViewChild('chatflowRoot')
     chatflowRoot: ElementRef;
-
-    //@HostListener('window:resize', ['$event'])
-    //onResize(event: UIEvent) {
-    //    this._designerWidth = window.innerWidth - Config.designerMargin;
-    //    this._designerHeight = window.innerHeight - Config.designerMargin;
-    //}
 
     ngOnInit(): void {
         this.globalsService.currentPageName = 'Chat Flow Designer';
@@ -67,12 +61,6 @@ export class ChatFlowComponent implements OnInit {
             this.chatflowRoot) {
             let ele = this.chatFlowRootSVG();
             if (ele.querySelector) { //Initialization issues, proceed only if querySelector is available.
-
-                //if (window) {
-                //    this._designerHeight = window.innerHeight - Config.designerMargin;
-                //    this._designerWidth = window.innerWidth - Config.designerMargin;
-                //}
-
                 for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
                     let x = this.chatFlowNetwork.chatNodeVMs[i];
 
@@ -82,7 +70,6 @@ export class ChatFlowComponent implements OnInit {
                         break;
                     }
                 }
-
             }
         }
     }
@@ -112,16 +99,6 @@ export class ChatFlowComponent implements OnInit {
     ngTr(x: number, y: number) {
         return `translate(${x},${y})`;
     }
-
-    //_designerHeight: number = Config.defaultDesignerHeight;
-    //designerHeight() {
-    //    return this._designerHeight;
-    //}
-
-    //_designerWidth: number = Config.defaultDesignerWidth;
-    //designerWidth() {
-    //    return this._designerWidth;
-    //}
 
     mouseMove(event: MouseEvent) {
         if (!this.chatFlowNetwork.newChatNodeConnection.isHidden) {
@@ -322,9 +299,12 @@ export class ChatFlowComponent implements OnInit {
             });
 
             this.chatFlowNetwork.chatNodeVMs.forEach(vm => {
-                var loc = pack.WebNodeLocations[vm.chatNode.Id];
-                vm._x = loc.X;
-                vm._y = loc.Y;
+                var locs = pack.WebNodeLocations || pack.NodeLocations;
+                if (locs) {
+                    var loc = locs[vm.chatNode.Id];
+                    vm._x = loc.X;
+                    vm._y = loc.Y;
+                }
             });
 
             this.chatFlowNetwork.updateChatNodeConnections();
