@@ -1,12 +1,23 @@
 * {
-    position: static !important;
-    top: auto !important;
+  position: static !important;
+  top: auto !important;
 }
 
 .moving-cursor {
-    cursor: grab;
+  cursor: grab;
 }
 
 .section-icon {
-    width: 23px;
+  width: 23px;
 }
+
+.chatflow-actions {
+  position: absolute !important;
+  width: 100%;
+  text-align: center;
+  margin: 15px 0;
+}
+
+  .chatflow-actions > button {
+    margin: 0 5px;
+  }

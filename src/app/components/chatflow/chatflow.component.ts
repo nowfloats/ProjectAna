@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap } from '@angular/router';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
 import { GlobalsService } from '../../services/globals.service'
 import * as models from '../../models/chatflow.models';
@@ -21,6 +21,7 @@ export class ChatFlowComponent implements OnInit {
         private chatFlowService: ChatFlowService,
         public dialog: MdDialog,
         public route: ActivatedRoute,
+        public snakbar: MdSnackBar,
         public globalsService: GlobalsService) {
 
         this.chatFlowNetwork = new ChatFlowNetwork(this);
@@ -97,6 +98,7 @@ export class ChatFlowComponent implements OnInit {
                 let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLDivElement;
                 chatNodeVM._height = nodeRoot.clientHeight;
                 chatNodeVM._layoutUpdated = true;
+                //this.updateLoadingIndicator();
             }, 500);
             return true;
         }
@@ -179,6 +181,67 @@ export class ChatFlowComponent implements OnInit {
         return `${this._viewBoxX} ${this._viewBoxY} ${this._viewBoxWidth} ${this._viewBoxHeight}`;
     }
 
+    zoomToRect(x: number, y: number, width: number, height: number) {
+        this._viewBoxX = x;
+        this._viewBoxY = y;
+        this._viewBoxWidth = width;
+        this._viewBoxHeight = height;
+    }
+
+    zoomToRectWithAnimation(x: number, y: number, width: number, height: number) {
+        this.zoomToRectAnimIntermediate(
+            this._viewBoxX, this._viewBoxY, this._viewBoxWidth, this._viewBoxHeight,
+            x, y, width, height);
+    }
+
+    zoomToRectAnimIntermediate(
+        x1: number, y1: number, width1: number, height1: number,
+        x2: number, y2: number, width2: number, height2: number) {
+
+        let step = Config.viewBoxAnimStep * ((Math.abs(x1 - x2) + Math.abs(y1 - y2) + Math.abs(width1 - width2) + Math.abs(height1 - height2)) / 100);
+        console.log("step: " + step);
+
+        this._viewBoxX = this.tendValue(x1, x2, step);
+        this._viewBoxY = this.tendValue(y1, y2, step);
+        this._viewBoxWidth = this.tendValue(width1, width2, step);
+        this._viewBoxHeight = this.tendValue(height1, height2, step);
+
+        if (!this.approxEquals(this._viewBoxX, x2, step) ||
+            !this.approxEquals(this._viewBoxY, y2, step) ||
+            !this.approxEquals(this._viewBoxWidth, width2, step) ||
+            !this.approxEquals(this._viewBoxHeight, height2, step))
+            requestAnimationFrame(() => {
+                console.log("Animate: " + this.viewBox());
+                this.zoomToRectAnimIntermediate(
+                    this._viewBoxX, this._viewBoxY, this._viewBoxWidth, this._viewBoxHeight,
+                    x2, y2, width2, height2);
+            });
+    }
+
+    tendValue(value: number, tendsTo: number, step: number) {
+        return (Math.abs(value - tendsTo) > step ? (value > tendsTo ? value - step : value + step) : value);
+    }
+    approxEquals(a: number, b: number, approx: number): boolean {
+        console.log(`AE: ${Math.round(a)} !~ ${Math.round(b)} of ${Math.round(approx)}`);
+        return Math.abs(Math.round(b) - Math.round(a)) <= Math.round(approx);
+    }
+    fitViewToNodes() {
+        var Xs = this.chatFlowNetwork.chatNodeVMs.map(x => x._x);
+        var Ys = this.chatFlowNetwork.chatNodeVMs.map(x => x._y);
+
+        var XsWithWidth = this.chatFlowNetwork.chatNodeVMs.map(x => x._x + x._width);
+        var YsWithHeight = this.chatFlowNetwork.chatNodeVMs.map(x => x._y + x._height);
+
+        var minX = Math.min(...Xs)
+        var minY = Math.min(...Ys)
+        var maxX = Math.max(...XsWithWidth)
+        var maxY = Math.max(...YsWithHeight)
+        var width = maxX - minX;
+        var height = maxY - minY;
+
+        this.zoomToRectWithAnimation(minX, minY, width, height);
+    }
+
     designerWheel(event: WheelEvent) {
         event.preventDefault();
         let change = Config.zoomCoefficient * event.wheelDelta;
@@ -212,6 +275,7 @@ export class ChatFlowComponent implements OnInit {
         });
         newNodeVM._x = (this._viewBoxWidth / 2) + (Math.random() * 50);
         newNodeVM._y = (this._viewBoxHeight / 2) + (Math.random() * 50);
+        newNodeVM._layoutUpdated = true; //To skip the loading indicator
 
         this.chatFlowNetwork.updateChatNodeConnections();
         this.updateLayout();
@@ -248,12 +312,12 @@ export class ChatFlowComponent implements OnInit {
             this.updateLayout();
         }
     }
+
     layoutReady() {
         if (!this.chatFlowNetwork.chatNodeVMs)
             return true;
-        else {
-            return this.chatFlowNetwork.chatNodeVMs.filter(x => x._layoutUpdated).length == this.chatFlowNetwork.chatNodeVMs.length;
-        }
+        else
+            return (this.chatFlowNetwork.chatNodeVMs.filter(x => x._layoutUpdated).length == this.chatFlowNetwork.chatNodeVMs.length);
     }
     private loadChatFlow(projectId: string) {
         this.chatFlowService.fetchChatFlowPack(projectId).subscribe(x => {
@@ -282,10 +346,19 @@ export class ChatFlowComponent implements OnInit {
         };
         this.chatFlowService.saveChatFlowPack(pack).subscribe(res => {
             this.loadChatFlowPack(res);
-            alert('saved');
+            this.snakbar.open('Saved', 'Dismiss');
         }, err => {
             console.error(JSON.stringify(err));
         });
+    }
+
+    getProjectUrl() {
+        return this.chatFlowService.getProjectUrl(this.chatFlowNetwork.chatFlowPack.ProjectId);
+    }
+
+    playChatFlow() {
+        let link = "anaconsim://app?chatflow=" + encodeURIComponent(this.getProjectUrl());
+        location.href = link;
     }
 }
 
@@ -482,6 +555,10 @@ class ChatButtonConnector {
         this.button.NextNodeId = nextNodeId;
         this.chatNodeVM.network.updateChatNodeConnections();
     }
+
+    isConnected() {
+        return this.button.NextNodeId && (this.chatNodeVM.network.chatNodeVMs.filter(x => x.chatNode.Id == this.button.NextNodeId).length > 0);
+    }
 }
 
 export class ChatNodeVM {
@@ -587,4 +664,6 @@ class Config {
     static connectionPathWidth = 3;
 
     static zoomCoefficient = 0.3;
+
+    static viewBoxAnimStep = 10;
 }

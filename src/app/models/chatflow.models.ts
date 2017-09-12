@@ -1,5 +1,6 @@
 import { ObjectID } from 'bson';
 import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.component';
+import { NodeEditorComponent } from '../components/nodeeditor/nodeeditor.component';
 import { GlobalsService } from '../services/globals.service';
 import { MdButton } from '@angular/material';
 
@@ -443,6 +444,20 @@ export class ModelHelpers {
             }
         }
     }
+
+    nodeDelete(chatNode: ChatNode, nodeEditor: NodeEditorComponent) {
+        if (confirm(`Are you sure you want to delete '${chatNode.Name || chatNode.NodeType}' chat node?`)) {
+            let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
+            var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
+            network.chatNodeVMs.splice(elementIdxToDel, 1);
+
+            network.updateChatNodeConnections();
+            network.parent.updateLayout();
+
+            nodeEditor.dialogRef.close();
+        }
+    }
+
     nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MdButton) {
         event.preventDefault();
 

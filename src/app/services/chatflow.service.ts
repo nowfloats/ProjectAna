@@ -58,6 +58,10 @@ export class ChatFlowService {
             (res.json() as ServiceResponseModels.ProjectListResponse));
     }
 
+    getProjectUrl(projectId: string) {
+        return this.baseUrl + "api/Conversation/chat?projectId=" + projectId;
+    }
+
     setChatServer(conn: ChatServerConnection) {
         if (!conn.ServerUrl) {
             throw 'Server Url in the given connection is empty!';
