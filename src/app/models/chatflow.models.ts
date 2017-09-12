@@ -57,6 +57,9 @@ export interface Section extends BaseEntity {
     SectionType: SectionType;
     DelayInMs?: number;
     Hidden?: boolean;
+
+    ContentId?: string;
+    ContentEmotion?: string;
 }
 
 export interface RepeatableBaseEntity extends BaseEntity {
@@ -91,11 +94,17 @@ export interface CarouselButton extends RepeatableBaseEntity {
     VariableValue: string;
     NextNodeId: string;
     Text: string;
+
+    ContentId: string;
+    ContentEmotion: string;
 }
 
 export interface CarouselItem extends RepeatableBaseEntity, TitleCaptionEntity {
     ImageUrl: string;
     Buttons: CarouselButton[];
+
+    ContentId?: string;
+    ContentEmotion?: string;
 }
 
 export interface CarouselSection extends TitleCaptionSection {
@@ -155,6 +164,9 @@ export interface Button extends BaseIdEntity {
     StartPosition?: number;
     MaxRepeats?: number;
     AdvancedOptions?: boolean;
+
+    ContentId?: string;
+    ContentEmotion?: string;
 }
 
 export interface ChatNode {
@@ -196,8 +208,7 @@ export interface ChatContent {
 export interface ChatFlowPack {
     ProjectId: string;
     ChatNodes: ChatNode[];
-    ChatContent: ChatContent[];
-    NodeLocations: NodeLocations;
+    WebNodeLocations: NodeLocations;
     CreatedOn: Date;
     UpdatedOn: Date;
     _id: string;

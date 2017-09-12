@@ -1,4 +1,4 @@
-<div class="container root">
+<div class="container dialog-root">
   <div>
     <div class="col-md-12">
       <md-tab-group>
@@ -197,7 +197,7 @@
                   <section class="form-field">
                     <md-checkbox [(ngModel)]="btn.AdvancedOptions" name="btnAdvancedOptions-{{i}}" align="start">Advanced Options</md-checkbox>
                   </section>
-                  <div class="btn-advanced-options" [hidden]="btn.AdvancedOptions==undefined?(!btn.VariableValue||!btn.APIResponseMatchKey||!btn.APIResponseMatchValue):!btn.AdvancedOptions">
+                  <div class="btn-advanced-options" [hidden]="!btn.AdvancedOptions">
                     <md-form-field>
                       <input mdInput type="text" placeholder="Variable Value" [(ngModel)]="btn.VariableValue" name="btnVariableValue-{{i}}">
                     </md-form-field>

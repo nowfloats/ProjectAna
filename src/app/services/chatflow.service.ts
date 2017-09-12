@@ -16,7 +16,7 @@ export class ChatFlowService {
 
     private loadProjectsAPI: string = "api/Project/List";
     private saveProjectsAPI: string = "api/Project/Save";
-    private saveChatFlowPackAPI: string = "api/Conversation/SaveChatFlow";
+    private saveChatFlowPackAPI: string = "api/Conversation/SaveChatFlowPack";
     private fetchChatFlowPackAPI: string = "api/Conversation/FetchChatFlowPack?projectId={projectId}";
 
     private getHttpOptions() {
@@ -27,6 +27,17 @@ export class ChatFlowService {
         };
     }
 
+    private normalizeBaseUrl(baseUrl: string) {
+        baseUrl = baseUrl.replace(/\\$/, '');//Remove ending \ char if any
+        if (!baseUrl.endsWith('/'))
+            baseUrl += '/';
+        return baseUrl;
+    }
+
+    private getAuth(conn: ChatServerConnection) {
+        return 'Basic ' + btoa(`${conn.APIKey || ''}:${conn.APISecret || ''}`);
+    }
+
     loadProjectsList() {
         return this.http.get(this.baseUrl + this.loadProjectsAPI, this.getHttpOptions()).map(res =>
             (res.json() as ServiceResponseModels.ProjectListResponse));
@@ -34,6 +45,11 @@ export class ChatFlowService {
 
     fetchChatFlowPack(projectId: string) {
         return this.http.get(this.baseUrl + this.fetchChatFlowPackAPI.replace("{projectId}", projectId), this.getHttpOptions()).map(res =>
+            res.json() as models.ChatFlowPack);
+    }
+
+    saveChatFlowPack(pack: models.ChatFlowPack) {
+        return this.http.post(this.baseUrl + this.saveChatFlowPackAPI, pack, this.getHttpOptions()).map(res =>
             res.json() as models.ChatFlowPack);
     }
 
@@ -51,17 +67,6 @@ export class ChatFlowService {
         this.baseUrl = this.normalizeBaseUrl(this.baseUrl);
         if (conn.APIKey || conn.APISecret)
             this.auth = this.getAuth(conn);
-    }
-
-    private normalizeBaseUrl(baseUrl: string) {
-        baseUrl = baseUrl.replace(/\\$/, '');//Remove ending \ char if any
-        if (!baseUrl.endsWith('/'))
-            baseUrl += '/';
-        return baseUrl;
-    }
-
-    private getAuth(conn: ChatServerConnection) {
-        return 'Basic ' + btoa(`${conn.APIKey || ''}:${conn.APISecret || ''}`);
     }
 
     testChatServerConnection(conn: ChatServerConnection) {

@@ -1,5 +1,5 @@
 <div>
-  <div [hidden]="_isLayoutUpdated">
+  <div [hidden]="layoutReady()">
     <div style="padding: 10px 50px">
       <img src="/assets/img/loading.svg" style="width: 100px;height: 100px" />
       <br />
@@ -7,10 +7,16 @@
     </div>
   </div>
   <div style="overflow: hidden">
-    <button mdTooltip="Add New Node" style="position: absolute !important; left: 50%; margin: 10px 0;" type="button" md-fab (click)="addNewNode()" [hidden]="!_isLayoutUpdated">
-      <md-icon class="fab-btn-icon">add</md-icon>
-    </button>
-    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="_isLayoutUpdated?'visible':'collapse'" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" style="overflow:hidden;" [attr.width]="designerWidth()+20" [attr.height]="designerHeight()">
+    <div style="position: absolute !important; left: 50%; margin: 10px 0;" [hidden]="!layoutReady()">
+      <button mdTooltip="Add New Node" type="button" md-fab (click)="addNewNode()">
+        <md-icon class="fab-btn-icon">add</md-icon>
+      </button>
+      <button mdTooltip="Save Flow" type="button" md-fab (click)="saveChatFlow()">
+        <md-icon class="fab-btn-icon">save</md-icon>
+      </button>
+    </div>
+
+    <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="layoutReady()?'visible':'collapse'" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" style="overflow:hidden;" [attr.width]="designerWidth()+20" [attr.height]="designerHeight()">
       <defs>
         <linearGradient id="NodeBG">
           <stop offset="0" stop-color="#CCC" />

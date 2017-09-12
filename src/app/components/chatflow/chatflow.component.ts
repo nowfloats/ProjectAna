@@ -55,7 +55,6 @@ export class ChatFlowComponent implements OnInit {
         return this.chatflowRoot.nativeElement as SVGSVGElement;
     }
 
-    _isLayoutUpdated = false;
     updateLayout() {
         if (this.chatFlowNetwork &&
             this.chatFlowNetwork.chatNodeVMs &&
@@ -87,7 +86,7 @@ export class ChatFlowComponent implements OnInit {
         let btnsTable = this.chatFlowRootSVG().querySelector(`table[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLTableElement;
         if (btnsTable) {
 
-            if (!this._isLayoutUpdated) //If this is not done, when new section is added to the node, node's width is also increasing abnormally!
+            if (!chatNodeVM._layoutUpdated) //If this is not done, when new section is added to the node, node's width is also increasing abnormally!
                 chatNodeVM._btnTableWidth = btnsTable.getBoundingClientRect().width;
             else
                 chatNodeVM._btnTableWidth = btnsTable.clientWidth;
@@ -97,7 +96,7 @@ export class ChatFlowComponent implements OnInit {
             setTimeout(() => {
                 let nodeRoot = this.chatFlowRootSVG().querySelector(`div[node-id='${chatNodeVM.chatNode.Id}']`) as HTMLDivElement;
                 chatNodeVM._height = nodeRoot.clientHeight;
-                this._isLayoutUpdated = true;
+                chatNodeVM._layoutUpdated = true;
             }, 500);
             return true;
         }
@@ -225,28 +224,68 @@ export class ChatFlowComponent implements OnInit {
             delete this.chatFlowNetwork.draggingChatNode;
         this._isMouseDown = false;
     }
-    //599647fa460b500d9c4cb11c, projectId: string = '599c3caa460b5053e4b09869'
+    private loadChatFlowPack(pack: models.ChatFlowPack) {
+
+        if (pack.ChatNodes) {
+            this.chatFlowNetwork.chatFlowPack = pack;
+            this.chatFlowNetwork.chatNodeVMs = [];
+
+            pack.ChatNodes.forEach(cn => {
+                new ChatNodeVM(this.chatFlowNetwork, cn);
+
+                cn.Buttons.forEach(btn => {
+                    btn.AdvancedOptions = ((btn.VariableValue || btn.APIResponseMatchKey || btn.APIResponseMatchValue) ? true : false);
+                });
+            });
+
+            this.chatFlowNetwork.chatNodeVMs.forEach(vm => {
+                var loc = pack.WebNodeLocations[vm.chatNode.Id];
+                vm._x = loc.X;
+                vm._y = loc.Y;
+            });
+
+            this.chatFlowNetwork.updateChatNodeConnections();
+            this.updateLayout();
+        }
+    }
+    layoutReady() {
+        if (!this.chatFlowNetwork.chatNodeVMs)
+            return true;
+        else {
+            return this.chatFlowNetwork.chatNodeVMs.filter(x => x._layoutUpdated).length == this.chatFlowNetwork.chatNodeVMs.length;
+        }
+    }
     private loadChatFlow(projectId: string) {
         this.chatFlowService.fetchChatFlowPack(projectId).subscribe(x => {
-            if (x.ChatNodes) {
-                x.ChatNodes.forEach(cn => {
-                    new ChatNodeVM(this.chatFlowNetwork, cn);
-                });
-
-                this.chatFlowNetwork.chatNodeVMs.forEach(vm => {
-                    var loc = x.NodeLocations[vm.chatNode.Id];
-                    vm._x = loc.X;
-                    vm._y = loc.Y;
-                });
-
-                this.chatFlowNetwork.updateChatNodeConnections();
-                this.updateLayout();
-            }
-            else {
-                //Nothing to load
-                this._isLayoutUpdated = true;
-            }
+            this.loadChatFlowPack(x);
         }, err => console.error(err));
+    }
+    private saveChatFlow() {
+        var nodeLocs: models.NodeLocations = {};
+
+        for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
+            let item = this.chatFlowNetwork.chatNodeVMs[i];
+
+            nodeLocs[item.chatNode.Id] = {
+                X: item._x,
+                Y: item._y
+            };
+        }
+
+        let pack: models.ChatFlowPack = {
+            ProjectId: this.chatFlowNetwork.chatFlowPack.ProjectId,
+            ChatNodes: this.chatFlowNetwork.chatNodeVMs.map(x => x.chatNode),
+            WebNodeLocations: nodeLocs,
+            _id: this.chatFlowNetwork.chatFlowPack._id,
+            CreatedOn: this.chatFlowNetwork.chatFlowPack.CreatedOn,
+            UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
+        };
+        this.chatFlowService.saveChatFlowPack(pack).subscribe(res => {
+            this.loadChatFlowPack(res);
+            alert('saved');
+        }, err => {
+            console.error(JSON.stringify(err));
+        });
     }
 }
 
@@ -270,6 +309,7 @@ class ChatFlowNetwork {
 
     chatNodeConnections: ChatNodeConnection[] = [];
     chatNodeVMs: ChatNodeVM[] = [];
+    chatFlowPack: models.ChatFlowPack;
 
     newChatNodeConnection: ChatNodeNewConnection = new ChatNodeNewConnection();
     draggingChatNode: ChatNodeVM;
@@ -452,7 +492,7 @@ export class ChatNodeVM {
 
         this._x = (this.network.chatNodeVMs.indexOf(this)) * Config.defaultNodeWidth;
     }
-
+    _layoutUpdated: boolean = false;
     _x: number = 0;
     _y: number = 0;
 

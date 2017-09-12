@@ -20,6 +20,11 @@ body {
   margin: -10px;
 }
 
+.dialog-root {
+  margin: 20px 0;
+  height: 90vh;
+}
+
 .root {
   margin: 20px 0;
   height: 90vh;
