@@ -262,6 +262,9 @@ namespace ANAConversationPlatform.Helpers
 					if ((chatFlow.WebNodeLocations == null || chatFlow.WebNodeLocations.Count <= 0) && (existingFlow.WebNodeLocations != null && existingFlow.WebNodeLocations.Count > 0))
 						chatFlow.WebNodeLocations = existingFlow.WebNodeLocations;
 
+					if (chatFlow.NodeLocations == null && existingFlow.NodeLocations != null)
+						chatFlow.NodeLocations = existingFlow.NodeLocations;
+
 					await chatsColl.ReplaceOneAsync(x => x.ProjectId == chatFlow.ProjectId, chatFlow);
 					return true;
 					#endregion
