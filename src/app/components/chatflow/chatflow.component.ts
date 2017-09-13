@@ -332,7 +332,7 @@ export class ChatFlowComponent implements OnInit {
             this.loadChatFlowPack(x);
         }, err => console.error(err));
     }
-    private saveChatFlow() {
+    saveChatFlow() {
         var nodeLocs: models.NodeLocations = {};
 
         for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
