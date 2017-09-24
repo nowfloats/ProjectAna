@@ -14,74 +14,77 @@ using System.IO;
 
 namespace ANAConversationPlatform
 {
-    public class Startup
-    {
-        public IConfigurationRoot Configuration { get; }
+	public class Startup
+	{
+		public IConfigurationRoot Configuration { get; }
 
-        public Startup(IHostingEnvironment env)
-        {
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(env.ContentRootPath)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            Configuration = builder.Build();
+		public Startup(IHostingEnvironment env)
+		{
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(env.ContentRootPath)
+				.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+				.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
+				.AddEnvironmentVariables();
+			Configuration = builder.Build();
 
-            //Load the DB configurations into the static helper
-            MongoHelper.Settings = Configuration.GetSection(nameof(DatabaseConnectionSettings)).Get<DatabaseConnectionSettings>();
-            RocketChatSDK.Settings = Configuration.GetSection(nameof(AgentChatSettings)).Get<AgentChatSettings>();
-            LiveClientSocketsHelper.Settings = Configuration.GetSection(nameof(LiveClientSocketsServerSettings)).Get<LiveClientSocketsServerSettings>();
-            Utils.Settings = Configuration.GetSection(nameof(Helpers.Settings)).Get<Helpers.Settings>();
-            Utils.BasicAuth = Configuration.GetSection(nameof(Helpers.BasicAuth)).Get<Helpers.BasicAuth>();
-        }
+			//Load the DB configurations into the static helper
+			MongoHelper.Settings = Configuration.GetSection(nameof(DatabaseConnectionSettings)).Get<DatabaseConnectionSettings>();
+			RocketChatSDK.Settings = Configuration.GetSection(nameof(AgentChatSettings)).Get<AgentChatSettings>();
+			LiveClientSocketsHelper.Settings = Configuration.GetSection(nameof(LiveClientSocketsServerSettings)).Get<LiveClientSocketsServerSettings>();
+			Utils.Settings = Configuration.GetSection(nameof(Helpers.Settings)).Get<Helpers.Settings>();
+			Utils.BasicAuth = Configuration.GetSection(nameof(Helpers.BasicAuth)).Get<Helpers.BasicAuth>();
+		}
 
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services
-                .AddMvc()
-                .AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-        }
+		// This method gets called by the runtime. Use this method to add services to the container.
+		public void ConfigureServices(IServiceCollection services)
+		{
+			services
+				.AddMvc()
+				.AddJsonOptions(options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+		}
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
-        {
-            loggerFactory
-                .AddConsole(Configuration.GetSection("Logging"))
-                .AddFile(Configuration.GetSection("FileLogging"));
-            app.UseCors();
+		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+		public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+		{
+			loggerFactory
+				.AddConsole(Configuration.GetSection("Logging"))
+				.AddFile(Configuration.GetSection("FileLogging"));
+			app.UseCors();
 
-            RocketChatSDK.Logger = loggerFactory.CreateLogger<RocketChatSDK>();
-            MongoHelper.Logger = loggerFactory.CreateLogger(nameof(MongoHelper));
-            ChatFlowBuilder.Logger = loggerFactory.CreateLogger(nameof(ChatFlowBuilder));
-            Task.Run(async () =>
-            {
-                try
-                {
-                    var login = await RocketChatSDK.Login(RocketChatSDK.Settings.APIUserName, RocketChatSDK.Settings.APIPassword);
-                    RocketChatSDK.Admin = new RocketChatSDK(login.Data.UserId, login.Data.AuthToken);
-                }
-                catch (System.Exception ex)
-                {
-                    RocketChatSDK.Logger.LogError(new EventId((int)LoggerEventId.ROCKET_CHAT_SDK_INIT_ERROR), ex, "Rocket Chat SDK Init Error: {0}", ex.Message);
-                }
-            }).Wait();
+			RocketChatSDK.Logger = loggerFactory.CreateLogger<RocketChatSDK>();
+			MongoHelper.Logger = loggerFactory.CreateLogger(nameof(MongoHelper));
+			ChatFlowBuilder.Logger = loggerFactory.CreateLogger(nameof(ChatFlowBuilder));
 
-            app.UseMvc(routes => routes.MapRoute("default", "api/{controller=Conversation}/{action=Chat}/{id?}"));
+			if (!string.IsNullOrWhiteSpace(RocketChatSDK.Settings?.APIBase)) //Only if rocket chat api base is set
+			{
+				Task.Run(async () =>
+				{
+					try
+					{
+						var login = await RocketChatSDK.Login(RocketChatSDK.Settings.APIUserName, RocketChatSDK.Settings.APIPassword);
+						RocketChatSDK.Admin = new RocketChatSDK(login.Data.UserId, login.Data.AuthToken);
+					}
+					catch (System.Exception ex)
+					{
+						RocketChatSDK.Logger.LogError(new EventId((int)LoggerEventId.ROCKET_CHAT_SDK_INIT_ERROR), ex, "Rocket Chat SDK Init Error: {0}", ex.Message);
+					}
+				}).Wait();
+			}
+			app.UseMvc(routes => routes.MapRoute("default", "api/{controller=Conversation}/{action=Chat}/{id?}"));
 
-            app.UseStaticFiles();
+			app.UseStaticFiles();
 
-            var chatMediaDir = Path.Combine(env.WebRootPath, CHAT_MEDIA_FOLDER_NAME);
-            try
-            {
-                if (!Directory.Exists(chatMediaDir))
-                    Directory.CreateDirectory(chatMediaDir);
-            }
-            catch (System.Exception ex)
-            {
-                var logger = loggerFactory.CreateLogger<Startup>();
-                logger.LogError(ex, $"Error creating the chat media folder ({chatMediaDir}). Services/ReceiveFile API might not work!");
-            }
-        }
-    }
+			var chatMediaDir = Path.Combine(env.WebRootPath, CHAT_MEDIA_FOLDER_NAME);
+			try
+			{
+				if (!Directory.Exists(chatMediaDir))
+					Directory.CreateDirectory(chatMediaDir);
+			}
+			catch (System.Exception ex)
+			{
+				var logger = loggerFactory.CreateLogger<Startup>();
+				logger.LogError(ex, $"Error creating the chat media folder ({chatMediaDir}). Services/ReceiveFile API might not work!");
+			}
+		}
+	}
 }
