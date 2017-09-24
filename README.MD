@@ -29,20 +29,30 @@ Web & Messenger SDK
 
 **Pre-requisites:**
 
-1.  Windows/Linux/Mac to host the Backend API
+1.  Windows/Linux/Mac to host the Platform API
 2.  Mongo DB
 3.  Windows PC with .NET Framework 4.5 to run Conversation Studio
 4.  Windows 10 PC to use Conversation Simulator (UWP App)
 
 **Setup Platform:**
 
-1.  Download the pre-built binary from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or Clone the repo.
-2.  In ANA Conversation Platform project, open appsettings-Sample.json and edit DatabaseConnectionSettings section to match your MongoDB details.
-3.  Change Collection names to new/empty collections.
-4.  Save and Rename appsettings-Sample.json to appsettings.json
-5.  Build and publish the project to the server as usual. It's a .NET Core project, which can be hosted on Windows, Linux and Mac.
-6.  Note down the base URL of your hosted project.
-7.  Optionally, Set the APIKey and APISecret in appsettings.json under BasicAuth section for security.
+1.  Download the pre-built binary from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or Clone the repo. <br> You can also build from the docker image hosted on dockerhub. Click [here](https://hub.docker.com/r/projectana/platform/) to see the instructions on Project ANA's dockerhub page.
+
+2. You need to set up your Mongo DB instance first. You can either do that on your local machine or get one from a Database-as-a-Service provider like [MLab](https://mlab.com). <br> Click [here](https://docs.mongodb.com/manual/installation) for instructions on installation and setup of Mongo DB.<br>
+
+3. In ANA Conversation Platform project, open `appsettings-Sample.json` and edit `DatabaseConnectionSettings` section to match your Mongo DB details you had configured earlier.
+
+4. Change collection names to new/empty collections.
+5. Save and rename appsettings-Sample.json to appsettings.json.
+
+6. To build the project, you need to have .NET Core 2.0 SDK installed in your system. Click [here](https://www.microsoft.com/net/download/core) to get the latest version. Note: .NET Core is cross platform and will work on windows, linux and mac.
+
+7. If you cloned the repository, follow the usual steps to restore, build and run a .NET Core project using `dotnet` cli or Visual Studio.
+
+8. If you downloaded the pre built binaries, open the platform folder and find the `ANAConversationPlatform.dll` file. <br> Run `dotnet ANAConversationPlatform.dll` to start the Platform API server.
+
+9.  Note down the base URL of your hosted Platform API server (displayed in the console if started using the above cmd).
+10. Optionally, set the `APIKey` and `APISecret` in `appsettings.json` under `BasicAuth` section for security.
 
 **Setup Studio:**
 
