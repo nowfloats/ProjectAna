@@ -171,7 +171,7 @@ namespace ANAConversationSimulator.ViewModels
 				catch (Exception ex)
 				{
 					ToggleTyping(false);
-					Utils.ShowDialog($"API[{parsedNode.ApiMethod}]: {parsedNode.ApiUrl }\r\nRequired Vars: {(parsedNode.RequiredVariables == null ? "" : string.Join(",", parsedNode.RequiredVariables))}\r\nError: " + ex.Message + "\r\n\r\n" + ex.ToString());
+					Utils.ShowDialog($"API[{parsedNode.ApiMethod}]: {parsedNode.ApiUrl }\r\nRequired Vars: {(parsedNode.RequiredVariables == null ? "" : string.Join(",", parsedNode.RequiredVariables))}\r\nError: " + ex.Message);
 					NavigateToNode(parsedNode.NextNodeId);
 				}
 			}
@@ -260,10 +260,7 @@ namespace ANAConversationSimulator.ViewModels
 										{
 											await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
 										}
-										catch (Exception ex)
-										{
-											await Utils.ShowDialogAsync(ex.ToString());
-										}
+										catch { }
 									});
 								});
 							}

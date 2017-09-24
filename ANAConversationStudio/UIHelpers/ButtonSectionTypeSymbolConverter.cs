@@ -18,18 +18,13 @@ namespace ANAConversationStudio.UIHelpers
                     case SectionTypeEnum.Image:
                         return "\uEB9F";
                     case SectionTypeEnum.Text:
-                        //return "\uE134"; //Comment quotations inside a chat bubble
                         return "\uEC42"; //Text inside a chat bubble
-                    case SectionTypeEnum.Graph:
-                        break;
                     case SectionTypeEnum.Gif:
                         return "\uE913";
                     case SectionTypeEnum.Audio:
                         return "\uE8D6";
                     case SectionTypeEnum.Video:
                         return "\uE20A";
-                    case SectionTypeEnum.Link:
-                        break;
                     case SectionTypeEnum.EmbeddedHtml:
                         return "\uE12B";
                     case SectionTypeEnum.Carousel:
@@ -44,8 +39,6 @@ namespace ANAConversationStudio.UIHelpers
             {
                 switch (buttonType)
                 {
-                    case ButtonTypeEnum.PostText:
-                        break;
                     case ButtonTypeEnum.OpenUrl:
                         break;
                     case ButtonTypeEnum.GetText:

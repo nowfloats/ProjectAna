@@ -73,10 +73,6 @@ namespace ANAConversationPlatform.Helpers
 									}
 								}
 								break;
-							case SectionTypeEnum.Graph:
-								break;
-							case SectionTypeEnum.Link:
-								break;
 							case SectionTypeEnum.Carousel:
 								{
 									var car = section as CarouselSection;
@@ -197,10 +193,6 @@ namespace ANAConversationPlatform.Helpers
 										});
 									}
 								}
-								break;
-							case SectionTypeEnum.Graph:
-								break;
-							case SectionTypeEnum.Link:
 								break;
 							case SectionTypeEnum.Carousel:
 								{

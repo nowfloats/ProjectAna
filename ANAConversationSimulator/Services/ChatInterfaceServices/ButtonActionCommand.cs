@@ -302,7 +302,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 					 }
 					 catch (Exception ex)
 					 {
-						 await Utils.ShowDialogAsync(ex.ToString());
+						 await Utils.ShowDialogAsync("Track View Event Ex: " + ex.Message);
 					 }
 				 });
 			});
@@ -321,7 +321,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 					}
 					catch (Exception ex)
 					{
-						await Utils.ShowDialogAsync(ex.ToString());
+						await Utils.ShowDialogAsync("Track View Event Ex: " + ex.Message);
 					}
 				});
 

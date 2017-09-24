@@ -20,9 +20,6 @@ namespace ANAConversationStudio.UIHelpers
 
 			switch (buttonType)
 			{
-				case ButtonTypeEnum.PostText:
-					hidden = true; //Hide all. Probably!
-					break;
 				case ButtonTypeEnum.OpenUrl:
 					hidden = !(new[] { nameof(Button.Url) }.Contains(fieldName));//Show only Url field
 					break;

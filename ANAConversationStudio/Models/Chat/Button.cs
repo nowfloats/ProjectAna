@@ -377,7 +377,6 @@ namespace ANAConversationStudio.Models.Chat
 
 	public enum ButtonTypeEnum
 	{
-		PostText,
 		OpenUrl,
 		GetText,
 		GetNumber,

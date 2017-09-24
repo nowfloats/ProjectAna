@@ -5,6 +5,15 @@
     <PackageTargetFallback>portable-net45+win8</PackageTargetFallback>
     <Configurations>Debug;Release</Configurations>
     <StartupObject>ANAConversationPlatform.Program</StartupObject>
+    <Description>The platform component of the ANA Conversation Suite. World's first open source conversation platform. http://ana.chat</Description>
+    <Version>2.1.0</Version>
+    <RepositoryUrl>https://github.com/Kitsune-tools/ProjectANA</RepositoryUrl>
+    <PackageProjectUrl>http://ana.chat</PackageProjectUrl>
+    <PackageId>ANAConversationPlatform</PackageId>
+    <Authors>Project ANA Team</Authors>
+    <Company>Project ANA</Company>
+    <Product>ANA Conversation Suite</Product>
+    <RepositoryType>git</RepositoryType>
   </PropertyGroup>
 
   <ItemGroup>

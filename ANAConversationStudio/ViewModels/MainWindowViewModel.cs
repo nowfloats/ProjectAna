@@ -688,7 +688,10 @@ namespace ANAConversationStudio.ViewModels
 			catch (Exception ex)
 			{
 				if (!Utilities.IsDesignMode())
-					MessageBox.Show(ex.ToString(), "Initialization error");
+				{
+					Logger.Write(ex);
+					MessageBox.Show(ex.Message, "Initialization error");
+				}
 			}
 			return false;
 		}
@@ -721,7 +724,10 @@ namespace ANAConversationStudio.ViewModels
 			catch (Exception ex)
 			{
 				if (!Utilities.IsDesignMode())
-					MessageBox.Show(ex.ToString(), "Connections Update error");
+				{
+					Logger.Write(ex);
+					MessageBox.Show(ex.Message, "Connections Update error");
+				}
 			}
 		}
 

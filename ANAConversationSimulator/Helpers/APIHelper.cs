@@ -91,7 +91,7 @@ namespace ANAConversationSimulator.Helpers
 			}
 			catch (Exception ex)
 			{
-				await Utils.ShowDialogAsync(ex.ToString());
+				await Utils.ShowDialogAsync("TrackEvent Ex: " + ex.Message);
 			}
 		}
 
@@ -118,7 +118,7 @@ namespace ANAConversationSimulator.Helpers
 			}
 			catch (Exception ex)
 			{
-				Utils.ShowDialog(ex.ToString());
+				Utils.ShowDialog(ex.Message);
 			}
 			return (null, null, null, null);
 		}

@@ -37,9 +37,16 @@ namespace ANAConversationStudio.Helpers
 			var fails = new List<CVR>();
 			foreach (var validation in ChatFlowValidatorList)
 			{
-				var res = validation(pack);
-				if (res.Status != CVS.Valid)
-					fails.Add(res);
+				try
+				{
+					var res = validation(pack);
+					if (res.Status != CVS.Valid)
+						fails.Add(res);
+				}
+				catch (Exception ex)
+				{
+					fails.Add(new CVR { Message = "Oops! Something went wrong while validating the flow!" + ex.Message, Status = CVS.Error, ValidationName = "Exception" });
+				}
 			}
 			return fails;
 		}

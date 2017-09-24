@@ -161,10 +161,6 @@ namespace ANAConversationStudio.Helpers
 									}
 								}
 								break;
-							case SectionTypeEnum.Graph:
-								break;
-							case SectionTypeEnum.Link:
-								break;
 							case SectionTypeEnum.Carousel:
 								{
 									var car = section as CarouselSection;
@@ -349,7 +345,7 @@ namespace ANAConversationStudio.Helpers
 	{
 		static Logger()
 		{
-			Log.Logger = new LoggerConfiguration().WriteTo.RollingFile("Logs\\Log-{Date}.log").CreateLogger();
+			Log.Logger = new LoggerConfiguration().WriteTo.RollingFile(Settings.LoggingDirectory + "\\Log-{Date}.log").CreateLogger();
 		}
 
 		public static void Write(Exception ex, [CallerMemberName] string caller = null, [CallerLineNumber] int lineNumber = 0, [CallerFilePath] string fileName = null)

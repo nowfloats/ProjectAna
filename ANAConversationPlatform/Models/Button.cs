@@ -3,7 +3,7 @@
 	public class Button : BaseEntity
 	{
 		public Button() { }
-		public Button(string id = "", string buttonName = "", string buttonText = "", EmotionEnum emotion = EmotionEnum.Cool, ButtonTypeEnum buttonType = ButtonTypeEnum.None, string nextNodeId = "", bool defaultButton = false, bool hidden = false, string variableValue = "")
+		public Button(string id = "", string buttonName = "", string buttonText = "", EmotionEnum emotion = EmotionEnum.Cool, ButtonTypeEnum buttonType = ButtonTypeEnum.NextNode, string nextNodeId = "", bool defaultButton = false, bool hidden = false, string variableValue = "")
 		{
 			this._id = id;
 			this.ButtonName = buttonName;
@@ -47,8 +47,6 @@
 	}
 	public enum ButtonTypeEnum
 	{
-		None,
-		PostText,
 		OpenUrl,
 		GetText,
 		GetAddress,

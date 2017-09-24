@@ -164,7 +164,6 @@
     <Compile Include="Models\Chat\Sections\CarouselSection.cs" />
     <Compile Include="Models\Chat\Sections\EmbeddedHtmlSection.cs" />
     <Compile Include="Models\Chat\Sections\GifSection.cs" />
-    <Compile Include="Models\Chat\Sections\GraphSection.cs" />
     <Compile Include="Models\Chat\Sections\ImageSection.cs" />
     <Compile Include="Models\Chat\Sections\Section.cs" />
     <Compile Include="Models\Chat\Sections\TextSection.cs" />

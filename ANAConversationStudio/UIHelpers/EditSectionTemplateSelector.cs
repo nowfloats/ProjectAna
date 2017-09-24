@@ -31,7 +31,6 @@ namespace ANAConversationStudio.UIHelpers
                 case SectionTypeEnum.Carousel:
                     templateName = "CarouselSectionEditTemplate";
                     break;
-                case SectionTypeEnum.Graph:
                 case SectionTypeEnum.PrintOTP:
                     templateName = "TextSectionEditTemplate";
                     //Not supported yet.
