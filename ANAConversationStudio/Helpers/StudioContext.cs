@@ -221,7 +221,7 @@ namespace ANAConversationStudio.Helpers
 		}
 		public static bool IsProjectLoaded(bool showMsg)
 		{
-			if (Current?.ChatServer?.ServerUrl == null)
+			if (Current?.ChatServer?.ServerUrl == null || Current?.ChatFlow == null)
 			{
 				if (showMsg)
 					MessageBox.Show("No chat flow is loaded. Please load a chat flow and try again.");
@@ -321,6 +321,8 @@ namespace ANAConversationStudio.Helpers
 
 		public bool AreChatFlowChangesMadeAfterLastSave()
 		{
+			if (!IsProjectLoaded(false))
+				return false;
 			if (string.IsNullOrWhiteSpace(LastChatFlowSavedHash))
 				return true;
 

@@ -302,8 +302,7 @@ namespace ANAConversationStudio.Views
 			if (eventArgs.Cancel)
 				return;
 
-			ChatFlowsManagerWindow w = new ChatFlowsManagerWindow();
-			w.ShowDialog();
+			new ChatFlowsManagerWindow().ShowDialog();
 		}
 
 		private async void NewChatFlowClick(object sender, RoutedEventArgs e)
@@ -1098,7 +1097,7 @@ namespace ANAConversationStudio.Views
 				var done = await StudioContext.LoadFromChatServerConnectionAsync(chatServer);
 				if (!done)
 					return;
-				new ChatFlowsManagerWindow().Show();
+				new ChatFlowsManagerWindow().ShowDialog();
 			}
 			else
 				await OpenChatServersManagerAsync();
@@ -1111,8 +1110,7 @@ namespace ANAConversationStudio.Views
 			if (eventArgs.Cancel)
 				return;
 
-			SaveChatServersManager man = new SaveChatServersManager();
-			man.ShowDialog();
+			new SaveChatServersManager().ShowDialog();
 		}
 
 		private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
@@ -1145,7 +1143,8 @@ namespace ANAConversationStudio.Views
 
 		private async Task AskToSaveChangesIfAny(CancelEventArgs cancelEventArgs)
 		{
-			if (StudioContext.Current == null) return;
+			if (StudioContext.Current?.ChatFlow == null) return;
+			this.ViewModel.ParseOutChanges();
 			if (!StudioContext.Current.AreChatFlowChangesMadeAfterLastSave()) return; //All changes saved
 
 			var op = MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);

@@ -103,7 +103,7 @@
                                     </Grid.ColumnDefinitions>
                                     <TextBlock Style="{StaticResource NodeTypeIconTextblockStyle}" Grid.Column="0"/>
                                     <TextBlock VerticalAlignment="Center" Grid.Column="1">
-                                            <Run  Text="Node: "/><Run  Text="{Binding Alias}"/>
+                                        <Run  Text="Node: "/><Run  Text="{Binding Alias}"/>
                                     </TextBlock>
                                     <Button Grid.Column="2" Style="{DynamicResource ToolTextButtonStyle}" Content="Copy Id" ToolTip="Copy node id to clipboard" Click="CopyNodeIdClick"/>
                                 </Grid>
@@ -160,11 +160,13 @@
                                             <TextBox Text="{Binding ChatNode.NextNodeId, Mode=TwoWay}" />
                                         </uc:TableRowUserControl.Field>
                                     </uc:TableRowUserControl>
+                                    <!--
+                                    Actual interpretation still pending!
                                     <uc:TableRowUserControl Label="API Response Data Root">
                                         <uc:TableRowUserControl.Field>
                                             <TextBox Text="{Binding ChatNode.ApiResponseDataRoot, Mode=TwoWay}" />
                                         </uc:TableRowUserControl.Field>
-                                    </uc:TableRowUserControl>
+                                    </uc:TableRowUserControl>-->
                                     <uc:TableRowUserControl Label="Required Variables">
                                         <uc:TableRowUserControl.Field>
                                             <TextBox Text="{Binding ChatNode.RequiredVariables, Converter={StaticResource ObservableCollectionStringJoinConverter}, Mode=TwoWay}" AcceptsReturn="True" />
