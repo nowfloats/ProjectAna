@@ -600,16 +600,60 @@ namespace ANAConversationStudio.ViewModels
 				};
 		}
 
-		public void ParseOutChanges()
+		public void UpdateContextChatFlowAndValidate()
 		{
 			StudioContext.Current.ChatFlow.NodeLocations = this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new LayoutPoint(x.X, x.Y));
 			StudioContext.Current.ChatFlow.ChatNodes = this.Network.Nodes.Select(x => x.ChatNode).ToList();
 			StudioContext.Current.ChatFlow.ChatContent = Utilities.ExtractContentFromChatNodes(StudioContext.Current.ChatFlow.ChatNodes);
+
+			ValidateCurrentFlow();
+		}
+
+		public ChatFlowValidationStatus ValidateCurrentFlow()
+		{
+			var validationRes = ChatFlowValidator.Validate(StudioContext.Current.ChatFlow);
+			ErrorText = string.Join("\r\n", validationRes.Where(x => x.Status != ChatFlowValidationStatus.Valid).Select(x => x.Message));
+
+			if (validationRes.Any(x => x.Status == ChatFlowValidationStatus.Error))
+				ValidationStatus = ChatFlowValidationStatus.Error;
+			else if (validationRes.Any(x => x.Status == ChatFlowValidationStatus.Warning))
+				ValidationStatus = ChatFlowValidationStatus.Warning;
+			else
+				ValidationStatus = ChatFlowValidationStatus.Valid;
+			return ValidationStatus;
+		}
+
+		private ChatFlowValidationStatus _ValidationStatus;
+		public ChatFlowValidationStatus ValidationStatus
+		{
+			get { return _ValidationStatus; }
+			set
+			{
+				if (_ValidationStatus != value)
+				{
+					_ValidationStatus = value;
+					OnPropertyChanged("ValidationStatus");
+				}
+			}
+		}
+
+		private string _ErrorText;
+		public string ErrorText
+		{
+			get { return _ErrorText; }
+			set
+			{
+				if (_ErrorText != value)
+				{
+					_ErrorText = value;
+					OnPropertyChanged("ErrorText");
+				}
+			}
 		}
 
 		public async Task SaveLoadedChat()
 		{
-			ParseOutChanges();
+			UpdateContextChatFlowAndValidate();
 			await StudioContext.Current.SaveChatFlowAsync();
 		}
 

@@ -150,6 +150,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Helpers\ChatFlowBuilder.cs" />
+    <Compile Include="Helpers\ChatFlowValidator.cs" />
     <Compile Include="Models\ChatFlowSearchItem.cs" />
     <Compile Include="UIHelpers\ButtonTypeToFieldVisibilityConverter.cs" />
     <Compile Include="UIHelpers\NodeTypeToGroupVisibilityConverter.cs" />

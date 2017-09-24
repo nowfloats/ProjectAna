@@ -1109,7 +1109,8 @@ namespace ANAConversationStudio.Views
 			await AskToSaveChangesIfAny(eventArgs);
 			if (eventArgs.Cancel)
 				return;
-
+			StudioContext.ClearCurrent();
+			this.ViewModel.ClearDesigner();
 			new SaveChatServersManager().ShowDialog();
 		}
 
@@ -1144,7 +1145,7 @@ namespace ANAConversationStudio.Views
 		private async Task AskToSaveChangesIfAny(CancelEventArgs cancelEventArgs)
 		{
 			if (StudioContext.Current?.ChatFlow == null) return;
-			this.ViewModel.ParseOutChanges();
+			this.ViewModel.UpdateContextChatFlowAndValidate();
 			if (!StudioContext.Current.AreChatFlowChangesMadeAfterLastSave()) return; //All changes saved
 
 			var op = MessageBox.Show("Save changes?", "Hold on!", MessageBoxButton.YesNoCancel);
@@ -1160,6 +1161,32 @@ namespace ANAConversationStudio.Views
 		private async void SaveButtonClick(object sender, RoutedEventArgs e)
 		{
 			await SaveEditsAsync();
+		}
+		private void ValidateButtonClick(object sender, RoutedEventArgs e)
+		{
+			ValidateFlow();
+		}
+
+		private void ValidateFlow()
+		{
+			this.ViewModel.UpdateContextChatFlowAndValidate();
+			switch (this.ViewModel.ValidationStatus)
+			{
+				case ChatFlowValidationStatus.Warning:
+					OverallStatusTextbox.Text = "The chat flow has warnings. Please check the Errors and Warnings window.";
+					break;
+				case ChatFlowValidationStatus.Error:
+					OverallStatusTextbox.Text = "The chat flow has errors. Please check the Errors and Warnings window.";
+					break;
+				case ChatFlowValidationStatus.Valid:
+					OverallStatusTextbox.Text = "The chat flow is valid.";
+					break;
+				default:
+					break;
+			}
+			if (this.ViewModel.ValidationStatus != ChatFlowValidationStatus.Valid)
+				if (ErrorsWindowAnchorable.IsAutoHidden)
+					ErrorsWindowAnchorable.ToggleAutoHide();
 		}
 		private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -1178,8 +1205,9 @@ namespace ANAConversationStudio.Views
 					return;
 				}
 
+				this.ValidateFlow();
 				await this.ViewModel.SaveLoadedChat();
-				StatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString();
+				SaveStatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString() + ". ";
 			}
 			catch (Exception ex)
 			{
@@ -1189,7 +1217,7 @@ namespace ANAConversationStudio.Views
 
 		public void Status(string txt)
 		{
-			StatusTextblock.Text = txt;
+			OverallStatusTextbox.Text = txt;
 		}
 		private async void LoadProjectClick(object sender, RoutedEventArgs e)
 		{

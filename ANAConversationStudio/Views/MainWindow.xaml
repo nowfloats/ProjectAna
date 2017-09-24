@@ -746,13 +746,15 @@
                                     </Grid.Resources>
                                     <Grid.ColumnDefinitions>
                                         <ColumnDefinition Width="auto" />
+                                        <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition/>
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
                                     <Button Padding="20,0" Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
-                                    <TextBlock x:Name="StatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="1" />
-                                    <ItemsControl Grid.Column="2">
+                                    <Button Padding="20,0" Grid.Column="1" Click="ValidateButtonClick" ToolTip="Validate chat flow" Content="Validate" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" HorizontalAlignment="Left" Margin="10,0"/>
+                                    <TextBlock x:Name="SaveStatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="2" ToolTip="{Binding Text, ElementName=SaveStatusTextBlock}"/>
+                                    <ItemsControl Grid.Column="3">
                                         <ItemsControl.Resources>
                                             <Style TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
                                                 <Setter Property="Padding" Value="10,0" />
@@ -782,7 +784,7 @@
                                             Full board
                                         </Button>
                                     </ItemsControl>
-                                    <StackPanel Grid.Column="3" Orientation="Horizontal">
+                                    <StackPanel Grid.Column="4" Orientation="Horizontal">
                                         <TextBlock Width="40" TextAlignment="Center" VerticalAlignment="Center" Margin="0,0,4,0" HorizontalAlignment="Center">
                                             <Run Text="{Binding ElementName=zoomAndPanControl, Path=ContentScale, Converter={StaticResource scaleToPercentConverter}}"/>%
                                         </TextBlock>
@@ -884,8 +886,34 @@
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>
+                <avalonDock:LayoutRoot.BottomSide>
+                    <avalonDock:LayoutAnchorSide>
+                        <avalonDock:LayoutAnchorGroup>
+                            <avalonDock:LayoutAnchorable  ContentId="ErrorsWindowAnchorable" x:Name="ErrorsWindowAnchorable" Title=" Errors and Warnings" CanHide="False" CanClose="False">
+                                <Grid>
+                                    <Grid.Resources>
+                                        <Style TargetType="TextBox">
+                                            <Setter Property="BorderBrush" Value="Transparent" />
+                                            <Setter Property="BorderThickness" Value="0" />
+                                            <Setter Property="Padding" Value="5" />
+                                            <Setter Property="VerticalAlignment" Value="Stretch" />
+                                            <Setter Property="HorizontalAlignment" Value="Stretch" />
+                                            <Setter Property="Background" Value="White" />
+                                            <Setter Property="IsReadOnly" Value="True" />
+                                            <Setter Property="IsReadOnlyCaretVisible" Value="True" />
+                                            <Setter Property="TextWrapping" Value="NoWrap"/>
+                                        </Style>
+                                    </Grid.Resources>
+                                    <ScrollViewer VerticalContentAlignment="Stretch" VerticalAlignment="Stretch" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Auto">
+                                        <TextBox Text="{Binding ErrorText}" TextBlock.LineHeight="20" TextBlock.LineStackingStrategy="BlockLineHeight" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </avalonDock:LayoutAnchorable>
+                        </avalonDock:LayoutAnchorGroup>
+                    </avalonDock:LayoutAnchorSide>
+                </avalonDock:LayoutRoot.BottomSide>
             </avalonDock:LayoutRoot>
         </avalonDock:DockingManager>
-        <TextBlock Grid.Row="2" x:Name="StatusTextblock" Text=" " Margin="5"/>
+        <TextBlock Grid.Row="2" x:Name="OverallStatusTextbox" Text=" " Margin="5" ToolTip="{Binding Text, ElementName=OverallStatusTextbox}"/>
     </Grid>
 </Window>

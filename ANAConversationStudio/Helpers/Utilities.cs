@@ -287,23 +287,23 @@ namespace ANAConversationStudio.Helpers
 	{
 		public static Models.ChatFlowSearchItem SearchNode(this ChatNode node, string searchKeywords)
 		{
-			if (node.ToString().IsMatch(searchKeywords))
+			if (node.ToString().IsMatch(searchKeywords) || node.Id.IsMatch(searchKeywords))
 			{
 				return new Models.ChatFlowSearchItem
 				{
 					NodeId = node.Id,
-					NodeText = node.ToString()
+					NodeText = node.ToString() ?? node.Alias
 				};
 			}
 
 			foreach (var btn in node.Buttons)
 			{
-				if (btn.ToString().IsMatch(searchKeywords))
+				if (btn.ToString().IsMatch(searchKeywords) || btn._id.IsMatch(searchKeywords))
 				{
 					return (new Models.ChatFlowSearchItem
 					{
 						NodeId = node.Id,
-						NodeText = node.ToString(),
+						NodeText = node.ToString() ?? node.Alias,
 						ButtonText = btn.ToString()
 					});
 				}
@@ -311,12 +311,12 @@ namespace ANAConversationStudio.Helpers
 
 			foreach (var sec in node.Sections)
 			{
-				if (sec.ToString().IsMatch(searchKeywords))
+				if (sec.ToString().IsMatch(searchKeywords) || sec._id.IsMatch(searchKeywords))
 				{
 					return (new Models.ChatFlowSearchItem
 					{
 						NodeId = node.Id,
-						NodeText = node.ToString(),
+						NodeText = node.ToString() ?? node.Alias,
 						SectionText = sec.ToString()
 					});
 				}
