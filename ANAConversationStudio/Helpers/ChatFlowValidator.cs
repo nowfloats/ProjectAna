@@ -123,7 +123,7 @@ namespace ANAConversationStudio.Helpers
 					}
 					foreach (var carItem in carSec.Items)
 					{
-						var carItemMsg = $"in {carSecMsg} Carousel Item '{carItem}' ";
+						var carItemMsg = $"{carSecMsg} Carousel Item '{carItem}' ";
 						if (carItem.Buttons == null || carItem.Buttons.Count == 0)
 						{
 							msgs.Add($"{carItemMsg} has no buttons!");
@@ -138,7 +138,7 @@ namespace ANAConversationStudio.Helpers
 
 						foreach (var carBtn in carItem.Buttons)
 						{
-							var carItemBtnMsg = $"in {carItemMsg} Carousel Button '{carBtn}' ";
+							var carItemBtnMsg = $"{carItemMsg} Carousel Button '{carBtn}' ";
 							if (string.IsNullOrWhiteSpace(carBtn.Text))
 							{
 								msgs.Add($"{carItemBtnMsg}, text is empty!");
@@ -213,7 +213,7 @@ namespace ANAConversationStudio.Helpers
 			{
 				foreach (var node in apicallNodes)
 				{
-					var nodeMsg = $"In node '{node.Identifer()}', ";
+					var nodeMsg = $"Error: In node '{node.Identifer()}', ";
 					if (node.ApiMethod == null)
 					{
 						msgs.Add($"{nodeMsg} '{nameof(node.ApiMethod)}' field is not set! Set it to the Method(HTTP Verb) of the api you want to use.");
