@@ -36,13 +36,24 @@ Web & Messenger SDK
 
 **Setup Platform:**
 
-1.  Download the pre-built binary from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or Clone the repo.
-2.  In ANA Conversation Platform project, open appsettings-Sample.json and edit DatabaseConnectionSettings section to match your MongoDB details.
+1.  Download the pre-built binary from [releases](https://github.com/Kitsune-tools/ProjectANA/releases/latest) or Clone the repo. <br> You can also build from the docker image hosted on dockerhub. Click [here](https://hub.docker.com/r/projectana/platform/) to go to the dockerhub link.
+
+2. You need to set up your mongodb instance first. You can either do that on your local machine or a server such as [MLab](https://mlab.com) . <br> Click [here](https://docs.mongodb.com/manual/tutorial/getting-started/) to know more about mongoDB such as installation and setting up a database. <br>
+
+
+3.  In ANA Conversation Platform project, open `appsettings-Sample.json` and edit `DatabaseConnectionSettings` section to match your MongoDB details you had configured earlier.
+
 3.  Change Collection names to new/empty collections.
-4.  Save and Rename appsettings-Sample.json to appsettings.json
-5.  Build and publish the project to the server as usual. It's a .NET Core project, which can be hosted on Windows, Linux and Mac.
-6.  Note down the base URL of your hosted project.
-7.  Optionally, Set the APIKey and APISecret in appsettings.json under BasicAuth section for security.
+5.  Save and Rename appsettings-Sample.json to appsettings.json.
+
+6. To build the project, you need to have dotnet core version 2 installed in your system. Click [here](https://www.microsoft.com/net/download/core) to get the latest version. Note : Dotnet core is cross platform and will work on windows, linux and mac.
+
+7. If you cloned the repository, follow the usual steps to restore, build and run a dotnet core project.
+
+8. If you downloaded the pre built binaries, go inside the platform folder and find the `ANAConversationPlatform.dll` file. <br> Run `dotnet ANAConversationPlatform.dll` to execute.
+
+9.  Note down the base URL of your hosted project.
+10.  Optionally, Set the APIKey and APISecret in appsettings.json under BasicAuth section for security.
 
 **Setup Studio:**
 
