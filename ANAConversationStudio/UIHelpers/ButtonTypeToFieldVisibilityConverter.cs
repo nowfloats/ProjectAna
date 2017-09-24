@@ -31,30 +31,31 @@ namespace ANAConversationStudio.UIHelpers
 				case ButtonTypeEnum.GetAddress:
 				case ButtonTypeEnum.GetEmail:
 				case ButtonTypeEnum.GetPhoneNumber:
+					//UrlForFetchChatFlow is a a custom field which displays the list of project urls instead of text field. Should be shown only when button type is FetchChatFlow
 					//if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.GetTime:
 				case ButtonTypeEnum.GetDate:
 				case ButtonTypeEnum.GetDateTime:
 				case ButtonTypeEnum.GetLocation:
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue), nameof(Button.PostfixText), nameof(Button.PrefixText) }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue), nameof(Button.PostfixText), nameof(Button.PrefixText) }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.GetImage:
 				case ButtonTypeEnum.GetAudio:
 				case ButtonTypeEnum.GetFile:
 				case ButtonTypeEnum.GetVideo:
 					//if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.PlaceholderText), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.PlaceholderText), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.GetItemFromSource:
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.NextNode:
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.PlaceholderText), }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.PlaceholderText), }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.DeepLink:
-					hidden = new[] { nameof(Button.NextNodeId), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.PlaceholderText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.Url), nameof(Button.PostfixText), nameof(Button.PrefixText), nameof(Button.PlaceholderText), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
 					break;
 				case ButtonTypeEnum.GetAgent:
 					hidden = true; //Hide all. Probably!

@@ -197,7 +197,7 @@
         <GroupBox Header="{Binding}" Margin="0,0,0,10">
             <GroupBox.HeaderTemplate>
                 <DataTemplate>
-                    <Grid >
+                    <Grid>
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition/>
@@ -241,12 +241,16 @@
                         <TextBox Text="{Binding DeepLinkUrl, Mode=TwoWay}" />
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
+                <uc:TableRowUserControl Label="Target Project" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=UrlForFetchChatFlow}">
+                    <uc:TableRowUserControl.Field>
+                        <ComboBox ItemsSource="{Binding ProjectUrls}" SelectedValuePath="Url" DisplayMemberPath="Name" SelectedValue="{Binding Url, Mode=TwoWay}"/>
+                    </uc:TableRowUserControl.Field>
+                </uc:TableRowUserControl>
                 <uc:TableRowUserControl Label="Url" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=Url}">
                     <uc:TableRowUserControl.Field>
                         <TextBox Text="{Binding Url, Mode=TwoWay}" />
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
-
                 <uc:TableRowUserControl Label="Next Node Id" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=NextNodeId}">
                     <uc:TableRowUserControl.Field>
                         <TextBox Text="{Binding NextNodeId, Mode=TwoWay}" />

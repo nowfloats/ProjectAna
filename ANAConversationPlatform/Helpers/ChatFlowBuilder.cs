@@ -42,6 +42,9 @@ namespace ANAConversationPlatform.Helpers
 
 								if (string.IsNullOrWhiteSpace(button.ButtonName))
 									button.ButtonName = button.ButtonText; //For backward comparability
+
+								if (string.IsNullOrWhiteSpace(button.ButtonText))
+									button.ButtonText = button.ButtonName; //For backward comparability
 							}
 						}
 					}

@@ -4,6 +4,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Input;
@@ -343,6 +344,20 @@ namespace ANAConversationStudio.Models.Chat
 		[BsonIgnore]
 		public string ContentEmotion { get; set; }
 
+		[JsonIgnore]
+		[BsonIgnore]
+		public List<ProjectOptions> ProjectUrls
+		{
+			get
+			{
+				return StudioContext.Current.ChatFlowProjects.Select(x => new ProjectOptions
+				{
+					Name = x.Name,
+					Url = StudioContext.GetProjectUrl(x)
+				}).ToList();
+			}
+		}
+
 		protected override void FillAlias()
 		{
 			Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonName) ? (string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText) : ButtonName);
@@ -353,6 +368,13 @@ namespace ANAConversationStudio.Models.Chat
 			return Alias;
 		}
 	}
+
+	public class ProjectOptions
+	{
+		public string Name { get; set; }
+		public string Url { get; set; }
+	}
+
 	public enum ButtonTypeEnum
 	{
 		PostText,
