@@ -72,6 +72,7 @@ Web & Messenger SDK
 4.  If everything went as it should, your chat will start and you will see the content of the first node -> first section.
 5.  Additional chat server related configurations can be done in top right menu -> Configure Chat Server.
 6.  If you choose to build the app instead of using the built package, obtain your own MapToken required by the UWP Map Control from your developer.microsoft.com account and place it in Config-Sample.json. Then rename the file to Config.json and build the project.
+7. **Note:** To use localhost URLs in the Simulator (In case you ran Platform locally), Open command prompt and run `checknetisolation loopbackexempt -a -n=44cabbc3-0a2f-4255-b5bb-b099cd5762f9_hvc7j3s42jt6e`. By default, localhost URLs are blocked in UWP Apps for security, above command will unblock it for only this Simulator App. 
 ----------
 
 ## Agent Chat
