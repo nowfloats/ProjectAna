@@ -29,7 +29,15 @@ namespace ANAConversationPlatform.Controllers
 			try
 			{
 				if (string.IsNullOrWhiteSpace(projectId) && string.IsNullOrWhiteSpace(projectName))
-					return BadRequest(new { Message = "Either project id or project name has to be provided" });
+				{
+					var projects = await MongoHelper.GetProjectsAsync();
+					if (projects == null)
+						return BadRequest(new { Message = "Something went wrong! Mongo DB connection might be the issue!" });
+					if (projects.Count <= 0)
+						return BadRequest(new { Message = "There are not projects available!" });
+					else
+						projectId = projects[0]._id;
+				}
 
 				ChatFlowPack chatFlowPack = null;
 				if (!string.IsNullOrWhiteSpace(projectId))
