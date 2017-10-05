@@ -24,6 +24,7 @@ namespace ANAConversationStudio.Helpers
 		private static List<Func<ChatFlowPack, CVR>> ChatFlowValidatorList = new List<Func<ChatFlowPack, CVR>>
 		{
 			EmptyValidation_ERROR,
+			EmptyNodeValidation_ERROR,
 			AllNodesShouldHaveAName_WARNING,
 			NodesWithGetXTypeButtonsShouldHaveVariableName_ERROR,
 			CarouselSectionsValidations_ERROR,
@@ -61,6 +62,22 @@ namespace ANAConversationStudio.Helpers
 			var res = new CVR();
 			if (pack == null || pack.ChatNodes == null || pack.ChatNodes.Count == 0)
 				return res.SetMsg("Error: The chat flow is empty! Please add at least one chat node").SetStatus(CVS.Error);
+			return res.Valid();
+		}
+
+		private static CVR EmptyNodeValidation_ERROR(ChatFlowPack pack)
+		{
+			var res = new CVR();
+			var respMessage = new List<string>();
+
+			foreach (var node in pack.ChatNodes.Where(x => x.NodeType == NodeTypeEnum.Combination))
+			{
+				if (node.Sections == null || node.Sections.Count <= 0)
+					respMessage.Add($"Error: Node '{node.Identifer()}' has no sections/content! Combination nodes cannot be empty.");
+			}
+
+			if (respMessage.Count > 0)
+				return res.SetMsg(string.Join("\r\n", respMessage)).SetStatus(CVS.Error);
 			return res.Valid();
 		}
 
