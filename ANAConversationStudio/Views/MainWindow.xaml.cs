@@ -195,11 +195,6 @@ namespace ANAConversationStudio.Views
 			cloneSelectedNodes();
 		}
 
-		private void ConvSimMenuClick(object sender, RoutedEventArgs e)
-		{
-			var p = Process.Start("anaconsim://");
-		}
-
 		private async void UpdateMenuClick(object sender, RoutedEventArgs e)
 		{
 			var eventArgs = new CancelEventArgs();

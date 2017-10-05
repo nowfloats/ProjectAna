@@ -688,7 +688,6 @@
                         <MenuItem Header="Exit" Click="ExitClick"/>
                     </MenuItem>
                     <MenuItem Header="Tools" Height="30">
-                        <MenuItem Header="Launch Simulator" Click="ConvSimMenuClick"/>
                         <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
