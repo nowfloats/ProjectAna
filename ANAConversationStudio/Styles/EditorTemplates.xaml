@@ -9,7 +9,7 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type TextBox}">
                     <Grid>
-                        <TextBox VerticalAlignment="Center" Margin="0" Padding="0" Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="textSource" Background="Transparent" Panel.ZIndex="2" />
+                        <TextBox VerticalAlignment="Center" Margin="0" Padding="0" Text="{Binding Path=Text, RelativeSource={RelativeSource TemplatedParent}, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" x:Name="textSource" Background="Transparent" Panel.ZIndex="2" TextWrapping="{Binding Path=TextWrapping, RelativeSource={RelativeSource TemplatedParent}}"/>
                         <TextBlock VerticalAlignment="Center" Margin="0" Padding="0" Text="{TemplateBinding Tag}" Background="{TemplateBinding Background}" Panel.ZIndex="1">
                             <TextBlock.Style>
                                 <Style TargetType="{x:Type TextBlock}">
@@ -422,7 +422,7 @@
                                                             <ColumnDefinition/>
                                                             <ColumnDefinition Width="Auto"/>
                                                         </Grid.ColumnDefinitions>
-                                                        <TextBox Style="{StaticResource PlaceHolderTB}" Margin="5,0,0,0" Tag="http://" Text="{Binding ImageUrl, Mode=TwoWay}" />
+                                                        <TextBox Style="{StaticResource PlaceHolderTB}" Margin="5,0,0,0" Tag="http://" Text="{Binding ImageUrl, Mode=TwoWay}" TextWrapping="NoWrap"/>
                                                         <Button ToolTip="Upload from your computer" Grid.Column="1" Style="{StaticResource ToolButtonStyle}" Content="&#xE898;" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center" Command="{Binding UploadMedia}"/>
                                                         <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding UploadProgress, Converter={StaticResource N2V}}" Text="{Binding UploadProgress}" ToolTip="{Binding UploadProgress}" Margin="5,0" FontStyle="Italic"/>
                                                     </Grid>
@@ -493,7 +493,7 @@
                                                                     </uc:TableRowUserControl>
                                                                     <uc:TableRowUserControl Label="Url">
                                                                         <uc:TableRowUserControl.Field>
-                                                                            <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                                            <TextBox Text="{Binding Url, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" TextWrapping="NoWrap"/>
                                                                         </uc:TableRowUserControl.Field>
                                                                     </uc:TableRowUserControl>
                                                                     <uc:TableRowUserControl Label="Variable Value">
