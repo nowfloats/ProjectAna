@@ -5,7 +5,7 @@
       xmlns:UIHelpers="using:ANAConversationSimulator.UIHelpers"
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-      xmlns:vm="using:ANAConversationSimulator.ViewModels" mc:Ignorable="d">
+      xmlns:vm="using:ANAConversationSimulator.ViewModels" mc:Ignorable="d" Width="500" MaxHeight="600" VerticalAlignment="Top" VerticalContentAlignment="Top">
     <Page.DataContext>
         <vm:MainPageViewModel x:Name="ViewModel" />
     </Page.DataContext>
@@ -19,7 +19,7 @@
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
                     <Image Source="ms-appx:///Assets/Square44x44Logo.png" Margin="0,5,0,5" Height="40"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" />
+                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" FontSize="15"/>
                 </Grid>
             </controls:PageHeader.Content>
             <controls:PageHeader.SecondaryCommands>
