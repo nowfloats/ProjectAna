@@ -154,7 +154,7 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Style="{StaticResource SectionTypeIconTextblockStyle}" Grid.Column="0"/>
                         <TextBlock VerticalAlignment="Center" Grid.Column="1">
-                            <Run  Text="Section: "/><Run  Text="{Binding Alias}"/>
+                            <Run Text="Section: "/><Run Text="{Binding Alias}"/>
                         </TextBlock>
                         <Button Grid.Column="2" Style="{StaticResource MoveUpButtonStyle}"/>
                         <Button Grid.Column="3" Style="{StaticResource MoveDownButtonStyle}"/>
@@ -256,7 +256,6 @@
                         <TextBox Text="{Binding NextNodeId, Mode=TwoWay}" />
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
-
                 <uc:TableRowUserControl Label="Advanced Options" >
                     <uc:TableRowUserControl.Field>
                         <CheckBox IsChecked="{Binding AdvancedOptions, Mode=TwoWay}" />
@@ -382,7 +381,7 @@
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <GroupBox Header="{Binding}">
+                                    <GroupBox Header="{Binding}" Width="300" Margin="5">
                                         <GroupBox.HeaderTemplate>
                                             <DataTemplate>
                                                 <Grid>
@@ -393,7 +392,7 @@
                                                         <ColumnDefinition Width="Auto"/>
                                                     </Grid.ColumnDefinitions>
                                                     <TextBlock VerticalAlignment="Center">
-                                                    <Run Text="Carousel Item: "/><Run Text="{Binding Title}"/>
+                                                        <Run Text="Carousel Item: "/><Run Text="{Binding Title}"/>
                                                     </TextBlock>
                                                     <Button Grid.Column="1" Style="{StaticResource MoveLeftButtonStyle}"/>
                                                     <Button Grid.Column="2" Style="{StaticResource MoveRightButtonStyle}"/>
@@ -414,7 +413,19 @@
                                             </uc:TableRowUserControl>
                                             <uc:TableRowUserControl Label="ImageUrl">
                                                 <uc:TableRowUserControl.Field>
-                                                    <TextBox Text="{Binding ImageUrl, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                                                    <Grid>
+                                                        <Grid.RowDefinitions>
+                                                            <RowDefinition Height="Auto"/>
+                                                            <RowDefinition Height="Auto"/>
+                                                        </Grid.RowDefinitions>
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition/>
+                                                            <ColumnDefinition Width="Auto"/>
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBox Style="{StaticResource PlaceHolderTB}" Margin="5,0,0,0" Tag="http://" Text="{Binding ImageUrl, Mode=TwoWay}" />
+                                                        <Button ToolTip="Upload from your computer" Grid.Column="1" Style="{StaticResource ToolButtonStyle}" Content="&#xE898;" Foreground="{DynamicResource PrimaryHueDarkBrush}" VerticalAlignment="Center" Command="{Binding UploadMedia}"/>
+                                                        <TextBlock Grid.Row="1" Grid.ColumnSpan="2" Visibility="{Binding UploadProgress, Converter={StaticResource N2V}}" Text="{Binding UploadProgress}" ToolTip="{Binding UploadProgress}" Margin="5,0" FontStyle="Italic"/>
+                                                    </Grid>
                                                 </uc:TableRowUserControl.Field>
                                             </uc:TableRowUserControl>
 
@@ -469,6 +480,12 @@
                                                                     </DataTemplate>
                                                                 </GroupBox.HeaderTemplate>
                                                                 <StackPanel>
+                                                                    <uc:TableRowUserControl Label="Type">
+                                                                        <uc:TableRowUserControl.Field>
+                                                                            <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
+                                                                        </uc:TableRowUserControl.Field>
+                                                                    </uc:TableRowUserControl>
+                                                                    
                                                                     <uc:TableRowUserControl Label="Text">
                                                                         <uc:TableRowUserControl.Field>
                                                                             <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>
@@ -490,13 +507,7 @@
                                                                         </uc:TableRowUserControl.Field>
                                                                     </uc:TableRowUserControl>
 
-                                                                    <uc:TableRowUserControl Label="Type">
-                                                                        <uc:TableRowUserControl.Field>
-                                                                            <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
-                                                                        </uc:TableRowUserControl.Field>
-                                                                    </uc:TableRowUserControl>
-
-                                                                    <uc:TableRowUserControl Label="Does Repeat" >
+                                                                    <uc:TableRowUserControl Label="Does Repeat">
                                                                         <uc:TableRowUserControl.Field>
                                                                             <CheckBox IsChecked="{Binding DoesRepeat, Mode=TwoWay}" />
                                                                         </uc:TableRowUserControl.Field>
