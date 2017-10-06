@@ -141,35 +141,32 @@ namespace ANAConversationStudio.Helpers
 					foreach (var carItem in carSec.Items)
 					{
 						var carItemMsg = $"{carSecMsg} Carousel Item '{carItem}' ";
-						if (carItem.Buttons == null || carItem.Buttons.Count == 0)
+						if (carItem.Buttons != null)
 						{
-							msgs.Add($"{carItemMsg} has no buttons!");
-							res.SetStatus(CVS.Error);
-							continue;
-						}
-						if (carItem.Buttons.Count > 2)
-						{
-							msgs.Add($"{carItemMsg} has more than 2 buttons! A carousel item can have maximum of 2 buttons.");
-							res.SetStatus(CVS.Error);
-						}
+							if (carItem.Buttons.Count > 3)
+							{
+								msgs.Add($"{carItemMsg} has more than 3 buttons! A carousel item can have maximum of 3 buttons.");
+								res.SetStatus(CVS.Error);
+							}
 
-						foreach (var carBtn in carItem.Buttons)
-						{
-							var carItemBtnMsg = $"{carItemMsg} Carousel Button '{carBtn}' ";
-							if (string.IsNullOrWhiteSpace(carBtn.Text))
+							foreach (var carBtn in carItem.Buttons)
 							{
-								msgs.Add($"{carItemBtnMsg}, text is empty!");
-								res.SetStatus(CVS.Error);
-							}
-							if ((carBtn.Type == CardButtonType.DeepLink || carBtn.Type == CardButtonType.OpenUrl) && string.IsNullOrWhiteSpace(carBtn.Url))
-							{
-								msgs.Add($"{carItemBtnMsg} is of type '{carBtn.Type}' but the '{nameof(carBtn.Url)}' field is empty! Set it to the target url.");
-								res.SetStatus(CVS.Error);
-							}
-							if (carBtn.Type == CardButtonType.NextNode && string.IsNullOrWhiteSpace(carBtn.NextNodeId))
-							{
-								msgs.Add($"{carItemBtnMsg} is of type '{carBtn.Type}' but the '{nameof(carBtn.NextNodeId)}' field is empty! Set it to the target Next Node Id.");
-								res.SetStatus(CVS.Error);
+								var carItemBtnMsg = $"{carItemMsg} Carousel Button '{carBtn}' ";
+								if (string.IsNullOrWhiteSpace(carBtn.Text))
+								{
+									msgs.Add($"{carItemBtnMsg}, text is empty!");
+									res.SetStatus(CVS.Error);
+								}
+								if ((carBtn.Type == CardButtonType.DeepLink || carBtn.Type == CardButtonType.OpenUrl) && string.IsNullOrWhiteSpace(carBtn.Url))
+								{
+									msgs.Add($"{carItemBtnMsg} is of type '{carBtn.Type}' but the '{nameof(carBtn.Url)}' field is empty! Set it to the target url.");
+									res.SetStatus(CVS.Error);
+								}
+								if (carBtn.Type == CardButtonType.NextNode && string.IsNullOrWhiteSpace(carBtn.NextNodeId))
+								{
+									msgs.Add($"{carItemBtnMsg} is of type '{carBtn.Type}' but the '{nameof(carBtn.NextNodeId)}' field is empty! Set it to the target Next Node Id.");
+									res.SetStatus(CVS.Error);
+								}
 							}
 						}
 					}
