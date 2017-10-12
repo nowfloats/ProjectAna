@@ -38,6 +38,7 @@ namespace ANAConversationStudio.Helpers
 				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
 				using (var wc = new WebClient())
 				{
+					wc.Encoding = Encoding.UTF8;
 					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
 					T resp = default(T);
 					if (strictTypeNames)
@@ -82,6 +83,7 @@ namespace ANAConversationStudio.Helpers
 				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
 				using (var wc = new WebClient())
 				{
+					wc.Encoding = Encoding.UTF8;
 					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
 					T resp = default(T);
 					if (strictTypeNames)
@@ -128,6 +130,7 @@ namespace ANAConversationStudio.Helpers
 				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
 				using (var wc = new WebClient())
 				{
+					wc.Encoding = Encoding.UTF8;
 					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
 					wc.Headers[HttpRequestHeader.Accept] = "application/json";
 
