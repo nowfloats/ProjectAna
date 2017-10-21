@@ -109,6 +109,11 @@ namespace ANAConversationStudio.Views
 			var connectorDraggedOut = (ConnectorViewModel)e.ConnectorDraggedOut;
 			var connectorDraggedOver = (ConnectorViewModel)e.ConnectorDraggedOver;
 			var newConnection = (ConnectionViewModel)e.Connection;
+			var droppedOnNodeItem = (NodeItem)e.NodeDraggedOver;
+
+			if (connectorDraggedOver == null && droppedOnNodeItem != null) //If not dropped on connector, but dropped on a node, assume that the drop happened on the first input connector of that node.
+				connectorDraggedOver = (droppedOnNodeItem.DataContext as NodeViewModel).InputConnectors.FirstOrDefault();
+
 			this.ViewModel.ConnectionDragCompleted(newConnection, connectorDraggedOut, connectorDraggedOver);
 
 		}
