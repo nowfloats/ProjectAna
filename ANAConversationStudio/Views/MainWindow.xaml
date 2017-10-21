@@ -414,7 +414,7 @@
                                                         </TextBlock>
                                                     </TextBlock.ToolTip>
                                                 </TextBlock>
-                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Alias}" MaxWidth="250" TextWrapping="Wrap" Margin="0,0,5,0" ToolTip="{Binding Text}"/>
+                                                <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Alias}" MaxWidth="250" TextWrapping="Wrap" Margin="0,0,5,0" ToolTip="{Binding Text}" Foreground="{StaticResource PrimaryHueDarkBrush}"/>
                                                 <Border CornerRadius="2" BorderBrush="White" Grid.ColumnSpan="2" Margin="0,5,0,0" BorderThickness="0,0.2" HorizontalAlignment="Stretch" Grid.Row="1"/>
                                             </Grid>
                                         </Border>
@@ -463,7 +463,7 @@
                                 Y1="30"
                                 X2="15"
                                 Y2="15"
-                                Stroke="{StaticResource nodeHeaderBorderBrush}"
+                                Stroke="{StaticResource PrimaryHueDarkBrush}"
                                 StrokeThickness="1"
                                 />
                             <Button
@@ -750,7 +750,7 @@
                                         <ColumnDefinition Width="Auto"/>
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <Button Padding="20,0" Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                                    <Button Padding="20,0" Grid.Column="0" Click="SaveButtonClick" ToolTip="Save changes (Ctrl+S)" Content="Save" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" Background="{StaticResource ANAGreenBrush}" BorderBrush="{StaticResource ANAGreenBrush}"/>
                                     <Button Padding="20,0" Grid.Column="1" Click="ValidateButtonClick" ToolTip="Validate chat flow" Content="Validate" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" HorizontalAlignment="Left" Margin="10,0"/>
                                     <TextBlock x:Name="SaveStatusTextBlock" Text="" VerticalAlignment="Center" Margin="5,4" Grid.Column="2" ToolTip="{Binding Text, ElementName=SaveStatusTextBlock}"/>
                                     <ItemsControl Grid.Column="3">

@@ -79,8 +79,11 @@
                     <TextBlock Text="&#xE948;" FontSize="20" VerticalAlignment="Center" FontFamily="{StaticResource MDL2Assets}"/>
                 </Setter.Value>
             </Setter>
+            
             <Setter Property="ToolTip" Value="Add Section"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
+            <Setter Property="Background" Value="{StaticResource ANAGreenBrush}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource ANAGreenBrush}"/>
         </Style>
 
     </UserControl.Resources>
@@ -90,6 +93,31 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <TabControl>
+            <TabControl.Resources>
+                <Style TargetType="TabItem">
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Padding" Value="0" />
+                    <Setter Property="HeaderTemplate">
+                        <Setter.Value>
+                            <DataTemplate>
+                                <Border x:Name="grid" Background="{StaticResource PrimaryHueLightBrush}" Padding="4">
+                                    <ContentPresenter>
+                                        <ContentPresenter.Content>
+                                            <TextBlock x:Name="gridText" Text="{TemplateBinding Content}"/>
+                                        </ContentPresenter.Content>
+                                    </ContentPresenter>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource Mode=FindAncestor,AncestorType={x:Type TabItem}},Path=IsSelected}" Value="True">
+                                        <Setter TargetName="grid" Property="Background" Value="White"/>
+                                        <Setter TargetName="gridText" Property="Foreground" Value="Black"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </TabControl.Resources>
             <TabItem Header="Node Info">
                 <ScrollViewer VerticalScrollBarVisibility="Auto">
                     <GroupBox Header="{Binding ChatNode}" Margin="0">

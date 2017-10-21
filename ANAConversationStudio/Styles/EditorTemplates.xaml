@@ -3,6 +3,17 @@
                     xmlns:ui="clr-namespace:ANAConversationStudio.UIHelpers"
                     xmlns:views="clr-namespace:ANAConversationStudio.Views"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#f2f2f2"/>
+    <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
+    <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#5a5a5a"/>
+    <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
+    <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#5a5a5a"/>
+    <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
+    <!--  accent -->
+    <Color x:Key="ANAGreenColor">#8cc83c</Color>
+    <SolidColorBrush x:Key="ANAGreenBrush" Color="{StaticResource ANAGreenColor}" />
+    
     <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
     <Style x:Key="PlaceHolderTB" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Template">
@@ -114,6 +125,8 @@
         <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}" />
         <Setter Property="Content" Value="&#xE948;" />
         <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="{StaticResource ANAGreenBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ANAGreenBrush}"/>
         <Setter Property="FontSize" Value="20"/>
     </Style>
     <Style x:Key="AddCarouselItemStyle" BasedOn="{StaticResource MaterialDesignFloatingActionMiniButton}" TargetType="Button">
@@ -121,6 +134,8 @@
         <Setter Property="Padding" Value="0" />
         <Setter Property="FontFamily" Value="{StaticResource MDL2Assets}" />
         <Setter Property="Content" Value="&#xE948;" />
+        <Setter Property="Background" Value="{StaticResource ANAGreenBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource ANAGreenBrush}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="20"/>
     </Style>

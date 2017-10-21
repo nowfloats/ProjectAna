@@ -26,6 +26,7 @@ namespace ANAConversationPlatform.Models
 		public string[] RequiredVariables { get; set; }
 		public string GroupName { get; set; }
 		public string FlowId { get; set; }
+		public SpecialChatNode SpecialNode { get; set; }
 
 		#region Card Node
 		public string CardHeader { get; set; }
@@ -56,5 +57,10 @@ namespace ANAConversationPlatform.Models
 	public enum Placement
 	{
 		Incoming, Outgoing, Center
+	}
+
+	public enum SpecialChatNode
+	{
+		No, TextInputErrorFallback
 	}
 }

@@ -290,6 +290,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+    <Resource Include="Resources\Quicksand-Regular.ttf" />
     <Resource Include="Resources\segoe-mdl2-assets.ttf" />
     <Resource Include="Resources\Gridlines.png" />
     <Content Include="Tools\extract.bat">

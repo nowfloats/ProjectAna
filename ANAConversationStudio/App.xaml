@@ -15,11 +15,25 @@
                 <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
                 <ResourceDictionary Source="/Styles/EditorTemplates.xaml" />
             </ResourceDictionary.MergedDictionaries>
+            <Color x:Key="ANAGreenColor">#8cc83c</Color>
+            <!-- primary hues  -->
+            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#f2f2f2"/>
+            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#5a5a5a"/>
+            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#5a5a5a"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
+            <SolidColorBrush  x:Key="DimGray" Color="#A6A6A6"/>
+            <!--  accent -->
+            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="{StaticResource ANAGreenColor}"/>
+            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="White"/>
+            <SolidColorBrush x:Key="ANAGreenBrush" Color="{StaticResource ANAGreenColor}" />
 
             <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
+            <FontFamily x:Key="Quicksand">pack://application:,,,/Resources/#Quicksand</FontFamily>
 
             <Style TargetType="{x:Type Window}">
-                <Setter Property="FontFamily" Value="Century Gothic" />
+                <Setter Property="FontFamily" Value="{StaticResource Quicksand}" />
             </Style>
 
             <Style TargetType="ListBoxItem" x:Key="ListBoxItemItemContainerStyle" >
@@ -32,14 +46,14 @@
 
             <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
             <UI:IsStartNodeToBrushConverter x:Key="IsStartNodeToBrushConverter"/>
-            <SolidColorBrush x:Key="connectionBrush" Color="#707070" />
-            <SolidColorBrush x:Key="connectionHighlightedBrush" Color="#AD4833" />
+            <SolidColorBrush x:Key="connectionBrush" Color="{StaticResource ANAGreenColor}"/>
+            <SolidColorBrush x:Key="connectionHighlightedBrush" Color="{Binding Color, Source={StaticResource DimGray}}"/>
 
             <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
             <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
 
             <!--Dots-->
-            <Grid Width="100" Height="100" x:Key="vBrushBack">
+            <Grid Width="100" Height="100" x:Key="vBrushBack" Background="{StaticResource PrimaryHueLightBrush}">
                 <Border Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Left"  Background="{StaticResource GridDotBrush}"/>
                 <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Bottom" HorizontalAlignment="Left" Background="{StaticResource GridDotBrush}"/>
                 <Border Opacity="0" Width="10" Height="10" CornerRadius="100" VerticalAlignment="Top" HorizontalAlignment="Right" BorderThickness="1" BorderBrush="{StaticResource GridDotBorderBrush}" Background="{StaticResource GridDotBrush}"/>
@@ -50,29 +64,21 @@
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
 
-            <!-- primary hues  -->
-            <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#ccc"/>
-            <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="Gray"/>
-            <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="Gray"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
-            <!--  accent -->
-            <SolidColorBrush x:Key="SecondaryAccentBrush" Color="Crimson"/>
-            <SolidColorBrush x:Key="SecondaryAccentForegroundBrush" Color="White"/>
+
 
             <SolidColorBrush x:Key="FileMenuForegroundBrush" Color="#DD000000" />
+
 
             <!-- Chat Designer Colors -->
             <!-- The border brush for nodes. -->
             <SolidColorBrush x:Key="nodeBorderBrush" Color="Transparent" />
             <!-- #AD4833 -->
-            <SolidColorBrush x:Key="startNodeHeaderBrush" Color="Teal" />
+            <SolidColorBrush x:Key="startNodeHeaderBrush" Color="{StaticResource ANAGreenColor}" />
             <SolidColorBrush x:Key="nodeHeaderBorderBrush" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" />
             <!-- The fill brush for nodes. -->
-            <SolidColorBrush x:Key="nodeFillBrush" Color="{Binding Color, Source={StaticResource PrimaryHueLightBrush}}"/>
+            <SolidColorBrush x:Key="nodeFillBrush" Color="White"/>
             <SolidColorBrush x:Key="selectionBorderColor" Color="Transparent" />
-            <SolidColorBrush x:Key="selectionBorderBackgroundColor" Color="{Binding Color, Source={StaticResource PrimaryHueLightBrush}}" Opacity="0.5" />
+            <SolidColorBrush x:Key="selectionBorderBackgroundColor" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" Opacity="0.5" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>
