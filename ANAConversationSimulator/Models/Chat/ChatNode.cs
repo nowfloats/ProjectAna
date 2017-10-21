@@ -25,7 +25,6 @@ namespace ANAConversationSimulator.Models.Chat
 		public string NextNodeId { get; set; }
 		public bool IsStartNode { get; set; }
 		public string GroupName { get; set; }
-		public SpecialChatNode SpecialNode { get; set; }
 
 		#region Card Node
 		public string CardHeader { get; set; }
@@ -47,10 +46,5 @@ namespace ANAConversationSimulator.Models.Chat
 	public enum Placement
 	{
 		Incoming, Outgoing, Center
-	}
-
-	public enum SpecialChatNode
-	{
-		No, TextInputErrorFallback
 	}
 }

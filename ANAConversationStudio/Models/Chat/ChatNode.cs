@@ -144,21 +144,6 @@ namespace ANAConversationStudio.Models.Chat
 				}
 			}
 		}
-
-		private SpecialChatNode _SpecialNode;
-		[Category("Misc")]
-		public SpecialChatNode SpecialNode
-		{
-			get { return _SpecialNode; }
-			set
-			{
-				if (_SpecialNode != value)
-				{
-					_SpecialNode = value;
-					OnPropertyChanged();
-				}
-			}
-		}
 		#endregion
 
 		#region For NodeType ApiCall
@@ -477,10 +462,5 @@ namespace ANAConversationStudio.Models.Chat
 	public enum Placement
 	{
 		Incoming, Outgoing, Center
-	}
-
-	public enum SpecialChatNode
-	{
-		No, TextInputErrorFallback
 	}
 }
