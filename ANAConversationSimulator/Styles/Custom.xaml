@@ -14,12 +14,12 @@
     <x:Double x:Key="NormalMinWidth">521</x:Double>
     <x:Double x:Key="WideMinWidth">1200</x:Double>
 
-    <Color x:Key="CustomColor">SteelBlue</Color>
+    <Color x:Key="CustomColor">#8cc83c</Color>
     <Color x:Key="ContrastColor">White</Color>
-    <Color x:Key="SystemAccentColor">SteelBlue</Color>
+    <Color x:Key="SystemAccentColor">#8cc83c</Color>
     <SolidColorBrush x:Key="TextForegroundBrush" Color="Gray" />
     <SolidColorBrush x:Key="PaleWhiteBrush" Color="#eaedf2" />
-    <SolidColorBrush x:Key="NFYellowBrush" Color="#00ADEF" />
+    <SolidColorBrush x:Key="NFYellowBrush" Color="#8cc83c" />
     <SolidColorBrush x:Key="ButtonBackgroundBrush" Color="#ccc" />
     <C4FConverters:BooleanToVisibilityConverter x:Key="B2V"/>
     <Style TargetType="TextBlock" x:Key="NormalTextStyle" >
@@ -344,7 +344,7 @@
     <ResourceDictionary.ThemeDictionaries>
 
         <ResourceDictionary x:Key="Light">
-            <Color x:Key="SystemAccentColor">Crimson</Color>
+            <Color x:Key="SystemAccentColor">#8cc83c</Color>
 
             <SolidColorBrush x:Key="CustomColorBrush" Color="{StaticResource CustomColor}" />
             <SolidColorBrush x:Key="ContrastColorBrush" Color="{StaticResource ContrastColor}" />

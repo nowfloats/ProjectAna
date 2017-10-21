@@ -1,6 +1,10 @@
 ﻿using ANAConversationSimulator.Helpers;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.Foundation;
+using Windows.Foundation.Metadata;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
@@ -8,39 +12,59 @@ using Windows.UI.Xaml.Controls;
 
 namespace ANAConversationSimulator.Views
 {
-    /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
-    /// </summary>
-    public sealed partial class MemoryStackPage : Page
-    {
-        public MemoryStackPage()
-        {
-            this.InitializeComponent();
-            this.DataContext = this;
-        }
+	/// <summary>
+	/// An empty page that can be used on its own or navigated to within a Frame.
+	/// </summary>
+	public sealed partial class MemoryStackPage : Page
+	{
+		public MemoryStackPage()
+		{
+			this.InitializeComponent();
+			this.DataContext = this;
 
-        public string PageTitle => "Memory Stack";
+			if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+			{
+				try
+				{
+					var titleBar = ApplicationView.GetForCurrentView().TitleBar;
+					if (titleBar != null)
+					{
+						var accent = Application.Current.Resources["SystemAccentColor"] as Color?;
+						titleBar.ButtonBackgroundColor = accent;
+						titleBar.ButtonForegroundColor = Colors.White;
+						titleBar.BackgroundColor = accent;
+						titleBar.ForegroundColor = Colors.White;
+						titleBar.InactiveForegroundColor = Colors.White;
+						titleBar.ButtonHoverBackgroundColor = Colors.White;
+						titleBar.ButtonHoverForegroundColor = accent;
+					}
+				}
+				catch { }
+			}
+		}
 
-        public List<KeyValuePair<string, object>> MemoryStack
-        {
-            get { return (List<KeyValuePair<string, object>>)GetValue(MemoryStackProperty); }
-            set { SetValue(MemoryStackProperty, value); }
-        }
-        public static readonly DependencyProperty MemoryStackProperty = DependencyProperty.Register("MemoryStack", typeof(List<KeyValuePair<string, object>>), typeof(MemoryStackPage), new PropertyMetadata(null));
+		public string PageTitle => "Memory Stack";
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            MemoryStack = Utils.LocalStore.ToList();
-        }
+		public List<KeyValuePair<string, object>> MemoryStack
+		{
+			get { return (List<KeyValuePair<string, object>>)GetValue(MemoryStackProperty); }
+			set { SetValue(MemoryStackProperty, value); }
+		}
+		public static readonly DependencyProperty MemoryStackProperty = DependencyProperty.Register("MemoryStack", typeof(List<KeyValuePair<string, object>>), typeof(MemoryStackPage), new PropertyMetadata(null));
 
-        public async void ClearMemoryStack()
-        {
-            Utils.LocalStore.Clear();
-            Utils.InitMemoryStack();
+		private void Page_Loaded(object sender, RoutedEventArgs e)
+		{
+			MemoryStack = Utils.LocalStore.ToList();
+		}
 
-            await Utils.ShowDialogAsync("Cleared");
-            if (Frame.CanGoBack)
-                Frame.GoBack();
-        }
-    }
+		public async void ClearMemoryStack()
+		{
+			Utils.LocalStore.Clear();
+			Utils.InitMemoryStack();
+
+			await Utils.ShowDialogAsync("Cleared");
+			if (Frame.CanGoBack)
+				Frame.GoBack();
+		}
+	}
 }

@@ -14,7 +14,7 @@
         <Canvas x:Name="rootCanvas" HorizontalAlignment="Stretch"
                 VerticalAlignment="Stretch">
             <Canvas.Background>
-                <ImageBrush ImageSource="ms-appx:///Assets/SplashScreen.png" Stretch="Uniform">
+                <ImageBrush ImageSource="ms-appx:///Assets/ana-logo-trans.png" Stretch="Uniform">
                     <ImageBrush.Transform>
                         <TranslateTransform Y="10" />
                     </ImageBrush.Transform>
@@ -23,7 +23,7 @@
             <Viewbox x:Name="splashImage"
                      Width="{Binding ActualWidth, ElementName=MyCanvas, Mode=OneWay}"
                      Height="{Binding ActualHeight, ElementName=MyCanvas, Mode=OneWay}">
-                <Image Source="ms-appx:///Assets/SplashScreen.png" />
+                <Image Source="ms-appx:///Assets/ana-logo-trans.png" />
             </Viewbox>
         </Canvas>
 

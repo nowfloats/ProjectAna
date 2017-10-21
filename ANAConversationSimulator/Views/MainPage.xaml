@@ -18,7 +18,7 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition/>
                     </Grid.ColumnDefinitions>
-                    <Image Source="ms-appx:///Assets/Square44x44Logo.png" Margin="0,5,0,5" Height="40"/>
+                    <Image Source="ms-appx:///Assets/ana-logo-trans.png" Margin="0" Height="50"/>
                     <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" FontSize="15"/>
                 </Grid>
             </controls:PageHeader.Content>

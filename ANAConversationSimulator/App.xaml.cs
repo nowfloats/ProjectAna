@@ -8,6 +8,9 @@ using Windows.UI.Xaml.Data;
 using ANAConversationSimulator.Helpers;
 using Windows.Foundation;
 using ANAConversationSimulator.ViewModels;
+using Windows.UI.ViewManagement;
+using Windows.Foundation.Metadata;
+using Windows.UI;
 
 namespace ANAConversationSimulator
 {
@@ -21,6 +24,12 @@ namespace ANAConversationSimulator
 		{
 			InitializeComponent();
 			SplashFactory = (e) => new Views.Splash(e);
+
+			if (ApiInformation.IsTypePresent("Windows.UI.ViewManagement.ApplicationView"))
+			{
+				ApplicationView.PreferredLaunchViewSize = new Size(500, 600);
+				ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.PreferredLaunchViewSize;
+			}
 
 			this.UnhandledException += App_UnhandledException;
 		}
