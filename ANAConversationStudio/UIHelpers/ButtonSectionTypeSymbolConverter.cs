@@ -6,7 +6,7 @@ using System.Windows.Data;
 
 namespace ANAConversationStudio.UIHelpers
 {
-    public class ButtonSectionTypeSymbolConverter : IValueConverter
+	public class ButtonSectionTypeSymbolConverter : IValueConverter
     {
         //Search the below as 'Segoe MDL2 Assets' in the internet to find how they look.
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -18,17 +18,17 @@ namespace ANAConversationStudio.UIHelpers
                     case SectionTypeEnum.Image:
                         return "\uEB9F";
                     case SectionTypeEnum.Text:
-                        return "\uEC42"; //Text inside a chat bubble
+                        return "\uE8D3"; //Text inside a chat bubble
                     case SectionTypeEnum.Gif:
-                        return "\uE913";
+                        return "\uEB9F";
                     case SectionTypeEnum.Audio:
                         return "\uE8D6";
                     case SectionTypeEnum.Video:
-                        return "\uE20A";
+                        return "\uE786";
                     case SectionTypeEnum.EmbeddedHtml:
                         return "\uE12B";
                     case SectionTypeEnum.Carousel:
-                        return "\uE89F";
+                        return "\uE843\uE843\uE843";
                     case SectionTypeEnum.PrintOTP:
                         break;
                     default:
@@ -40,44 +40,43 @@ namespace ANAConversationStudio.UIHelpers
                 switch (buttonType)
                 {
                     case ButtonTypeEnum.OpenUrl:
-                        break;
+						return "\uE8A7";
                     case ButtonTypeEnum.GetText:
-                        return "\uE13E";
+                        return "\uE8D3";
                     case ButtonTypeEnum.GetNumber:
                         return "\uE18F";
                     case ButtonTypeEnum.GetAddress:
-                        return "\uE779";
+                        return "\uE707";
                     case ButtonTypeEnum.GetEmail:
-                        return "\uE168";
+                        return "\uE715";
                     case ButtonTypeEnum.GetPhoneNumber:
-                        return "\uE13A";
+                        return "\uE717";
                     case ButtonTypeEnum.GetItemFromSource:
-                        return "\uE14C";
+                        return "\uE8B5";
                     case ButtonTypeEnum.GetImage:
-                        return "\uE156";
+                        return "\uEB9F";
                     case ButtonTypeEnum.GetAudio:
                         return "\uE8D6";
                     case ButtonTypeEnum.GetVideo:
                         return "\uE20A";
                     case ButtonTypeEnum.NextNode:
-                        return "\uEA54";
+                        return "\uE761";
                     case ButtonTypeEnum.DeepLink:
-                        break;
+						return "\uE71B";
                     case ButtonTypeEnum.GetAgent:
-                        return "\uE13D";
+                        return "\uE77B";
                     case ButtonTypeEnum.ShowConfirmation:
-                        break;
+						return "\uE930";
                     case ButtonTypeEnum.FetchChatFlow:
-                        return "\uE167";
-
+                        return "\uEA54";
                     case ButtonTypeEnum.GetDateTime:
-                        return "\uE163";
+                        return "\uEC92";
                     case ButtonTypeEnum.GetDate:
-                        return "\uE163";
+                        return "\uE787";
                     case ButtonTypeEnum.GetTime:
-                        return "\uE121";
+                        return "\uE823";
                     case ButtonTypeEnum.GetLocation:
-                        return "\uE81D";
+                        return "\uE707";
                     default:
                         break;
                 }
