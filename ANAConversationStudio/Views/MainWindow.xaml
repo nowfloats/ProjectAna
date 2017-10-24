@@ -358,13 +358,13 @@
                             <Border 
                                 CornerRadius="8"
                                 Margin="6,0,6,0"
-                                Background="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}"
+                                Background="{Binding IsSelected, Converter={StaticResource IsStartNodeToBrushConverter}}"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="3"
                                 Grid.Row="0">
                                 <!-- The name of the node. -->
                                 <Grid>
-                                    <Grid Height="18" Background="{Binding ChatNode.IsStartNode, Converter={StaticResource IsStartNodeToBrushConverter}}" VerticalAlignment="Bottom"/>
+                                    <Grid Height="18" Background="{Binding IsSelected, Converter={StaticResource IsStartNodeToBrushConverter}}" VerticalAlignment="Bottom"/>
                                     <StackPanel
                                         Orientation="Horizontal"
                                         HorizontalAlignment="Center"

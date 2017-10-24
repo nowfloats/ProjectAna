@@ -19,9 +19,9 @@
             <!-- primary hues  -->
             <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#f2f2f2"/>
             <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
-            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#5a5a5a"/>
+            <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#666666"/>
             <SolidColorBrush x:Key="PrimaryHueMidForegroundBrush" Color="White"/>
-            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#5a5a5a"/>
+            <SolidColorBrush x:Key="PrimaryHueDarkBrush" Color="#666666"/>
             <SolidColorBrush x:Key="PrimaryHueDarkForegroundBrush" Color="White"/>
             <SolidColorBrush  x:Key="DimGray" Color="#A6A6A6"/>
             <!--  accent -->
@@ -46,8 +46,8 @@
 
             <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
             <UI:IsStartNodeToBrushConverter x:Key="IsStartNodeToBrushConverter"/>
-            <SolidColorBrush x:Key="connectionBrush" Color="{StaticResource ANAGreenColor}"/>
-            <SolidColorBrush x:Key="connectionHighlightedBrush" Color="{Binding Color, Source={StaticResource DimGray}}"/>
+            <SolidColorBrush x:Key="connectionBrush" Color="{Binding Color, Source={StaticResource DimGray}}"/>
+            <SolidColorBrush x:Key="connectionHighlightedBrush" Color="{StaticResource ANAGreenColor}"/>
 
             <SolidColorBrush Color="LightGray" x:Key="GridDotBrush"/>
             <SolidColorBrush Color="LightGray" x:Key="GridDotBorderBrush"/>
@@ -64,10 +64,7 @@
             Viewport="0,0,25,25"
             ViewportUnits="Absolute" Visual="{StaticResource vBrushBack}"/>
 
-
-
             <SolidColorBrush x:Key="FileMenuForegroundBrush" Color="#DD000000" />
-
 
             <!-- Chat Designer Colors -->
             <!-- The border brush for nodes. -->
@@ -78,7 +75,7 @@
             <!-- The fill brush for nodes. -->
             <SolidColorBrush x:Key="nodeFillBrush" Color="White"/>
             <SolidColorBrush x:Key="selectionBorderColor" Color="Transparent" />
-            <SolidColorBrush x:Key="selectionBorderBackgroundColor" Color="{Binding Color, Source={StaticResource PrimaryHueDarkBrush}}" Opacity="0.5" />
+            <SolidColorBrush x:Key="selectionBorderBackgroundColor" Color="Transparent" Opacity="0.5" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

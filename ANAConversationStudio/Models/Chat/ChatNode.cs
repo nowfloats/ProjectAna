@@ -144,6 +144,21 @@ namespace ANAConversationStudio.Models.Chat
 				}
 			}
 		}
+
+		private bool _IsGoalNode;
+		[Category("Misc")]
+		public bool IsGoalNode
+		{
+			get { return _IsGoalNode; }
+			set
+			{
+				if (_IsGoalNode != value)
+				{
+					_IsGoalNode = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 		#endregion
 
 		#region For NodeType ApiCall

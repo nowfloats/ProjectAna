@@ -26,6 +26,7 @@ namespace ANAConversationPlatform.Models
 		public string[] RequiredVariables { get; set; }
 		public string GroupName { get; set; }
 		public string FlowId { get; set; }
+		public bool IsGoalNode { get; set; }
 
 		#region Card Node
 		public string CardHeader { get; set; }

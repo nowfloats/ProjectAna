@@ -25,6 +25,7 @@ namespace ANAConversationSimulator.Models.Chat
 		public string NextNodeId { get; set; }
 		public bool IsStartNode { get; set; }
 		public string GroupName { get; set; }
+		public bool IsGoalNode { get; set; }
 
 		#region Card Node
 		public string CardHeader { get; set; }

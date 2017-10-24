@@ -79,7 +79,7 @@
                     <TextBlock Text="&#xE948;" FontSize="20" VerticalAlignment="Center" FontFamily="{StaticResource MDL2Assets}"/>
                 </Setter.Value>
             </Setter>
-            
+
             <Setter Property="ToolTip" Value="Add Section"/>
             <Setter Property="Margin" Value="0,5,0,0"/>
             <Setter Property="Background" Value="{StaticResource ANAGreenBrush}"/>
@@ -152,6 +152,11 @@
                                 <uc:TableRowUserControl Label="Mark as start node">
                                     <uc:TableRowUserControl.Field>
                                         <CheckBox IsChecked="{Binding ChatNode.IsStartNode, Mode=TwoWay}" />
+                                    </uc:TableRowUserControl.Field>
+                                </uc:TableRowUserControl>
+                                <uc:TableRowUserControl Label="Goal node" ToolTip="Enable analytics for tracking goal completion">
+                                    <uc:TableRowUserControl.Field>
+                                        <CheckBox IsChecked="{Binding ChatNode.IsGoalNode, Mode=TwoWay}" />
                                     </uc:TableRowUserControl.Field>
                                 </uc:TableRowUserControl>
                                 <uc:TableRowUserControl Label="Variable Name">
