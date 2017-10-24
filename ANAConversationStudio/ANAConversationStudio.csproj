@@ -153,6 +153,7 @@
     <Compile Include="Helpers\ChatFlowValidator.cs" />
     <Compile Include="Models\ChatFlowSearchItem.cs" />
     <Compile Include="UIHelpers\ButtonTypeToFieldVisibilityConverter.cs" />
+    <Compile Include="UIHelpers\IsGoalNodeToBrushConverter.cs" />
     <Compile Include="UIHelpers\NodeTypeToGroupVisibilityConverter.cs" />
     <Compile Include="UserControls\NodeEditorUserControl.xaml.cs">
       <DependentUpon>NodeEditorUserControl.xaml</DependentUpon>
@@ -293,6 +294,8 @@
     <Resource Include="Resources\Quicksand-Regular.ttf" />
     <Resource Include="Resources\segoe-mdl2-assets.ttf" />
     <Resource Include="Resources\Gridlines.png" />
+    <Resource Include="Resources\CloneNode.png" />
+    <Resource Include="Resources\Next.png" />
     <Content Include="Tools\extract.bat">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

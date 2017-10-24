@@ -379,6 +379,7 @@
                                         </TextBlock>
                                         <TextBlock Text="{Binding ChatNode.Alias}" Foreground="White" Margin="3" VerticalAlignment="Center"/>
                                     </StackPanel>
+                                    <Grid Height="3" Background="{Binding ChatNode.IsGoalNode, Converter={StaticResource IsGoalNodeToBrushConverter}}" VerticalAlignment="Bottom"/>
                                 </Grid>
                             </Border>
 
@@ -665,13 +666,13 @@
             <RowDefinition/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" BorderBrush="{StaticResource PrimaryHueLightBrush}" BorderThickness="0,0,0,1"  HorizontalAlignment="Stretch" VerticalAlignment="Top" >
+        <Border Grid.Row="0" BorderBrush="{StaticResource PrimaryHueLightBrush}" BorderThickness="0,0,0,1"  HorizontalAlignment="Stretch" VerticalAlignment="Top">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <Menu Foreground="{StaticResource FileMenuForegroundBrush}" x:Name="menu" >
+                <Menu Foreground="{StaticResource FileMenuForegroundBrush}" x:Name="menu" Padding="0,0,0,5">
                     <MenuItem Header="File" x:Name="FileMenu" Height="30">
                         <MenuItem Header="New Chat Flow" Click="NewChatFlowClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" ItemsSource="{Binding CurrentStudioContext.ChatFlowProjects}" IsEnabled="{Binding CurrentStudioContext.ChatFlowProjects, FallbackValue=false, Converter={StaticResource N2B}}">
@@ -697,7 +698,12 @@
                     </MenuItem>
                 </Menu>
                 <Grid Grid.Column="1" Margin="0,0,20,0">
-                    <toolkit:WatermarkTextBox VerticalAlignment="Center" Watermark="Search nodes" Width="200" KeyUp="SearchTextboxKeyUp" GotFocus="SearchTextboxGotFocus" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" />
+                    <Border Margin="0,5" BorderBrush="{StaticResource PrimaryHueDarkBrush}" BorderThickness="1">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="&#xE721;" Foreground="Gray" VerticalAlignment="Center" Margin="3,0" FontFamily="{StaticResource MDL2Assets}"/>
+                            <toolkit:WatermarkTextBox BorderThickness="0" VerticalAlignment="Center" Watermark="Search nodes" Width="200" KeyUp="SearchTextboxKeyUp" GotFocus="SearchTextboxGotFocus" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}" />
+                        </StackPanel>
+                    </Border>
                     <Popup IsOpen="{Binding SearchResults, Converter={StaticResource N2B}}" MaxHeight="400" MaxWidth="300">
                         <ListBox x:Name="SearchResultsListBox" Background="White" BorderThickness="1,1,1,0" BorderBrush="{StaticResource PrimaryHueDarkBrush}" ItemsSource="{Binding SearchResults}" SelectionChanged="SearchResultSelectedChanged">
                             <ListBox.ItemContainerStyle>
@@ -735,7 +741,7 @@
             <avalonDock:LayoutRoot>
                 <avalonDock:LayoutPanel>
                     <avalonDock:LayoutDocumentPane>
-                        <avalonDock:LayoutDocument ContentId="NodeNetworkView" Title=" Chat Flow " CanClose="False" CanFloat="False">
+                        <avalonDock:LayoutDocument ContentId="NodeNetworkView" Title="     Chat Flow     " CanClose="False" CanFloat="False">
                             <DockPanel Grid.Row="1" >
                                 <Grid Margin="5,5,5,5" DockPanel.Dock="Bottom">
                                     <Grid.Resources>
@@ -765,22 +771,24 @@
                                                 <VirtualizingStackPanel Orientation="Horizontal" />
                                             </ItemsPanelTemplate>
                                         </ItemsControl.ItemsPanel>
-                                        <Button  Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
-                                            <TextBlock>
-                                                <Run Text="&#xE96F;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
-                                                <Run Text="Previous Node"/>
-                                            </TextBlock>
+                                        <Button Padding="7" Command="{StaticResource Commands.PrevNode}" ToolTip="Jump to previous node in the flow (Ctrl + &lt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
+                                            <Image Width="17.6" Source="/ANAConversationStudio;component/Resources/Next.png" RenderTransformOrigin="0.5,0.5"  >
+                                                <Image.RenderTransform>
+                                                    <TransformGroup>
+                                                        <RotateTransform Angle="180"/>
+                                                    </TransformGroup>
+                                                </Image.RenderTransform>
+                                            </Image>
                                         </Button>
-                                        <Button  Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
-                                            <TextBlock>
-                                                <Run Text="Next Node"/>
-                                                <Run Text="&#xE970;" FontFamily="{StaticResource MDL2Assets}" FontSize="10"/>
-                                            </TextBlock>
+                                        <Button Padding="7" Command="{StaticResource Commands.NextNode}" ToolTip="Jump to next node in the flow (Ctrl + &gt;)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
+                                            <Image Width="17.6" Source="/ANAConversationStudio;component/Resources/Next.png"  />
                                         </Button>
-                                        <Button Content="Clone Node"  Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                                        <Button Padding="7" Click="CloneSelectedNodeClick" ToolTip="Create a deep copy of the node along with content (Alt+C)" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}">
+                                            <Image Source="/ANAConversationStudio;component/Resources/CloneNode.png"  />
+                                        </Button>
                                         <Button Grid.Column="4"  Command="{StaticResource Commands.FitContent}" ToolTip="Fit all nodes to the viewport">Fit</Button>
                                         <Button Grid.Column="6" Command="{StaticResource Commands.Fill}" ToolTip="Fit the entire content area to the viewport" >
-                                            Full board
+                                            Full
                                         </Button>
                                     </ItemsControl>
                                     <StackPanel Grid.Column="4" Orientation="Horizontal">
@@ -881,7 +889,7 @@
                     </avalonDock:LayoutDocumentPane>
                     <avalonDock:LayoutAnchorablePane DockWidth="400" IsMaximized="False" x:Name="NodeEditorLayoutAnchorablePane" >
                         <avalonDock:LayoutAnchorable AutoHideMinWidth="400" ContentId="NodeEditorLayoutAnchorable" x:Name="NodeEditorLayoutAnchorable" Title="Node Editor" CanHide="False" CanClose="False">
-                            <UC:NodeEditorUserControl x:Name="NodeEditor" />
+                            <UC:NodeEditorUserControl x:Name="NodeEditor" Margin="0,10,0,0"/>
                         </avalonDock:LayoutAnchorable>
                     </avalonDock:LayoutAnchorablePane>
                 </avalonDock:LayoutPanel>

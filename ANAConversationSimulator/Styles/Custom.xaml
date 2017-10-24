@@ -106,7 +106,7 @@
                         </ItemsControl.ItemsPanel>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid VerticalAlignment="Center" Padding="5" Margin="5" Background="White">
+                                <Grid VerticalAlignment="Center" Padding="5" Margin="5" Background="White" Width="180">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition Height="Auto"/>

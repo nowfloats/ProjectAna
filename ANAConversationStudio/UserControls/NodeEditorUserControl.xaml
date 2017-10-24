@@ -100,7 +100,7 @@
                     <Setter Property="HeaderTemplate">
                         <Setter.Value>
                             <DataTemplate>
-                                <Border x:Name="grid" Background="{StaticResource PrimaryHueLightBrush}" Padding="4">
+                                <Border x:Name="grid" Background="{StaticResource PrimaryHueLightBrush}" Padding="20,4">
                                     <ContentPresenter>
                                         <ContentPresenter.Content>
                                             <TextBlock x:Name="gridText" Text="{TemplateBinding Content}"/>

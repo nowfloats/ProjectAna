@@ -226,9 +226,9 @@ namespace ANAConversationStudio.Helpers
 			if (removeNewLines)
 				text = text.Replace("\r\n", " ");
 
-			bool trimNeeded = text.Length > Constants.GroupHeaderTextMaxLength;
+			bool trimNeeded = text.Length > length;
 			if (trimNeeded)
-				text = text.Substring(0, Constants.GroupHeaderTextMaxLength) + "...";
+				text = text.Substring(0, length) + "...";
 			return text;
 		}
 

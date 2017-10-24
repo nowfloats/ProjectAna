@@ -360,7 +360,7 @@ namespace ANAConversationStudio.Models.Chat
 
 		protected override void FillAlias()
 		{
-			Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonName) ? (string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText) : ButtonName);
+			Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonName) ? (string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText) : ButtonName, 12);
 		}
 
 		public override string ToString()
