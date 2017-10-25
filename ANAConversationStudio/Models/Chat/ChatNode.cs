@@ -466,7 +466,7 @@ namespace ANAConversationStudio.Models.Chat
 
 	public enum NodeTypeEnum
 	{
-		ApiCall, Combination, Card
+		ApiCall, Combination, Card, HandoffToAgent
 	};
 
 	public enum EmotionEnum

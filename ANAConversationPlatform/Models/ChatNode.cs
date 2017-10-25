@@ -46,7 +46,7 @@ namespace ANAConversationPlatform.Models
 	}
 	public enum NodeTypeEnum
 	{
-		Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, ApiCall, Combination, Card
+		Image, Text, Graph, Gif, Audio, Video, Link, EmbeddedHtml, ApiCall, Combination, Card, HandoffToAgent
 	}
 
 	public enum EmotionEnum

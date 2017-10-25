@@ -119,7 +119,9 @@ namespace ANAConversationSimulator.ViewModels
 			if (parsedNode.Buttons != null && parsedNode.Buttons.Count > 0)
 				ClearButtons();
 
-			if (parsedNode.NodeType == NodeTypeEnum.ApiCall)
+			if (parsedNode.NodeType == NodeTypeEnum.HandoffToAgent)
+				AgentChat();
+			else if (parsedNode.NodeType == NodeTypeEnum.ApiCall)
 			{
 				ToggleTyping(true);
 				try
