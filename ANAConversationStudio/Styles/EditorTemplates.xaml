@@ -3,7 +3,7 @@
                     xmlns:ui="clr-namespace:ANAConversationStudio.UIHelpers"
                     xmlns:views="clr-namespace:ANAConversationStudio.Views"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
-    
+
     <SolidColorBrush x:Key="PrimaryHueLightBrush" Color="#f2f2f2"/>
     <SolidColorBrush x:Key="PrimaryHueLightForegroundBrush" Color="Black"/>
     <SolidColorBrush x:Key="PrimaryHueMidBrush" Color="#5a5a5a"/>
@@ -13,7 +13,7 @@
     <!--  accent -->
     <Color x:Key="ANAGreenColor">#8cc83c</Color>
     <SolidColorBrush x:Key="ANAGreenBrush" Color="{StaticResource ANAGreenColor}" />
-    
+
     <FontFamily x:Key="MDL2Assets">pack://application:,,,/Resources/#Segoe MDL2 Assets</FontFamily>
     <Style x:Key="PlaceHolderTB" TargetType="{x:Type TextBox}" BasedOn="{StaticResource {x:Type TextBox}}">
         <Setter Property="Template">
@@ -303,6 +303,27 @@
                             <TextBox Text="{Binding PostfixText, Mode=TwoWay}" />
                         </uc:TableRowUserControl.Field>
                     </uc:TableRowUserControl>
+
+                    <uc:TableRowUserControl Label="Minimum Characters" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=MinLength}">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding MinLength, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Maximum Characters" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=MaxLength}">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding MaxLength, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Allow Multiline" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=IsMultiLine}">
+                        <uc:TableRowUserControl.Field>
+                            <CheckBox IsChecked="{Binding IsMultiLine, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
+                    <uc:TableRowUserControl Label="Prefilled Text" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=DefaultText}">
+                        <uc:TableRowUserControl.Field>
+                            <TextBox Text="{Binding DefaultText, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" />
+                        </uc:TableRowUserControl.Field>
+                    </uc:TableRowUserControl>
                 </StackPanel>
 
                 <uc:TableRowUserControl Label="Does Repeat" >
@@ -500,7 +521,7 @@
                                                                             <ComboBox SelectedItem="{Binding Type, Mode=TwoWay}" ItemsSource="{Binding Types}"/>
                                                                         </uc:TableRowUserControl.Field>
                                                                     </uc:TableRowUserControl>
-                                                                    
+
                                                                     <uc:TableRowUserControl Label="Text">
                                                                         <uc:TableRowUserControl.Field>
                                                                             <TextBox Text="{Binding Text, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" AcceptsReturn="True" AcceptsTab="True" TextWrapping="Wrap"/>

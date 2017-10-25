@@ -50,6 +50,11 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 						break;
 					case ButtonTypeEnum.GetText:
 						if (string.IsNullOrWhiteSpace(button.VariableValue)) return;
+						if (!Utils.IsValidTextButton(button))
+						{
+							Utils.ShowDialog($"The text should not be empty and it should be between {button.MinLength} and {button.MaxLength}");
+							return;
+						}
 						ButtonActionHelper.HandleSaveTextInput(button.VariableName, button.VariableValue);
 						userData[button.VariableName] = button.VariableValue;
 						if (!button.Hidden && button.PostToChat)

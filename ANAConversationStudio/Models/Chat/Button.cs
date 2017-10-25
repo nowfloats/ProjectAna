@@ -93,6 +93,66 @@ namespace ANAConversationStudio.Models.Chat
 				}
 			}
 		}
+
+		private int _MinLength;
+		[Category("For ButtonType GetText")]
+		public int MinLength
+		{
+			get { return _MinLength; }
+			set
+			{
+				if (_MinLength != value)
+				{
+					_MinLength = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private int _MaxLength;
+		[Category("For ButtonType GetText")]
+		public int MaxLength
+		{
+			get { return _MaxLength; }
+			set
+			{
+				if (_MaxLength != value)
+				{
+					_MaxLength = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private bool _IsMultiLine;
+		[Category("For ButtonType GetText")]
+		public bool IsMultiLine
+		{
+			get { return _IsMultiLine; }
+			set
+			{
+				if (_IsMultiLine != value)
+				{
+					_IsMultiLine = value;
+					OnPropertyChanged();
+				}
+			}
+		}
+
+		private string _DefaultText;
+		[Category("For ButtonType GetText")]
+		public string DefaultText
+		{
+			get { return _DefaultText; }
+			set
+			{
+				if (_DefaultText != value)
+				{
+					_DefaultText = value;
+					OnPropertyChanged();
+				}
+			}
+		}
 		#endregion
 
 		#region Misc
@@ -295,7 +355,7 @@ namespace ANAConversationStudio.Models.Chat
 			{
 				if (_AdvancedOptions == null)
 				{
-					if (!string.IsNullOrWhiteSpace(VariableValue) || !string.IsNullOrWhiteSpace(APIResponseMatchKey) || !string.IsNullOrWhiteSpace(APIResponseMatchValue))
+					if (!string.IsNullOrWhiteSpace(VariableValue) || !string.IsNullOrWhiteSpace(APIResponseMatchKey) || !string.IsNullOrWhiteSpace(APIResponseMatchValue) || !string.IsNullOrWhiteSpace(PrefixText) || !string.IsNullOrWhiteSpace(PostfixText) || MinLength > 0 || MaxLength > 0 || IsMultiLine || !string.IsNullOrWhiteSpace(DefaultText))
 						_AdvancedOptions = true;
 					else
 						_AdvancedOptions = false;

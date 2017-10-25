@@ -41,6 +41,10 @@
 		public string RepeatAs { get; set; }
 		public int StartPosition { get; set; }
 		public int MaxRepeats { get; set; }
+		public int MinLength { get; set; }
+		public int MaxLength { get; set; }
+		public bool IsMultiLine { get; set; }
+		public string DefaultText { get; set; }
 
 		public string ContentId { get; set; }
 		public string ContentEmotion { get; set; }

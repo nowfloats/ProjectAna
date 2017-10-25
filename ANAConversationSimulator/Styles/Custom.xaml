@@ -181,7 +181,7 @@
     </DataTemplate>
     <DataTemplate x:Key="GraphSectionChatBubbleTemplate">
         <C4F:ChatBubble BorderBrush="{Binding Direction, Converter={StaticResource DirectionToBorderColorConverter}}" Background="{Binding Direction, Converter={StaticResource DirectionToBackgroundColorConverter}}" HorizontalAlignment="{Binding Direction, Converter={StaticResource DirectionToAlignmentConverter}}" ChatBubbleDirection="{Binding Direction, Converter={StaticResource DirectionToBubbleDirectionConverter}}">
-            <TextBlock Text="[Graph Section comming soon]" TextWrapping="Wrap" FontSize="15" Foreground="White" />
+            <TextBlock Text="[Graph Section coming soon]" TextWrapping="Wrap" FontSize="15" Foreground="White" />
         </C4F:ChatBubble>
     </DataTemplate>
     <DataTemplate x:Key="TypingSectionChatBubbleTemplate">

@@ -18,12 +18,18 @@ namespace ANAConversationStudio.UIHelpers
 			var buttonType = (ButtonTypeEnum)value;
 			var hidden = false;
 
+			//Following fields should only be visible for ButtonTypeEnum.GetText
+			if (new[] { nameof(Button.MinLength), nameof(Button.MaxLength), nameof(Button.IsMultiLine), nameof(Button.DefaultText) }.Contains(fieldName))
+				return buttonType == ButtonTypeEnum.GetText ? Visibility.Visible : Visibility.Collapsed;
+
 			switch (buttonType)
 			{
 				case ButtonTypeEnum.OpenUrl:
 					hidden = !(new[] { nameof(Button.Url) }.Contains(fieldName));//Show only Url field
 					break;
 				case ButtonTypeEnum.GetText:
+					hidden = new[] { "UrlForFetchChatFlow", nameof(Button.NextNodeId), nameof(Button.DeepLinkUrl), nameof(Button.Url), nameof(Button.APIResponseMatchKey), nameof(Button.APIResponseMatchValue) }.Contains(fieldName);
+					break;
 				case ButtonTypeEnum.GetNumber:
 				case ButtonTypeEnum.GetAddress:
 				case ButtonTypeEnum.GetEmail:

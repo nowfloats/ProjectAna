@@ -109,6 +109,27 @@ namespace ANAConversationSimulator.Helpers
 			}
 		}
 
+		public static bool IsValidTextButton(Button button)
+		{
+			try
+			{
+				if (string.IsNullOrWhiteSpace(button.VariableValue))
+					return false;
+
+				if (button.MinLength > 0 && button.VariableValue.Length < button.MinLength)
+					return false;
+
+				if (button.MaxLength > 0 && button.VariableValue.Length > button.MaxLength)
+					return false;
+
+				return true;
+			}
+			catch
+			{
+				return false;
+			}
+		}
+
 		public static bool ValidateStrings(params string[] input)
 		{
 			if (input == null) return false;

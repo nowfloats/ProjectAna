@@ -344,6 +344,8 @@ namespace ANAConversationSimulator.ViewModels
 							ButtonActionHelper.HandleSaveTextInput(b.RepeatAs, repeatOn[i] + "");
 							b.ButtonName = VerbProcessor.Process(b.ButtonName, false);
 							b.ButtonText = VerbProcessor.Process(b.ButtonText, false);
+							if (btn.ButtonType == ButtonTypeEnum.GetText && !string.IsNullOrWhiteSpace(btn.DefaultText))
+								btn.VariableValue = btn.DefaultText;
 							ButtonActionHelper.ClearSavedValue(b.RepeatAs);
 							CurrentClickButtons.Add(b);
 						}
@@ -353,6 +355,8 @@ namespace ANAConversationSimulator.ViewModels
 				{
 					btn.VariableName = node["VariableName"] + "";
 					btn.NodeId = parsedNode.Id;
+					if (btn.ButtonType == ButtonTypeEnum.GetText && !string.IsNullOrWhiteSpace(btn.DefaultText))
+						btn.VariableValue = btn.DefaultText;
 					btn.ButtonName = VerbProcessor.Process(btn.ButtonName);
 					btn.ButtonText = VerbProcessor.Process(btn.ButtonText);
 					CurrentClickButtons.Add(btn);

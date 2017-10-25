@@ -105,10 +105,15 @@ namespace ANAConversationStudio.Helpers
 				using (var resp = new StreamReader(ex.Response.GetResponseStream()))
 				{
 					T respParsed = Activator.CreateInstance<T>();
-					if (strictTypeNames)
-						respParsed.Message = await resp.ReadToEndAsync();
-					else
-						respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
+					var respText = await resp.ReadToEndAsync();
+					try
+					{
+						respParsed = JsonConvert.DeserializeObject<T>(respText);
+					}
+					catch
+					{
+						respParsed.Message = respText;
+					}
 					respParsed.Status = false;
 					return respParsed;
 				}
@@ -359,6 +364,7 @@ namespace ANAConversationStudio.Helpers
 					LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson()); //Serializing the object with Bson Serializer as we use the same while sending the chat flow to the server.
 					return true;
 				}
+				MessageBox.Show(saveChatFlowResp.Message, "Unable to save the flow");
 			}
 			return false;
 		}
