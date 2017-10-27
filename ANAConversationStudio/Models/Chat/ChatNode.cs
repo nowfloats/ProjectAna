@@ -305,6 +305,7 @@ namespace ANAConversationStudio.Models.Chat
 
 		private string _Alias;
 		[JsonIgnore]
+		[BsonIgnore]
 		public string Alias
 		{
 			get { return _Alias; }

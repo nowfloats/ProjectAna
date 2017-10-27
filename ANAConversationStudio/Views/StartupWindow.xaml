@@ -1,0 +1,53 @@
+﻿<Window x:Class="ANAConversationStudio.Views.StartupWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ANAConversationStudio.Views"
+        mc:Ignorable="d"
+        Title="Choose ANA Chat Project" Height="300" Width="400" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10" Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button HorizontalAlignment="Center" Content="New Project" Background="{StaticResource ANAGreenBrush}" BorderBrush="{StaticResource ANAGreenBrush}" Click="NewProjectClick"/>
+            <Button Grid.Column="1" HorizontalAlignment="Center" Content="Open Project" Click="OpenProjectClick"/>
+        </Grid>
+        <Border Grid.Row="1" BorderBrush="{StaticResource DimGray}" BorderThickness="0.5" Margin="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Recent chat projects" FontSize="17" Margin="10,5,10,10"/>
+                <ListBox Margin="0,0,0,0" Grid.Row="1" BorderThickness="0" ItemsSource="{Binding RecentProjectPaths}" SelectionChanged="RecentProjectSelectionChanged">
+                    <ListBox.ItemContainerStyle>
+                        <Style TargetType="ListBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                            <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListBox.ItemContainerStyle>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border BorderBrush="{StaticResource DimGray}" BorderThickness="0,0,0,1" Padding="5,0,5,10">
+                                <StackPanel HorizontalAlignment="Stretch" ToolTip="{Binding}">
+                                    <TextBlock Text="{Binding Converter={StaticResource FilePathToTitleConverter}}" FontSize="15"/>
+                                    <TextBlock Text="{Binding}" Foreground="{StaticResource DimGray}"/>
+                                </StackPanel>
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Grid Grid.Row="1" Visibility="{Binding RecentProjectPaths, Converter={StaticResource ListToVisiblityConverter}}">
+                    <TextBlock Text="No recent projects" VerticalAlignment="Top" Margin="0,30,0,0" HorizontalAlignment="Center"/>
+                </Grid>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>

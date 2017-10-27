@@ -5,6 +5,7 @@ using MongoDB.Bson.Serialization.Attributes;
 using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Windows;
 using System.Windows.Input;
 
 namespace ANAConversationStudio.Models.Chat.Sections
@@ -201,8 +202,10 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
 		[JsonIgnore]
 		[BsonIgnore]
-		public ICommand UploadMedia => new ActionCommand(async (s) =>
+		public ICommand UploadMedia => new ActionCommand((s) =>
 		{
+			MessageBox.Show("This feature is coming back soon!", "Feature unavailable");
+#if false
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
 				Title = "Please choose a media file to upload",
@@ -252,7 +255,8 @@ namespace ANAConversationStudio.Models.Chat.Sections
 				{
 					UploadProgress = "Unable to upload: " + ex.Message;
 				}
-			}
+			} 
+#endif
 		});
 	}
 	public enum SectionTypeEnum

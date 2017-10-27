@@ -19,6 +19,7 @@ using Newtonsoft.Json.Converters;
 using ANAConversationStudio.ViewModels;
 using System.Linq;
 using System.Text.RegularExpressions;
+using Microsoft.Win32;
 
 namespace ANAConversationStudio.Helpers
 {

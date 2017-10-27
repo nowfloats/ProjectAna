@@ -20,6 +20,7 @@ using System.Threading.Tasks;
 using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.ComponentModel;
+using System.Collections.ObjectModel;
 
 namespace ANAConversationStudio.Views
 {
@@ -32,6 +33,18 @@ namespace ANAConversationStudio.Views
 		{
 			Current = this;
 			InitializeComponent();
+
+			ViewModel.LoadNodesComplete = () =>
+			{
+				var dt = new DispatcherTimer { Interval = TimeSpan.FromSeconds(1) };
+				dt.Tick += (s, e) =>
+				{
+					dt.Stop();
+					dt = null;
+					this.FitContent_Executed(null, null);
+				};
+				dt.Start();
+			};
 		}
 
 		public static MainWindow Current { get; set; }
@@ -203,7 +216,7 @@ namespace ANAConversationStudio.Views
 		private async void UpdateMenuClick(object sender, RoutedEventArgs e)
 		{
 			var eventArgs = new CancelEventArgs();
-			await AskToSaveChangesIfAny(eventArgs);
+			AskToSaveChangesIfAny(eventArgs);
 			if (eventArgs.Cancel)
 				return;
 
@@ -295,24 +308,9 @@ namespace ANAConversationStudio.Views
 			GotoPreviousNode(position);
 		}
 
-		private async Task OpenChatFlowManagerAsync()
+		private void NewChatFlowClick(object sender, RoutedEventArgs e)
 		{
-			var eventArgs = new CancelEventArgs();
-			await AskToSaveChangesIfAny(eventArgs);
-			if (eventArgs.Cancel)
-				return;
-
-			new ChatFlowsManagerWindow().ShowDialog();
-		}
-
-		private async void NewChatFlowClick(object sender, RoutedEventArgs e)
-		{
-			await OpenChatFlowManagerAsync();
-		}
-
-		private async void ManageChatFlowsClick(object sender, RoutedEventArgs e)
-		{
-			await OpenChatFlowManagerAsync();
+			StudioContext.LoadNew(ViewModel);
 		}
 
 		private void ConvSimWithChatMenuClick(object sender, RoutedEventArgs e)
@@ -323,7 +321,12 @@ namespace ANAConversationStudio.Views
 		private void StartChatInSimulator()
 		{
 			if (StudioContext.IsProjectLoaded(true))
-				Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
+			{
+				var saved = this.ViewModel.SaveLoadedChat();
+				if (saved)
+					Process.Start(StudioContext.Current.ProjectFilePath);
+				//Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
+			}
 		}
 
 		private void StartInSimulator_Executed(object sender, ExecutedRoutedEventArgs e)
@@ -352,8 +355,6 @@ namespace ANAConversationStudio.Views
 			if (!StudioContext.IsProjectLoaded(true))
 				return;
 
-			var currentProj = StudioContext.CurrentProject();
-
 			var resolution = 200;
 			var scale = resolution / 96d;
 			var target = new RenderTargetBitmap((int)(scale * (element.RenderSize.Width)), (int)(scale * (element.RenderSize.Height)), scale * 96, scale * 96, PixelFormats.Pbgra32);
@@ -366,7 +367,7 @@ namespace ANAConversationStudio.Views
 			var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyPictures), "ANA Conversation Studio");
 			if (!Directory.Exists(dir))
 				Directory.CreateDirectory(dir);
-			var fileName = currentProj.Name + " " + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + ".png";
+			var fileName = StudioContext.Current.ProjectName + " " + DateTime.Now.ToString("yyyy-MM-dd HH-mm-ss") + ".png";
 
 			var fullPath = Path.Combine(dir, fileName);
 
@@ -399,18 +400,6 @@ namespace ANAConversationStudio.Views
 				graphics.DrawImage(originalImage, destinationRectangle.Value, sourceRectangle, System.Drawing.GraphicsUnit.Pixel);
 			}
 			return croppedImage;
-		}
-
-		private void CopyProjectIdClick(object sender, RoutedEventArgs e)
-		{
-			if (StudioContext.IsProjectLoaded(true))
-				Clipboard.SetText(StudioContext.CurrentProjectId());
-		}
-
-		private void CopyChatURLClick(object sender, RoutedEventArgs e)
-		{
-			if (StudioContext.IsProjectLoaded(true))
-				Clipboard.SetText(StudioContext.CurrentProjectUrl());
 		}
 
 		private void SearchTextboxKeyUp(object sender, KeyEventArgs e)
@@ -459,11 +448,6 @@ namespace ANAConversationStudio.Views
 				this.ViewModel.SearchInNodes(tb.Text);
 		}
 
-		private async void ManageChatServersClick(object sender, RoutedEventArgs e)
-		{
-			await OpenChatServersManagerAsync();
-		}
-
 		private void networkControl_SelectionChanged(object sender, SelectionChangedEventArgs e)
 		{
 			if (NodeEditor.ChatNode != null)
@@ -507,7 +491,22 @@ namespace ANAConversationStudio.Views
 		private void PublishChatProjectClick(object sender, RoutedEventArgs e)
 		{
 			if (StudioContext.IsProjectLoaded(true))
-				new PublishChatProjectWindow(StudioContext.CurrentProjectUrl()).ShowDialog();
+			{
+				var saved = this.ViewModel.SaveLoadedChat();
+				if (saved)
+					new PublishChatProjectWindow(StudioContext.Current.GetCompiledProjectJSON()).ShowDialog();
+			}
+		}
+
+		private void LoadProjectClick(object sender, RoutedEventArgs e)
+		{
+			var path = (sender as MenuItem).Tag as string;
+			StudioContext.Load(path, ViewModel);
+		}
+
+		private void OpenChatFlowClick(object sender, RoutedEventArgs e)
+		{
+			StudioContext.Open(ViewModel);
 		}
 	}
 
@@ -828,7 +827,7 @@ namespace ANAConversationStudio.Views
 		}
 
 		/// <summary>
-		/// The 'Fill' command was executed.
+		/// The 'Fit' command was executed.
 		/// </summary>
 		private void FitContent_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
@@ -1070,7 +1069,7 @@ namespace ANAConversationStudio.Views
 				return wp.Success;
 			}
 		}
-		private async void MainWindow_Loaded(object sender, RoutedEventArgs e)
+		private void MainWindow_Loaded(object sender, RoutedEventArgs e)
 		{
 			if (!NodeEditorLayoutAnchorable.IsAutoHidden)
 				NodeEditorLayoutAnchorable.ToggleAutoHide();
@@ -1079,50 +1078,32 @@ namespace ANAConversationStudio.Views
 			this.IsEnabled = false;
 			if (!AskPass()) return;
 			this.IsEnabled = true;
-			await SelectDefaultOrAskForChatServerAsync();
+			new StartupWindow().ShowDialog();
 			CheckForUpdates();
 			UpdateTitle(); //Update title here so that chosen chat server name, project name fill up.
+
+			if (Utilities.Settings?.RecentChatFlowFiles != null)
+				ViewModel.RecentProjects = new ObservableCollection<string>(Utilities.Settings.RecentChatFlowFiles);
 		}
 		private void UpdateTitle()
 		{
-			var chatServerName = StudioContext.Current?.ChatServer?.Name;
-			var chatProjectName = StudioContext.Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == StudioContext.Current?.ChatFlow?.ProjectId)?.Name;
+			var chatProjectName = StudioContext.Current?.ProjectName;
 
-			var title = $"{chatServerName} : {chatProjectName}";
-			if (string.IsNullOrWhiteSpace(chatServerName) || string.IsNullOrWhiteSpace(chatProjectName))
+			if (string.IsNullOrWhiteSpace(chatProjectName))
 				Title = $"ANA Conversation Studio {GetVersion()}";
 			else
-				Title = $"{title} - ANA Conversation Studio {GetVersion()}";
+				Title = $"{chatProjectName} - ANA Conversation Studio {GetVersion()}";
 		}
 
-		private async Task SelectDefaultOrAskForChatServerAsync()
-		{
-			ChatServerConnection chatServer = null;
-			if (Utilities.Settings.SavedChatServerConnections.Count == 1)
-				chatServer = Utilities.Settings.SavedChatServerConnections.First();
-			else if (Utilities.Settings.SavedChatServerConnections.Any(x => x.IsDefault))
-				chatServer = Utilities.Settings.SavedChatServerConnections.First(x => x.IsDefault);
-
-			if (chatServer != null)
-			{
-				var done = await StudioContext.LoadFromChatServerConnectionAsync(chatServer);
-				if (!done)
-					return;
-				new ChatFlowsManagerWindow().ShowDialog();
-			}
-			else
-				await OpenChatServersManagerAsync();
-		}
-
-		private async Task OpenChatServersManagerAsync()
+		private void OpenChatFlowProject()
 		{
 			var eventArgs = new CancelEventArgs();
-			await AskToSaveChangesIfAny(eventArgs);
+			AskToSaveChangesIfAny(eventArgs);
 			if (eventArgs.Cancel)
 				return;
 			StudioContext.ClearCurrent();
 			this.ViewModel.ClearDesigner();
-			new ChatServersManagerWindow().ShowDialog();
+			new StartupWindow().ShowDialog();
 		}
 
 		private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;
@@ -1147,13 +1128,13 @@ namespace ANAConversationStudio.Views
 			}
 		}
 		public bool AskAlert = true;
-		private async void MainWindow_Closing(object sender, CancelEventArgs e)
+		private void MainWindow_Closing(object sender, CancelEventArgs e)
 		{
 			if (!AskAlert) return;
-			await AskToSaveChangesIfAny(e);
+			AskToSaveChangesIfAny(e);
 		}
 
-		private async Task AskToSaveChangesIfAny(CancelEventArgs cancelEventArgs)
+		private void AskToSaveChangesIfAny(CancelEventArgs cancelEventArgs)
 		{
 			if (StudioContext.Current?.ChatFlow == null) return;
 			this.ViewModel.UpdateContextChatFlowAndValidate();
@@ -1166,12 +1147,12 @@ namespace ANAConversationStudio.Views
 				return;
 			}
 			if (op == MessageBoxResult.Yes)
-				await SaveEditsAsync();
+				SaveEdits();
 		}
 
-		private async void SaveButtonClick(object sender, RoutedEventArgs e)
+		private void SaveButtonClick(object sender, RoutedEventArgs e)
 		{
-			await SaveEditsAsync();
+			SaveEdits();
 		}
 		private void ValidateButtonClick(object sender, RoutedEventArgs e)
 		{
@@ -1199,12 +1180,12 @@ namespace ANAConversationStudio.Views
 				if (ErrorsWindowAnchorable.IsAutoHidden)
 					ErrorsWindowAnchorable.ToggleAutoHide();
 		}
-		private async void Save_Executed(object sender, ExecutedRoutedEventArgs e)
+		private void Save_Executed(object sender, ExecutedRoutedEventArgs e)
 		{
-			await SaveEditsAsync();
+			SaveEdits();
 		}
 
-		private async Task SaveEditsAsync()
+		private void SaveEdits()
 		{
 			try
 			{
@@ -1217,7 +1198,7 @@ namespace ANAConversationStudio.Views
 				}
 
 				this.ValidateFlow();
-				await this.ViewModel.SaveLoadedChat();
+				this.ViewModel.SaveLoadedChat();
 				SaveStatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString() + ". ";
 			}
 			catch (Exception ex)
@@ -1229,36 +1210,6 @@ namespace ANAConversationStudio.Views
 		public void Status(string txt)
 		{
 			OverallStatusTextbox.Text = txt;
-		}
-		private async void LoadProjectClick(object sender, RoutedEventArgs e)
-		{
-			var eventArgs = new CancelEventArgs();
-			await AskToSaveChangesIfAny(eventArgs);
-			if (eventArgs.Cancel)
-				return;
-
-			await LoadProjectAsync((sender as MenuItem).Tag as ANAProject);
-		}
-
-		public async Task LoadProjectAsync(ANAProject proj)
-		{
-			var (done, msg) = await StudioContext.Current.LoadChatFlowAsync(proj._id);
-			if (!done)
-			{
-				MessageBox.Show(msg);
-				return;
-			}
-
-			this.ViewModel.LoadNodesIntoDesigner();
-			Status("Loaded");
-			UpdateTitle();
-
-#pragma warning disable CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
-			Task.Delay(500).ContinueWith((s) =>
-			{
-				Dispatcher.Invoke(() => this.FitContent_Executed(null, null));
-			});
-#pragma warning restore CS4014 // Because this call is not awaited, execution of the current method continues before the call is completed
 		}
 
 		public void GotoNextNode(int position = 1)

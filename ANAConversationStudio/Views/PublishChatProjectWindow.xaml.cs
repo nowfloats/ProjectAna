@@ -7,19 +7,19 @@ namespace ANAConversationStudio.Views
 {
 	public partial class PublishChatProjectWindow : Window
 	{
-		public PublishChatProjectWindow(string flowUrl)
+		public PublishChatProjectWindow(string publishJSON)
 		{
 			InitializeComponent();
 			this.DataContext = this;
 
-			this.flowUrl = flowUrl;
+			this.publishJSON = publishJSON;
 
 			if (Utilities.Settings.PublishServers.Count <= 0)
 				ShowPublishServerManager();
 			else
 				this.PublishServers = new ObservableCollection<PublishServer>(Utilities.Settings.PublishServers);
 		}
-		private string flowUrl;
+		private string publishJSON;
 
 		public PublishChatProject PublishChatProject
 		{
@@ -81,7 +81,7 @@ namespace ANAConversationStudio.Views
 
 				if (confirmed)
 				{
-					(var status, var text) = await publishClient.Publish(PublishChatProject, this.flowUrl);
+					(var status, var text) = await publishClient.Publish(PublishChatProject, this.publishJSON);
 					if (status)
 					{
 						MessageBox.Show("Chat published successfully!", "Done");

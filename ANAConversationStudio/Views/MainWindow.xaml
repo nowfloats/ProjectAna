@@ -674,16 +674,15 @@
                 </Grid.ColumnDefinitions>
                 <Menu Foreground="{StaticResource FileMenuForegroundBrush}" x:Name="menu" Padding="0,0,0,5">
                     <MenuItem Header="File" x:Name="FileMenu" Height="30">
-                        <MenuItem Header="New Chat Flow" Click="NewChatFlowClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
-                        <MenuItem Header="Open Chat Flow" HorizontalContentAlignment="Left" ItemsSource="{Binding CurrentStudioContext.ChatFlowProjects}" IsEnabled="{Binding CurrentStudioContext.ChatFlowProjects, FallbackValue=false, Converter={StaticResource N2B}}">
+                        <MenuItem Header="New Chat Flow Project" Click="NewChatFlowClick" />
+                        <MenuItem Header="Open Chat Flow Project" Click="OpenChatFlowClick" />
+                        <MenuItem Header="Open Recent Project" HorizontalContentAlignment="Left" ItemsSource="{Binding RecentProjects}" IsEnabled="{Binding RecentProjects, FallbackValue=false, Converter={StaticResource N2B}}">
                             <MenuItem.ItemTemplate>
                                 <DataTemplate>
                                     <MenuItem Header="{Binding}" HorizontalContentAlignment="Left" HorizontalAlignment="Left" Tag="{Binding}" Click="LoadProjectClick"/>
                                 </DataTemplate>
                             </MenuItem.ItemTemplate>
                         </MenuItem>
-                        <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
-                        <MenuItem Header="Manage Chat Servers" Click="ManageChatServersClick"/>
                         <MenuItem Header="Manage Publish Servers" Click="ManagePublishServersClick"/>
                         <MenuItem Header="Export as image" Click="ExportAsImageClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Settings" Click="SettingsClick"/>
@@ -691,8 +690,6 @@
                     </MenuItem>
                     <MenuItem Header="Tools" Height="30">
                         <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
-                        <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
-                        <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Publish" Click="PublishChatProjectClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                     </MenuItem>
                     <MenuItem Header="Help" Name="HelpMenu" Height="30">

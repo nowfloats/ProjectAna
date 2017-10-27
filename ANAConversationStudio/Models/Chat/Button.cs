@@ -404,20 +404,6 @@ namespace ANAConversationStudio.Models.Chat
 		[BsonIgnore]
 		public string ContentEmotion { get; set; }
 
-		[JsonIgnore]
-		[BsonIgnore]
-		public List<ProjectOptions> ProjectUrls
-		{
-			get
-			{
-				return StudioContext.Current.ChatFlowProjects.Select(x => new ProjectOptions
-				{
-					Name = x.Name,
-					Url = StudioContext.GetProjectUrl(x)
-				}).ToList();
-			}
-		}
-
 		protected override void FillAlias()
 		{
 			Alias = Utilities.TrimText(string.IsNullOrWhiteSpace(ButtonName) ? (string.IsNullOrWhiteSpace(ButtonText) ? ButtonType + "" : ButtonText) : ButtonName, 12);

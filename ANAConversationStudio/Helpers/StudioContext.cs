@@ -1,7 +1,10 @@
 ﻿using ANAConversationStudio.Models.Chat;
+using ANAConversationStudio.ViewModels;
+using Microsoft.Win32;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -19,178 +22,46 @@ namespace ANAConversationStudio.Helpers
 	public class StudioContext : INotifyPropertyChanged
 	{
 		#region Private
-		private const string LoadProjectsAPI = "api/Project/List";
-		private const string SaveProjectsAPI = "api/Project/Save";
+		/// <summary>
+		/// Use to detect unsaved changes
+		/// </summary>
+		private string LastChatFlowSavedHash { get; set; }
 
-		private const string SaveChatFlowPackAPI = "api/Conversation/SaveChatFlow";
-		private const string FetchChatFlowPackAPI = "api/Conversation/FetchChatFlow?projectId={projectId}";
-		private const string ReceiveFileAPI = "api/Services/ReceiveFile?fileName={fileName}";
-
+		private StudioContext(string projectFilePath)
+		{
+			this.ProjectFilePath = projectFilePath;
+		}
 		private StudioContext() { }
-		private StudioContext(ChatServerConnection conn) { ChatServer = conn; }
 
-		private async Task<T> Hit<T>(string api, bool strictTypeNames = false) where T : APIResponse
+		public (bool, string) LoadChatFlowProject()
 		{
 			try
 			{
-				if (api == null) return null;
+				if (!string.IsNullOrWhiteSpace(ProjectFilePath))
+				{
+					var rawProjectJson = File.ReadAllText(ProjectFilePath);
+					ChatFlow = BsonSerializer.Deserialize<ChatFlowPack>(rawProjectJson);
+				}
+				else
+				{
+					var firstNode = new ChatNode { Name = "New Node" };
+					firstNode.Id = ObjectId.GenerateNewId().ToString();
 
-				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
-				using (var wc = new WebClient())
-				{
-					wc.Encoding = Encoding.UTF8;
-					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
-					T resp = default(T);
-					if (strictTypeNames)
-						resp = BsonSerializer.Deserialize<T>(await wc.DownloadStringTaskAsync(api));
-					else
+					ChatFlow = new ChatFlowPack
 					{
-						wc.Headers[HttpRequestHeader.Accept] = "application/json";
-						resp = JsonConvert.DeserializeObject<T>(await wc.DownloadStringTaskAsync(api));
-					}
-					resp.Status = true;
-					return resp;
+						ChatNodes = new List<ChatNode>(new[] { firstNode }),
+						ChatContent = new List<Models.BaseContent>(),
+						NodeLocations = new Dictionary<string, Models.LayoutPoint> { { firstNode.Id, new Models.LayoutPoint { X = 500, Y = 500 } } }
+					};
 				}
-			}
-			catch (WebException ex)
-			{
-				using (var resp = new StreamReader(ex.Response.GetResponseStream()))
-				{
-					var respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
-					if (respParsed == default(T))
-					{
-						respParsed = Activator.CreateInstance<T>();
-						respParsed.Message = ex.Message;
-					}
-					respParsed.Status = false;
-					return respParsed;
-				}
+				LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson());
+				ChatFlowBuilder.Build(ChatFlow);
+				return (true, "");
 			}
 			catch (Exception ex)
 			{
-				var respParsed = Activator.CreateInstance<T>();
-				respParsed.Message = ex.Message;
-				respParsed.Status = false;
-				return respParsed;
+				return (false, ex.Message);
 			}
-		}
-		private async Task<T> HitPost<T, TReq>(string api, TReq requestData, bool strictTypeNames = false) where T : APIResponse
-		{
-			try
-			{
-				if (api == null) return null;
-
-				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
-				using (var wc = new WebClient())
-				{
-					wc.Encoding = Encoding.UTF8;
-					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
-					T resp = default(T);
-					if (strictTypeNames)
-					{
-						resp = BsonSerializer.Deserialize<T>(await wc.UploadStringTaskAsync(api, requestData.ToJson()));
-					}
-					else
-					{
-						wc.Headers[HttpRequestHeader.ContentType] = "application/json";
-						wc.Headers[HttpRequestHeader.Accept] = "application/json";
-						resp = JsonConvert.DeserializeObject<T>(await wc.UploadStringTaskAsync(api, JsonConvert.SerializeObject(requestData)));
-					}
-					resp.Status = true;
-					return resp;
-				}
-			}
-			catch (WebException ex)
-			{
-				using (var resp = new StreamReader(ex.Response.GetResponseStream()))
-				{
-					T respParsed = Activator.CreateInstance<T>();
-					var respText = await resp.ReadToEndAsync();
-					try
-					{
-						respParsed = JsonConvert.DeserializeObject<T>(respText);
-					}
-					catch
-					{
-						respParsed.Message = respText;
-					}
-					respParsed.Status = false;
-					return respParsed;
-				}
-			}
-			catch (Exception ex)
-			{
-				T respParsed = Activator.CreateInstance<T>();
-				respParsed.Status = false;
-				respParsed.Message = ex.Message;
-				return respParsed;
-			}
-		}
-		private async Task<T> HitPostData<T>(string api, Stream dataStream) where T : APIResponse
-		{
-			try
-			{
-				if (api == null) return null;
-
-				api = ChatServer.ServerUrl?.TrimEnd('/') + "/" + api;
-				using (var wc = new WebClient())
-				{
-					wc.Encoding = Encoding.UTF8;
-					wc.Headers[HttpRequestHeader.Authorization] = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes($"{ChatServer.APIKey}:{ChatServer.APISecret}"));
-					wc.Headers[HttpRequestHeader.Accept] = "application/json";
-
-					byte[] reqData = new byte[dataStream.Length];
-					dataStream.Read(reqData, 0, reqData.Length);
-
-					var respBytes = await wc.UploadDataTaskAsync(api, reqData);
-					var resp = JsonConvert.DeserializeObject<T>(Encoding.UTF8.GetString(respBytes));
-					resp.Status = true;
-					return resp;
-				}
-			}
-			catch (WebException ex)
-			{
-				using (var resp = new StreamReader(ex.Response.GetResponseStream()))
-				{
-					var respParsed = JsonConvert.DeserializeObject<T>(await resp.ReadToEndAsync());
-					if (respParsed == null)
-					{
-						respParsed = Activator.CreateInstance<T>();
-						respParsed.Message = ex.Message;
-					}
-					respParsed.Status = false;
-					return respParsed;
-				}
-			}
-			catch (Exception ex)
-			{
-				T respParsed = Activator.CreateInstance<T>();
-				respParsed.Status = false;
-				respParsed.Message = ex.Message;
-				return respParsed;
-			}
-		}
-
-		private async Task<bool> LoadProjectsAsync()
-		{
-			var projsResp = await Hit<DataListResponse<ANAProject>>(LoadProjectsAPI);
-			if (projsResp.Status)
-			{
-				ChatFlowProjects = new ObservableCollection<ANAProject>(projsResp.Data);
-				try
-				{
-					if (ChatFlowProjects == null || ChatFlowProjects.Count <= 0)
-					{
-						ChatFlowProjects = new ObservableCollection<ANAProject> { new ANAProject { Name = "My First ANA Project", _id = ObjectId.GenerateNewId().ToString() } };
-						await SaveProjectsAsync();
-					}
-				}
-				catch { }
-				LastChatFlowProjectsSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(ChatFlowProjects));
-				return true;
-			}
-			MessageBox.Show("Error: " + projsResp.Message, "Unable to load projects from chat server.");
-			return false;
 		}
 		#endregion
 
@@ -215,56 +86,85 @@ namespace ANAConversationStudio.Helpers
 			}
 		}
 
-		public static async Task<bool> LoadFromChatServerConnectionAsync(ChatServerConnection conn)
-		{
-			var s = new StudioContext(conn);
-			var done = await s.LoadProjectsAsync();
-			if (done)
-				Current = s;
-			return done;
-		}
 		public static void ClearCurrent()
 		{
 			Current = null;
 		}
 		public static bool IsProjectLoaded(bool showMsg)
 		{
-			if (Current?.ChatServer?.ServerUrl == null || Current?.ChatFlow == null)
+			if (Current?.ProjectFilePath == null || Current?.ChatFlow == null)
 			{
 				if (showMsg)
-					MessageBox.Show("No chat flow is loaded. Please load a chat flow and try again.");
+					MessageBox.Show("No chat flow project is loaded. Please load a chat flow and try again.");
 				return false;
 			}
 			return true;
 		}
-
-		public static string CurrentProjectUrl()
+		public static bool Load(string projectFilePath, MainWindowViewModel viewModelRef)
 		{
-			return Current?.ChatServer?.ServerUrl + "/api/Conversation/chat?projectId=" + CurrentProjectId();
-		}
+			var studioContext = new StudioContext(projectFilePath);
+			(var done, var msg) = studioContext.LoadChatFlowProject();
+			if (!done)
+			{
+				MessageBox.Show(msg, "Unable to open the project");
+				return false;
+			}
+			Current = studioContext;
 
-		public static string CurrentProjectId()
+			if (!Utilities.Settings.RecentChatFlowFiles.Contains(projectFilePath))
+			{
+				Utilities.Settings.RecentChatFlowFiles.Insert(0, projectFilePath);
+				Utilities.Settings.Save(App.Cryptio);
+			}
+
+			if (viewModelRef != null)
+				viewModelRef.LoadNodesIntoDesigner();
+			return true;
+		}
+		public static bool LoadNew(MainWindowViewModel viewModelRef)
 		{
-			return Current?.ChatFlow?.ProjectId;
+			var studioContext = new StudioContext();
+			(var done, var msg) = studioContext.LoadChatFlowProject();
+			if (!done)
+			{
+				MessageBox.Show(msg, "Unable to create a new project");
+				return false;
+			}
+			Current = studioContext;
+			if (viewModelRef != null)
+				viewModelRef.LoadNodesIntoDesigner();
+			return true;
 		}
-
-		public static ANAProject CurrentProject()
+		public static bool Open(MainWindowViewModel viewModelRef)
 		{
-			return Current?.ChatFlowProjects?.FirstOrDefault(x => x._id == Current?.ChatFlow?.ProjectId);
+			var openFileDialog = new OpenFileDialog
+			{
+				Filter = "ANA Project Files | *.anaproj",
+				CheckFileExists = true,
+				Multiselect = false,
+				InitialDirectory = Settings.ANADocumentsDirectory,
+				Title = "Browse to the ANA Project to load",
+				ValidateNames = true
+			};
+			var done = openFileDialog.ShowDialog();
+			if (done == true)
+			{
+				var loaded = Load(openFileDialog.FileName, viewModelRef);
+				if (loaded)
+					return true;
+			}
+			return false;
 		}
-
-		public static string GetProjectUrl(ANAProject proj)
+		private static readonly JsonSerializerSettings publishJsonSettings = new JsonSerializerSettings
 		{
-			return Current?.ChatServer?.ServerUrl + "/api/Conversation/chat?projectId=" + proj._id;
-		}
-
+			NullValueHandling = NullValueHandling.Ignore,
+			Converters = new List<JsonConverter> { new StringEnumConverter() }
+		};
 		#endregion
 
 		#region Public
-		/// <summary>
-		/// Use to detect unsaved changes
-		/// </summary>
-		public string LastChatFlowSavedHash { get; set; }
+
+		public string ProjectFilePath { get; set; }
 
 		public string LastChatFlowProjectsSavedHash { get; set; }
 
@@ -282,49 +182,14 @@ namespace ANAConversationStudio.Helpers
 			}
 		}
 
-		private ChatServerConnection _ChatServer;
-		public ChatServerConnection ChatServer
+		public string ProjectName
 		{
-			get { return _ChatServer; }
-			set
+			get
 			{
-				if (_ChatServer != value)
-				{
-					_ChatServer = value;
-					OnPropertyChanged();
-				}
+				if (!string.IsNullOrWhiteSpace(ProjectFilePath))
+					return Path.GetFileNameWithoutExtension(ProjectFilePath);
+				return "Unsaved project";
 			}
-		}
-
-		private ObservableCollection<ANAProject> _ChatFlowProjects;
-		public ObservableCollection<ANAProject> ChatFlowProjects
-		{
-			get { return _ChatFlowProjects; }
-			set
-			{
-				if (_ChatFlowProjects != value)
-				{
-					_ChatFlowProjects = value;
-					OnPropertyChanged();
-				}
-			}
-		}
-
-		public async Task<(bool, string)> LoadChatFlowAsync(string projectId)
-		{
-			if (ChatFlowProjects != null && ChatFlowProjects.Any(x => x._id == projectId))
-			{
-				var chatFlowResp = await Hit<DataResponse<ChatFlowPack>>(FetchChatFlowPackAPI.Replace("{projectId}", projectId), true);
-				if (chatFlowResp.Status)
-				{
-					ChatFlow = chatFlowResp.Data;
-					LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson()); //Serializing the object with Bson Serializer as we use the same while sending the chat flow to the server.
-					ChatFlowBuilder.Build(ChatFlow);
-					return (true, "");
-				}
-				return (false, chatFlowResp.Message);
-			}
-			return (false, "Not connected to chat server!");
 		}
 
 		public bool AreChatFlowChangesMadeAfterLastSave()
@@ -341,56 +206,56 @@ namespace ANAConversationStudio.Helpers
 			return true;
 		}
 
-		public bool AreChatFlowProjectChangesMadeAfterLastSave(ObservableCollection<ANAProject> editedProjects)
+		public bool SaveChatFlowProject()
 		{
-			if (string.IsNullOrWhiteSpace(LastChatFlowProjectsSavedHash))
-				return true;
-
-			var currentHash = Utilities.GenerateHash(JsonConvert.SerializeObject(editedProjects));
-			if (LastChatFlowProjectsSavedHash == currentHash)
-				return false; //no changes
-
-			return true;
-		}
-
-		public async Task<bool> SaveChatFlowAsync()
-		{
-			if (ChatFlow != null)
+			try
 			{
-				var saveChatFlowResp = await HitPost<DataResponse<ChatFlowPack>, ChatFlowPack>(SaveChatFlowPackAPI, ChatFlow, true);
-				if (saveChatFlowResp.Status)
+				if (ChatFlow != null)
 				{
-					ChatFlow = saveChatFlowResp.Data;
-					LastChatFlowSavedHash = Utilities.GenerateHash(ChatFlow.ToJson()); //Serializing the object with Bson Serializer as we use the same while sending the chat flow to the server.
+					if (string.IsNullOrWhiteSpace(ProjectFilePath))
+					{
+						var saveFileDialog = new SaveFileDialog()
+						{
+							FileName = "ChatProject.anaproj",
+							Filter = "ANA Project Files | *.anaproj",
+							AddExtension = true,
+							CheckPathExists = true,
+							InitialDirectory = Settings.ANADocumentsDirectory,
+							OverwritePrompt = true,
+							Title = "Specify the ANA Project save location",
+							ValidateNames = true
+						};
+						var done = saveFileDialog.ShowDialog();
+						if (done != true)
+							return false;
+						ProjectFilePath = saveFileDialog.FileName;
+					}
+
+					var rawProjectJson = ChatFlow.ToJson();
+					File.WriteAllText(ProjectFilePath, rawProjectJson);
+					LastChatFlowSavedHash = Utilities.GenerateHash(rawProjectJson);
+
+					if (!Utilities.Settings.RecentChatFlowFiles.Contains(ProjectFilePath))
+					{
+						Utilities.Settings.RecentChatFlowFiles.Insert(0, ProjectFilePath);
+						Utilities.Settings.Save(App.Cryptio);
+					}
+
 					return true;
 				}
-				MessageBox.Show(saveChatFlowResp.Message, "Unable to save the flow");
+				MessageBox.Show("Chat flow project Not loaded properly!", "Unable to save the flow");
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show(ex.Message, "Unable to save the flow");
 			}
 			return false;
 		}
 
-		public async Task<bool> SaveProjectsAsync()
+		public string GetCompiledProjectJSON()
 		{
-			if (ChatFlowProjects != null)
-			{
-				var saveProjectsResp = await HitPost<DataListResponse<ANAProject>, List<ANAProject>>(SaveProjectsAPI, ChatFlowProjects.ToList());
-				if (saveProjectsResp.Status)
-				{
-					ChatFlowProjects = new ObservableCollection<ANAProject>(saveProjectsResp.Data);
-					LastChatFlowProjectsSavedHash = Utilities.GenerateHash(JsonConvert.SerializeObject(ChatFlowProjects));
-					return true;
-				}
-			}
-			return false;
-		}
-
-		public async Task<UploadFileResponse> UploadFile(string srcFileFullPath)
-		{
-			var api = ReceiveFileAPI.Replace("{fileName}", Uri.EscapeDataString(Path.GetFileName(srcFileFullPath)));
-			if (!File.Exists(srcFileFullPath))
-				return null;
-			using (var fs = File.OpenRead(srcFileFullPath))
-				return await HitPostData<UploadFileResponse>(api, fs);
+			var compiled = ChatFlowBuilder.Build(ChatFlow);
+			return JsonConvert.SerializeObject(compiled, publishJsonSettings);
 		}
 
 		#region INPC

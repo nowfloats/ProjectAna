@@ -22,7 +22,7 @@ namespace ANAConversationStudio.Helpers
 				authHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(publishServer.Key + ":" + publishServer.Secret));
 		}
 
-		public async Task<(bool Status, string Msg)> Publish(PublishChatProject project, string flowUrl)
+		public async Task<(bool Status, string Msg)> Publish(PublishChatProject project, string publishJSON)
 		{
 			try
 			{
@@ -30,7 +30,7 @@ namespace ANAConversationStudio.Helpers
 				{
 					business_id = project.Id,
 					business_name = project.Name,
-					flow_url = flowUrl
+					flow = publishJSON
 				});
 				return (true, ""); //If 200;
 			}

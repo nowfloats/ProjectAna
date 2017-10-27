@@ -50,7 +50,22 @@ namespace ANAConversationStudio.Helpers
 		}
 		private static string SettingsJsonPath => Path.Combine(ANAStudioAppDataDirectory, SettingsFile + SettingsFileExtention);
 
-		public List<ChatServerConnection> SavedChatServerConnections { get; set; } = new List<ChatServerConnection>();
+		private static string _ANADocumentsDirectory;
+		public static string ANADocumentsDirectory
+		{
+			get
+			{
+				if (string.IsNullOrWhiteSpace(_ANADocumentsDirectory))
+				{
+					_ANADocumentsDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "ANA Projects");
+					if (!Directory.Exists(_ANADocumentsDirectory))
+						Directory.CreateDirectory(_ANADocumentsDirectory);
+				}
+				return _ANADocumentsDirectory;
+			}
+		}
+
+		public List<string> RecentChatFlowFiles { get; set; } = new List<string>();
 		public List<PublishServer> PublishServers { get; set; } = new List<PublishServer>();
 		public EditableSettings UpdateDetails { get; set; } = new EditableSettings();
 		public static bool IsEncrypted()
@@ -84,41 +99,6 @@ namespace ANAConversationStudio.Helpers
 		{
 			if (File.Exists(SettingsJsonPath))
 				File.Move(SettingsJsonPath, Path.Combine(SettingsJsonBackupDirectory, SettingsFile + "-" + Guid.NewGuid().ToString() + SettingsFileExtention));
-		}
-	}
-
-	public class ChatServerConnection
-	{
-		[PropertyOrder(1)]
-		[DisplayName("Connection Name")]
-		public string Name { get; set; }
-		[PropertyOrder(2)]
-		[DisplayName("Server URL")]
-		public string ServerUrl { get; set; }
-
-		[PropertyOrder(3)]
-		[DisplayName("API Key")]
-		public string APIKey { get; set; }
-		[PropertyOrder(4)]
-		[DisplayName("API Secret")]
-		public string APISecret { get; set; }
-
-		[PropertyOrder(5)]
-		[DisplayName("Set as default")]
-		public bool IsDefault { get; set; }
-
-		public override string ToString()
-		{
-			if (!string.IsNullOrWhiteSpace(Name))
-				return Name + (IsDefault ? " (Default)" : "");
-			if (!string.IsNullOrWhiteSpace(ServerUrl))
-				return ServerUrl + (IsDefault ? " (Default)" : "");
-			return "New Chat Server Connection";
-		}
-
-		public bool IsValid()
-		{
-			return Utilities.ValidateStrings(ServerUrl, Name);
 		}
 	}
 

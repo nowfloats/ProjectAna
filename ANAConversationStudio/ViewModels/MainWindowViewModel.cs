@@ -534,7 +534,22 @@ namespace ANAConversationStudio.ViewModels
 		public MainWindowViewModel()
 		{
 			StudioContext.StaticPropertyChanged -= StudioContext_StaticPropertyChanged;
-			StudioContext.StaticPropertyChanged += StudioContext_StaticPropertyChanged; ;
+			StudioContext.StaticPropertyChanged += StudioContext_StaticPropertyChanged;
+		}
+
+
+		private StudioContext _CurrentStudioContext;
+		public StudioContext CurrentStudioContext
+		{
+			get { return _CurrentStudioContext; }
+			set
+			{
+				if (_CurrentStudioContext != value)
+				{
+					_CurrentStudioContext = value;
+					OnPropertyChanged(nameof(CurrentStudioContext));
+				}
+			}
 		}
 
 		private void StudioContext_StaticPropertyChanged(object sender, EventArgs e)
@@ -551,7 +566,7 @@ namespace ANAConversationStudio.ViewModels
 		{
 			if (e.PropertyName == nameof(StudioContext.ChatFlow))
 			{
-				if (CurrentStudioContext.ChatFlow == null)
+				if (CurrentStudioContext?.ChatFlow == null)
 					ClearDesigner();
 			}
 		}
@@ -559,18 +574,20 @@ namespace ANAConversationStudio.ViewModels
 		~MainWindowViewModel()
 		{
 			StudioContext.StaticPropertyChanged -= StudioContext_StaticPropertyChanged;
+			if (CurrentStudioContext != null)
+				CurrentStudioContext.PropertyChanged -= Current_PropertyChanged;
 		}
 
-		private StudioContext _CurrentStudioContext;
-		public StudioContext CurrentStudioContext
+		private ObservableCollection<string> _RecentProjects;
+		public ObservableCollection<string> RecentProjects
 		{
-			get { return _CurrentStudioContext; }
+			get { return _RecentProjects; }
 			set
 			{
-				if (_CurrentStudioContext != value)
+				if (_RecentProjects != value)
 				{
-					_CurrentStudioContext = value;
-					OnPropertyChanged(nameof(CurrentStudioContext));
+					_RecentProjects = value;
+					OnPropertyChanged(nameof(RecentProjects));
 				}
 			}
 		}
@@ -600,12 +617,16 @@ namespace ANAConversationStudio.ViewModels
 				};
 		}
 
-		public void UpdateContextChatFlowAndValidate()
+		private void UpdateChatFlowInCurrentStudioContext()
 		{
 			StudioContext.Current.ChatFlow.NodeLocations = this.Network.Nodes.ToDictionary(x => x.ChatNode.Id, x => new LayoutPoint(x.X, x.Y));
 			StudioContext.Current.ChatFlow.ChatNodes = this.Network.Nodes.Select(x => x.ChatNode).ToList();
 			StudioContext.Current.ChatFlow.ChatContent = Utilities.ExtractContentFromChatNodes(StudioContext.Current.ChatFlow.ChatNodes);
+		}
 
+		public void UpdateContextChatFlowAndValidate()
+		{
+			UpdateChatFlowInCurrentStudioContext();
 			ValidateCurrentFlow();
 		}
 
@@ -651,11 +672,13 @@ namespace ANAConversationStudio.ViewModels
 			}
 		}
 
-		public async Task SaveLoadedChat()
+		public bool SaveLoadedChat()
 		{
 			UpdateContextChatFlowAndValidate();
-			await StudioContext.Current.SaveChatFlowAsync();
+			return StudioContext.Current.SaveChatFlowProject();
 		}
+
+		public Action LoadNodesComplete { get; set; }
 
 		public bool LoadNodesIntoDesigner()
 		{
@@ -663,7 +686,7 @@ namespace ANAConversationStudio.ViewModels
 			{
 				if (StudioContext.Current?.ChatFlow?.ChatNodes == null)
 				{
-					MessageBox.Show("Connection with chat server is not established or no project is selected. If this is the first time, create a new project from file menu and get started. Please restart the application and try again if the issue continues.", "Oops!");
+					MessageBox.Show("Chat Project is not created/loaded properly! Please restart the studio and try again", "Oops!");
 					return false;
 				}
 
@@ -683,6 +706,7 @@ namespace ANAConversationStudio.ViewModels
 				foreach (var node in nodeVMs)
 					Utilities.FillConnectionsFromButtonsOfChatNode(node);
 
+				LoadNodesComplete?.Invoke();
 				return true;
 			}
 			catch (Exception ex)
