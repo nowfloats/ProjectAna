@@ -19,8 +19,6 @@ namespace ANAConversationStudio.Views
 			else
 				this.PublishServers = new ObservableCollection<PublishServer>(Utilities.Settings.PublishServers);
 		}
-
-
 		private string flowUrl;
 
 		public PublishChatProject PublishChatProject
@@ -68,7 +66,7 @@ namespace ANAConversationStudio.Views
 				switch (exists)
 				{
 					case true:
-						confirmed = MessageBox.Show($"A project is already published by the given chat project id!\r\n\r\n Are you sure you want to publish to the project {PublishChatProject}(Id: {PublishChatProject.Id}) on server {PublishServer}(URL: {PublishServer.Url})?. \r\nIt will override the existing chat project", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
+						confirmed = MessageBox.Show($"A project is already published by the given chat project id!\r\n\r\nAre you sure you want to publish to the project {PublishChatProject}(Id: {PublishChatProject.Id}) on server {PublishServer}(URL: {PublishServer.Url})?. \r\nIt will override the existing chat project", "Confirmation", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes;
 						break;
 					case false:
 						confirmed = MessageBox.Show($"Are you sure you want to publish to the project {PublishChatProject}(Id: {PublishChatProject.Id}) on server {PublishServer}(URL: {PublishServer.Url})?", "Confirmation", MessageBoxButton.YesNo) == MessageBoxResult.Yes;
@@ -85,7 +83,10 @@ namespace ANAConversationStudio.Views
 				{
 					(var status, var text) = await publishClient.Publish(PublishChatProject, this.flowUrl);
 					if (status)
+					{
 						MessageBox.Show("Chat published successfully!", "Done");
+						Close();
+					}
 					else
 						MessageBox.Show(text, "Unable to publish the project");
 				}

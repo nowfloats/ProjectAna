@@ -10,8 +10,8 @@ namespace ANAConversationStudio.Helpers
 {
 	public class ChatProjectPublishClient
 	{
-		private const string PUBLISH_API = "/api/publish";
-		private const string CHECK_PROJECT_EXISTS_API = "/api/exists?business_id?={business_id}";
+		private const string PUBLISH_API = "/bot/business";
+		private const string CHECK_PROJECT_EXISTS_API = "/bot/business?business_id={business_id}";
 
 		private PublishServer publishServer;
 		private string authHeader;
@@ -46,7 +46,16 @@ namespace ANAConversationStudio.Helpers
 			try
 			{
 				var resp = await HitGetAsync(CHECK_PROJECT_EXISTS_API.Replace("{business_id}", project.Id));
-				return (resp.exists, ""); //If 200;
+				return (true, ""); //If 200;
+			}
+			catch (WebException ex)
+			{
+				if (ex.Response is HttpWebResponse hResp)
+				{
+					if (hResp.StatusCode == HttpStatusCode.NotFound)
+						return (false, "Project does not exist");
+				}
+				return (null, ex.Message);
 			}
 			catch (Exception ex)
 			{

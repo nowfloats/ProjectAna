@@ -29,7 +29,7 @@
             <Button Content="Add Server/Chat Project" Margin="10,0,10,0" Click="ManagePublishServersClick" HorizontalAlignment="Left"/>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
                 <Button Content="Publish" Margin="0,0,10,0" Click="PublishClick" Background="{StaticResource SecondaryAccentBrush}" BorderBrush="{StaticResource SecondaryAccentBrush}"/>
-                <Button Content="Cancel" Margin="10,0,0,0" Click="CancelClick"/>
+                <Button Content="Close" Margin="10,0,0,0" Click="CancelClick"/>
             </StackPanel>
         </Grid>
     </Grid>
