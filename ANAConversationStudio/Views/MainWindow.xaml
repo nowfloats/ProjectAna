@@ -684,6 +684,7 @@
                         </MenuItem>
                         <MenuItem Header="Manage Chat Flows" Click="ManageChatFlowsClick" IsEnabled="{Binding CurrentStudioContext, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Manage Chat Servers" Click="ManageChatServersClick"/>
+                        <MenuItem Header="Manage Publish Servers" Click="ManagePublishServersClick"/>
                         <MenuItem Header="Export as image" Click="ExportAsImageClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Settings" Click="SettingsClick"/>
                         <MenuItem Header="Exit" Click="ExitClick"/>
@@ -692,6 +693,7 @@
                         <MenuItem Header="Launch Current Chat in Simulator (F5)" Click="ConvSimWithChatMenuClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Copy Chat URL" Click="CopyChatURLClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                         <MenuItem Header="Copy Project Id" Click="CopyProjectIdClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
+                        <MenuItem Header="Publish" Click="PublishChatProjectClick" IsEnabled="{Binding CurrentStudioContext.ChatFlow, FallbackValue=false, Converter={StaticResource N2B}}"/>
                     </MenuItem>
                     <MenuItem Header="Help" Name="HelpMenu" Height="30">
                         <MenuItem Header="No Update Available!" Click="UpdateMenuClick" IsEnabled="False" Name="UpdateMenuItem"/>

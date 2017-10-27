@@ -12,6 +12,6 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <xctk:PropertyGrid x:Name="SettingsEditor" SelectedObject="{Binding Config}"/>
-        <Button Content="Save" Click="SaveClick" Grid.Row="1" Margin="10" HorizontalAlignment="Center" Padding="30,5"/>
+        <Button Content="Save" Click="SaveClick" Grid.Row="1" Margin="10" HorizontalAlignment="Center" Padding="30,5" Background="{StaticResource SecondaryAccentBrush}" BorderBrush="{StaticResource SecondaryAccentBrush}"/>
     </Grid>
 </Window>

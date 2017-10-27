@@ -498,6 +498,17 @@ namespace ANAConversationStudio.Views
 					.ToList().ForEach(x => x.ChatNode.IsStartNode = false);
 			}
 		}
+
+		private void ManagePublishServersClick(object sender, RoutedEventArgs e)
+		{
+			new PublishServersManagerWindow().ShowDialog();
+		}
+
+		private void PublishChatProjectClick(object sender, RoutedEventArgs e)
+		{
+			if (StudioContext.IsProjectLoaded(true))
+				new PublishChatProjectWindow(StudioContext.CurrentProjectUrl()).ShowDialog();
+		}
 	}
 
 	/// <summary>
@@ -1048,13 +1059,13 @@ namespace ANAConversationStudio.Views
 		{
 			if (!Settings.IsEncrypted())
 			{
-				SetPassword sp = new SetPassword();
+				SetPasswordWindow sp = new SetPasswordWindow();
 				sp.ShowDialog();
 				return sp.Success;
 			}
 			else
 			{
-				EnterPassword wp = new EnterPassword();
+				EnterPasswordWindow wp = new EnterPasswordWindow();
 				wp.ShowDialog();
 				return wp.Success;
 			}
@@ -1111,7 +1122,7 @@ namespace ANAConversationStudio.Views
 				return;
 			StudioContext.ClearCurrent();
 			this.ViewModel.ClearDesigner();
-			new SaveChatServersManager().ShowDialog();
+			new ChatServersManagerWindow().ShowDialog();
 		}
 
 		private Version GetVersion() => Assembly.GetExecutingAssembly().GetName().Version;

@@ -1,0 +1,36 @@
+﻿<Window x:Class="ANAConversationStudio.Views.PublishChatProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ANAConversationStudio.Views"
+        mc:Ignorable="d"
+        Title="Choose publish server and chat project" Height="220" Width="500" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <TextBlock Text="Server" VerticalAlignment="Center"/>
+            <TextBlock Text="Chat Project" Grid.Row="1" VerticalAlignment="Center"/>
+            <ComboBox ItemsSource="{Binding PublishServers}" Grid.Column="1" SelectedItem="{Binding PublishServer, Mode=TwoWay}" Margin="10"/>
+            <ComboBox ItemsSource="{Binding PublishServer.ChatProjects}" Grid.Column="1" Grid.Row="1" SelectedItem="{Binding PublishChatProject, Mode=TwoWay}" Margin="10"/>
+        </Grid>
+        <Grid Grid.Row="1" >
+            <Button Content="Add Server/Chat Project" Margin="10,0,10,0" Click="ManagePublishServersClick" HorizontalAlignment="Left"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="10">
+                <Button Content="Publish" Margin="0,0,10,0" Click="PublishClick" Background="{StaticResource SecondaryAccentBrush}" BorderBrush="{StaticResource SecondaryAccentBrush}"/>
+                <Button Content="Cancel" Margin="10,0,0,0" Click="CancelClick"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

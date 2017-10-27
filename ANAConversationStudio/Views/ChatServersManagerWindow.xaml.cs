@@ -10,9 +10,9 @@ using Xceed.Wpf.Toolkit.PropertyGrid;
 
 namespace ANAConversationStudio.Views
 {
-	public partial class SaveChatServersManager : Window
+	public partial class ChatServersManagerWindow : Window
 	{
-		public SaveChatServersManager()
+		public ChatServersManagerWindow()
 		{
 			InitializeComponent();
 

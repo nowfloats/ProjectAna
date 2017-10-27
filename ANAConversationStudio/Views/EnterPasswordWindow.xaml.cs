@@ -4,12 +4,9 @@ using System.Windows;
 
 namespace ANAConversationStudio.Views
 {
-    /// <summary>
-    /// Interaction logic for EnterPassword.xaml
-    /// </summary>
-    public partial class EnterPassword : Window
+    public partial class EnterPasswordWindow : Window
     {
-        public EnterPassword()
+        public EnterPasswordWindow()
         {
             InitializeComponent();
         }

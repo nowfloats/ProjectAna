@@ -151,6 +151,7 @@
     </ApplicationDefinition>
     <Compile Include="Helpers\ChatFlowBuilder.cs" />
     <Compile Include="Helpers\ChatFlowValidator.cs" />
+    <Compile Include="Helpers\ChatProjectPublishClient.cs" />
     <Compile Include="Models\ChatFlowSearchItem.cs" />
     <Compile Include="UIHelpers\ButtonTypeToFieldVisibilityConverter.cs" />
     <Compile Include="UIHelpers\IsGoalNodeToBrushConverter.cs" />
@@ -177,8 +178,14 @@
     <Compile Include="Views\ChatFlowsManagerWindow.xaml.cs">
       <DependentUpon>ChatFlowsManagerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SaveChatServersManager.xaml.cs">
-      <DependentUpon>SaveChatServersManager.xaml</DependentUpon>
+    <Compile Include="Views\PublishChatProjectWindow.xaml.cs">
+      <DependentUpon>PublishChatProjectWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PublishServersManagerWindow.xaml.cs">
+      <DependentUpon>PublishServersManagerWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ChatServersManagerWindow.xaml.cs">
+      <DependentUpon>ChatServersManagerWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\Settings.cs" />
     <Compile Include="Helpers\Utilities.cs" />
@@ -202,11 +209,11 @@
     <Compile Include="UIHelpers\ScaleToPercentConverter.cs" />
     <Compile Include="UIHelpers\NullToVisibilityConverter.cs" />
     <Compile Include="UIHelpers\BindingToTypeNameConverter.cs" />
-    <Compile Include="Views\EnterPassword.xaml.cs">
-      <DependentUpon>EnterPassword.xaml</DependentUpon>
+    <Compile Include="Views\EnterPasswordWindow.xaml.cs">
+      <DependentUpon>EnterPasswordWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\SetPassword.xaml.cs">
-      <DependentUpon>SetPassword.xaml</DependentUpon>
+    <Compile Include="Views\SetPasswordWindow.xaml.cs">
+      <DependentUpon>SetPasswordWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
@@ -227,11 +234,19 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SaveChatServersManager.xaml">
+    <Page Include="Views\PublishChatProjectWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PublishServersManagerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\ChatServersManagerWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\EnterPassword.xaml">
+    <Page Include="Views\EnterPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -254,7 +269,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\SetPassword.xaml">
+    <Page Include="Views\SetPasswordWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
