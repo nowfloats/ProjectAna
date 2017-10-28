@@ -1085,7 +1085,16 @@ namespace ANAConversationStudio.Views
 			this.IsEnabled = false;
 			if (!AskPass()) return;
 			this.IsEnabled = true;
-			new StartupWindow().ShowDialog();
+
+			var cmdArgs = Environment.GetCommandLineArgs();
+			if (cmdArgs.Length > 1 && cmdArgs[1].ToLower().EndsWith(".anaproj"))
+			{
+				var filePath = cmdArgs[1];
+				StudioContext.Load(filePath, this.ViewModel);
+			}
+			else
+				new StartupWindow().ShowDialog();
+
 			CheckForUpdates();
 			UpdateTitle(); //Update title here so that chosen chat server name, project name fill up.
 
