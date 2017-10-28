@@ -15,6 +15,7 @@ using Windows.ApplicationModel;
 using ANAConversationSimulator.Helpers;
 using System.Diagnostics;
 using Newtonsoft.Json;
+using ANAConversationSimulator.UserControls;
 
 namespace ANAConversationSimulator.ViewModels
 {
@@ -227,6 +228,12 @@ namespace ANAConversationSimulator.ViewModels
 					if (parsedSection != null)
 						parsedSection.DelayInMs = 0;
 				}
+				else
+				{
+					if (parsedSection != null && parsedSection.DelayInMs <= 0)
+						parsedSection.DelayInMs = 2000;
+				}
+
 #endif
 				if (parsedSection != null)
 				{
@@ -509,6 +516,24 @@ namespace ANAConversationSimulator.ViewModels
 		}
 
 		public void ShowMemoryStack() => NavigationService.Navigate(typeof(Views.MemoryStackPage));
+
+		public async void ConfigSettings()
+		{
+			Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
+
+			InputContentDialog icd = new InputContentDialog()
+			{
+				UploadFileAPI = UploadFileAPI + "",
+			};
+
+			icd.Closed += (s, e) =>
+			{
+				if (e.Result == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
+					Utils.APISettings.Values["UploadFileAPI"] = icd.UploadFileAPI;
+			};
+			ToggleTyping(false);
+			await icd.ShowAsync();
+		}
 		#endregion
 	}
 }

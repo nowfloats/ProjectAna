@@ -256,11 +256,11 @@
                         <TextBox Text="{Binding DeepLinkUrl, Mode=TwoWay}" />
                     </uc:TableRowUserControl.Field>
                 </uc:TableRowUserControl>
-                <uc:TableRowUserControl Label="Target Project" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=UrlForFetchChatFlow}">
+                <!--<uc:TableRowUserControl Label="Target Project" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=UrlForFetchChatFlow}">
                     <uc:TableRowUserControl.Field>
                         <ComboBox ItemsSource="{Binding ProjectUrls}" SelectedValuePath="Url" DisplayMemberPath="Name" SelectedValue="{Binding Url, Mode=TwoWay}"/>
                     </uc:TableRowUserControl.Field>
-                </uc:TableRowUserControl>
+                </uc:TableRowUserControl>-->
                 <uc:TableRowUserControl Label="Url" Visibility="{Binding ButtonType, Converter={StaticResource ButtonTypeToFieldVisibilityConverter}, ConverterParameter=Url}">
                     <uc:TableRowUserControl.Field>
                         <TextBox Text="{Binding Url, Mode=TwoWay}" />

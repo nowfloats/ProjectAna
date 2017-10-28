@@ -28,6 +28,8 @@
                 <AppBarSeparator />
                 <AppBarButton Click="{x:Bind SaveChatAsImageDefault}" Label="Save Snapshot" />
                 <AppBarButton Click="{x:Bind SaveChatAsImageWithName}" Label="Save Snapshot As.." />
+                <AppBarSeparator />
+                <AppBarButton Click="{x:Bind ViewModel.ConfigSettings}" Label="Settings" />
             </controls:PageHeader.SecondaryCommands>
         </controls:PageHeader>
         <Grid x:Name="ContentGrid" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignBottomWithPanel="True" RelativePanel.Below="pageHeader" Background="White">

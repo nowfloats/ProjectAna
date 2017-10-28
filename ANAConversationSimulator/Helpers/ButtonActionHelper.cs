@@ -99,11 +99,15 @@ namespace ANAConversationSimulator.Helpers
 				fop.FileTypeFilter.Add("*");
 			}
 			var sf = await fop.PickSingleFileAsync();
-			var fileUploadResp = await APIHelper.UploadFile<UploadFileResponse>(sf.Name, sf);
-			if (fileUploadResp != null && fileUploadResp.Url != null)
+			if (sf != null)
 			{
-				Utils.LocalStore[varName] = fileUploadResp.Url;
-				return fileUploadResp.Url;
+				var fileUploadResp = await APIHelper.UploadFile(sf.Name, sf);
+				if (fileUploadResp != null && fileUploadResp.links != null && fileUploadResp.links.Length > 0)
+				{
+					if (!string.IsNullOrWhiteSpace(varName))
+						Utils.LocalStore[varName] = fileUploadResp.links[0].href;
+					return fileUploadResp.links[0].href;
+				}
 			}
 			return null;
 		}

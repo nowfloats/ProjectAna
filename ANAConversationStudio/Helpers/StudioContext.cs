@@ -282,8 +282,15 @@ namespace ANAConversationStudio.Helpers
 		public T Data { get; set; }
 	}
 
-	public class UploadFileResponse : APIResponse
+	public class Link
 	{
-		public string Url { get; set; }
+		public string rel;
+		public string href;
+	}
+
+	public class UploadFileResponse
+	{
+		public bool data;
+		public Link[] links;
 	}
 }

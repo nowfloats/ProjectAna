@@ -200,10 +200,8 @@ namespace ANAConversationStudio.Models.Chat.Sections
 
 		[JsonIgnore]
 		[BsonIgnore]
-		public ICommand UploadMedia => new ActionCommand((s) =>
+		public ICommand UploadMedia => new ActionCommand(async (s) =>
 		{
-			MessageBox.Show("This feature is coming back soon!", "Feature unavailable");
-#if false
 			OpenFileDialog ofd = new OpenFileDialog()
 			{
 				Title = "Please choose a media file to upload",
@@ -229,7 +227,7 @@ namespace ANAConversationStudio.Models.Chat.Sections
 					break;
 				default:
 					{
-						System.Windows.MessageBox.Show("Media upload can only be done for Image, GIF, Video, Audio section types");
+						MessageBox.Show("Media upload can only be done for Image, GIF, Video, Audio section types");
 						return;
 					}
 			}
@@ -240,10 +238,10 @@ namespace ANAConversationStudio.Models.Chat.Sections
 				try
 				{
 					UploadProgress = "Uploading...";
-					var upload = await StudioContext.Current.UploadFile(ofd.FileName);
-					if (upload != null && !string.IsNullOrWhiteSpace(upload.Url))
+					var uploadedUrl = await Utilities.FileUploadAsync(ofd.FileName);
+					if (uploadedUrl != null && !string.IsNullOrWhiteSpace(uploadedUrl))
 					{
-						Url = upload.Url;
+						Url = uploadedUrl;
 						UploadProgress = null;
 					}
 					else
@@ -253,8 +251,7 @@ namespace ANAConversationStudio.Models.Chat.Sections
 				{
 					UploadProgress = "Unable to upload: " + ex.Message;
 				}
-			} 
-#endif
+			}
 		});
 	}
 	public enum SectionTypeEnum

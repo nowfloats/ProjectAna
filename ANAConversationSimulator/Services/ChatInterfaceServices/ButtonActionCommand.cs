@@ -158,6 +158,8 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 					case ButtonTypeEnum.GetAudio:
 					case ButtonTypeEnum.GetVideo:
 						var mediaUrl = await ButtonActionHelper.HandleSaveMediaInputAsync(button.VariableName, button.ButtonType);
+						if (string.IsNullOrWhiteSpace(mediaUrl))
+							return;
 						userData[button.VariableName] = mediaUrl;
 						ButtonActionHelper.HandlePostMediaToThread(mediaUrl, button.ButtonType);
 						break;

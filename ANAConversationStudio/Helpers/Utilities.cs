@@ -19,7 +19,6 @@ using Newtonsoft.Json.Converters;
 using ANAConversationStudio.ViewModels;
 using System.Linq;
 using System.Text.RegularExpressions;
-using Microsoft.Win32;
 
 namespace ANAConversationStudio.Helpers
 {
@@ -278,7 +277,41 @@ namespace ANAConversationStudio.Helpers
 				return Convert.ToBase64String(hashAlgo.ComputeHash(Encoding.UTF8.GetBytes(data)));
 			}
 		}
+
+		public static async Task<string> FileUploadAsync(string filePath)
+		{
+			try
+			{
+				if (!File.Exists(filePath))
+				{
+					MessageBox.Show("Given file does not exist! Please try again.", "Error!");
+					return null;
+				}
+				using (var webClient = new WebClient())
+				{
+					string boundary = "------------------------" + DateTime.Now.Ticks.ToString("x");
+					webClient.Headers.Add("Content-Type", "multipart/form-data; boundary=" + boundary);
+					using (var fileStream = File.OpenRead(filePath))
+					{
+						var fileBytes = new byte[fileStream.Length];
+						fileStream.Read(fileBytes, 0, fileBytes.Length);
+						var fileData = webClient.Encoding.GetString(fileBytes);
+						var package = string.Format("--{0}\r\nContent-Disposition: form-data; name=\"file\"; filename=\"{1}\"\r\nContent-Type: {2}\r\n\r\n{3}\r\n--{0}--\r\n", boundary, Path.GetFileName(filePath), "application/octet-stream", fileData);
+						var nfile = webClient.Encoding.GetBytes(package);
+						byte[] resp = await webClient.UploadDataTaskAsync(Settings.UpdateDetails.FileUploadUrl, "POST", nfile);
+						var respDetails = JsonConvert.DeserializeObject<UploadFileResponse>(Encoding.UTF8.GetString(resp));
+						return respDetails.links[0].href;
+					}
+				}
+			}
+			catch (Exception ex)
+			{
+				MessageBox.Show("Make sure FileUploadUrl is set in File>Settings>FileUploadUrl field and it's working.", "Unable to upload file!");
+			}
+			return null;
+		}
 	}
+
 
 	public static class Exts
 	{

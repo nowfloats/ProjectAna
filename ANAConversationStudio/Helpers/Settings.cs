@@ -105,6 +105,7 @@ namespace ANAConversationStudio.Helpers
 	public class EditableSettings
 	{
 		public string StudioUpdateUrl { get; set; }
+		public string FileUploadUrl { get; set; }
 	}
 
 	public class AutoUpdateResponse

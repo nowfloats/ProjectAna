@@ -58,7 +58,7 @@ namespace ANAConversationSimulator.Helpers
 			}
 		}
 
-		public static async Task<TResponse> UploadFile<TResponse>(string fileName, StorageFile sFile)
+		public static async Task<UploadFileResponse> UploadFile(string fileName, StorageFile sFile)
 		{
 			using (var client = new HttpClient())
 			{
@@ -67,12 +67,16 @@ namespace ANAConversationSimulator.Helpers
 					Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
 					if (string.IsNullOrWhiteSpace(UploadFileAPI + ""))
 					{
-						Utils.ShowDialog("Upload File API is not set. Please go to Menu(...) -> Update APIs and set it.");
-						return default(TResponse);
+						Utils.ShowDialog("Upload File API is not set. Please go to Menu(...) -> Settings and set it.");
+						return null;
 					}
-					var resp = await client.PostAsync((UploadFileAPI + "").Replace("{fileName}", Uri.EscapeDataString(fileName)), new StreamContent(fStrm));
+					var postData = new MultipartFormDataContent();
+					postData.Add(new StreamContent(fStrm), "file", sFile.Name);
+
+					var resp = await client.PostAsync(UploadFileAPI + "", postData);
 					resp = resp.EnsureSuccessStatusCode();
-					return JsonConvert.DeserializeObject<TResponse>(await resp.Content.ReadAsStringAsync());
+					var respJson = await resp.Content.ReadAsStringAsync();
+					return JsonConvert.DeserializeObject<UploadFileResponse>(respJson);
 				}
 			}
 		}
