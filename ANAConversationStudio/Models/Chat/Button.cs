@@ -293,7 +293,6 @@ namespace ANAConversationStudio.Models.Chat
 
 		//Content
 		private string _ButtonText;
-		[JsonIgnore]
 		public string ButtonText
 		{
 			get { return _ButtonText; }
@@ -310,7 +309,6 @@ namespace ANAConversationStudio.Models.Chat
 		}
 
 		private string _ButtonName;
-		[JsonIgnore]
 		public string ButtonName
 		{
 			get { return _ButtonName; }

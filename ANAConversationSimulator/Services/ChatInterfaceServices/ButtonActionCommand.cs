@@ -173,8 +173,7 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 							ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
 						break;
 					case ButtonTypeEnum.GetAgent:
-						if (MainPageViewModel.CurrentInstance != null)
-							MainPageViewModel.CurrentInstance.AgentChat();
+						await Utils.ShowDialogAsync("Agent chat not supported in simulator");
 						if (!button.Hidden && button.PostToChat)
 							ButtonActionHelper.HandlePostTextToThread(button.ButtonText);
 						break;

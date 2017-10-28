@@ -324,7 +324,14 @@ namespace ANAConversationStudio.Views
 			{
 				var saved = this.ViewModel.SaveLoadedChat();
 				if (saved)
-					Process.Start(StudioContext.Current.ProjectFilePath);
+				{
+					var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".anachat");
+					File.WriteAllText(filePath, StudioContext.Current.GetCompiledProjectJSON());
+					if (saved)
+						Process.Start(filePath);
+				}
+				else
+					MessageBox.Show("Unable to save chat!");
 				//Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
 			}
 		}

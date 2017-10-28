@@ -25,6 +25,16 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#8cc83c" />
       </uap:VisualElements>
       <Extensions>
+        <uap:Extension Category="windows.fileTypeAssociation">
+          <uap:FileTypeAssociation Name="anachat">
+            <uap:DisplayName>ANA Chat Flow</uap:DisplayName>
+            <uap:Logo>Assets\ana-logo.png</uap:Logo>
+            <uap:EditFlags OpenIsSafe="true" />
+            <uap:SupportedFileTypes>
+              <uap:FileType ContentType="text/plain">.anachat</uap:FileType>
+            </uap:SupportedFileTypes>
+          </uap:FileTypeAssociation>
+        </uap:Extension>
         <uap:Extension Category="windows.protocol">
           <uap:Protocol Name="anaconsim" DesiredView="default">
             <uap:Logo>Assets\Square150x150.png</uap:Logo>

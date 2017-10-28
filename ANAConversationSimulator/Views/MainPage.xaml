@@ -24,9 +24,7 @@
             </controls:PageHeader.Content>
             <controls:PageHeader.SecondaryCommands>
                 <AppBarButton Click="{x:Bind Reset}" Label="Reset" />
-                <AppBarButton Click="{x:Bind ViewModel.UpdateAPI}" Label="Configure Chat Server" />
                 <AppBarButton Click="{x:Bind ViewModel.ShowMemoryStack}" Label="Show Memory Stack" />
-                <AppBarButton Click="{x:Bind ViewModel.AgentChat}" Label="Agent Chat" />
                 <AppBarSeparator />
                 <AppBarButton Click="{x:Bind SaveChatAsImageDefault}" Label="Save Snapshot" />
                 <AppBarButton Click="{x:Bind SaveChatAsImageWithName}" Label="Save Snapshot As.." />

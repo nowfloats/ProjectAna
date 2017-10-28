@@ -13,12 +13,8 @@ using ANAConversationSimulator.Models.Chat.Sections;
 using Windows.UI.Xaml;
 using Windows.ApplicationModel;
 using ANAConversationSimulator.Helpers;
-using ANAConversationSimulator.UserControls;
-using Quobject.SocketIoClientDotNet.Client;
 using System.Diagnostics;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using ANAConversationSimulator.Views;
 
 namespace ANAConversationSimulator.ViewModels
 {
@@ -43,23 +39,13 @@ namespace ANAConversationSimulator.ViewModels
 		ObservableCollection<Button> _currentTextInputButtons = new ObservableCollection<Button>();
 		public ObservableCollection<Button> CurrentTextInputButtons { get { return _currentTextInputButtons; } set { Set(ref _currentTextInputButtons, value); } }
 
-		private string currentAPI = "";
 		private JArray chatNodes;
-		public async Task LoadNodesAsync()
+		public void LoadNodes()
 		{
 			try
 			{
-				using (var hc = new HttpClient())
-				{
-					if (Utils.APISettings.Values.TryGetValue("API", out object savedAPI) && !string.IsNullOrWhiteSpace(savedAPI + ""))
-					{
-						currentAPI = savedAPI + "";
-						var resp = await hc.GetStringAsync(currentAPI);
-						chatNodes = JArray.Parse(resp);
-					}
-					else
-						UpdateAPI();
-				}
+				if (Utils.APISettings.Values.TryGetValue("JSON", out object json) && !string.IsNullOrWhiteSpace(json as string))
+					chatNodes = JArray.Parse(json as string);
 			}
 			catch (Exception ex)
 			{
@@ -91,12 +77,11 @@ namespace ANAConversationSimulator.ViewModels
 		{
 			return chatNodes.Children().FirstOrDefault(x => x["Id"].ToString() == nodeId);
 		}
-		public async void StartChatting()
+		public void StartChatting()
 		{
 			ClearChatThread();
-			SetupSocketConnection();
 			ToggleTyping(true);
-			await LoadNodesAsync();
+			LoadNodes();
 			if (chatNodes == null || chatNodes.Count == 0)
 				return;
 
@@ -120,7 +105,7 @@ namespace ANAConversationSimulator.ViewModels
 				ClearButtons();
 
 			if (parsedNode.NodeType == NodeTypeEnum.HandoffToAgent)
-				AgentChat();
+				await Utils.ShowDialogAsync("'HandoffToAgent' not supported in simulator");
 			else if (parsedNode.NodeType == NodeTypeEnum.ApiCall)
 			{
 				ToggleTyping(true);
@@ -519,98 +504,6 @@ namespace ANAConversationSimulator.ViewModels
 		}
 
 		public void ShowMemoryStack() => NavigationService.Navigate(typeof(Views.MemoryStackPage));
-
-		public async void UpdateAPI()
-		{
-			Utils.APISettings.Values.TryGetValue("UploadFileAPI", out object UploadFileAPI);
-			Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
-			Utils.APISettings.Values.TryGetValue("SocketServer", out object SocketServer);
-
-			InputContentDialog icd = new InputContentDialog()
-			{
-				ChatFlowAPI = currentAPI,
-				UploadFileAPI = UploadFileAPI + "",
-				ActivityTrackAPI = ActivityTrackAPI + "",
-				SocketServer = SocketServer + ""
-			};
-
-			icd.Closed += (s, e) =>
-			{
-				if (e.Result == Windows.UI.Xaml.Controls.ContentDialogResult.Primary)
-				{
-					Utils.APISettings.Values["API"] = icd.ChatFlowAPI;
-					Utils.APISettings.Values["UploadFileAPI"] = icd.UploadFileAPI;
-					Utils.APISettings.Values["ActivityTrackAPI"] = icd.ActivityTrackAPI;
-					Utils.APISettings.Values["SocketServer"] = icd.SocketServer;
-
-					MainPage.Current?.Reset();
-				}
-			};
-			ToggleTyping(false);
-			await icd.ShowAsync();
-		}
-		#endregion
-
-		#region Agent Chat
-		public void AgentChat()
-		{
-			var first = chatNodes.FirstOrDefault(x => x["Id"] + "" == "INIT_CHAT_NODE");
-			if (first != null)
-			{
-				ProcessNode(first);
-			}
-			else
-			{
-				Utils.ShowDialog("Chat Init node not found");
-			}
-		}
-
-		private Socket socket;
-		public void SetupSocketConnection()
-		{
-			try
-			{
-				if (socket != null)
-					socket.Close();
-				Utils.APISettings.Values.TryGetValue("SocketServer", out object socketServer);
-				if (string.IsNullOrWhiteSpace(socketServer + ""))
-				{
-					//Utils.ShowDialog("Socket Server is not set. Please go to Menu(...) -> Update APIs and set it.");
-					return;
-				}
-				socket = IO.Socket(socketServer + "", new IO.Options { Reconnection = true, AutoConnect = true });
-
-				socket.On(Socket.EVENT_CONNECT, () =>
-				{
-					Debug.WriteLine("Connected");
-					socket.Emit("join", Utils.DeviceId);
-				});
-
-				socket.On(Socket.EVENT_DISCONNECT, () =>
-				{
-					Debug.WriteLine("Disconnected");
-				});
-
-				socket.On(Socket.EVENT_MESSAGE, (data) =>
-				{
-					var dataString = JsonConvert.SerializeObject(data, Formatting.Indented);
-					Debug.WriteLine(dataString);
-
-					Dispatcher.Dispatch(() =>
-					{
-						if (data is JObject jData)
-						{
-							chatNodes.Add(jData);
-							ProcessNode(jData);
-						}
-					});
-				});
-			}
-			catch (Exception ex)
-			{
-				//TODO: Handle error
-			}
-		}
 		#endregion
 	}
 }

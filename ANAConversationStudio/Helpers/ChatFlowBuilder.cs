@@ -30,6 +30,7 @@ namespace ANAConversationStudio.Helpers
 						{
 							var cnt = content.GetFor(button);
 							button.ButtonText = cnt?.ButtonText;
+							button.ButtonName = cnt?.ButtonName;
 							button.ContentId = cnt?._id;
 							button.ContentEmotion = cnt?.Emotion;
 

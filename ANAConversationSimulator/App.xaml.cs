@@ -11,6 +11,7 @@ using ANAConversationSimulator.ViewModels;
 using Windows.UI.ViewManagement;
 using Windows.Foundation.Metadata;
 using Windows.UI;
+using Windows.Storage;
 
 namespace ANAConversationSimulator
 {
@@ -79,6 +80,12 @@ namespace ANAConversationSimulator
 					}
 					catch { }
 				}
+			}
+			if (args is FileActivatedEventArgs fArgs && fArgs.Files.Count > 0)
+			{
+				var file = fArgs.Files[0] as StorageFile;
+				Utils.APISettings.Values["JSON"] = await FileIO.ReadTextAsync(file);
+				MainPageViewModel.CurrentInstance?.StartChatting();
 			}
 			// long-running startup tasks go here
 			await Utils.LoadConfig();
