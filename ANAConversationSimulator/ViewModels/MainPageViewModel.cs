@@ -46,6 +46,11 @@ namespace ANAConversationSimulator.ViewModels
 			{
 				if (Utils.APISettings.Values.TryGetValue("JSON", out object json) && !string.IsNullOrWhiteSpace(json as string))
 					chatNodes = JArray.Parse(json as string);
+				else
+				{
+					ToggleTyping(false);
+					Utils.ShowDialog("Create a chat flow using ANA Conversation Studio, open that chat in the ANA Simulator by going to Tools>Launch current chat in simulator option");
+				}
 			}
 			catch (Exception ex)
 			{

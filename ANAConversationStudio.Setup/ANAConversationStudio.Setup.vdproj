@@ -117,6 +117,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_42D6BF30E72B4AD1AD481DF10EBB0A2C"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_4697BFE2708F4CDC0F552CAF22AD4792"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
@@ -155,12 +161,6 @@
         {
         "MsmKey" = "8:_55510FC3E0831AE353E4AF66667EE3DE"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_5B680C2F974542FEAD36FDF1C35EE9F4"
-        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -299,6 +299,12 @@
         {
         "MsmKey" = "8:_8233C879E1A1BF2119F7B501ACDE385E"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_86725A79C885DEA350EDB85A4469B082"
+        "OwnerKey" = "8:_3C020368A3674EBBB6964882B1D7E342"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -477,6 +483,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_CE145EDFD8BCEBF4A909AAEBCAB871E9"
+        "OwnerKey" = "8:_86725A79C885DEA350EDB85A4469B082"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_D0ED70977B38915194E70641F0E6E5D9"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
@@ -567,12 +579,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_F030F94938EA447EAD4BA85D33AF55D8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_F5C07A46672736186BDBF172411A052A"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
@@ -611,6 +617,18 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_86725A79C885DEA350EDB85A4469B082"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_CE145EDFD8BCEBF4A909AAEBCAB871E9"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1607,6 +1625,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_42D6BF30E72B4AD1AD481DF10EBB0A2C"
+            {
+            "SourcePath" = "8:..\\ANAConversationSimulator\\AppxBundle\\Simulator.zip"
+            "TargetName" = "8:Simulator.zip"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_4697BFE2708F4CDC0F552CAF22AD4792"
             {
             "AssemblyRegister" = "3:1"
@@ -1791,26 +1829,6 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5B680C2F974542FEAD36FDF1C35EE9F4"
-            {
-            "SourcePath" = "8:..\\ANAConversationSimulator\\AppxBundle\\ANAConversationSimulator.appxbundle"
-            "TargetName" = "8:ANAConversationSimulator.appxbundle"
-            "Tag" = "8:"
-            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5DE7B4EC6A5D4E290FEF3E6E6B7ACA2A"
@@ -2202,6 +2220,37 @@
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_6B854D7E7BAC45F0A7D8892B06AAA81B"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_86725A79C885DEA350EDB85A4469B082"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:System.IO.Compression.FileSystem, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_86725A79C885DEA350EDB85A4469B082"
+                    {
+                    "Name" = "8:System.IO.Compression.FileSystem.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.IO.Compression.FileSystem.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -2938,6 +2987,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CE145EDFD8BCEBF4A909AAEBCAB871E9"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:TRUE"
+            "AssemblyAsmDisplayName" = "8:System.IO.Compression, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_CE145EDFD8BCEBF4A909AAEBCAB871E9"
+                    {
+                    "Name" = "8:System.IO.Compression.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:System.IO.Compression.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_D0ED70977B38915194E70641F0E6E5D9"
             {
             "AssemblyRegister" = "3:1"
@@ -3341,26 +3421,6 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F030F94938EA447EAD4BA85D33AF55D8"
-            {
-            "SourcePath" = "8:..\\ANAConversationSimulator\\AppxBundle\\ANAConversationSimulator.cer"
-            "TargetName" = "8:ANAConversationSimulator.cer"
-            "Tag" = "8:"
-            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F5C07A46672736186BDBF172411A052A"
             {
             "AssemblyRegister" = "3:1"
@@ -3546,7 +3606,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ANA Conversation Studio"
         "ProductCode" = "8:{F8EEBE41-A8E8-49FF-8F21-0AECD7DD8163}"
-        "PackageCode" = "8:{0B6D11A6-5E9B-4D35-99AB-7C8EFEBC6D8E}"
+        "PackageCode" = "8:{29EC6768-78E8-463B-90C9-F49A8E28FE12}"
         "UpgradeCode" = "8:{1BD9D39A-BCB0-4988-88FE-7481A5494FFF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"

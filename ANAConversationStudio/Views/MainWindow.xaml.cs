@@ -1216,6 +1216,7 @@ namespace ANAConversationStudio.Views
 				this.ValidateFlow();
 				this.ViewModel.SaveLoadedChat();
 				SaveStatusTextBlock.Text = "Saved at " + DateTime.Now.ToShortTimeString() + ". ";
+				UpdateTitle();
 			}
 			catch (Exception ex)
 			{
