@@ -245,6 +245,7 @@ ModelManifest.xml
 *.pubxml
 
 /ANAConversationSimulator/Config.json
+/ANAConversationSimulator/AppxBundle/
 /ANAConversationPlatform/wwwroot/
 /ANAConversationPlatform/appsettings.json
 /ANAConversationPlatform/Logs
