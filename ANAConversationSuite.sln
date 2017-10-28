@@ -24,6 +24,14 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Assets", "Assets", "{0D4612
 EndProject
 Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "ANAConversationStudio.Setup", "ANAConversationStudio.Setup\ANAConversationStudio.Setup.vdproj", "{6AD8CA51-F493-46A2-A3B6-71DC7F49D056}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{72739A68-8C36-4795-82B9-773E2C53BA63}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "MSIUpdater", "MSIUpdater", "{51F4AED5-AD71-4F60-B1AC-42D387AAEE86}"
+	ProjectSection(SolutionItems) = preProject
+		Tools\MSIUpdater\Microsoft.Deployment.WindowsInstaller.dll = Tools\MSIUpdater\Microsoft.Deployment.WindowsInstaller.dll
+		Tools\MSIUpdater\UpdateMSICustomActionType.exe = Tools\MSIUpdater\UpdateMSICustomActionType.exe
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -202,6 +210,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{51F4AED5-AD71-4F60-B1AC-42D387AAEE86} = {72739A68-8C36-4795-82B9-773E2C53BA63}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {878CE18B-DBF7-412A-91DB-99EA8BB13325}

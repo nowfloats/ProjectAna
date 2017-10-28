@@ -87,6 +87,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_3C020368A3674EBBB6964882B1D7E342"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_3F477AA1B57805F0D0D4C1DFF3375A99"
         "OwnerKey" = "8:_5DE7B4EC6A5D4E290FEF3E6E6B7ACA2A"
         "MsmSig" = "8:_UNDEFINED"
@@ -149,6 +155,12 @@
         {
         "MsmKey" = "8:_55510FC3E0831AE353E4AF66667EE3DE"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_5B680C2F974542FEAD36FDF1C35EE9F4"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -555,6 +567,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_F030F94938EA447EAD4BA85D33AF55D8"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_F5C07A46672736186BDBF172411A052A"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
         "MsmSig" = "8:_UNDEFINED"
@@ -593,6 +611,12 @@
         {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_D4EFAFED3A064A39A7D563BA8B3CBF7B"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_3C020368A3674EBBB6964882B1D7E342"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -1081,6 +1105,20 @@
     {
         "CustomAction"
         {
+            "{4AA51A2D-7D85-4A59-BA75-B0809FC8B380}:_7DB49EF23F34452A9F94817B390D652D"
+            {
+            "Name" = "8:ANASimRun.exe"
+            "Condition" = "8:"
+            "Object" = "8:_3C020368A3674EBBB6964882B1D7E342"
+            "FileType" = "3:2"
+            "InstallAction" = "3:2"
+            "Arguments" = "8:"
+            "EntryPoint" = "8:"
+            "Sequence" = "3:1"
+            "Identifier" = "8:_5A4C848A_1838_4634_86E2_2C080436AE6F"
+            "InstallerClass" = "11:FALSE"
+            "CustomActionData" = "8:"
+            }
         }
         "DefaultFeature"
         {
@@ -1476,6 +1514,37 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3C020368A3674EBBB6964882B1D7E342"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:ANASimRun, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_3C020368A3674EBBB6964882B1D7E342"
+                    {
+                    "Name" = "8:ANASimRun.exe"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:..\\Tools\\ANA Simulator Install Initializer\\ANASimRun.exe"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_3F477AA1B57805F0D0D4C1DFF3375A99"
             {
             "AssemblyRegister" = "3:1"
@@ -1722,6 +1791,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_5B680C2F974542FEAD36FDF1C35EE9F4"
+            {
+            "SourcePath" = "8:..\\ANAConversationSimulator\\AppxBundle\\ANAConversationSimulator.appxbundle"
+            "TargetName" = "8:ANAConversationSimulator.appxbundle"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_5DE7B4EC6A5D4E290FEF3E6E6B7ACA2A"
@@ -3252,6 +3341,26 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F030F94938EA447EAD4BA85D33AF55D8"
+            {
+            "SourcePath" = "8:..\\ANAConversationSimulator\\AppxBundle\\ANAConversationSimulator.cer"
+            "TargetName" = "8:ANAConversationSimulator.cer"
+            "Tag" = "8:"
+            "Folder" = "8:_4084382A1954427793AE2D34BBD14315"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F5C07A46672736186BDBF172411A052A"
             {
             "AssemblyRegister" = "3:1"
@@ -3385,6 +3494,18 @@
                 {
                 }
             }
+            "{994432C3-9487-495D-8656-3E829A8DBDDE}:_4084382A1954427793AE2D34BBD14315"
+            {
+            "DefaultLocation" = "8:[TARGETDIR]"
+            "Name" = "8:Simulator"
+            "AlwaysCreate" = "11:TRUE"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Property" = "8:SIMULATORFOLDER"
+                "Folders"
+                {
+                }
+            }
             "{3C67513D-01DD-4637-8A68-80971EB9504F}:_6B854D7E7BAC45F0A7D8892B06AAA81B"
             {
             "DefaultLocation" = "8:[ProgramFilesFolder][Manufacturer]\\[ProductName]"
@@ -3425,7 +3546,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ANA Conversation Studio"
         "ProductCode" = "8:{F8EEBE41-A8E8-49FF-8F21-0AECD7DD8163}"
-        "PackageCode" = "8:{EE95ECAE-6078-4FCB-9719-E9025375E637}"
+        "PackageCode" = "8:{0B6D11A6-5E9B-4D35-99AB-7C8EFEBC6D8E}"
         "UpgradeCode" = "8:{1BD9D39A-BCB0-4988-88FE-7481A5494FFF}"
         "AspNetVersion" = "8:4.0.30319.0"
         "RestartWWWService" = "11:FALSE"
@@ -3448,7 +3569,7 @@
         "UseSystemSearchPath" = "11:TRUE"
         "TargetPlatform" = "3:0"
         "PreBuildEvent" = "8:"
-        "PostBuildEvent" = "8:"
+        "PostBuildEvent" = "8:\"$(ProjectDir)..\\Tools\\MSIUpdater\\UpdateMSICustomActionType.exe\" \"$(BuiltOuputPath)\" _5A4C848A_1838_4634_86E2_2C080436AE6F 1554"
         "RunPostBuildEvent" = "3:0"
         }
         "Registry"
