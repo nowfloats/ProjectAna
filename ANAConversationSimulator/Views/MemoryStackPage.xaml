@@ -17,7 +17,7 @@
         <controls:PageHeader x:Name="pageHeader" HorizontalContentAlignment="Center" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Background="{StaticResource NFYellowBrush}" FontFamily="Segoe UI Semilight" FontSize="24" Margin="0,3,0,0" Grid.RowSpan="2">
             <controls:PageHeader.Content>
                 <Grid HorizontalAlignment="Center">
-                    <Image Source="ms-appx:///Assets/ana-logo-trans.png" Margin="31,0,0,0" Height="50"/>
+                    <Image Source="ms-appx:///Assets/ana-logo-trans.png" Margin="0,0,0,0" Height="50"/>
                 </Grid>
             </controls:PageHeader.Content>
             <controls:PageHeader.SecondaryCommands>
