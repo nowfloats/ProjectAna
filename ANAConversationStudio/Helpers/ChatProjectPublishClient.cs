@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using ANAConversationStudio.Models.Chat;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +23,7 @@ namespace ANAConversationStudio.Helpers
 				authHeader = "Basic " + Convert.ToBase64String(Encoding.UTF8.GetBytes(publishServer.Key + ":" + publishServer.Secret));
 		}
 
-		public async Task<(bool Status, string Msg)> Publish(PublishChatProject project, string publishJSON)
+		public async Task<(bool Status, string Msg)> Publish(PublishChatProject project, List<ChatNode> compiledChatFlow)
 		{
 			try
 			{
@@ -30,8 +31,8 @@ namespace ANAConversationStudio.Helpers
 				{
 					business_id = project.Id,
 					business_name = project.Name,
-					flow = publishJSON
-				});
+					flow = compiledChatFlow
+				}, StudioContext.PublishJsonSettings);
 				return (true, ""); //If 200;
 			}
 			catch (Exception ex)
@@ -75,14 +76,14 @@ namespace ANAConversationStudio.Helpers
 			}
 		}
 
-		private async Task<dynamic> HitPostAsync<T>(string api, T data)
+		private async Task<dynamic> HitPostAsync<T>(string api, T data, JsonSerializerSettings serializerSettings = null)
 		{
 			using (var wc = new WebClient())
 			{
 				wc.Headers[HttpRequestHeader.Authorization] = authHeader;
 				wc.Headers[HttpRequestHeader.ContentType] = "application/json";
 				wc.Headers[HttpRequestHeader.Accept] = "application/json";
-				var resp = await wc.UploadStringTaskAsync(publishServer.Url + api, JsonConvert.SerializeObject(data));
+				var resp = await wc.UploadStringTaskAsync(publishServer.Url + api, serializerSettings == null ? JsonConvert.SerializeObject(data) : JsonConvert.SerializeObject(data, serializerSettings));
 				return JsonConvert.DeserializeObject(resp) as dynamic;
 			}
 		}

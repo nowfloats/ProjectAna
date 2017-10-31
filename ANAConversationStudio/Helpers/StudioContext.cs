@@ -155,7 +155,7 @@ namespace ANAConversationStudio.Helpers
 			}
 			return false;
 		}
-		private static readonly JsonSerializerSettings publishJsonSettings = new JsonSerializerSettings
+		public static readonly JsonSerializerSettings PublishJsonSettings = new JsonSerializerSettings
 		{
 			NullValueHandling = NullValueHandling.Ignore,
 			Converters = new List<JsonConverter> { new StringEnumConverter() }
@@ -252,10 +252,9 @@ namespace ANAConversationStudio.Helpers
 			return false;
 		}
 
-		public string GetCompiledProjectJSON()
+		public List<ChatNode> GetCompiledProject()
 		{
-			var compiled = ChatFlowBuilder.Build(ChatFlow);
-			return JsonConvert.SerializeObject(compiled, publishJsonSettings);
+			return ChatFlowBuilder.Build(ChatFlow);
 		}
 
 		#region INPC

@@ -14,15 +14,10 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <controls:PageHeader x:Name="pageHeader" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Background="{StaticResource NFYellowBrush}" FontFamily="Segoe UI Semilight" FontSize="24">
+        <controls:PageHeader x:Name="pageHeader" HorizontalContentAlignment="Center" RelativePanel.AlignLeftWithPanel="True" RelativePanel.AlignRightWithPanel="True" RelativePanel.AlignTopWithPanel="True" Background="{StaticResource NFYellowBrush}" FontFamily="Segoe UI Semilight" FontSize="24" Margin="0,3,0,0" Grid.RowSpan="2">
             <controls:PageHeader.Content>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="ms-appx:///Assets/ana-logo-trans.png" Margin="0" Height="50"/>
-                    <TextBlock Grid.Column="1" VerticalAlignment="Center" Margin="5,0,0,0" Text="{Binding PageTitle}" />
+                <Grid HorizontalAlignment="Center">
+                    <Image Source="ms-appx:///Assets/ana-logo-trans.png" Margin="31,0,0,0" Height="50"/>
                 </Grid>
             </controls:PageHeader.Content>
             <controls:PageHeader.SecondaryCommands>

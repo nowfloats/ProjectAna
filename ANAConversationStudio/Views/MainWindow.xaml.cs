@@ -21,6 +21,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using System.ComponentModel;
 using System.Collections.ObjectModel;
+using Newtonsoft.Json;
 
 namespace ANAConversationStudio.Views
 {
@@ -326,7 +327,7 @@ namespace ANAConversationStudio.Views
 				if (saved)
 				{
 					var filePath = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".anachat");
-					File.WriteAllText(filePath, StudioContext.Current.GetCompiledProjectJSON());
+					File.WriteAllText(filePath, JsonConvert.SerializeObject(StudioContext.Current.GetCompiledProject(), StudioContext.PublishJsonSettings));
 					if (saved)
 						Process.Start(filePath);
 				}
@@ -501,7 +502,7 @@ namespace ANAConversationStudio.Views
 			{
 				var saved = this.ViewModel.SaveLoadedChat();
 				if (saved)
-					new PublishChatProjectWindow(StudioContext.Current.GetCompiledProjectJSON()).ShowDialog();
+					new PublishChatProjectWindow(StudioContext.Current.GetCompiledProject()).ShowDialog();
 			}
 		}
 

@@ -1,25 +1,26 @@
 ﻿using ANAConversationStudio.Helpers;
+using ANAConversationStudio.Models.Chat;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls;
 
 namespace ANAConversationStudio.Views
 {
 	public partial class PublishChatProjectWindow : Window
 	{
-		public PublishChatProjectWindow(string publishJSON)
+		public PublishChatProjectWindow(List<ChatNode> compiledChatFlow)
 		{
 			InitializeComponent();
 			this.DataContext = this;
 
-			this.publishJSON = publishJSON;
+			this.compiledChatFlow = compiledChatFlow;
 
 			if (Utilities.Settings.PublishServers.Count <= 0)
 				ShowPublishServerManager();
 			else
 				this.PublishServers = new ObservableCollection<PublishServer>(Utilities.Settings.PublishServers);
 		}
-		private string publishJSON;
+		private List<ChatNode> compiledChatFlow;
 
 		public PublishChatProject PublishChatProject
 		{
@@ -81,7 +82,7 @@ namespace ANAConversationStudio.Views
 
 				if (confirmed)
 				{
-					(var status, var text) = await publishClient.Publish(PublishChatProject, this.publishJSON);
+					(var status, var text) = await publishClient.Publish(PublishChatProject, this.compiledChatFlow);
 					if (status)
 					{
 						MessageBox.Show("Chat published successfully!", "Done");
