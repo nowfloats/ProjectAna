@@ -3,7 +3,7 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 
 World's first **Open Source Conversation Platform** which comes with a **Graphical Chat Flow Designer** and **Chat Simulator**.
-Supported channels are [Web Chat](https://github.com/Kitsune-tools/ana-web-chat-plugin), Facebook Messenger, Android & iOS (SDKs available).
+Supported channels are [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web), [Android](https://github.com/Kitsune-tools/ANAChat-Android), [iOS](https://github.com/Kitsune-tools/ANAChat-iOS) and Facebook Messenger.
 
 ----------
 
@@ -34,9 +34,9 @@ Supported channels are [Web Chat](https://github.com/Kitsune-tools/ana-web-chat-
 
 ----------
 
-## Publishing your chat bot
+## Publishing your ANA chat bot
 
-Once you have created and tested your chat bot in the ANA Simulator in your computer, you would want to publish it. You can publish your chat bot and have it live on multiple channels, be it Web, Facebook Messenger, Android or IOS App. 
+Once you have created and tested your chat bot in the ANA Simulator in your computer, you would want to publish it. You can publish your chat bot once and have it live on multiple channels, be it [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web), [Android](https://github.com/Kitsune-tools/ANAChat-Android), [iOS](https://github.com/Kitsune-tools/ANAChat-iOS) or Facebook Messenger.
 
 **Prerequisites**
 
@@ -52,8 +52,16 @@ To publish, you need an ANA Chat Server.
    4. Enter your ANA Chat Server details 
       - Server URL is mandatory.
       - Key and Secret are only needed if they are set in the chat server. 
-   5. Click on 'Chat Projects' field. In the window that appears, click 'Add' and enter a new 'Chat Project Id' and also a Name. The 'Chat Project Id' a.k.a. 'Business Id' is the one you need to link this chat bot on [Web Chat](https://github.com/Kitsune-tools/ana-web-chat-plugin), Facebook Messenger, Android or IOS. 
+   5. Click on 'Chat Projects' field. In the window that appears, click 'Add' and enter a new 'Chat Project Id' and also a Name. The 'Chat Project Id' a.k.a. 'Business Id' is the one you need to link this chat bot on [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web), [Android](https://github.com/Kitsune-tools/ANAChat-Android), [iOS](https://github.com/Kitsune-tools/ANAChat-iOS) or Facebook Messenger.
    6. Click 'Ok' and then Click 'Save'. You should be back to Publish Window. Choose the server you just created, in Server drop down. Choose the Chat Project you just created, in Chat Project drop down and click publish.
+
+## Deploying your ANA chat bot
+
+The following channels are supported for deploying your ana chat bot. Follow the links for instructions.
+   1. [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web)
+   2. [Android](https://github.com/Kitsune-tools/ANAChat-Android)
+   3. [iOS](https://github.com/Kitsune-tools/ANAChat-iOS)
+   4. Facebook Messenger (Coming soon...)
 
 ## Note
 
