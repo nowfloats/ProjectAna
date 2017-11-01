@@ -45,8 +45,8 @@ namespace ANAConversationSimulator.ViewModels
 		{
 			try
 			{
-				if (Utils.APISettings.Values.TryGetValue("JSON", out object json) && !string.IsNullOrWhiteSpace(json as string))
-					chatNodes = JArray.Parse(json as string);
+				if (!string.IsNullOrWhiteSpace(Utils.CurrentChatFlowJson))
+					chatNodes = JArray.Parse(Utils.CurrentChatFlowJson);
 				else
 				{
 					ToggleTyping(false);
@@ -249,21 +249,6 @@ namespace ANAConversationSimulator.ViewModels
 						var sectionIndex = (sectionsSource.Children().ToList().FindIndex(x => x["_id"].ToString() == parsedSection._id));
 						if (precacheSucess)
 						{
-							if (sectionIndex == 0) //First section in node, send View Event
-							{
-								await Task.Run(async () =>
-								{
-									await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-									{
-										try
-										{
-											await APIHelper.TrackEvent(Utils.GetViewEvent(parsedNode.Id, Utils.DeviceId));
-										}
-										catch { }
-									});
-								});
-							}
-
 							if (parsedNode.NodeType == NodeTypeEnum.Card)
 							{
 								parsedSection.Title = VerbProcessor.Process(parsedNode.CardHeader);

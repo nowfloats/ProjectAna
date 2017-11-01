@@ -104,9 +104,15 @@
                                 <ItemsStackPanel Orientation="Horizontal" Margin="0,0,0,20"/>
                             </ItemsPanelTemplate>
                         </ItemsControl.ItemsPanel>
+                        <ItemsControl.ItemContainerStyle>
+                            <Style TargetType="ContentPresenter">
+                                <Setter Property="VerticalAlignment" Value="Stretch"/>
+                                <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+                            </Style>
+                        </ItemsControl.ItemContainerStyle>
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
-                                <Grid VerticalAlignment="Center" Padding="5" Margin="5" Background="White" Width="180">
+                                <Grid VerticalAlignment="Stretch" Padding="5" Margin="5" Background="White" Width="180">
                                     <Grid.RowDefinitions>
                                         <RowDefinition/>
                                         <RowDefinition Height="Auto"/>

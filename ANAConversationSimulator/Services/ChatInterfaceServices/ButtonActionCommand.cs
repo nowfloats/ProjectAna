@@ -4,9 +4,7 @@ using ANAConversationSimulator.Models.Chat;
 using System;
 using System.Linq;
 using System.Windows.Input;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using Windows.System.Threading;
 using ANAConversationSimulator.Models.Chat.Sections;
 using ANAConversationSimulator.ViewModels;
 using UWPControls = Windows.UI.Xaml.Controls;
@@ -264,7 +262,6 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 						Utils.ShowDialog($"Button type: {button.ButtonType} not supported");
 						break;
 				}
-				trackViewEvent(button, userData);
 				ButtonActionHelper.NavigateToNode(button.NextNodeId);
 			}
 			else if (parameter is CarouselButton cButton)
@@ -289,49 +286,8 @@ namespace ANAConversationSimulator.Services.ChatInterfaceServices
 						Utils.ShowDialog($"Button type: {cButton.Type} not supported");
 						break;
 				}
-				trackViewEvent(cButton, userData);
 				ButtonActionHelper.NavigateToNode(cButton.NextNodeId);
 			}
-		}
-
-		private async void trackViewEvent(Button button, Dictionary<string, string> userData)
-		{
-			await Task.Run(async () =>
-			{
-				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-				 {
-					 try
-					 {
-						 if (userData.Count == 0)
-							 userData = null;
-						 await APIHelper.TrackEvent(Utils.GetClickEvent(button.NodeId, Utils.DeviceId, button._id, button.ButtonText, userData));
-					 }
-					 catch (Exception ex)
-					 {
-						 await Utils.ShowDialogAsync("Track View Event Ex: " + ex.Message);
-					 }
-				 });
-			});
-		}
-		private async void trackViewEvent(CarouselButton cButton, Dictionary<string, string> userData)
-		{
-			await Task.Run(async () =>
-			{
-				await Windows.ApplicationModel.Core.CoreApplication.MainView.CoreWindow.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, async () =>
-				{
-					try
-					{
-						if (userData.Count == 0)
-							userData = null;
-						await APIHelper.TrackEvent(Utils.GetClickEvent(cButton.NodeId, Utils.DeviceId, cButton._id, cButton.Text, userData));
-					}
-					catch (Exception ex)
-					{
-						await Utils.ShowDialogAsync("Track View Event Ex: " + ex.Message);
-					}
-				});
-
-			});
 		}
 	}
 }

@@ -81,24 +81,6 @@ namespace ANAConversationSimulator.Helpers
 			}
 		}
 
-		public static async Task TrackEvent(ChatActivityEvent activityEvent)
-		{
-			try
-			{
-				Utils.APISettings.Values.TryGetValue("ActivityTrackAPI", out object ActivityTrackAPI);
-				if (string.IsNullOrWhiteSpace(ActivityTrackAPI + ""))
-				{
-					//Utils.ShowDialog("Activity Track API is not set. Please go to Menu(...) -> Update APIs and set it.");
-					return;
-				}
-				await HitPostAsync(ActivityTrackAPI + "", activityEvent);
-			}
-			catch (Exception ex)
-			{
-				await Utils.ShowDialogAsync("TrackEvent Ex: " + ex.Message);
-			}
-		}
-
 		public static async Task<(string City, string Country, string Pincode, string FormattedAddress)> LoadCityCountryFromLatLongAsync(double lat, double lng)
 		{
 			try

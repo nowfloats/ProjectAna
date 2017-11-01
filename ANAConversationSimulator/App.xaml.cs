@@ -12,6 +12,7 @@ using Windows.UI.ViewManagement;
 using Windows.Foundation.Metadata;
 using Windows.UI;
 using Windows.Storage;
+using System.Net.Http;
 
 namespace ANAConversationSimulator
 {
@@ -73,8 +74,16 @@ namespace ANAConversationSimulator
 						var parsedQuery = new WwwFormUrlDecoder(pArgs.Uri.Query);
 						if (parsedQuery.Count > 0)
 						{
-							var chatUrl = parsedQuery.GetFirstValueByName("chatflow");
-							Utils.APISettings.Values["API"] = chatUrl;
+							try
+							{
+								var chatUrl = parsedQuery.GetFirstValueByName("chatflow");
+								using (var hc = new HttpClient())
+									Utils.CurrentChatFlowJson = await hc.GetStringAsync(chatUrl);
+							}
+							catch (Exception ex)
+							{
+								await Utils.ShowDialogAsync(ex.Message);
+							}
 							MainPageViewModel.CurrentInstance?.StartChatting();
 						}
 					}
@@ -84,7 +93,7 @@ namespace ANAConversationSimulator
 			if (args is FileActivatedEventArgs fArgs && fArgs.Files.Count > 0)
 			{
 				var file = fArgs.Files[0] as StorageFile;
-				Utils.APISettings.Values["JSON"] = await FileIO.ReadTextAsync(file);
+				Utils.CurrentChatFlowJson = await FileIO.ReadTextAsync(file);
 				MainPageViewModel.CurrentInstance?.StartChatting();
 			}
 			// long-running startup tasks go here

@@ -27,6 +27,8 @@ namespace ANAConversationSimulator.Helpers
 {
 	public static class Utils
 	{
+		public static string CurrentChatFlowJson { get; set; }
+		
 		private static ApplicationDataContainer _APISettings;
 		public static ApplicationDataContainer APISettings
 		{
@@ -37,7 +39,7 @@ namespace ANAConversationSimulator.Helpers
 				return _APISettings;
 			}
 		}
-
+		
 		private static IPropertySet _localStore;
 		public static IPropertySet LocalStore
 		{

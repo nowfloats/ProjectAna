@@ -333,7 +333,6 @@ namespace ANAConversationStudio.Views
 				}
 				else
 					MessageBox.Show("Unable to save chat!");
-				//Process.Start("anaconsim://app?chatflow=" + Uri.EscapeDataString(StudioContext.CurrentProjectUrl()));
 			}
 		}
 
