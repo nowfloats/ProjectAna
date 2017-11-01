@@ -18,6 +18,8 @@ Supported channels are [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web),
 * Windows 10 PC with *developer mode* enabled. 
   - Developer mode is needed to install ANA Simulator as it is a [Universal Windows Platform](https://docs.microsoft.com/en-us/windows/uwp/get-started/whats-a-uwp) app usually distributed via Windows App Store.
   - To enable developer mode, go to your PC Settings > Update & Security > For Developers. Under 'Use developer features', choose 'Developer Mode'. 
+* If you have older version of windows, ANA Conversation Studio will install but the ANA Simulator will not be installed. You can still publish and use the chat bot in [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web), [Android](https://github.com/Kitsune-tools/ANAChat-Android), [iOS](https://github.com/Kitsune-tools/ANAChat-iOS) or Facebook Messenger.
+
 
 **Installing ANA Conversation Studio:**
 
