@@ -69,7 +69,8 @@ namespace ANAConversationStudio.Helpers
 		{
 			using (var wc = new WebClient())
 			{
-				wc.Headers[HttpRequestHeader.Authorization] = authHeader;
+				if (!string.IsNullOrWhiteSpace(authHeader))
+					wc.Headers[HttpRequestHeader.Authorization] = authHeader;
 				wc.Headers[HttpRequestHeader.Accept] = "application/json";
 				var resp = await wc.DownloadStringTaskAsync(publishServer.Url + api);
 				return JsonConvert.DeserializeObject(resp) as dynamic;
@@ -80,9 +81,11 @@ namespace ANAConversationStudio.Helpers
 		{
 			using (var wc = new WebClient())
 			{
-				wc.Headers[HttpRequestHeader.Authorization] = authHeader;
+				if (!string.IsNullOrWhiteSpace(authHeader))
+					wc.Headers[HttpRequestHeader.Authorization] = authHeader;
 				wc.Headers[HttpRequestHeader.ContentType] = "application/json";
 				wc.Headers[HttpRequestHeader.Accept] = "application/json";
+				wc.Encoding = Encoding.UTF8;
 				var resp = await wc.UploadStringTaskAsync(publishServer.Url + api, serializerSettings == null ? JsonConvert.SerializeObject(data) : JsonConvert.SerializeObject(data, serializerSettings));
 				return JsonConvert.DeserializeObject(resp) as dynamic;
 			}

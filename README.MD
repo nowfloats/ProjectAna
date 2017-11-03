@@ -42,9 +42,9 @@ Once you have created and tested your chat bot in the ANA Simulator in your comp
 
 **Prerequisites**
 
-To publish, you need an ANA Chat Server. 
-   - Instructions on setting up your own ANA Chat Server will be specified soon. 
-   - Assuming you have one, let's say `http://ana-chat-server.com` 
+To publish, you need an [ANA Chat Server](ANA-CHAT-SERVER-SETUP-README.MD)
+   - Click [here](ANA-CHAT-SERVER-SETUP-README.MD) for instructions on how to setup one yourselves.
+   - Assuming you have got one after following the above stated process, let's call it `http://ana-chat-server.com` 
 
 **Publishing Steps**
    
