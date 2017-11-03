@@ -36,7 +36,7 @@
     sudo docker-compose up
     ```
     - You should now see fast random logs being dumped onto the console, once every service is up and running the logs will slow down.  
-    - To make sure things are running as they should, head over to http://<public-ip-of-ubuntu-machine>:8761/. 
+    - To make sure things are running as they should, head over to `http://<public-ip-of-ubuntu-machine>:8761/`. 
         - This should open the Spring Eureka.
         - It should have three applications under 'Instances currently registered with Eureka', namely, API-GATEWAY, CONFIG-SERVER, WS-CUSTOMERS. This means the ANA Chat Server is up and running. 
   4. ANA Chat Server URL is the http URL of the **public IP address** of the machine (`eg: http://10.1.2.3`). Additionally, you can map a domain to this IP and use that as well.
