@@ -15,7 +15,6 @@
    - Click [here](https://docs.docker.com/compose/install/) for docker-compose installation guidelines  
  2. MySQL Database Server
    - You can install MySQL Database Server locally on the Ubuntu Machine you are about to use. Click [here](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04) for instructions on that. 
-   - **Or** you can get a server from one of the service providers like Amazon RDS. Click [here](http://docs.aws.amazon.com/AmazonRDS/latest/UserGuide/CHAP_GettingStarted.CreatingConnecting.MySQL.html) for instructions on that.
 
 ## Setup Steps
  1. Login into MySQL Server as root and create a user
