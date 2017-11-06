@@ -158,6 +158,7 @@
     <Compile Include="UIHelpers\IsGoalNodeToBrushConverter.cs" />
     <Compile Include="UIHelpers\ListToVisiblityConverter.cs" />
     <Compile Include="UIHelpers\NodeTypeToGroupVisibilityConverter.cs" />
+    <Compile Include="UIHelpers\ConnectionToFillBrushConverter.cs" />
     <Compile Include="UserControls\NodeEditorUserControl.xaml.cs">
       <DependentUpon>NodeEditorUserControl.xaml</DependentUpon>
     </Compile>

@@ -252,11 +252,23 @@
 
                     <!-- The connection is represented by a curved arrow. -->
                     <Controls:CurvedArrow
-                        Stroke="{Binding SourceConnector.ParentNode.IsSelected, Converter={StaticResource SelectionToFillBrushConverter}}"
                         StrokeThickness="2"
-                        Fill="{Binding SourceConnector.ParentNode.IsSelected, Converter={StaticResource SelectionToFillBrushConverter}}"
                         Points="{Binding Points}"
-                        />
+                        >
+                        <Controls:CurvedArrow.Stroke>
+                            <MultiBinding Converter="{StaticResource ConnectionToFillBrushConverter}">
+                                <Binding Path="SourceConnector.ParentNode.IsSelected"/>
+                                <Binding Path="DestConnector.ParentNode.IsSelected"/>
+                            </MultiBinding>
+                        </Controls:CurvedArrow.Stroke>
+                        <Controls:CurvedArrow.Fill>
+                            <MultiBinding Converter="{StaticResource ConnectionToFillBrushConverter}">
+                                <Binding Path="SourceConnector.ParentNode.IsSelected"/>
+                                <Binding Path="DestConnector.ParentNode.IsSelected"/>
+                            </MultiBinding>
+                        </Controls:CurvedArrow.Fill>
+                    </Controls:CurvedArrow>
+
 
                     <ac:AdornedControl.AdornerContent>
 

@@ -45,7 +45,8 @@
             <BooleanToVisibilityConverter x:Key="B2V"/>
             <UI:FilePathToTitleConverter x:Key="FilePathToTitleConverter"/>
             <UI:ListToVisiblityConverter  x:Key="ListToVisiblityConverter"/>
-            
+
+            <UI:ConnectionToFillBrushConverter x:Key="ConnectionToFillBrushConverter"/>
             <UI:SelectionToFillBrushConverter x:Key="SelectionToFillBrushConverter"/>
             <UI:IsStartNodeToBrushConverter x:Key="IsStartNodeToBrushConverter"/>
             <UI:IsGoalNodeToBrushConverter x:Key="IsGoalNodeToBrushConverter"/>

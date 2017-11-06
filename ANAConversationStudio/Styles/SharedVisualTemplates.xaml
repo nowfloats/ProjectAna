@@ -162,7 +162,7 @@
             <Ellipse
                     Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}"
                     Margin="3"
-                    Fill="{StaticResource connectionBrush}"
+                    Fill="{Binding ParentNode.IsSelected, Converter={StaticResource SelectionToFillBrushConverter}}"
                     IsHitTestVisible="False"
                     />
         </Grid>
@@ -216,9 +216,15 @@
                 <Ellipse
                     Visibility="{Binding IsConnectionAttached, Converter={StaticResource booleanToVisibilityConverter}}"
                     Margin="3"
-                    Fill="{Binding ParentNode.IsSelected, Converter={StaticResource SelectionToFillBrushConverter}}"
                     IsHitTestVisible="False"
-                    />
+                    >
+                    <Ellipse.Fill>
+                        <MultiBinding Converter="{StaticResource ConnectionToFillBrushConverter}">
+                            <Binding Path="ParentNode.IsSelected" />
+                            <Binding Path="AttachedConnections[0].DestConnector.ParentNode.IsSelected" />
+                        </MultiBinding>
+                    </Ellipse.Fill>
+                </Ellipse>
             </Grid>
         </Grid>
     </DataTemplate>
