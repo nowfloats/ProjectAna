@@ -63,7 +63,9 @@
     }
 
 .chatnode-body {
-    background-color: #ccc;
+    background-color: white;
+    color: #666666;
+    border-radius: 0 0 10px 10px;
 }
 
 .chatnode-sections {
@@ -96,7 +98,6 @@
     }
 
 .chatnode-buttons {
-    background-color: #ccc;
     height: 100%;
     text-align: center;
     width: 100%;

@@ -238,12 +238,11 @@ export class ChatFlowComponent implements OnInit {
 		this.zoomCancel();
 
 		let change = Config.zoomCoefficient * event.wheelDelta;
-		if (this._viewBoxWidth - change < 0 || this._viewBoxHeight - change < 0) {
-			return;
-		}
+		if (this._viewBoxWidth - change > 0)
+			this._viewBoxWidth -= change;
 
-		this._viewBoxWidth -= change;
-		this._viewBoxHeight -= change;
+		if (this._viewBoxHeight - change > 0)
+			this._viewBoxHeight -= change;
 	}
 
 	openEditor(chatNodeVM: ChatNodeVM) {
