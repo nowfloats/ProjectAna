@@ -53,7 +53,7 @@
                             <xhtml:div class="chatnode-body">
                                 <xhtml:div class="chatnode-sections">
                                     <xhtml:table>
-                                        <xhtml:tr *ngFor="let section of chatNodeVM.chatNode.Sections">
+                                        <xhtml:tr *ngFor="let section of chatNodeVM.chatNode.Sections" [attr.title]="MH.sectionAlias(section)">
                                             <xhtml:td valign="middle" class="section-icon">
                                                 <xhtml:i class="fa fa-file-text-o"></xhtml:i>
                                             </xhtml:td>
@@ -67,7 +67,7 @@
                                     <xhtml:table [attr.node-id]="chatNodeVM.chatNode.Id">
                                         <xhtml:tr>
                                             <xhtml:td *ngFor="let chatButton of chatNodeVM.chatNode.Buttons" valign="middle">
-                                                <xhtml:div>
+                                                <xhtml:div [attr.title]="MH.chatButtonAlias(chatButton)">
                                                     <xhtml:i class="fa fa-link"></xhtml:i>
                                                     <br />
                                                     <xhtml:div>{{MH.chatButtonAlias(chatButton) | ellipsis:50 }}</xhtml:div>
