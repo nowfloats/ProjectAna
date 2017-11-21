@@ -42,14 +42,14 @@ export class ChatFlowComponent implements OnInit {
 
 	@ViewChild('chatflowRoot')
 	chatflowRoot: ElementRef;
-
+	projName: string = "";
 	ngOnInit(): void {
 		this.globalsService.currentPageName = 'Chat Flow Designer';
 
 		this.route.queryParamMap.subscribe(x => {
-			let proj = x.get('proj');
-			if (proj)
-				this.loadChatFlowPack(this.settings.openChatProject(proj));
+			this.projName = x.get('proj');
+			if (this.projName)
+				this.loadChatFlowPack(this.settings.openChatProject(this.projName));
 		});
 	}
 
@@ -350,12 +350,14 @@ export class ChatFlowComponent implements OnInit {
 			CreatedOn: this.chatFlowNetwork.chatFlowPack.CreatedOn,
 			UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
 		};
-		this.chatFlowService.saveChatFlowPack(pack).subscribe(res => {
-			this.loadChatFlowPack(res);
-			this.snakbar.open('Saved', 'Dismiss');
-		}, err => {
-			console.error(JSON.stringify(err));
-		});
+		this.settings.saveChatProject(this.projName, pack, true);
+		this.snakbar.open('Saved', 'Dismiss');
+		return pack;
+	}
+
+	exportChatFlow() {
+		let pack = this.saveChatFlow();
+		this.globalsService.downloadTextAsFile(this.projName + ".anaproj", JSON.stringify(pack));
 	}
 
 	getProjectUrl() {

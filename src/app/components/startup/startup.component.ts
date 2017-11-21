@@ -101,4 +101,10 @@ export class StartupComponent implements OnInit {
 			this.loadSavedProjects();
 		}
 	}
+
+	downloadChatBotProject(name: string) {
+		let pack = this.settings.openChatProject(name);
+		this.globals.downloadTextAsFile(name + ".anaproj", JSON.stringify(pack));
+	}
+
 }
