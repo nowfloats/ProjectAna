@@ -10,5 +10,4 @@ export class GlobalsService {
 	chatFlowComponent: ChatFlowComponent;
 	loading: boolean = false;
 	currentPageName: string = '';
-	currentChatProject: models.ChatFlowPack;
 }

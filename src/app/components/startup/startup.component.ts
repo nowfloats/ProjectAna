@@ -38,9 +38,9 @@ export class StartupComponent implements OnInit {
 					let reader = new FileReader();
 					reader.onload = (evt) => {
 						let pack = JSON.parse(reader.result) as models.ChatFlowPack;
-						this.settings.saveChatProject(selectedFile.name.replace(new RegExp('\.anaproj$'), ''), pack, false);
-						this.globals.currentChatProject = pack;
-						this.router.navigateByUrl('/designer');
+						let projName = selectedFile.name.replace(new RegExp('\.anaproj$'), '');
+						this.settings.saveChatProject(projName, pack, false);
+						this.openChatBotProject(projName);
 					};
 					reader.onerror = () => {
 						alert('Unable to load the file!');
@@ -88,8 +88,7 @@ export class StartupComponent implements OnInit {
 	}
 
 	openChatBotProject(name: string) {
-		this.globals.currentChatProject = this.settings.openChatProject(name);
-		this.router.navigateByUrl('/designer');
+		this.router.navigateByUrl('/designer?proj=' + encodeURIComponent(name));
 	}
 	renameChatBotProject(name: string) {
 		let newName = prompt("Enter a new name: ", name);

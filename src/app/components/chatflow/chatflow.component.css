@@ -106,10 +106,11 @@
 
     .chatnode-buttons > table {
         width: 100%;
+        table-layout: fixed;
     }
 
         .chatnode-buttons > table > tr > td {
-            width: auto;
+            width: 80px;
             padding: 10px;
         }
 

@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
+import { SettingsService } from '../../services/settings.service'
 import { GlobalsService } from '../../services/globals.service'
 import * as models from '../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
@@ -22,7 +23,8 @@ export class ChatFlowComponent implements OnInit {
 		public dialog: MdDialog,
 		public route: ActivatedRoute,
 		public snakbar: MdSnackBar,
-		public globalsService: GlobalsService) {
+		public globalsService: GlobalsService,
+		public settings: SettingsService) {
 
 		this.chatFlowNetwork = new ChatFlowNetwork(this);
 		this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
@@ -43,8 +45,12 @@ export class ChatFlowComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.globalsService.currentPageName = 'Chat Flow Designer';
-		if (this.globalsService.currentChatProject)
-			this.loadChatFlowPack(this.globalsService.currentChatProject);
+
+		this.route.queryParamMap.subscribe(x => {
+			let proj = x.get('proj');
+			if (proj)
+				this.loadChatFlowPack(this.settings.openChatProject(proj));
+		});
 	}
 
 	chatFlowRootSVG() {
