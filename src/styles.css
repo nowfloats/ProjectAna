@@ -1,40 +1,39 @@
 /* You can add global styles to this file, and also import other style files */
-@import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
 @import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 body {
-  font-family: 'Century Gothic';
-  background-color: #F0F0F0;
+    font-family: 'Century Gothic';
+    background-color: #F0F0F0;
 }
 
 [hidden] {
-  display: none !important;
+    display: none !important;
 }
 
 .fab-btn-icon {
-  color: white;
+    color: white;
 }
 
 .panel-heading-actions {
-  margin: -10px;
+    margin: -10px;
 }
 
 .dialog-root {
-  margin: 20px 0;
-  height: 90vh;
+    margin: 20px 0;
+    height: 90vh;
 }
 
 .root {
-  margin: 20px 0;
-  height: 90vh;
-  width: 98vw;
+    margin: 20px 0;
+    height: 90vh;
+    width: 98vw;
 }
 
-  .root > .center-content {
-    width: 800px;
-  }
+    .root > .center-content {
+        width: 800px;
+    }
 
 input[type=text] {
-  line-height: normal;
+    line-height: normal;
 }

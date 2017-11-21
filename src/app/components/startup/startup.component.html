@@ -1,8 +1,21 @@
 <div class="root">
     <div class="center-block center-content">
+        <md-card [hidden]="savedProjects.length!=0" class="text-center"><h3>Looks like you don't have any saved chat server connections. <br /> Start by adding one.</h3></md-card>
+        <md-accordion [hidden]="savedProjects.length==0">
+            <h2>Recent Projects</h2>
+            <md-expansion-panel *ngFor="let projName of savedProjects; let i = index">
+                <md-expansion-panel-header>
+                    <md-panel-title>{{projName}}</md-panel-title>
+                </md-expansion-panel-header>
+                <md-action-row>
+                    <button md-raised-button color="primary" (click)="openChatBotProject(projName)"><span>Open</span></button>
+                    <button md-raised-button (click)="renameChatBotProject(projName)"><span>Rename</span></button>
+                </md-action-row>
+            </md-expansion-panel>
+        </md-accordion>
+
         <section class="bottom-actions">
-            <button mdTooltip="New Chat Bot Project" md-raised-button color="primary" (click)="newChatBotProject()">New Chat Bot</button>
-            <button mdTooltip="Open Chat Bot Project" md-raised-button (click)="openChatBotProject()">Open Chat Bot</button>
+            <button mdTooltip="Add new chat bot project" color="primary" md-raised-button (click)="addProject()">Add new chat bot</button>
         </section>
     </div>
 </div>

@@ -6,19 +6,27 @@ md-form-field, md-select {
     margin: 20px 10px;
 }
 
-    .bottom-actions > button[color="primary"] {
-        color: white;
-    }
+button[color="primary"] {
+    color: white;
+}
 
 md-action-row > button {
     margin: 10px;
 }
 
-/*md-action-row {
-  margin: 0 -10px;
-  display: block;
-}*/
 .bottom-actions {
     display: block;
     text-align: center;
+}
+
+.list-action-btn {
+    float: right;
+}
+
+.list-item {
+    width: 100%
+}
+
+.mat-expansion-panel-body {
+    display: none !important;
 }
