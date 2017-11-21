@@ -3,8 +3,8 @@
 @import '../node_modules/font-awesome/css/font-awesome.min.css';
 
 body {
-    font-family: 'Century Gothic';
-    background-color: #F0F0F0;
+    font-family: 'Open Sans';
+    background-color: #f5f5f5;
 }
 
 [hidden] {
@@ -36,4 +36,9 @@ body {
 
 input[type=text] {
     line-height: normal;
+}
+
+.danger-button {
+    background-color: crimson !important;
+    color: white !important;
 }

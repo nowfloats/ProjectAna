@@ -16,12 +16,41 @@ export class StartupComponent implements OnInit {
 		private globals: GlobalsService,
 		private settings: SettingsService) {
 		this.globals.currentPageName = "Startup";
+		this.loadSavedProjects();
+	}
+
+	loadSavedProjects() {
 		this.savedProjects = this.settings.listSavedChatProjectNames();
 	}
+
 	savedProjects: string[] = [];
 
 	ngOnInit() {
 
+	}
+	importProject() {
+		let fileInput = document.createElement('input');
+		fileInput.type = 'file';
+		fileInput.onchange = (event) => {
+			if (fileInput.files && fileInput.files[0]) {
+				let selectedFile = fileInput.files[0];
+				if (selectedFile.name.endsWith('.anaproj')) {
+					let reader = new FileReader();
+					reader.onload = (evt) => {
+						let pack = JSON.parse(reader.result) as models.ChatFlowPack;
+						this.settings.saveChatProject(selectedFile.name.replace(new RegExp('\.anaproj$'), ''), pack, false);
+						this.globals.currentChatProject = pack;
+						this.router.navigateByUrl('/designer');
+					};
+					reader.onerror = () => {
+						alert('Unable to load the file!');
+					};
+					reader.readAsText(selectedFile, "UTF-8");
+				} else
+					alert('Invalid file. Please select a valid Ana project file');
+			}
+		};
+		fileInput.click();
 	}
 
 	addProject() {
@@ -67,32 +96,10 @@ export class StartupComponent implements OnInit {
 		if (newName)
 			this.settings.renameChatProject(name, newName);
 	}
-}
-
-
-{/*
-	openChatBotProject___OLD() {
-		let fileInput = document.createElement('input');
-		fileInput.type = 'file';
-		fileInput.onchange = (event) => {
-			if (fileInput.files && fileInput.files[0]) {
-				let selectedFile = fileInput.files[0];
-				if (selectedFile.name.endsWith('.anaproj')) {
-					let reader = new FileReader();
-					reader.onload = (evt) => {
-						console.log("File Loaded: " + reader.result);
-						this.globals.currentChatProject = JSON.parse(reader.result) as ChatFlowPack;
-						this.router.navigateByUrl('/designer');
-					};
-					reader.onerror = () => {
-						alert('Unable to load the file!');
-					};
-					reader.readAsText(selectedFile, "UTF-8");
-				} else
-					alert('Invalid file. Please select a valid Ana project file');
-			}
-		};
-		fileInput.click();
+	deleteChatBotProject(name: string) {
+		if (confirm(`Are you sure you want to delete '${name}'`)) {
+			this.settings.deleteChatProject(name);
+			this.loadSavedProjects();
+		}
 	}
-
-	*/}
+}

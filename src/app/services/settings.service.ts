@@ -53,13 +53,28 @@ export class SettingsService {
 	}
 
 	renameChatProject(oldName: string, newName: string) {
-		let temp = localStorage.getItem(oldName + ".anaproj");
+		oldName += ".anaproj";
+		newName += ".anaproj";
+
+		let temp = localStorage.getItem(oldName);
 		if (!temp) {
 			alert(`${oldName} not found`);
 			return;
 		}
 		localStorage.setItem(newName, temp);
 		localStorage.removeItem(oldName);
+	}
+
+	deleteChatProject(name: string) {
+		name += ".anaproj";
+
+		let exists = localStorage.getItem(name);
+		if (!exists) {
+			alert(`${name} not found`);
+			return false;
+		}
+		localStorage.removeItem(name);
+		return true;
 	}
 }
 

@@ -1,38 +1,121 @@
 * {
-  position: static !important;
-  top: auto !important;
+    position: static !important;
+    top: auto !important;
 }
 
 .moving-cursor {
-  cursor: grab;
+    cursor: grab;
 }
 
 .section-icon {
-  width: 23px;
+    width: 23px;
 }
 
 .chatflow-actions {
-  position: absolute !important;
-  width: 100%;
-  text-align: center;
-  margin: 15px 0;
+    position: absolute !important;
+    width: 100%;
+    text-align: center;
+    margin: 15px 0;
 }
 
-  .chatflow-actions > button {
-    margin: 0 5px;
-  }
+    .chatflow-actions > button {
+        margin: 0 5px;
+    }
 
 .chatflow-root-svg {
-  overflow: hidden;
-  width: 98vw;
-  height: 100vh
+    overflow: hidden;
+    width: 98vw;
+    height: 100vh
 }
 
 .chatflow-loading {
-  padding: 10px 50px;
+    padding: 10px 50px;
 }
 
-  .chatflow-loading > img {
-    width: 100px;
-    height: 100px
-  }
+    .chatflow-loading > img {
+        width: 100px;
+        height: 100px
+    }
+
+.chatflow-designer-wrapper {
+    overflow: hidden;
+}
+
+.chatnode {
+    background: none;
+    cursor: move
+}
+
+.chatnode-header {
+    height: 30px;
+    border-radius: 10px 10px 0 0;
+    background-color: #666666;
+}
+
+    .chatnode-header.startnode {
+        background-color: #8cc83c;
+    }
+
+    .chatnode-header > p {
+        padding: 5px;
+        text-align: center;
+        color: white
+    }
+
+.chatnode-body {
+    background-color: #ccc;
+}
+
+.chatnode-sections {
+    height: 100%;
+    padding: 0 5px
+}
+
+    .chatnode-sections > table {
+        width: 100%;
+    }
+
+        .chatnode-sections > table > tr {
+            border-bottom: 1px dashed white;
+        }
+
+            .chatnode-sections > table > tr > td {
+                padding-left: 5px;
+            }
+
+.section-icon > fa {
+    font-size: 20px;
+}
+
+.section-alias {
+    padding-right: 5px
+}
+
+    .section-alias > div {
+        margin: 10px 0px 10px 5px
+    }
+
+.chatnode-buttons {
+    background-color: #ccc;
+    height: 100%;
+    text-align: center;
+    width: 100%;
+    margin-top: 10px
+}
+
+    .chatnode-buttons > table {
+        width: 100%;
+    }
+
+        .chatnode-buttons > table > tr > td {
+            width: auto;
+            padding: 10px;
+        }
+
+            .chatnode-buttons > table > tr > td > div {
+                text-align: center;
+            }
+
+                .chatnode-buttons > table > tr > td > div > .fa {
+                    font-size: 20px;
+                }
