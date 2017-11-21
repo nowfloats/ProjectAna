@@ -1,0 +1,24 @@
+md-form-field, md-select {
+    width: 100%;
+}
+
+.bottom-actions > button {
+    margin: 20px 10px;
+}
+
+    .bottom-actions > button[color="primary"] {
+        color: white;
+    }
+
+md-action-row > button {
+    margin: 10px;
+}
+
+/*md-action-row {
+  margin: 0 -10px;
+  display: block;
+}*/
+.bottom-actions {
+    display: block;
+    text-align: center;
+}

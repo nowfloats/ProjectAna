@@ -7,20 +7,20 @@ import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {
-    MdButtonModule,
-    MdMenuModule,
-    MdSidenavModule,
-    MdInputModule,
-    MdDialogModule,
-    MdSelectModule,
-    MdCheckboxModule,
-    MdTabsModule,
-    MdIconModule,
-    MdTooltipModule,
-    MdExpansionModule,
-    MdProgressSpinnerModule,
-    MdSnackBarModule,
-    MdCardModule
+	MdButtonModule,
+	MdMenuModule,
+	MdSidenavModule,
+	MdInputModule,
+	MdDialogModule,
+	MdSelectModule,
+	MdCheckboxModule,
+	MdTabsModule,
+	MdIconModule,
+	MdTooltipModule,
+	MdExpansionModule,
+	MdProgressSpinnerModule,
+	MdSnackBarModule,
+	MdCardModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -33,56 +33,59 @@ import { SettingsService } from './services/settings.service';
 import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
 import { ProjectsManagerComponent } from './components/projects-manager/projects-manager.component';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
+import { StartupComponent } from './components/startup/startup.component';
 
 @NgModule({
-    declarations: [
-        AppComponent,
-        ChatFlowComponent,
-        NodeEditorComponent,
-        ChatServerManagerComponent,
-        ProjectsManagerComponent,
-        EllipsisPipe
-    ],
-    imports: [
-        BrowserModule,
-        CommonModule,
-        HttpModule,
-        FormsModule,
-        MdButtonModule,
-        MdMenuModule,
-        MdSidenavModule,
-        MdInputModule,
-        MdDialogModule,
-        HttpClientModule,
-        BrowserAnimationsModule,
-        MdSelectModule,
-        MdCheckboxModule,
-        MdTabsModule,
-        MdIconModule,
-        MdTooltipModule,
-        MdExpansionModule,
-        MdProgressSpinnerModule,
-        MdSnackBarModule,
-        MdCardModule,
-        RouterModule.forRoot([
-            { path: '', redirectTo: 'connections', pathMatch: 'full' },
-            { path: 'designer/:id', component: ChatFlowComponent },
-            { path: 'projects', component: ProjectsManagerComponent },
-            { path: 'connections', component: ChatServerManagerComponent },
-            { path: '**', redirectTo: 'connections' }
-        ])
-    ],
-    providers: [
-        ChatFlowService,
-        GlobalsService,
-        SettingsService
-    ],
-    bootstrap: [AppComponent],
-    schemas: [
-        NO_ERRORS_SCHEMA
-    ],
-    entryComponents: [
-        NodeEditorComponent
-    ]
+	declarations: [
+		AppComponent,
+		ChatFlowComponent,
+		NodeEditorComponent,
+		ChatServerManagerComponent,
+		ProjectsManagerComponent,
+		EllipsisPipe,
+		StartupComponent
+	],
+	imports: [
+		BrowserModule,
+		CommonModule,
+		HttpModule,
+		FormsModule,
+		MdButtonModule,
+		MdMenuModule,
+		MdSidenavModule,
+		MdInputModule,
+		MdDialogModule,
+		HttpClientModule,
+		BrowserAnimationsModule,
+		MdSelectModule,
+		MdCheckboxModule,
+		MdTabsModule,
+		MdIconModule,
+		MdTooltipModule,
+		MdExpansionModule,
+		MdProgressSpinnerModule,
+		MdSnackBarModule,
+		MdCardModule,
+		RouterModule.forRoot([
+			{ path: '', redirectTo: 'startup', pathMatch: 'full' },
+			{ path: 'designer', component: ChatFlowComponent },
+			{ path: 'projects', component: ProjectsManagerComponent },
+			{ path: 'connections', component: ChatServerManagerComponent },
+			{ path: 'startup', component: StartupComponent },
+			{ path: '**', redirectTo: 'startup' }
+		])
+	],
+	providers: [
+		ChatFlowService,
+		GlobalsService,
+		SettingsService
+	],
+	bootstrap: [AppComponent],
+	schemas: [
+		NO_ERRORS_SCHEMA
+	],
+	entryComponents: [
+		NodeEditorComponent
+	]
 })
 export class AppModule { }

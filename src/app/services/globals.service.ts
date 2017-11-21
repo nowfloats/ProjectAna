@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import * as ChatFlowModels from '../models/chatflow.models'
+import * as models from '../models/chatflow.models'
 import { ChatFlowComponent } from '../components/chatflow/chatflow.component'
+
 
 @Injectable()
 export class GlobalsService {
-    constructor() { }
+	constructor() { }
 
-    chatFlowComponent: ChatFlowComponent;
-    loading: boolean = false;
-    currentPageName: string = '';
+	chatFlowComponent: ChatFlowComponent;
+	loading: boolean = false;
+	currentPageName: string = '';
+	currentChatProject: models.ChatFlowPack;
 }
