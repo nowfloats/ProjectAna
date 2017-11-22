@@ -66,3 +66,7 @@ input[type=text] {
 .mat-form-field.contains-hint {
     padding-bottom: 1.25em;
 }
+
+.mat-dialog-title {
+    margin: 0 !important;
+}

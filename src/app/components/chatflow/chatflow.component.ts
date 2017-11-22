@@ -353,7 +353,9 @@ export class ChatFlowComponent implements OnInit {
 			UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
 		};
 		this.settings.saveChatProject(this.projName, pack, true);
-		this.snakbar.open('Saved', 'Dismiss');
+		this.snakbar.open('Chatbot project saved', 'Dismiss', {
+			duration: 2000
+		});
 		return pack;
 	}
 
