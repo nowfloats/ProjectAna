@@ -16,6 +16,12 @@
     </section>
 </md-dialog-content>
 <md-dialog-actions>
-    <button md-raised-button [disabled]="!selectedServer || !selectedProject" color="primary" (click)="publish()">Publish</button>
-    <button md-raised-button (click)="dismiss()">Dismiss</button>
+    <div class="left">
+        <button md-raised-button (click)="managePublishServers()">Add/Edit publish servers</button>
+    </div>
+    <div class="spacing"></div>
+    <div class="right">
+        <button md-raised-button [disabled]="!selectedServer || !selectedProject" color="primary" (click)="publish()">Publish</button>
+        <button md-raised-button (click)="dismiss()">Dismiss</button>
+    </div>
 </md-dialog-actions>

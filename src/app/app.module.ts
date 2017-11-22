@@ -21,7 +21,8 @@ import {
 	MdProgressSpinnerModule,
 	MdSnackBarModule,
 	MdCardModule,
-	MdListModule
+	MdListModule,
+	MdGridListModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -68,6 +69,7 @@ import { PublishDialogComponent } from './components/publish-dialog/publish-dial
 		MdSnackBarModule,
 		MdCardModule,
 		MdListModule,
+		MdGridListModule,
 		RouterModule.forRoot([
 			{ path: '', redirectTo: 'startup', pathMatch: 'full' },
 			{ path: 'designer', component: ChatFlowComponent },

@@ -5,3 +5,7 @@ section.form-field {
 md-select {
     width: 100%;
 }
+
+md-dialog-actions > .spacing {
+    flex-grow: 1;
+}

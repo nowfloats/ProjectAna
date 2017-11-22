@@ -47,8 +47,6 @@ export class ChatFlowComponent implements OnInit {
 	chatflowRoot: ElementRef;
 	projName: string = "";
 	ngOnInit(): void {
-		this.globalsService.currentPageName = 'Chat Flow Designer';
-
 		this.route.queryParamMap.subscribe(x => {
 			this.projName = x.get('proj');
 			if (this.projName) {
