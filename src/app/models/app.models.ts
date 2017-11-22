@@ -4,13 +4,14 @@ export interface ChatServerConnection {
 	APIKey: string;
 	APISecret: string;
 	IsDefault: boolean;
+	ChatProjects: ChatBotProject[];
 }
 
-export interface ANAProject {
+export interface ChatBotProject {
 	Name: string;
 	CreatedOn: Date;
 	UpdatedOn: Date;
-	_id: string;
+	Id: string;
 }
 
 export interface ChatBotReferance {

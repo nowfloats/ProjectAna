@@ -42,3 +42,8 @@ input[type=text] {
     background-color: crimson !important;
     color: white !important;
 }
+
+.mat-dialog-content {
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}

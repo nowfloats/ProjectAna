@@ -7,6 +7,7 @@ import { SettingsService } from '../../services/settings.service'
 import { GlobalsService } from '../../services/globals.service'
 import * as models from '../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
+import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
 import { MdMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
@@ -256,12 +257,8 @@ export class ChatFlowComponent implements OnInit {
 			width: '80%',
 			data: chatNodeVM.chatNode
 		});
-
-		// dialogRef.afterClosed().subscribe(result => {
-		//     console.log('The dialog was closed');
-		// });
 	}
-
+	
 	addNewNode() {
 		var newNodeVM = new ChatNodeVM(this.chatFlowNetwork, {
 			Name: 'New Node',

@@ -1,6 +1,6 @@
-import { ANAProject } from './app.models'
+import { ChatBotProject } from './app.models'
 
 export interface ProjectListResponse {
     Message: string;
-    Data: ANAProject[];
+    Data: ChatBotProject[];
 }

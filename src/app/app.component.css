@@ -173,3 +173,8 @@ li .glyphicon {
     padding: 9px 0;
     margin-right: 10px;
 }
+
+    .navbar-actions > button {
+        background-color: #8cc83c;
+        color: white;
+    }
