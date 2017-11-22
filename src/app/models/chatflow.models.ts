@@ -33,6 +33,11 @@ export enum NodeType {
 export enum APIMethod {
 	GET = 'GET',
 	POST = 'POST',
+	PUT = 'PUT',
+	DELETE = 'DELETE',
+	HEAD = 'HEAD',
+	OPTIONS = 'OPTIONS',
+	CONNECT = 'CONNECT',
 }
 
 export enum CardPlacement {
@@ -112,6 +117,21 @@ export interface CarouselSection extends TitleCaptionSection {
 	Items: CarouselItem[];
 }
 // Sections - End
+export enum ConditionOperator {
+	EqualTo = 'EqualTo',
+	NotEqualTo = 'NotEqualTo',
+	GreaterThan = 'GreaterThan',
+	LessThan = 'LessThan',
+	GreaterThanOrEqualTo = 'GreaterThanOrEqualTo',
+	LessThanOrEqualTo = 'LessThanOrEqualTo',
+	Mod = 'Mod',
+	In = 'In',
+	NotIn = 'NotIn',
+	StartsWith = 'StartsWith',
+	EndsWith = 'EndsWith',
+	Contains = 'Contains',
+	Between = 'Between'
+}
 
 export enum ButtonType {
 	PostText = 'PostText',
@@ -156,8 +176,9 @@ export interface Button extends BaseIdEntity {
 	PrefixText?: string;
 	PostfixText?: string;
 	PlaceholderText?: string;
-	APIResponseMatchKey?: string;
-	APIResponseMatchValue?: string;
+	ConditionMatchKey?: string;
+	ConditionOperator?: ConditionOperator;
+	ConditionMatchValue?: string;
 	PostToChat?: boolean;
 	DoesRepeat?: boolean;
 	RepeatOn?: string;
@@ -165,6 +186,10 @@ export interface Button extends BaseIdEntity {
 	StartPosition?: number;
 	MaxRepeats?: number;
 	AdvancedOptions?: boolean;
+	MinLength?: number;
+	MaxLength?: number;
+	DefaultText?: string;
+	IsMultiLine?: boolean;
 
 	ContentId?: string;
 	ContentEmotion?: string;
@@ -189,6 +214,9 @@ export interface ChatNode {
 	CardFooter?: string;
 	Placement?: CardPlacement;
 	IsStartNode?: boolean;
+
+	RequestBody?: string;
+	Headers?: string;
 }
 
 export interface ChatContent {
@@ -205,7 +233,7 @@ export interface ChatContent {
 	Title: string;
 	Caption: string;
 }
-	
+
 //WebNodeLocations: NodeLocations;
 export interface ChatFlowPack {
 	ProjectId: string;
@@ -245,6 +273,11 @@ export class ModelHelpers {
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
 		APIMethod.POST,
+		APIMethod.PUT,
+		APIMethod.HEAD,
+		APIMethod.OPTIONS,
+		APIMethod.DELETE,
+		APIMethod.CONNECT
 	];
 	cardPlacements: CardPlacement[] = [
 		CardPlacement.Center,
@@ -274,7 +307,21 @@ export class ModelHelpers {
 		ButtonType.PostText,
 		ButtonType.ShowConfirmation
 	];
-
+	conditionOperators: ConditionOperator[] = [
+		ConditionOperator.EqualTo,
+		ConditionOperator.NotEqualTo,
+		ConditionOperator.GreaterThan,
+		ConditionOperator.LessThan,
+		ConditionOperator.GreaterThanOrEqualTo,
+		ConditionOperator.LessThanOrEqualTo,
+		ConditionOperator.Mod,
+		ConditionOperator.In,
+		ConditionOperator.NotIn,
+		ConditionOperator.StartsWith,
+		ConditionOperator.EndsWith,
+		ConditionOperator.Contains,
+		ConditionOperator.Between
+	];
 	sectionAlias(section: Section) {
 		switch (section.SectionType) {
 			case SectionType.Text:
@@ -319,6 +366,10 @@ export class ModelHelpers {
 		}
 	}
 	chatButtonFieldVisible(btn: Button, fieldName: string) {
+		//Following fields must only be visible for 'GetText' Buttons
+		if (['MinLength', 'MaxLength', 'IsMultiLine', 'DefaultText'].indexOf(fieldName) != -1)
+			return btn.ButtonType == ButtonType.GetText ? false : true;
+
 		var hidden = false;
 		switch (btn.ButtonType) {
 			case ButtonType.PostText:
@@ -333,29 +384,29 @@ export class ModelHelpers {
 			case ButtonType.GetEmail:
 			case ButtonType.GetPhoneNumber:
 				//if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetTime:
 			case ButtonType.GetDate:
 			case ButtonType.GetDateTime:
 			case ButtonType.GetLocation:
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'APIResponseMatchKey', 'APIResponseMatchValue', 'PostfixText', 'PrefixText'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue', 'PostfixText', 'PrefixText'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetImage:
 			case ButtonType.GetFile:
 			case ButtonType.GetAudio:
 			case ButtonType.GetVideo:
 				//if the passed button property is present in the list, that field should not be visible. here placeholder text should not be visible if button type is input(Get[X]) type
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'PlaceholderText', 'Url', 'PostfixText', 'PrefixText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'PlaceholderText', 'Url', 'PostfixText', 'PrefixText', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetItemFromSource:
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.NextNode:
 				hidden = ['NextNodeId', 'PostfixText', 'PrefixText', 'DeepLinkUrl', 'Url', 'PlaceholderText'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.DeepLink:
-				hidden = ['NextNodeId', 'Url', 'PostfixText', 'PrefixText', 'PlaceholderText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'Url', 'PostfixText', 'PrefixText', 'PlaceholderText', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetAgent:
 				hidden = true; //Hide all. Probably!
@@ -364,12 +415,32 @@ export class ModelHelpers {
 				hidden = true; //Hide all. Probably!
 				break;
 			case ButtonType.FetchChatFlow:
-				hidden = ['DeepLinkUrl', 'PlaceholderText', 'PostfixText', 'PrefixText', 'APIResponseMatchKey', 'APIResponseMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['DeepLinkUrl', 'PlaceholderText', 'PostfixText', 'PrefixText', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			default:
 				break;
 		}
 		return hidden;
+	}
+	chatNodeApiCallFieldVisible(chatNode: ChatNode, fieldName: string) {
+		switch (chatNode.ApiMethod) {
+			case APIMethod.POST:
+			case APIMethod.PUT:
+				{
+					if (fieldName == 'RequestBody')
+						return true;
+					if (fieldName == 'RequiredVariables')
+						return false;
+				}
+			default:
+				{
+					if (fieldName == 'RequestBody')
+						return false;
+					if (fieldName == 'RequiredVariables')
+						return true;
+				}
+		}
+		return true;
 	}
 	sectionIcon(section: Section) {
 		switch (section.SectionType) {

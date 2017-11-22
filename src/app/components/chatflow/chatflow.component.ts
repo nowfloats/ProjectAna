@@ -298,7 +298,7 @@ export class ChatFlowComponent implements OnInit {
 				new ChatNodeVM(this.chatFlowNetwork, cn);
 
 				cn.Buttons.forEach(btn => {
-					btn.AdvancedOptions = ((btn.VariableValue || btn.APIResponseMatchKey || btn.APIResponseMatchValue) ? true : false);
+					btn.AdvancedOptions = ((btn.VariableValue || btn.ConditionMatchKey || btn.ConditionMatchValue || btn.ConditionOperator) ? true : false);
 				});
 			});
 

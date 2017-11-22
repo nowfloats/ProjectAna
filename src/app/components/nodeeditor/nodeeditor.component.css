@@ -1,34 +1,46 @@
 md-form-field, md-select {
-  width: 100%;
+    width: 100%;
 }
 
 .text-section-icon {
-  font-size: 20px;
+    font-size: 20px;
 }
 
 .mat-form-field-wrapper {
-  /*padding-bottom: 0px;*/
+    /*padding-bottom: 0px;*/
 }
 
 section.form-field {
-  padding-bottom: 1.25em;
+    padding-bottom: 1.25em;
 }
 
 .tab-content {
-  margin: 20px;
-  height: 80vh;
+    margin: 20px;
 }
 
 .col-centered {
-  float: none;
-  margin: 0 auto;
+    float: none;
+    margin: 0 auto;
 }
 
 .panel-header-icon {
-  margin-top: 2px;
-  margin-right: 5px;
+    margin-top: 2px;
+    margin-right: 5px;
 }
 
 .node-text-section {
-  /*padding: 0 10px;*/
+    /*padding: 0 10px;*/
+}
+
+.spacing {
+    width: 20px;
+    display: inline-block;
+}
+
+.dialog-actions {
+    margin: 10px;
+}
+
+md-dialog-actions {
+    justify-content: center;
 }

@@ -24,7 +24,9 @@ export class NodeEditorComponent {
 		this.MH = new models.ModelHelpers(globalsService);
 	}
 	SectionType = models.SectionType;
-
+	dismiss() {
+		this.dialogRef.close();
+	}
 	//Model Helpers
 	MH: models.ModelHelpers;
 }

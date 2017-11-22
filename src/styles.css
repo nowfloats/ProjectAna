@@ -48,3 +48,21 @@ input[type=text] {
     padding-bottom: 10px !important;
 }
 
+.mat-select-placeholder {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.125;
+}
+
+.mat-select {
+    padding-bottom: 1.25em;
+    font-family: 'Open Sans' !important;
+}
+
+.mat-hint {
+    margin: 0 0 4px 0 !important;
+}
+
+.mat-form-field.contains-hint {
+    padding-bottom: 1.25em;
+}
