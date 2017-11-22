@@ -32,12 +32,14 @@ export class SettingsService {
 		}
 	}
 
-	openChatProject(chatProjectName: string) {
+	getChatProject(chatProjectName: string) {
 		chatProjectName += '.anaproj';
 
 		let existing = localStorage.getItem(chatProjectName);
-		if (!existing)
+		if (!existing) {
 			alert(`Chat Project with name '${chatProjectName}' does not exist`);
+			return null;
+		}
 		return JSON.parse(existing) as ChatFlowPack;
 	}
 

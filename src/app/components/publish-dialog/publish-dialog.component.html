@@ -1,0 +1,21 @@
+<h2 md-dialog-title>Publish Chat Bot</h2>
+<md-dialog-content>
+    <section class="form-field">
+        <md-select placeholder="Server" [(ngModel)]="selectedServer" name="PublishServer">
+            <md-option *ngFor="let conn of savedConns" [value]="conn">
+                {{ conn.Name }}
+            </md-option>
+        </md-select>
+    </section>
+    <section class="form-field" *ngIf="selectedServer">
+        <md-select placeholder="Chat Project" [(ngModel)]="selectedProject" name="Project">
+            <md-option *ngFor="let proj of selectedServer.ChatProjects" [value]="proj">
+                {{ proj.Name }}
+            </md-option>
+        </md-select>
+    </section>
+</md-dialog-content>
+<md-dialog-actions>
+    <button md-raised-button [disabled]="!selectedServer || !selectedProject" color="primary" (click)="publish()">Publish</button>
+    <button md-raised-button (click)="dismiss()">Dismiss</button>
+</md-dialog-actions>

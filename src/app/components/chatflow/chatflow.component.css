@@ -16,16 +16,24 @@
     width: 100%;
     text-align: center;
     margin: 15px 0;
+    z-index: 10;
 }
 
     .chatflow-actions > button {
         margin: 0 5px;
     }
 
+
+
 .chatflow-root-svg {
     overflow: hidden;
     width: 98vw;
-    height: 100vh
+    height: 100vh;
+    /*position: fixed !important;
+    top: 60px !important;
+    right: 0 !important;
+    left: 0 !important;
+    bottom: 0 !important;*/
 }
 
 .chatflow-loading {
@@ -78,7 +86,7 @@
     }
 
         .chatnode-sections > table > tr {
-            border-bottom: 1px dashed white;
+            border-bottom: 1px dashed #F0F0F0;
         }
 
             .chatnode-sections > table > tr > td {

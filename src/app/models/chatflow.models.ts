@@ -205,12 +205,12 @@ export interface ChatContent {
 	Title: string;
 	Caption: string;
 }
-
+	
+//WebNodeLocations: NodeLocations;
 export interface ChatFlowPack {
 	ProjectId: string;
 	ChatNodes: ChatNode[];
 	NodeLocations?: NodeLocations;
-	WebNodeLocations: NodeLocations;
 	CreatedOn: Date;
 	UpdatedOn: Date;
 	_id: string;

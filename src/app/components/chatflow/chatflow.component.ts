@@ -1,12 +1,13 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Http } from '@angular/http';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
 import { ChatFlowService } from '../../services/chatflow.service'
 import { SettingsService } from '../../services/settings.service'
 import { GlobalsService } from '../../services/globals.service'
 import * as models from '../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
+import { PublishDialogComponent } from '../publish-dialog/publish-dialog.component';
 import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
 import { MdMenuTrigger } from '@angular/material';
 
@@ -23,6 +24,7 @@ export class ChatFlowComponent implements OnInit {
 		private chatFlowService: ChatFlowService,
 		public dialog: MdDialog,
 		public route: ActivatedRoute,
+		public router: Router,
 		public snakbar: MdSnackBar,
 		public globalsService: GlobalsService,
 		public settings: SettingsService) {
@@ -49,8 +51,13 @@ export class ChatFlowComponent implements OnInit {
 
 		this.route.queryParamMap.subscribe(x => {
 			this.projName = x.get('proj');
-			if (this.projName)
-				this.loadChatFlowPack(this.settings.openChatProject(this.projName));
+			if (this.projName) {
+				let proj = this.settings.getChatProject(this.projName);
+				if (proj)
+					this.loadChatFlowPack(proj);
+				else
+					this.router.navigateByUrl('/startup');
+			}
 		});
 	}
 
@@ -258,7 +265,7 @@ export class ChatFlowComponent implements OnInit {
 			data: chatNodeVM.chatNode
 		});
 	}
-	
+
 	addNewNode() {
 		var newNodeVM = new ChatNodeVM(this.chatFlowNetwork, {
 			Name: 'New Node',
@@ -298,7 +305,7 @@ export class ChatFlowComponent implements OnInit {
 			});
 
 			this.chatFlowNetwork.chatNodeVMs.forEach(vm => {
-				var locs = pack.WebNodeLocations || pack.NodeLocations;
+				var locs = pack.NodeLocations;
 				if (locs) {
 					var loc = locs[vm.chatNode.Id];
 					vm._x = loc.X;
@@ -342,7 +349,7 @@ export class ChatFlowComponent implements OnInit {
 		let pack: models.ChatFlowPack = {
 			ProjectId: this.chatFlowNetwork.chatFlowPack.ProjectId,
 			ChatNodes: this.chatFlowNetwork.chatNodeVMs.map(x => x.chatNode),
-			WebNodeLocations: nodeLocs,
+			NodeLocations: nodeLocs,
 			_id: this.chatFlowNetwork.chatFlowPack._id,
 			CreatedOn: this.chatFlowNetwork.chatFlowPack.CreatedOn,
 			UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
@@ -357,13 +364,17 @@ export class ChatFlowComponent implements OnInit {
 		this.globalsService.downloadTextAsFile(this.projName + ".anaproj", JSON.stringify(pack));
 	}
 
-	getProjectUrl() {
-		return this.chatFlowService.getProjectUrl(this.chatFlowNetwork.chatFlowPack.ProjectId);
+	playChatFlow() {
+		alert('Coming soon');
+		//let link = "anaconsim://app?chatflow=" + encodeURIComponent(this.getProjectUrl());
+		//location.href = link;
 	}
 
-	playChatFlow() {
-		let link = "anaconsim://app?chatflow=" + encodeURIComponent(this.getProjectUrl());
-		location.href = link;
+	openPublishDialog() {
+		this.dialog.open(PublishDialogComponent, {
+			width: '60%',
+			data: this.saveChatFlow()
+		});
 	}
 }
 

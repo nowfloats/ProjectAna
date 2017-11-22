@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { MdDialogRef } from '@angular/material';
 import { ChatServerConnection, ChatBotProject } from '../../models/app.models';
 import { SettingsService } from '../../services/settings.service';
 import { ChatFlowService } from '../../services/chatflow.service';
@@ -17,38 +18,14 @@ export class ChatServerManagerComponent implements OnInit {
 		public chatFlowService: ChatFlowService,
 		public global: GlobalsService,
 		public snakbar: MdSnackBar,
-		public router: Router) { }
+		public router: Router,
+		public dialogRef: MdDialogRef<ChatServerManagerComponent>) {
+		this.savedConnections = this.settings.loadSavedConnections();
+	}
 
 	savedConnections: ChatServerConnection[] = [];
 
 	ngOnInit(): void {
-		this.savedConnections = this.settings.loadSavedConnections();
-		this.global.currentPageName = 'Chat Server Manager';
-	}
-
-	testConnection(conn: ChatServerConnection) {
-		this.global.loading = true;
-		this.chatFlowService.testChatServerConnection(conn).subscribe(resp => {
-			this.global.loading = false;
-
-			this.snakbar.open('Connection Successful', 'Dismiss');
-		}, err => {
-			this.global.loading = false;
-
-			this.handleConnectionFailed(err);
-		}, () => {
-			this.global.loading = false;
-		});
-	}
-
-	private handleConnectionFailed(err) {
-		console.log(err);
-		if (err.status == 404)
-			this.snakbar.open('Connection Failed. Unable to connect to remove server! 404 Not Found.', 'Dismiss');
-		else if (err.status == 401)
-			this.snakbar.open('Connection Failed. Invalid APIKey and APISecret.', 'Dismiss');
-		else
-			this.snakbar.open('Connection Failed.' + (err.data.Message || ''), 'Dismiss');
 	}
 
 	connectionAlias(conn: ChatServerConnection) {
@@ -89,9 +66,10 @@ export class ChatServerManagerComponent implements OnInit {
 	saveConnections() {
 		this.settings.saveSavedConnections(this.savedConnections);
 
-		this.snakbar.open('Connections saved!', 'Dismiss', {
+		this.snakbar.open('Publish servers saved!', 'Dismiss', {
 			duration: 3000
 		});
+		this.dialogRef.close();
 	}
 
 	addConnection() {
@@ -104,9 +82,5 @@ export class ChatServerManagerComponent implements OnInit {
 			ChatProjects: []
 		};
 		this.savedConnections.push(newConn);
-	}
-
-	isExpanded(conn: ChatServerConnection) {
-		return this.savedConnections.indexOf(conn) == this.savedConnections.length - 1;
 	}
 }

@@ -32,9 +32,9 @@ import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
 import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
-import { ProjectsManagerComponent } from './components/projects-manager/projects-manager.component';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 import { StartupComponent } from './components/startup/startup.component';
+import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -42,9 +42,9 @@ import { StartupComponent } from './components/startup/startup.component';
 		ChatFlowComponent,
 		NodeEditorComponent,
 		ChatServerManagerComponent,
-		ProjectsManagerComponent,
 		EllipsisPipe,
-		StartupComponent
+		StartupComponent,
+		PublishDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -71,8 +71,6 @@ import { StartupComponent } from './components/startup/startup.component';
 		RouterModule.forRoot([
 			{ path: '', redirectTo: 'startup', pathMatch: 'full' },
 			{ path: 'designer', component: ChatFlowComponent },
-			{ path: 'projects', component: ProjectsManagerComponent },
-			{ path: 'connections', component: ChatServerManagerComponent },
 			{ path: 'startup', component: StartupComponent },
 			{ path: '**', redirectTo: 'startup' }
 		])
@@ -87,7 +85,9 @@ import { StartupComponent } from './components/startup/startup.component';
 		NO_ERRORS_SCHEMA
 	],
 	entryComponents: [
-		NodeEditorComponent
+		NodeEditorComponent,
+		ChatServerManagerComponent,
+		PublishDialogComponent
 	]
 })
 export class AppModule { }

@@ -73,11 +73,9 @@ export class StartupComponent implements OnInit {
 			UpdatedOn: new Date(),
 			NodeLocations: {},
 			ProjectId: _id,
-			WebNodeLocations: {},
 			_id: _id
 		};
 		defaultFlow.NodeLocations[firstNode.Id] = { X: 500, Y: 500 };
-		defaultFlow.WebNodeLocations[firstNode.Id] = { X: 500, Y: 500 };
 		this.settings.saveChatProject(name, defaultFlow, false);
 
 		this.openChatBotProject(name);
@@ -103,7 +101,7 @@ export class StartupComponent implements OnInit {
 	}
 
 	downloadChatBotProject(name: string) {
-		let pack = this.settings.openChatProject(name);
+		let pack = this.settings.getChatProject(name);
 		this.globals.downloadTextAsFile(name + ".anaproj", JSON.stringify(pack));
 	}
 
