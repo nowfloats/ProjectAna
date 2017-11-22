@@ -36,12 +36,23 @@ export class PublishDialogComponent implements OnInit {
 	}
 
 	publish() {
-		this.chatFlowService.publishProject(this.selectedServer, this.selectedProject, this.pack).subscribe(x => {
-			alert('Chat published successfully');
+		this.chatFlowService.chatProjectExists(this.selectedServer, this.selectedProject).subscribe(x => {
+			if (confirm(`Chat project with id '${this.selectedProject.Id}' already exists. Publishing this will overwrite it. Do you want to proceed?`))
+				this.doPublish();
 		}, err => {
-			alert('Oops! Something went wrong while publishing the flow! Please try again.');
+			this.doPublish();
 		});
 	}
+
+	private doPublish() {
+		this.chatFlowService.publishProject(this.selectedServer, this.selectedProject, this.pack).subscribe(x => {
+			alert('Chatbot published successfully');
+			this.dismiss();
+		}, err => {
+			alert('Oops! Something went wrong while publishing the chat project! Please try again.');
+		});
+	}
+
 	managePublishServers() {
 		let dialogRef = this.dialog.open(ChatServerManagerComponent, {
 			width: '60%',

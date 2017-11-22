@@ -21,15 +21,9 @@
                 <md-form-field>
                     <input mdInput type="url" placeholder="Server Url" [(ngModel)]="conn.ServerUrl" name="connUrl-{{i}}">
                 </md-form-field>
-
-                <md-form-field>
-                    <input mdInput type="text" placeholder="Key" [(ngModel)]="conn.APIKey" name="connAPIKey-{{i}}">
-                </md-form-field>
-
-                <md-form-field>
-                    <input mdInput type="text" placeholder="Secret" [(ngModel)]="conn.APISecret" name="connSecret-{{i}}">
-                </md-form-field>
+               
                 <section>
+                    <h5>Chat Projects</h5>
                     <md-accordion>
                         <md-expansion-panel *ngFor="let proj of conn.ChatProjects; let i = index">
                             <md-expansion-panel-header>

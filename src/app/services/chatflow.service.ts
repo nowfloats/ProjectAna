@@ -29,6 +29,10 @@ export class ChatFlowService {
 		}).map(res => res.json());
 	}
 
+	chatProjectExists(conn: ChatServerConnection, proj: ChatBotProject) {
+		return this.http.get(this.normalizeBaseUrl(conn.ServerUrl) + this.publishChatBotAPI + "?business_id=" + proj.Id).map(res => res.json());
+	}
+
 	normalizeChatNodes(chatNodes: models.ChatNode[]) {
 		chatNodes.forEach(x => {
 			x.IsStartNode = x.IsStartNode ? true : false //This field should exist even if it's false
