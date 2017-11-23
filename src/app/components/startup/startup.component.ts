@@ -57,7 +57,7 @@ export class StartupComponent implements OnInit {
 
 	addProject() {
 
-		this.infoDialog.prompt('Chatbot Project Name', 'Enter a name for your new chat bot project', (name) => {
+		this.infoDialog.prompt('Chatbot Project Name', 'Enter a name for your new chatbot project', (name) => {
 			if (!name)
 				return;
 

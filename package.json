@@ -10,7 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron dist",
-    "package": "ng build --prod && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico"
+    "package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all"
   },
   "private": true,
   "dependencies": {

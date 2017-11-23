@@ -11,7 +11,7 @@
         "assets",
         "favicon.ico",
         "package.json",
-        "index.js"
+        "electron.js"
       ],
       "index": "index.html",
       "main": "main.ts",

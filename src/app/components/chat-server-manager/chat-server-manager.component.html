@@ -1,8 +1,8 @@
-<h2 md-dialog-title>Publish Servers</h2>
+<h2 md-dialog-title>Publish server connections</h2>
 <md-dialog-content>
     <div class="center-block center-content">
         <md-card [hidden]="savedConnections.length!=0" class="text-center">
-            <h4>Looks like you don't have any saved chat publish connections. <br /> Start by adding one.</h4>
+            <h4>Looks like you don't have any saved publish server connections. <br /> Start by adding one.</h4>
         </md-card>
 
         <md-accordion [hidden]="savedConnections.length==0">
@@ -21,9 +21,9 @@
                 <md-form-field>
                     <input mdInput type="url" placeholder="Server Url" [(ngModel)]="conn.ServerUrl" name="connUrl-{{i}}">
                 </md-form-field>
-               
+
                 <section>
-                    <h5>Chat Projects</h5>
+                    <h5 [hidden]="!conn.ChatProjects || conn.ChatProjects.length<=0">Chat projects</h5>
                     <md-accordion>
                         <md-expansion-panel *ngFor="let proj of conn.ChatProjects; let i = index">
                             <md-expansion-panel-header>
@@ -41,14 +41,14 @@
                             </md-form-field>
 
                             <md-action-row>
-                                <button md-raised-button (click)="deleteProject(conn)"><span>Delete Project</span></button>
+                                <button md-raised-button (click)="deleteProject(proj)"><span>Delete Project</span></button>
                             </md-action-row>
                         </md-expansion-panel>
                     </md-accordion>
                 </section>
                 <md-action-row>
-                    <button md-raised-button (click)="addChatProjectToConn(conn)"><span>Add Chat Project</span></button>
-                    <button md-raised-button (click)="deleteConnection(conn)"><span>Delete Connection</span></button>
+                    <button md-raised-button (click)="addChatProjectToConn(conn)"><span>Add chat project</span></button>
+                    <button md-raised-button (click)="deleteConnection(conn)"><span>Delete server connection</span></button>
                 </md-action-row>
 
             </md-expansion-panel>
@@ -56,7 +56,7 @@
     </div>
 </md-dialog-content>
 <md-dialog-actions>
-    <button mdTooltip="Save Changes" color="primary" [hidden]="savedConnections.length==0" md-raised-button (click)="saveConnections()">Save Changes</button>
-    <button mdTooltip="Add new connection" md-raised-button (click)="addConnection()">Add New Connection</button>
+    <button mdTooltip="Save Changes" color="primary" [hidden]="savedConnections.length==0" md-raised-button (click)="saveConnections()">Save changes</button>
+    <button mdTooltip="Add new connection" md-raised-button (click)="addConnection()">Add new server connection</button>
     <button md-raised-button md-dialog-close>Dismiss</button>
 </md-dialog-actions>
