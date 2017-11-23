@@ -9,8 +9,8 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "electron .",
-    "package": "ng build --prod && electron-packager . \"Ana Conversation Studio\""
+    "electron": "electron dist",
+    "package": "ng build --prod && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico"
   },
   "private": true,
   "dependencies": {

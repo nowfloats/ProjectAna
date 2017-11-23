@@ -9,10 +9,11 @@ app.on('ready', () => {
 	win = new BrowserWindow({ width: 1000, height: 600 });
 
 	win.loadURL(url.format({
-		pathname: path.join(__dirname, 'dist/index.html'),
+		pathname: path.join(__dirname, 'index.html'),
 		protocol: 'file:',
 		slashes: true
 	}));
+
 
 	win.on('closed', () => {
 		win = null;
