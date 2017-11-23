@@ -32,10 +32,12 @@ import { NodeEditorComponent } from './components/nodeeditor/nodeeditor.componen
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
+import { InfoDialogService } from './services/info-dialog.service';
 import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 import { StartupComponent } from './components/startup/startup.component';
 import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
+import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 
 @NgModule({
 	declarations: [
@@ -45,7 +47,8 @@ import { PublishDialogComponent } from './components/publish-dialog/publish-dial
 		ChatServerManagerComponent,
 		EllipsisPipe,
 		StartupComponent,
-		PublishDialogComponent
+		PublishDialogComponent,
+		InfoDialogComponent
 	],
 	imports: [
 		BrowserModule,
@@ -80,7 +83,8 @@ import { PublishDialogComponent } from './components/publish-dialog/publish-dial
 	providers: [
 		ChatFlowService,
 		GlobalsService,
-		SettingsService
+		SettingsService,
+		InfoDialogService
 	],
 	bootstrap: [AppComponent],
 	schemas: [
@@ -89,7 +93,8 @@ import { PublishDialogComponent } from './components/publish-dialog/publish-dial
 	entryComponents: [
 		NodeEditorComponent,
 		ChatServerManagerComponent,
-		PublishDialogComponent
+		PublishDialogComponent,
+		InfoDialogComponent
 	]
 })
 export class AppModule { }

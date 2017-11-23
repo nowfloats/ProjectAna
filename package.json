@@ -8,7 +8,9 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "electron": "electron .",
+    "package": "ng build --prod && electron-packager . \"Ana Conversation Studio\""
   },
   "private": true,
   "dependencies": {
@@ -41,6 +43,7 @@
     "@types/node": "~6.0.60",
     "codelyzer": "~3.2.0",
     "electron": "^1.7.9",
+    "electron-packager": "^10.1.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.0",

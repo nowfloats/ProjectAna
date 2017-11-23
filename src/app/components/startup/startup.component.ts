@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { InfoDialogService } from '../../services/info-dialog.service';
 import { GlobalsService } from '../../services/globals.service';
 import { SettingsService } from '../../services/settings.service';
 import * as models from '../../models/chatflow.models';
@@ -14,6 +15,7 @@ export class StartupComponent implements OnInit {
 	constructor(
 		private router: Router,
 		private globals: GlobalsService,
+		private infoDialog: InfoDialogService,
 		private settings: SettingsService) {
 		this.globals.currentPageName = "Startup";
 		this.loadSavedProjects();
@@ -54,31 +56,33 @@ export class StartupComponent implements OnInit {
 	}
 
 	addProject() {
-		let name = prompt('Enter a name for your new chat bot project');
-		if (!name)
-			return;
 
-		let firstNode = {
-			Name: 'New Node',
-			Id: new ObjectID().toHexString(),
-			Buttons: [],
-			Sections: [],
-			NodeType: models.NodeType.Combination,
-			TimeoutInMs: 0
-		};
-		let _id = new ObjectID().toHexString();
-		let defaultFlow: models.ChatFlowPack = {
-			ChatNodes: [firstNode],
-			CreatedOn: new Date(),
-			UpdatedOn: new Date(),
-			NodeLocations: {},
-			ProjectId: _id,
-			_id: _id
-		};
-		defaultFlow.NodeLocations[firstNode.Id] = { X: 500, Y: 500 };
-		this.settings.saveChatProject(name, defaultFlow, false);
+		this.infoDialog.prompt('Chatbot Project Name', 'Enter a name for your new chat bot project', (name) => {
+			if (!name)
+				return;
 
-		this.openChatBotProject(name);
+			let firstNode = {
+				Name: 'New Node',
+				Id: new ObjectID().toHexString(),
+				Buttons: [],
+				Sections: [],
+				NodeType: models.NodeType.Combination,
+				TimeoutInMs: 0
+			};
+			let _id = new ObjectID().toHexString();
+			let defaultFlow: models.ChatFlowPack = {
+				ChatNodes: [firstNode],
+				CreatedOn: new Date(),
+				UpdatedOn: new Date(),
+				NodeLocations: {},
+				ProjectId: _id,
+				_id: _id
+			};
+			defaultFlow.NodeLocations[firstNode.Id] = { X: 500, Y: 500 };
+			this.settings.saveChatProject(name, defaultFlow, false);
+
+			this.openChatBotProject(name);
+		});
 	}
 
 	isExpanded(proj: string) {
@@ -89,15 +93,20 @@ export class StartupComponent implements OnInit {
 		this.router.navigateByUrl('/designer?proj=' + encodeURIComponent(name));
 	}
 	renameChatBotProject(name: string) {
-		let newName = prompt("Enter a new name: ", name);
-		if (newName)
-			this.settings.renameChatProject(name, newName);
+		this.infoDialog.prompt("Rename", 'Enter a new name: ', (newName) => {
+			if (newName) {
+				this.settings.renameChatProject(name, newName);
+				this.loadSavedProjects();
+			}
+		}, name);
 	}
 	deleteChatBotProject(name: string) {
-		if (confirm(`Are you sure you want to delete '${name}'`)) {
-			this.settings.deleteChatProject(name);
-			this.loadSavedProjects();
-		}
+		this.infoDialog.confirm('Sure?', `Are you sure you want to delete '${name}'`, (ok) => {
+			if (ok) {
+				this.settings.deleteChatProject(name);
+				this.loadSavedProjects();
+			}
+		});
 	}
 
 	downloadChatBotProject(name: string) {

@@ -4,6 +4,7 @@ import { MdDialogRef } from '@angular/material';
 import { ChatServerConnection, ChatBotProject } from '../../models/app.models';
 import { SettingsService } from '../../services/settings.service';
 import { ChatFlowService } from '../../services/chatflow.service';
+import { InfoDialogService } from '../../services/info-dialog.service';
 import { GlobalsService } from '../../services/globals.service';
 import { MdSnackBar } from '@angular/material';
 
@@ -18,6 +19,7 @@ export class ChatServerManagerComponent implements OnInit {
 		public chatFlowService: ChatFlowService,
 		public global: GlobalsService,
 		public snakbar: MdSnackBar,
+		public infoDialog: InfoDialogService,
 		public router: Router,
 		public dialogRef: MdDialogRef<ChatServerManagerComponent>) {
 		this.savedConnections = this.settings.loadSavedConnections();
@@ -35,10 +37,13 @@ export class ChatServerManagerComponent implements OnInit {
 	deleteConnection(conn: ChatServerConnection) {
 		var current = this.savedConnections.indexOf(conn);
 		if (current != -1) {
-			if (confirm(`Delete chat server connection '${this.connectionAlias(conn)}'`)) {
-				this.savedConnections.splice(current, 1);
-				this.saveConnections();
-			}
+
+			this.infoDialog.confirm("Sure?", `Delete chat server connection '${this.connectionAlias(conn)}'`, (ok) => {
+				if (ok) {
+					this.savedConnections.splice(current, 1);
+					this.saveConnections();
+				}
+			});
 		}
 	}
 
@@ -56,10 +61,12 @@ export class ChatServerManagerComponent implements OnInit {
 	deleteProject(conn: ChatServerConnection, proj: ChatBotProject) {
 		var current = conn.ChatProjects.indexOf(proj);
 		if (current != -1) {
-			if (confirm(`Delete chat project '${proj.Name}'`)) {
-				conn.ChatProjects.splice(current, 1);
-				this.saveConnections();
-			}
+			this.infoDialog.confirm("Sure?", `Delete chat project '${proj.Name}'`, (ok) => {
+				if (ok) {
+					conn.ChatProjects.splice(current, 1);
+					this.saveConnections();
+				}
+			});
 		}
 	}
 

@@ -2,6 +2,7 @@ import { ObjectID } from 'bson';
 import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.component';
 import { NodeEditorComponent } from '../components/nodeeditor/nodeeditor.component';
 import { GlobalsService } from '../services/globals.service';
+import { InfoDialogService } from '../services/info-dialog.service';
 import { MdButton } from '@angular/material';
 
 //Enum Start
@@ -261,7 +262,8 @@ export enum EditorType {
 
 export class ModelHelpers {
 	constructor(
-		public globalsService: GlobalsService) {
+		public globalsService: GlobalsService,
+		public infoDialog: InfoDialogService) {
 
 	}
 
@@ -477,12 +479,13 @@ export class ModelHelpers {
 	sectionDelete(chatNode: ChatNode, section: Section) {
 		var current = chatNode.Sections.indexOf(section);
 		if (current != -1) {
-			if (confirm(`Delete section '${this.sectionAlias(section)}'`)) {
-				chatNode.Sections.splice(current, 1);
-
-				this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
-				this.globalsService.chatFlowComponent.updateLayout();
-			}
+			this.infoDialog.confirm('Sure?', `Delete section '${this.sectionAlias(section)}'`, (ok) => {
+				if (ok) {
+					chatNode.Sections.splice(current, 1);
+					this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
+					this.globalsService.chatFlowComponent.updateLayout();
+				}
+			});
 		}
 	}
 	addButton(chatNode: ChatNode) {
@@ -508,17 +511,17 @@ export class ModelHelpers {
 	buttonDelete(chatNode: ChatNode, btn: Button) {
 		var current = chatNode.Buttons.indexOf(btn);
 		if (current != -1) {
-			if (confirm(`Delete button '${this.chatButtonAlias(btn)}'?`)) {
+			this.infoDialog.confirm('Sure?', `Delete button '${this.chatButtonAlias(btn)}'?`, (ok) => {
 				chatNode.Buttons.splice(current, 1);
 
 				this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
 				this.globalsService.chatFlowComponent.updateLayout();
-			}
+			});
 		}
 	}
 
 	nodeDelete(chatNode: ChatNode, nodeEditor: NodeEditorComponent) {
-		if (confirm(`Are you sure you want to delete '${chatNode.Name || chatNode.NodeType}' chat node?`)) {
+		this.infoDialog.confirm('Sure?', `Are you sure you want to delete '${chatNode.Name || chatNode.NodeType}' chat node?`, (ok) => {
 			let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
 			var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
 			network.chatNodeVMs.splice(elementIdxToDel, 1);
@@ -527,7 +530,8 @@ export class ModelHelpers {
 			network.parent.updateLayout();
 
 			nodeEditor.dialogRef.close();
-		}
+		});
+
 	}
 
 	nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MdButton) {

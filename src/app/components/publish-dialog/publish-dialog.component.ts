@@ -3,6 +3,7 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import { ChatBotProject, ChatBotReferance, ChatServerConnection } from '../../models/app.models';
 import { SettingsService } from '../../services/settings.service';
 import { ChatFlowService } from '../../services/chatflow.service';
+import { InfoDialogService } from '../../services/info-dialog.service';
 import { ChatServerManagerComponent } from '../../components/chat-server-manager/chat-server-manager.component';
 import * as models from '../../models/chatflow.models';
 @Component({
@@ -16,6 +17,7 @@ export class PublishDialogComponent implements OnInit {
 		private settings: SettingsService,
 		private chatFlowService: ChatFlowService,
 		private dialog: MdDialog,
+		private infoDialog: InfoDialogService,
 		private dialogRef: MdDialogRef<PublishDialogComponent>,
 		@Inject(MD_DIALOG_DATA) private pack: models.ChatFlowPack) {
 		this.loadSavedConns();
@@ -37,8 +39,9 @@ export class PublishDialogComponent implements OnInit {
 
 	publish() {
 		this.chatFlowService.chatProjectExists(this.selectedServer, this.selectedProject).subscribe(x => {
-			if (confirm(`Chat project with id '${this.selectedProject.Id}' already exists. Publishing this will overwrite it. Do you want to proceed?`))
+			this.infoDialog.confirm("Sure?", `Chat project with id '${this.selectedProject.Id}' already exists. Publishing this will overwrite it. Do you want to proceed?`, (ok) => {
 				this.doPublish();
+			});
 		}, err => {
 			this.doPublish();
 		});
@@ -46,10 +49,9 @@ export class PublishDialogComponent implements OnInit {
 
 	private doPublish() {
 		this.chatFlowService.publishProject(this.selectedServer, this.selectedProject, this.pack).subscribe(x => {
-			alert('Chatbot published successfully');
-			this.dismiss();
+			this.infoDialog.alert('Done', 'Chatbot published successfully', () => this.dismiss());
 		}, err => {
-			alert('Oops! Something went wrong while publishing the chat project! Please try again.');
+			this.infoDialog.alert('Done', 'Oops! Something went wrong while publishing the chat project! Please try again.');
 		});
 	}
 
