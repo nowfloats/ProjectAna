@@ -11,6 +11,8 @@ export class InfoDialogComponent implements OnInit {
 	constructor(
 		private dialogRef: MdDialogRef<InfoDialogComponent>,
 		@Inject(MD_DIALOG_DATA) public options: InfoDialogOptions) {
+		this.dialogRef.disableClose = true;
+
 		if (!options) {
 			options = {
 				dialogType: InfoDialogType.Alert,

@@ -512,24 +512,28 @@ export class ModelHelpers {
 		var current = chatNode.Buttons.indexOf(btn);
 		if (current != -1) {
 			this.infoDialog.confirm('Sure?', `Delete button '${this.chatButtonAlias(btn)}'?`, (ok) => {
-				chatNode.Buttons.splice(current, 1);
+				if (ok) {
+					chatNode.Buttons.splice(current, 1);
 
-				this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
-				this.globalsService.chatFlowComponent.updateLayout();
+					this.globalsService.chatFlowComponent.chatFlowNetwork.updateChatNodeConnections();
+					this.globalsService.chatFlowComponent.updateLayout();
+				}
 			});
 		}
 	}
 
 	nodeDelete(chatNode: ChatNode, nodeEditor: NodeEditorComponent) {
 		this.infoDialog.confirm('Sure?', `Are you sure you want to delete '${chatNode.Name || chatNode.NodeType}' chat node?`, (ok) => {
-			let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
-			var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
-			network.chatNodeVMs.splice(elementIdxToDel, 1);
+			if (ok) {
+				let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
+				var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
+				network.chatNodeVMs.splice(elementIdxToDel, 1);
 
-			network.updateChatNodeConnections();
-			network.parent.updateLayout();
+				network.updateChatNodeConnections();
+				network.parent.updateLayout();
 
-			nodeEditor.dialogRef.close();
+				nodeEditor.dialogRef.close();
+			}
 		});
 
 	}
@@ -549,7 +553,7 @@ export class ModelHelpers {
 	}
 
 	test(chatNode: ChatNode) {
-		alert(JSON.stringify(chatNode.Sections[chatNode.Sections.length - 1], null, 4));
+		this.infoDialog.alert('Alert', JSON.stringify(chatNode.Sections[chatNode.Sections.length - 1], null, 4));
 	}
 
 	arrayMove_RAW(array: any[], old_index, new_index) {

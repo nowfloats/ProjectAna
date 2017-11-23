@@ -40,7 +40,8 @@ export class PublishDialogComponent implements OnInit {
 	publish() {
 		this.chatFlowService.chatProjectExists(this.selectedServer, this.selectedProject).subscribe(x => {
 			this.infoDialog.confirm("Sure?", `Chat project with id '${this.selectedProject.Id}' already exists. Publishing this will overwrite it. Do you want to proceed?`, (ok) => {
-				this.doPublish();
+				if (ok)
+					this.doPublish();
 			});
 		}, err => {
 			this.doPublish();

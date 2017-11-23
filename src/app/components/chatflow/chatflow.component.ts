@@ -12,6 +12,7 @@ import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-m
 import { MdMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
+import { InfoDialogService } from '../../services/info-dialog.service';
 
 @Component({
 	selector: 'app-chatflow',
@@ -23,6 +24,7 @@ export class ChatFlowComponent implements OnInit {
 	constructor(
 		private chatFlowService: ChatFlowService,
 		public dialog: MdDialog,
+		public infoDialog: InfoDialogService,
 		public route: ActivatedRoute,
 		public router: Router,
 		public snakbar: MdSnackBar,
@@ -38,7 +40,7 @@ export class ChatFlowComponent implements OnInit {
 
 		globalsService.chatFlowComponent = this;
 
-		this.MH = new models.ModelHelpers(globalsService);
+		this.MH = new models.ModelHelpers(globalsService, infoDialog);
 	}
 	chatFlowNetwork: ChatFlowNetwork;
 	MH: models.ModelHelpers;
@@ -365,15 +367,21 @@ export class ChatFlowComponent implements OnInit {
 	}
 
 	playChatFlow() {
-		alert('Coming soon');
-		//let link = "anaconsim://app?chatflow=" + encodeURIComponent(this.getProjectUrl());
-		//location.href = link;
+		this.infoDialog.alert('Alert', 'Coming soon');
 	}
 
 	openPublishDialog() {
 		this.dialog.open(PublishDialogComponent, {
 			width: '60%',
 			data: this.saveChatFlow()
+		});
+	}
+
+	gotoStartup() {
+		this.infoDialog.confirm('Save?', 'Do you want to save any unsaved changes before you close?', (ok) => {
+			if (ok)
+				this.saveChatFlow();
+			this.router.navigateByUrl('/startup');
 		});
 	}
 }

@@ -45,11 +45,11 @@ export class StartupComponent implements OnInit {
 						this.openChatBotProject(projName);
 					};
 					reader.onerror = () => {
-						alert('Unable to load the file!');
+						this.infoDialog.alert('Oops!', 'Unable to load the file!');
 					};
 					reader.readAsText(selectedFile, "UTF-8");
 				} else
-					alert('Invalid file. Please select a valid Ana project file');
+					this.infoDialog.alert('Oops!', 'Invalid file. Please select a valid Ana project file');
 			}
 		};
 		fileInput.click();

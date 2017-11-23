@@ -7,5 +7,5 @@
 </md-dialog-content>
 <md-dialog-actions>
     <button md-raised-button color="primary" (click)="primaryClick()" *ngIf="primaryButtonText">{{primaryButtonText}}</button>
-    <button md-raised-button md-dialog-close>{{secondaryButtonText}}</button>
+    <button md-raised-button [md-dialog-close]="false">{{secondaryButtonText}}</button>
 </md-dialog-actions>

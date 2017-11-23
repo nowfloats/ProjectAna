@@ -26,6 +26,9 @@
             <button mdTooltip="Fit" type="button" md-fab (click)="fitViewToAllNodes()">
                 <md-icon class="fab-btn-icon">zoom_out_map</md-icon>
             </button>
+            <button mdTooltip="Close" type="button" md-fab (click)="gotoStartup()" class="danger-button">
+                <md-icon class="fab-btn-icon">close</md-icon>
+            </button>
         </div>
 
         <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" #chatflowRoot [attr.visibility]="(layoutReady()?'visible':'collapse')" (mouseup)="mouseUp($event)" (mousemove)="mouseMove($event)" (mousedown)="mouseDown($event)" (mouseleave)="mouseLeave($event)" [attr.viewBox]="viewBox()" (wheel)="designerWheel($event)" class="chatflow-root-svg">

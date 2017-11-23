@@ -8,6 +8,7 @@ import * as models from '../../models/chatflow.models';
 import * as chatflow from '../../components/chatflow/chatflow.component';
 import { ChatFlowService } from '../../services/chatflow.service';
 import { GlobalsService } from '../../services/globals.service';
+import { InfoDialogService } from '../../services/info-dialog.service';
 
 @Component({
 	selector: 'app-nodeeditor',
@@ -17,11 +18,12 @@ import { GlobalsService } from '../../services/globals.service';
 export class NodeEditorComponent {
 	constructor(
 		private chatFlowService: ChatFlowService,
+		private infoDialog: InfoDialogService,
 		public dialogRef: MdDialogRef<NodeEditorComponent>,
 		@Inject(MD_DIALOG_DATA) public chatNode: models.ChatNode,
 		public globalsService: GlobalsService) {
 
-		this.MH = new models.ModelHelpers(globalsService);
+		this.MH = new models.ModelHelpers(globalsService, infoDialog);
 	}
 	SectionType = models.SectionType;
 	dismiss() {

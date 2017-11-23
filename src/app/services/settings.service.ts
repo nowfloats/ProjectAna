@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { ChatServerConnection } from '../models/app.models'
 import { ChatFlowPack } from '../models/chatflow.models';
+import { InfoDialogService } from '../services/info-dialog.service';
 @Injectable()
 export class SettingsService {
-	constructor() { }
+	constructor(private infoDialog: InfoDialogService) { }
 	loadSavedConnections() {
 		var loaded = JSON.parse(localStorage.getItem(SettingKey.SavedConnsKey)) as ChatServerConnection[];
 		if (loaded)
@@ -24,8 +25,10 @@ export class SettingsService {
 		} else {
 			let existing = localStorage.getItem(chatProjectName);
 			if (existing) {
-				if (confirm("Chat project the given name already exists. Do you want to overwrite it?"))
-					localStorage.setItem(chatProjectName, JSON.stringify(pack));
+				this.infoDialog.confirm('Sure?', "Chat project the given name already exists. Do you want to overwrite it?", (ok) => {
+					if (ok)
+						localStorage.setItem(chatProjectName, JSON.stringify(pack));
+				});
 			}
 			else
 				localStorage.setItem(chatProjectName, JSON.stringify(pack));
@@ -37,7 +40,7 @@ export class SettingsService {
 
 		let existing = localStorage.getItem(chatProjectName);
 		if (!existing) {
-			alert(`Chat Project with name '${chatProjectName}' does not exist`);
+			this.infoDialog.alert('Not found', `Chat Project with name '${chatProjectName}' does not exist`);
 			return null;
 		}
 		return JSON.parse(existing) as ChatFlowPack;
@@ -60,7 +63,7 @@ export class SettingsService {
 
 		let temp = localStorage.getItem(oldName);
 		if (!temp) {
-			alert(`${oldName} not found`);
+			this.infoDialog.alert('Not found', `${oldName} not found`);
 			return;
 		}
 		localStorage.setItem(newName, temp);
@@ -72,7 +75,7 @@ export class SettingsService {
 
 		let exists = localStorage.getItem(name);
 		if (!exists) {
-			alert(`${name} not found`);
+			this.infoDialog.alert('Not found', `${name} not found`);
 			return false;
 		}
 		localStorage.removeItem(name);
