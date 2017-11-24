@@ -241,9 +241,11 @@ export class ChatFlowComponent implements OnInit {
 		var maxY = Math.max(...YsWithHeight);
 		var width = maxX - minX;
 		var height = maxY - minY;
-		console.log('fitViewToNodes: ');
-		console.log(width);
-		console.log(height);
+		if (width < Config.maxZoomWidth)
+			width = Config.maxZoomWidth;
+		if (height < Config.maxZoomHeight)
+			height = Config.maxZoomHeight;
+
 		this.zoomToRectWithAnimation(minX, minY, width, height);
 	}
 
@@ -259,6 +261,14 @@ export class ChatFlowComponent implements OnInit {
 
 		if (this._viewBoxHeight - change > 0)
 			this._viewBoxHeight -= change;
+
+		if (this._viewBoxWidth < Config.maxZoomWidth)
+			this._viewBoxWidth = Config.maxZoomWidth;
+		if (this._viewBoxHeight < Config.maxZoomHeight)
+			this._viewBoxHeight = Config.maxZoomHeight;
+
+		//console.log('designerWheel: ');
+		//console.log(this._viewBoxWidth + "," + this._viewBoxHeight);
 	}
 
 	openEditor(chatNodeVM: ChatNodeVM) {
@@ -277,8 +287,9 @@ export class ChatFlowComponent implements OnInit {
 			NodeType: models.NodeType.Combination,
 			TimeoutInMs: 0
 		});
-		newNodeVM._x = (this._viewBoxWidth / 2) + (Math.random() * 50);
-		newNodeVM._y = (this._viewBoxHeight / 2) + (Math.random() * 50);
+
+		newNodeVM._x = (this._viewBoxX + (this._viewBoxWidth / 2)) + (Math.random() * 50);
+		newNodeVM._y = (this._viewBoxY + (this._viewBoxHeight / 2)) + (Math.random() * 50);
 		newNodeVM._layoutUpdated = true; //To skip the loading indicator
 
 		this.chatFlowNetwork.updateChatNodeConnections();
@@ -692,4 +703,7 @@ class Config {
 	static zoomCoefficient = 0.3;
 
 	static viewBoxAnimStep = 10;
+
+	static maxZoomHeight = 600;
+	static maxZoomWidth = 900;
 }

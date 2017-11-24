@@ -28,7 +28,8 @@ export enum CarouselButtonType {
 export enum NodeType {
 	ApiCall = 'ApiCall',
 	Combination = 'Combination',
-	Card = 'Card'
+	Card = 'Card',
+	Condition = 'Condition'
 }
 
 export enum APIMethod {
@@ -271,6 +272,7 @@ export class ModelHelpers {
 		NodeType.ApiCall,
 		NodeType.Combination,
 		NodeType.Card,
+		NodeType.Condition
 	];
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
