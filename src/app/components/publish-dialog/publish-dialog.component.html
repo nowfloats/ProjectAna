@@ -1,6 +1,15 @@
 <h2 md-dialog-title>Publish chatbot</h2>
 <md-dialog-content>
-    <section class="form-field">
+    <md-card *ngIf="!savedConns || savedConns.length <= 0" class="text-center">
+        <h4>
+            Looks like you don't have any saved publish server connections. 
+            <br />
+            <br />
+            <button md-raised-button color="primary" (click)="managePublishServers()">Add publish server connection</button>
+        </h4>
+    </md-card>
+
+    <section class="form-field" *ngIf="savedConns && savedConns.length>0">
         <md-select placeholder="Server" [(ngModel)]="selectedServer" name="PublishServer">
             <md-option *ngFor="let conn of savedConns" [value]="conn">
                 {{ conn.Name }}
@@ -16,7 +25,7 @@
     </section>
 </md-dialog-content>
 <md-dialog-actions>
-    <div class="left">
+    <div class="left" *ngIf="savedConns && savedConns.length>0">
         <button md-raised-button (click)="managePublishServers()">Add/edit publish servers</button>
     </div>
     <div class="spacing"></div>

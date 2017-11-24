@@ -52,7 +52,7 @@ export class ChatServerManagerComponent implements OnInit {
 			conn.ChatProjects = [];
 		conn.ChatProjects.push({
 			CreatedOn: new Date(),
-			Id: '',
+			Id: 'new-chat-project',
 			Name: 'New Chat Project',
 			UpdatedOn: new Date()
 		});
@@ -71,6 +71,26 @@ export class ChatServerManagerComponent implements OnInit {
 	}
 
 	saveConnections() {
+		if (this.savedConnections && this.savedConnections.length > 0) {
+			let invalidPublishServers = this.savedConnections.filter(x => !x.ServerUrl || !x.Name || !x.ChatProjects || (x.ChatProjects.length <= 0));
+			if (invalidPublishServers.length > 0) {
+				this.infoDialog.alert('Incomplete Details', `One or more of your publish servers have Server Url, Name or Chat Projects empty. Please fill them and try again.`);
+				return;
+			}
+			try {
+				let emptyChatProjects = this.savedConnections.filter(x => !x.ChatProjects || x.ChatProjects.length <= 0);
+				let invalidChatProjects = this.savedConnections.filter(x => x.ChatProjects && x.ChatProjects.length > 0).map(x => x.ChatProjects).reduce((a, b) => a.concat(b)).filter(x => !x.Id || !x.Name);
+				if (emptyChatProjects.length > 0 || invalidChatProjects.length > 0) {
+					this.infoDialog.alert('Incomplete Details', `One or more of the chat projects in your chat server connections is incomplete. Please fill them and try again.`);
+					return;
+				}
+			} catch (e) {
+				console.log(e);
+				this.infoDialog.alert('Incomplete Details', `One or more of the chat projects in your chat server connections is incomplete. Please fill them and try again.`);
+				return;
+			}
+		}
+
 		this.settings.saveSavedConnections(this.savedConnections);
 
 		this.snakbar.open('Publish servers saved!', 'Dismiss', {

@@ -235,13 +235,15 @@ export class ChatFlowComponent implements OnInit {
 		var XsWithWidth = chatNodeVMs.map(x => x._x + x._width);
 		var YsWithHeight = chatNodeVMs.map(x => x._y + x._height);
 
-		var minX = Math.min(...Xs)
-		var minY = Math.min(...Ys)
-		var maxX = Math.max(...XsWithWidth)
-		var maxY = Math.max(...YsWithHeight)
+		var minX = Math.min(...Xs);
+		var minY = Math.min(...Ys);
+		var maxX = Math.max(...XsWithWidth);
+		var maxY = Math.max(...YsWithHeight);
 		var width = maxX - minX;
 		var height = maxY - minY;
-
+		console.log('fitViewToNodes: ');
+		console.log(width);
+		console.log(height);
 		this.zoomToRectWithAnimation(minX, minY, width, height);
 	}
 
