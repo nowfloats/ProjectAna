@@ -12,7 +12,7 @@ function createWindow() {
 		protocol: 'file:',
 		slashes: true
 	}))
-	win.openDevTools();
+
 	win.on('closed', () => {
 		win = null
 	})
