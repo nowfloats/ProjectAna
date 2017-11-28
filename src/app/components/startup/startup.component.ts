@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { InfoDialogService } from '../../services/info-dialog.service';
 import { GlobalsService } from '../../services/globals.service';
 import { SettingsService } from '../../services/settings.service';
 import * as models from '../../models/chatflow.models';
 import { ObjectID } from 'bson';
+
 @Component({
 	selector: 'app-startup',
 	templateUrl: './startup.component.html',
@@ -21,6 +22,9 @@ export class StartupComponent implements OnInit {
 		this.loadSavedProjects();
 	}
 
+	@ViewChild('fileInput')
+	fileInput: ElementRef;
+
 	loadSavedProjects() {
 		this.savedProjects = this.settings.listSavedChatProjectNames();
 	}
@@ -30,33 +34,31 @@ export class StartupComponent implements OnInit {
 	ngOnInit() {
 
 	}
-	importProject() {
-		let fileInput = document.createElement('input');
-		fileInput.type = 'file';
-		fileInput.onchange = (event) => {
-			if (fileInput.files && fileInput.files[0]) {
-				let selectedFile = fileInput.files[0];
-				if (selectedFile.name.endsWith('.anaproj')) {
-					let reader = new FileReader();
-					reader.onload = (evt) => {
-						let pack = JSON.parse(reader.result) as models.ChatFlowPack;
-						let projName = selectedFile.name.replace(new RegExp('\.anaproj$'), '');
-						this.settings.saveChatProject(projName, pack, false);
+
+	fileInputChange() {
+		let fileInput = this.fileInput.nativeElement as HTMLInputElement;
+		if (fileInput.files && fileInput.files[0]) {
+			let selectedFile = fileInput.files[0];
+			fileInput.value = '';
+			if (selectedFile.name.endsWith('.anaproj')) {
+				let reader = new FileReader();
+				reader.onload = (evt) => {
+					let pack = JSON.parse(reader.result) as models.ChatFlowPack;
+					let projName = selectedFile.name.replace(new RegExp('\.anaproj$'), '');
+					this.settings.saveChatProject(projName, pack, false, () => {
 						this.openChatBotProject(projName);
-					};
-					reader.onerror = () => {
-						this.infoDialog.alert('Oops!', 'Unable to load the file!');
-					};
-					reader.readAsText(selectedFile, "UTF-8");
-				} else
-					this.infoDialog.alert('Oops!', 'Invalid file. Please select a valid Ana project file');
-			}
-		};
-		fileInput.click();
+					});
+				};
+				reader.onerror = () => {
+					this.infoDialog.alert('Oops!', 'Unable to load the file!');
+				};
+				reader.readAsText(selectedFile, "UTF-8");
+			} else
+				this.infoDialog.alert('Oops!', 'Invalid file. Please select a valid Ana project file');
+		}
 	}
 
 	addProject() {
-
 		this.infoDialog.prompt('Chatbot Project Name', 'Enter a name for your new chatbot project', (name) => {
 			if (!name)
 				return;
@@ -79,9 +81,9 @@ export class StartupComponent implements OnInit {
 				_id: _id
 			};
 			defaultFlow.NodeLocations[firstNode.Id] = { X: 500, Y: 500 };
-			this.settings.saveChatProject(name, defaultFlow, false);
-
-			this.openChatBotProject(name);
+			this.settings.saveChatProject(name, defaultFlow, false, () => {
+				this.openChatBotProject(name);
+			});
 		});
 	}
 

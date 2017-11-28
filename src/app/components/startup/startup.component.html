@@ -31,7 +31,8 @@
 
         <section class="bottom-actions">
             <button mdTooltip="Add new chatbot project" color="primary" md-raised-button (click)="addProject()">Add new chatbot</button>
-            <button mdTooltip="Import chatbot project from file" md-raised-button (click)="importProject()">Import chatbot</button>
+            <button mdTooltip="Import chatbot project from file" md-raised-button (click)="fileInput.click()">Import chatbot</button>
         </section>
     </div>
 </div>
+<input type="file" name="f" style="display:none" #fileInput (change)="fileInputChange()"/>

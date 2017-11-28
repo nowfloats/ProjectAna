@@ -17,21 +17,26 @@ export class SettingsService {
 		localStorage.setItem(SettingKey.SavedConnsKey, JSON.stringify(connections));
 	}
 
-	saveChatProject(chatProjectName: string, pack: ChatFlowPack, quite: boolean) {
+	saveChatProject(chatProjectName: string, pack: ChatFlowPack, quite: boolean, next?: () => void) {
 		chatProjectName += '.anaproj';
 
 		if (quite) {
 			localStorage.setItem(chatProjectName, JSON.stringify(pack));
+			if (next) next();
 		} else {
 			let existing = localStorage.getItem(chatProjectName);
 			if (existing) {
-				this.infoDialog.confirm('Sure?', "Chat project the given name already exists. Do you want to overwrite it?", (ok) => {
-					if (ok)
+				this.infoDialog.confirm('Sure?', 'Chat project the given name already exists. Do you want to overwrite it?', (ok) => {
+					if (ok) {
 						localStorage.setItem(chatProjectName, JSON.stringify(pack));
+						if (next) next();
+					}
 				});
 			}
-			else
+			else {
 				localStorage.setItem(chatProjectName, JSON.stringify(pack));
+				if (next) next();
+			}
 		}
 	}
 
