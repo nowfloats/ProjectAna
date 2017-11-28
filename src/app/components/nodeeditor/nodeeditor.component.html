@@ -23,6 +23,10 @@
                     <md-form-field>
                         <input mdInput type="number" placeholder="Timeout (ms)" [(ngModel)]="chatNode.TimeoutInMs" name="timeout">
                     </md-form-field>
+
+                    <md-form-field>
+                        <input mdInput type="text" disabled readonly placeholder="Node Id" [(ngModel)]="chatNode.Id" name="nodeId">
+                    </md-form-field>
                 </div>
                 <div class="node-api-details" [hidden]="chatNode.NodeType!='ApiCall'">
                     <div class="panel panel-default">

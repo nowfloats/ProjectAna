@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { SafeResourceUrl, DomSanitizer } from '@angular/platform-browser';
+import { environment } from '../../../environments/environment';
 
 @Component({
 	selector: 'app-simulator-frame',
@@ -22,6 +23,8 @@ export class SimulatorFrameComponent implements OnInit {
 			}
 		};
 		let url = `simulator/index.html?sim=${btoa(JSON.stringify(param))}`;
+		if (!environment.production)
+			url = `http://localhost:4200/index.html?sim=${btoa(JSON.stringify(param))}`;
 		this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
