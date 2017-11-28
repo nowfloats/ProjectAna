@@ -136,7 +136,6 @@ export enum ConditionOperator {
 }
 
 export enum ButtonType {
-	PostText = 'PostText',
 	OpenUrl = 'OpenUrl',
 	GetText = 'GetText',
 	GetNumber = 'GetNumber',
@@ -308,7 +307,6 @@ export class ModelHelpers {
 		ButtonType.GetFile,
 		ButtonType.NextNode,
 		ButtonType.OpenUrl,
-		ButtonType.PostText,
 		ButtonType.ShowConfirmation
 	];
 	conditionOperators: ConditionOperator[] = [
@@ -376,9 +374,6 @@ export class ModelHelpers {
 
 		var hidden = false;
 		switch (btn.ButtonType) {
-			case ButtonType.PostText:
-				hidden = true; //Hide all. Probably!
-				break;
 			case ButtonType.OpenUrl:
 				hidden = !(['Url'].indexOf(fieldName) != -1);//Show only Url field
 				break;

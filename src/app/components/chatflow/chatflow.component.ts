@@ -380,7 +380,22 @@ export class ChatFlowComponent implements OnInit {
 	}
 
 	playChatFlow() {
-		this.infoDialog.alert('Alert', 'Coming soon');
+		//this.infoDialog.alert('Alert', 'Coming soon');
+		let pack = this.saveChatFlow();
+		let param = {
+			debug: true,
+			chatFlow: this.chatFlowService.normalizeChatNodes(pack.ChatNodes),
+			brandingConfig: {
+				primaryBackgroundColor: '#8cc83c',
+				primaryForegroundColor:  'white',
+				secondaryBackgroundColor:  '#3c3c3c',
+				logoUrl:  'http://ana.chat/favicon.ico',
+				agentName: "ANA Simulator",
+				frameHeight: '70vh',
+				frameWidth: '360px',
+			}
+		};
+		window.open(`http://localhost:4200/?sim=${btoa(JSON.stringify(param))}`);
 	}
 
 	openPublishDialog() {
