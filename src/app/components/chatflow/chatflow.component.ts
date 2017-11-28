@@ -13,6 +13,7 @@ import { MdMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../services/info-dialog.service';
+import { SimulatorFrameComponent } from '../../components/simulator-frame/simulator-frame.component';
 
 @Component({
 	selector: 'app-chatflow',
@@ -47,6 +48,10 @@ export class ChatFlowComponent implements OnInit {
 
 	@ViewChild('chatflowRoot')
 	chatflowRoot: ElementRef;
+
+	@ViewChild('simulator')
+	simulator: SimulatorFrameComponent;
+
 	projName: string = "";
 	ngOnInit(): void {
 		this.route.queryParamMap.subscribe(x => {
@@ -382,20 +387,13 @@ export class ChatFlowComponent implements OnInit {
 	playChatFlow() {
 		//this.infoDialog.alert('Alert', 'Coming soon');
 		let pack = this.saveChatFlow();
-		let param = {
-			debug: true,
-			chatFlow: this.chatFlowService.normalizeChatNodes(pack.ChatNodes),
-			brandingConfig: {
-				primaryBackgroundColor: '#8cc83c',
-				primaryForegroundColor:  'white',
-				secondaryBackgroundColor:  '#3c3c3c',
-				logoUrl:  'http://ana.chat/favicon.ico',
-				agentName: "ANA Simulator",
-				frameHeight: '70vh',
-				frameWidth: '360px',
-			}
-		};
-		window.open(`http://localhost:4200/?sim=${btoa(JSON.stringify(param))}`);
+		let chatNodes = this.chatFlowService.normalizeChatNodes(pack.ChatNodes);
+		let simWindow = this.simulator.frame();
+		simWindow.postMessage({
+			type: 0,
+			data: chatNodes
+		}, '*');
+		this.simulator.isOpen = true;
 	}
 
 	openPublishDialog() {

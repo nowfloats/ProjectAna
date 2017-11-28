@@ -38,6 +38,7 @@ import { EllipsisPipe } from './pipes/ellipsis.pipe';
 import { StartupComponent } from './components/startup/startup.component';
 import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
+import { SimulatorFrameComponent } from './components/simulator-frame/simulator-frame.component';
 
 @NgModule({
 	declarations: [
@@ -48,7 +49,8 @@ import { InfoDialogComponent } from './components/info-dialog/info-dialog.compon
 		EllipsisPipe,
 		StartupComponent,
 		PublishDialogComponent,
-		InfoDialogComponent
+		InfoDialogComponent,
+		SimulatorFrameComponent
 	],
 	imports: [
 		BrowserModule,
