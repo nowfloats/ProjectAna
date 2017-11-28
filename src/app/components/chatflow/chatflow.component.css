@@ -23,17 +23,10 @@
         margin: 0 5px;
     }
 
-
-
 .chatflow-root-svg {
     overflow: hidden;
     width: 98vw;
-    height: 98vw;
-    /*position: fixed !important;
-    top: 60px !important;
-    right: 0 !important;
-    left: 0 !important;
-    bottom: 0 !important;*/
+    height: 98vh;
 }
 
 .chatflow-loading {

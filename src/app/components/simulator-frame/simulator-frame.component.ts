@@ -15,14 +15,13 @@ export class SimulatorFrameComponent implements OnInit {
 				primaryBackgroundColor: '#8cc83c',
 				primaryForegroundColor: 'white',
 				secondaryBackgroundColor: '#3c3c3c',
-				logoUrl: '/favicon.ico',
+				logoUrl: `favicon.ico`,
 				agentName: "ANA Simulator",
 				frameHeight: '70vh',
 				frameWidth: '360px',
 			}
 		};
 		let url = `simulator/index.html?sim=${btoa(JSON.stringify(param))}`;
-		console.log(url);
 		this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 

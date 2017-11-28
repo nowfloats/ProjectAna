@@ -4,7 +4,7 @@ shell.echo('Building studio project...');
 shell.exec('ng build --prod --aot=false');
 
 shell.echo('Changing to simulator project...');
-if (shell.cd('../ana-web-chat/') == 0) {
+if (shell.cd('../ana-web-chat/').code == 0) {
 
 	shell.echo('Building simulator project...');
 	shell.exec('ng build --prod');
@@ -19,6 +19,7 @@ if (shell.cd('../ana-web-chat/') == 0) {
 	shell.sed('-i', '<base href="./">', '<base href="./simulator">', 'dist/simulator/index.html');
 
 	shell.echo('Packing Ana Studio into an electron app...');
+	shell.rm('-R', 'out');
 	shell.exec('electron-packager dist "Ana Conversation Studio" --out out --icon=dist/favicon.ico --all --overwrite');
 
 	shell.echo('Done');
