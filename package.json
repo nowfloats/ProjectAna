@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron dist",
-    "package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all --overwrite"
+    "package": "node pack-ana-studio.js",
+    "studio-package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all --overwrite"
   },
   "private": true,
   "dependencies": {
@@ -41,6 +42,7 @@
     "@types/jasmine": "~2.5.53",
     "@types/jasminewd2": "~2.0.2",
     "@types/node": "~6.0.60",
+    "@types/shelljs": "^0.7.6",
     "codelyzer": "~3.2.0",
     "electron": "^1.7.9",
     "electron-packager": "^10.1.0",
@@ -53,6 +55,7 @@
     "karma-jasmine": "~1.1.0",
     "karma-jasmine-html-reporter": "^0.2.2",
     "protractor": "~5.1.2",
+    "shelljs": "^0.7.8",
     "ts-node": "~3.3.0",
     "tslint": "~5.7.0",
     "typescript": "~2.4.2"
