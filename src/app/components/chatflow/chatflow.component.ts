@@ -388,6 +388,10 @@ export class ChatFlowComponent implements OnInit {
 	playChatFlow() {
 		//this.infoDialog.alert('Alert', 'Coming soon');
 		let pack = this.saveChatFlow();
+		if (pack.ChatNodes.filter(x => x.IsStartNode).length <= 0) {
+			this.infoDialog.alert('Start node not set!', `Tick 'Mark as start node' for the initial node of your chatbot.`);
+			return;
+		}
 		let chatNodes = this.chatFlowService.normalizeChatNodes(pack.ChatNodes);
 		let simWindow = this.simulator.frame();
 		simWindow.postMessage({
