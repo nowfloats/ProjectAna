@@ -1,15 +1,22 @@
 import { Injectable } from '@angular/core';
-import * as models from '../models/chatflow.models'
-import { ChatFlowComponent } from '../components/chatflow/chatflow.component'
-
+import * as models from '../models/chatflow.models';
+import { Title } from '@angular/platform-browser';
+import { ChatFlowComponent } from '../components/chatflow/chatflow.component';
 
 @Injectable()
 export class GlobalsService {
-	constructor() { }
+	constructor(private title: Title) { }
+	appName = 'Ana Conversation Studio';
 
 	chatFlowComponent: ChatFlowComponent;
 	loading: boolean = false;
-	currentPageName: string = '';
+
+	setPageTitle(title?: string) {
+		if (title)
+			this.title.setTitle(`${title} - ${this.appName}`);
+		else
+			this.title.setTitle(this.appName);
+	}
 
 	downloadTextAsFile(filename, text) {
 		var element = document.createElement('a');

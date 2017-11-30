@@ -22,6 +22,8 @@ export class ChatServerManagerComponent implements OnInit {
 		public infoDialog: InfoDialogService,
 		public router: Router,
 		public dialogRef: MdDialogRef<ChatServerManagerComponent>) {
+
+		this.global.setPageTitle("Publish Servers Manager");
 		this.savedConnections = this.settings.loadSavedConnections();
 	}
 

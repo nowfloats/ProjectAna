@@ -57,6 +57,7 @@ export class ChatFlowComponent implements OnInit {
 		this.route.queryParamMap.subscribe(x => {
 			this.projName = x.get('proj');
 			if (this.projName) {
+				this.globalsService.setPageTitle(this.projName);
 				let proj = this.settings.getChatProject(this.projName);
 				if (proj)
 					this.loadChatFlowPack(proj);
@@ -373,7 +374,7 @@ export class ChatFlowComponent implements OnInit {
 			UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
 		};
 		this.settings.saveChatProject(this.projName, pack, true);
-		this.snakbar.open('Chatbot project saved', 'Dismiss', {
+		this.snakbar.open(`Chatbot project '${this.projName}' saved`, 'Dismiss', {
 			duration: 2000
 		});
 		return pack;

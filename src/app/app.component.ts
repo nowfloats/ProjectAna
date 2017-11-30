@@ -21,16 +21,8 @@ export class AppComponent {
 	hideLoading() {
 		this.global.loading = false;
 	}
-	pageName() {
-		return this.global.currentPageName;
-	}
+	
 	goto(path: string) {
 		this.router.navigateByUrl(path);
-	}
-
-	managePublishServers() {
-		let dialogRef = this.dialog.open(ChatServerManagerComponent, {
-			width: '60%',
-		});
 	}
 }

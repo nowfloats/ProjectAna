@@ -30,7 +30,7 @@
 .chatflow-root-svg {
     overflow: hidden;
     width: calc(99vw - 88px);
-    height: 98vh;
+    height: 99vh;
 }
 
 .chatflow-loading {

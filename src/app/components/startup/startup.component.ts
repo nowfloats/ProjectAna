@@ -18,7 +18,7 @@ export class StartupComponent implements OnInit {
 		private globals: GlobalsService,
 		private infoDialog: InfoDialogService,
 		private settings: SettingsService) {
-		this.globals.currentPageName = "Startup";
+		this.globals.setPageTitle();
 		this.loadSavedProjects();
 	}
 

@@ -9,31 +9,31 @@
     <div class="chatflow-designer-wrapper">
         <div class="left-sidebar">
             <div class="chatflow-actions" [hidden]="!layoutReady()">
-                <button mdTooltip="Add new node" type="button" md-button (click)="addNewNode()">
+                <button mdTooltip="Add new node" mdTooltipPosition="right" type="button" md-button (click)="addNewNode()">
                     <md-icon class="fab-btn-icon">add</md-icon><br />
                     ADD
                 </button>
-                <button mdTooltip="Save chatbot project" type="button" md-button (click)="saveChatFlow()">
+                <button mdTooltip="Save chatbot project" type="button" md-button mdTooltipPosition="right" (click)="saveChatFlow()">
                     <md-icon class="fab-btn-icon">save</md-icon><br />
                     SAVE
                 </button>
-                <button mdTooltip="Download chatbot project" type="button" md-button (click)="exportChatFlow()">
+                <button mdTooltip="Download chatbot project" type="button" md-button mdTooltipPosition="right" (click)="exportChatFlow()">
                     <md-icon class="fab-btn-icon">file_download</md-icon><br />
                     EXPORT
                 </button>
-                <button mdTooltip="Publish to Ana chat server" type="button" md-button (click)="openPublishDialog()">
+                <button mdTooltip="Publish to Ana chat server" type="button" md-button mdTooltipPosition="right" (click)="openPublishDialog()">
                     <md-icon class="fab-btn-icon">publish</md-icon><br />
                     PUBLISH
                 </button>
-                <button mdTooltip="Run chat in simulator" type="button" md-button (click)="playChatFlow()">
+                <button mdTooltip="Run chat in simulator" type="button" md-button mdTooltipPosition="right" (click)="playChatFlow()">
                     <md-icon class="fab-btn-icon">play_arrow</md-icon><br />
                     RUN CHAT
                 </button>
-                <button mdTooltip="Fit" type="button" md-button (click)="fitViewToAllNodes()">
+                <button mdTooltip="Fit" type="button" md-button mdTooltipPosition="right" (click)="fitViewToAllNodes()">
                     <md-icon class="fab-btn-icon">zoom_out_map</md-icon><br />
                     FIT
                 </button>
-                <button mdTooltip="Close designer" type="button" md-button (click)="gotoStartup()">
+                <button mdTooltip="Close designer" type="button" md-button mdTooltipPosition="right" (click)="gotoStartup()">
                     <md-icon class="fab-btn-icon">close</md-icon><br />
                     CLOSE
                 </button>
