@@ -43,6 +43,15 @@ input[type=text] {
     color: white !important;
 }
 
+.white-button {
+    background-color: white !important;
+    color: crimson !important;
+}
+
+    .white-button .fab-btn-icon {
+        color: crimson !important;
+    }
+
 .mat-dialog-content {
     padding-top: 10px !important;
     padding-bottom: 10px !important;

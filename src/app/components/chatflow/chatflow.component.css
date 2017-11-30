@@ -1,7 +1,7 @@
-* {
+/** {
     position: static !important;
     top: auto !important;
-}
+}*/
 
 .moving-cursor {
     cursor: grab;
@@ -12,20 +12,24 @@
 }
 
 .chatflow-actions {
-    position: absolute !important;
-    width: 100%;
-    text-align: center;
     margin: 15px 0;
     z-index: 10;
+    display: flex;
+    flex-direction: column;
 }
 
     .chatflow-actions > button {
-        margin: 0 5px;
+        margin: 8px 0;
+        font-size: 12px;
+    }
+
+    .chatflow-actions .fab-btn-icon {
+        margin-bottom: -13px !important;
     }
 
 .chatflow-root-svg {
     overflow: hidden;
-    width: 98vw;
+    width: calc(99vw - 88px);
     height: 98vh;
 }
 
@@ -40,7 +44,21 @@
 
 .chatflow-designer-wrapper {
     overflow: hidden;
+    display: flex;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
 }
+
+    .chatflow-designer-wrapper .left-sidebar {
+        height: 100vh;
+        background-color: #8cc83c;
+        color: white;
+    }
+
+    .chatflow-designer-wrapper .chatflow-root-svg {
+        flex-grow: 1;
+    }
 
 .chatnode {
     background: none;

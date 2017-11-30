@@ -29,7 +29,8 @@ export enum NodeType {
 	ApiCall = 'ApiCall',
 	Combination = 'Combination',
 	Card = 'Card',
-	Condition = 'Condition'
+	Condition = 'Condition',
+	HandoffToAgent = 'HandoffToAgent'
 }
 
 export enum APIMethod {
@@ -271,7 +272,8 @@ export class ModelHelpers {
 		NodeType.ApiCall,
 		NodeType.Combination,
 		NodeType.Card,
-		NodeType.Condition
+		NodeType.Condition,
+		NodeType.HandoffToAgent
 	];
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
@@ -289,12 +291,12 @@ export class ModelHelpers {
 	];
 	buttonTypes: ButtonType[] = [
 		ButtonType.DeepLink,
-		ButtonType.FetchChatFlow,
+		//ButtonType.FetchChatFlow,
 		ButtonType.GetAddress,
 		ButtonType.GetAgent,
 		ButtonType.GetAudio,
 		ButtonType.GetDate,
-		ButtonType.GetDateTime,
+		//ButtonType.GetDateTime,
 		ButtonType.GetEmail,
 		ButtonType.GetImage,
 		ButtonType.GetItemFromSource,
@@ -307,7 +309,7 @@ export class ModelHelpers {
 		ButtonType.GetFile,
 		ButtonType.NextNode,
 		ButtonType.OpenUrl,
-		ButtonType.ShowConfirmation
+		//ButtonType.ShowConfirmation
 	];
 	conditionOperators: ConditionOperator[] = [
 		ConditionOperator.EqualTo,
@@ -367,7 +369,16 @@ export class ModelHelpers {
 				return EditorType.Text;
 		}
 	}
-	chatButtonFieldVisible(btn: Button, fieldName: string) {
+	chatButtonFieldHidden(chatNode: ChatNode, btn: Button, fieldName: string) {
+		const HIDDEN = true;
+
+		if (['ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1) {
+			return [NodeType.ApiCall, NodeType.Condition].indexOf(chatNode.NodeType) != -1 ? !HIDDEN : HIDDEN;
+		}
+
+		if (fieldName == 'ButtonType' || fieldName == 'ButtonText') {
+			return [NodeType.ApiCall, NodeType.Condition].indexOf(chatNode.NodeType) != -1 ? HIDDEN : !HIDDEN;
+		}
 		//Following fields must only be visible for 'GetText' Buttons
 		if (['MinLength', 'MaxLength', 'IsMultiLine', 'DefaultText'].indexOf(fieldName) != -1)
 			return btn.ButtonType == ButtonType.GetText ? false : true;
@@ -449,8 +460,18 @@ export class ModelHelpers {
 				return 'fa-file-o';
 		}
 	}
-
+	
 	addSection(chatNode: ChatNode, sectionType: SectionType) {
+		if (chatNode.NodeType == NodeType.Card) {
+			if (chatNode.Sections && chatNode.Sections.length >= 1) {
+				this.infoDialog.alert('Not allowed', 'In a Card Node, only one content item can be added.');
+				return;
+			}
+			if ([SectionType.Text, SectionType.Image].indexOf(sectionType) == -1) {
+				this.infoDialog.alert('Not allowed', 'In a Card Node, only Text and Image content types can be added.');
+				return;
+			}
+		}
 		switch (sectionType) {
 			default:
 				chatNode.Sections.push({
@@ -486,6 +507,13 @@ export class ModelHelpers {
 		}
 	}
 	addButton(chatNode: ChatNode) {
+		if (chatNode.NodeType == NodeType.Card) {
+			if (chatNode.Buttons && chatNode.Buttons.length >= 2) {
+				this.infoDialog.alert('No allowed', 'Card node cannot have more than two buttons');
+				return;
+			}
+		}
+
 		chatNode.Buttons.push({
 			_id: new ObjectID().toHexString(),
 			ButtonText: "New Button",
