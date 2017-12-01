@@ -34,7 +34,7 @@ export class ChatFlowComponent implements OnInit {
 		public simulatorService: SimulatorService,
 		public settings: SettingsService) {
 
-		this.chatFlowNetwork = new ChatFlowNetwork(this);
+		this.chatFlowNetwork = new ChatFlowNetwork(this, this.infoDialog);
 		this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
 		this._viewBoxX = 0;
 		this._viewBoxY = 0;
@@ -415,7 +415,9 @@ export class ChatFlowComponent implements OnInit {
 }
 
 class ChatFlowNetwork {
-	constructor(public parent: ChatFlowComponent) {
+	constructor(
+		public parent: ChatFlowComponent,
+		public infoDialog: InfoDialogService) {
 	}
 
 	updateChatNodeConnections(): void {
@@ -426,7 +428,7 @@ class ChatFlowNetwork {
 				if (srcBtn.NextNodeId != null || srcBtn.NextNodeId != "") {
 					let destNode = this.chatNodeVMs.filter(x => x.chatNode.Id == srcBtn.NextNodeId);
 					if (destNode && destNode.length > 0)
-						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn), destNode[0]));
+						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn), destNode[0], this.infoDialog));
 				}
 			});
 		});
@@ -444,7 +446,8 @@ class ChatFlowNetwork {
 class ChatNodeConnection {
 	constructor(
 		public srcButtonConnector: ChatButtonConnector,
-		public destChatNodeVM: ChatNodeVM) {
+		public destChatNodeVM: ChatNodeVM,
+		public infoDialog: InfoDialogService) {
 	}
 
 	srcConnectorX() {
@@ -506,6 +509,15 @@ class ChatNodeConnection {
 
 	circleRadius = Config.buttonCircleRadius;
 	pathWidth = Config.connectionPathWidth;
+
+	remove(event: MouseEvent) {
+		this.infoDialog.confirm('Delete connection?', `This will delete the connection between the button '${this.srcButtonConnector.button.ButtonName || 'Unnamed Button'}' and node '${this.destChatNodeVM.chatNode.Name || 'Unnamed Node'}'. Are you sure?`, (ok) => {
+			if (ok) {
+				this.srcButtonConnector.setButtonNextNodeId(null);
+				this.destChatNodeVM.network.updateChatNodeConnections();
+			}
+		});
+	}
 }
 
 class ChatNodeNewConnection {

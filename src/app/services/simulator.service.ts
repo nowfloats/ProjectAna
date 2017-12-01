@@ -519,6 +519,7 @@ export class SimulatorService {
 			models.ButtonType.DeepLink,
 			models.ButtonType.OpenUrl,
 			models.ButtonType.GetDate,
+			models.ButtonType.GetImage,
 			models.ButtonType.GetVideo,
 			models.ButtonType.GetAddress,
 			models.ButtonType.GetAudio,
@@ -577,6 +578,15 @@ export class SimulatorService {
 								mandatory: mandatory,
 								inputType: chatModels.InputType.MEDIA,
 								mediaType: chatModels.MediaType.VIDEO
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetImage:
+						return {
+							content: <chatModels.MediaInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.MEDIA,
+								mediaType: chatModels.MediaType.IMAGE
 							},
 							type: chatModels.MessageType.INPUT
 						}

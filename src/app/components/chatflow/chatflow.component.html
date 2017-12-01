@@ -98,19 +98,22 @@
                             </xhtml:div>
                         </xhtml:div>
                     </foreignObject>
+                </g>
+
+                <g *ngFor="let connection of chatFlowNetwork.chatNodeConnections" transform="translate(15,20)">
+                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0" (click)="connection.remove($event)" class="pointer-cursor"></path>
+                </g>
+
+                <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
                     <g *ngFor="let connector of chatNodeVM.chatButtonConnectors()" transform="translate(-7,0)">
-                        <circle r="0" [attr.r]="connector.circleRadius-3" [attr.cx]="connector.x()" [attr.cy]="connector.y()" [attr.fill]="connector.isConnected()?'darkgray':'#F0F0F0'" stroke="#F0F0F0" stroke-width="3" (mousedown)="connector.mouseDown($event)" (mouseup)="connector.mouseUp($event)"></circle>
+                        <circle r="0" [attr.r]="connector.circleRadius-3" [attr.cx]="connector.x()" [attr.cy]="connector.y()" [attr.fill]="connector.isConnected()?'darkgray':'#F0F0F0'" stroke="#F0F0F0" stroke-width="3" (mousedown)="connector.mouseDown($event)" (mouseup)="connector.mouseUp($event)" style="cursor: crosshair; padding: 20px"></circle>
                     </g>
                     <circle r="0" [attr.r]="chatNodeVM.circleRadius-3" [attr.cx]="chatNodeVM.nodeConnectorX()" [attr.cy]="chatNodeVM.nodeConnectorY()" fill="darkgray" stroke="#F0F0F0" stroke-width="3" transform="translate(-7,0)"></circle>
                 </g>
 
-                <g *ngFor="let connection of chatFlowNetwork.chatNodeConnections" transform="translate(15,20)">
-                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0"></path>
-                </g>
-
-                <g transform="translate(15,20)" [attr.visibility]="chatFlowNetwork.newChatNodeConnection.isHidden?'collapse':'visible'">
-                    <path [attr.d]="chatFlowNetwork.newChatNodeConnection.path()" fill="transparent" [attr.stroke]="chatFlowNetwork.newChatNodeConnection.canConnect?'green':'red'" stroke="red" stroke-width="3" d="M 0,0"></path>
-                    <circle r="3" [attr.cx]="chatFlowNetwork.newChatNodeConnection.destX" [attr.cy]="chatFlowNetwork.newChatNodeConnection.destY" fill="darkgray" [attr.fill]="chatFlowNetwork.newChatNodeConnection.canConnect?'green':'red'"></circle>
+                <g transform="translate(15,20)" [attr.visibility]="chatFlowNetwork.newChatNodeConnection.isHidden?'collapse':'visible'" class="pointer-events-none">
+                    <path [attr.d]="chatFlowNetwork.newChatNodeConnection.path()" fill="transparent" [attr.stroke]="chatFlowNetwork.newChatNodeConnection.canConnect?'darkgray':'crimson'" stroke="crimson" stroke-width="3" d="M 0,0" class="pointer-events-none"></path>
+                    <circle r="3" [attr.cx]="chatFlowNetwork.newChatNodeConnection.destX" [attr.cy]="chatFlowNetwork.newChatNodeConnection.destY" fill="darkgray" [attr.fill]="chatFlowNetwork.newChatNodeConnection.canConnect?'darkgray':'crimson'" class="pointer-events-none"></circle>
                 </g>
             </svg>
         </div>
