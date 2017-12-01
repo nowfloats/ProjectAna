@@ -100,7 +100,6 @@ export class SimulatorService {
 	}
 
 	private processIncomingMessage(chatMsg: chatModels.ANAChatMessage) {
-
 		let message = chatMsg.data;
 		if (message.type == chatModels.MessageType.INPUT) {
 			let ipMsgContent = message.content as chatModels.InputContent;
@@ -280,7 +279,18 @@ export class SimulatorService {
 
 	private getNodeButtonByType(type: models.ButtonType) {
 		let btn = this.state.currentNode.Buttons.filter(x => x.ButtonType == type);
-		return (btn && btn.length > 0) ? btn[0] : null;
+		let firstTry = (btn && btn.length > 0) ? btn[0] : null;
+		if (firstTry) return firstTry;
+
+		if (type == models.ButtonType.GetText) {
+			let found = _.first(_.filter(this.state.currentNode.Buttons, x => _.contains([
+				models.ButtonType.GetPhoneNumber,
+				models.ButtonType.GetEmail,
+				models.ButtonType.GetNumber
+			], x.ButtonType)));
+			if (found) return found;
+		}
+		return null;
 	}
 
 	private getCarouselButtonById(carItemBtnId: string) {
@@ -301,14 +311,25 @@ export class SimulatorService {
 		if (this.debug)
 			console.log(msg);
 	}
+	
 	private processVerbsForChatNode(chatNode: models.ChatNode): models.ChatNode {
 		return JSON.parse(this.processVerbs(JSON.stringify(chatNode))) as models.ChatNode;
 	}
 	private processVerbs(txt: string): string {
 		return txt.replace(/\[~(.*?)\]/g, (subStr, key) => {
-			if (this.state.variables && this.state.variables[key])
-				return this.state.variables[key];
-			return "";
+			try {
+				if (this.state.variables && this.state.variables[key])
+					return this.state.variables[key];
+				else {
+					let tokens = key.split('.');
+					let firstPart = tokens[0];
+					tokens.shift();
+					let remainingParts = tokens.join('.');
+					return jsonpath.query(this.state.variables[firstPart], remainingParts) as any;
+				}
+			} catch (e) {
+				return "";
+			}
 		});
 	}
 
@@ -527,7 +548,7 @@ export class SimulatorService {
 				let optionsInput: chatModels.OptionsInputContent = {
 					inputType: chatModels.InputType.OPTIONS,
 					mandatory: mandatory,
-					options: _.map(clickInputs, y => {
+					options: _.map(_.filter(clickInputs, x => _.contains([models.ButtonType.NextNode, models.ButtonType.OpenUrl], x.ButtonType)), y => {
 						return {
 							title: y.ButtonName || y.ButtonText,
 							value: y._id,
@@ -539,6 +560,92 @@ export class SimulatorService {
 					content: optionsInput,
 					type: chatModels.MessageType.INPUT
 				};
+			} else {
+				let inputButton = _.first(clickInputs);
+				switch (inputButton.ButtonType) {
+					case models.ButtonType.GetDate:
+						return {
+							content: <chatModels.DateInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.DATE,
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetVideo:
+						return {
+							content: <chatModels.MediaInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.MEDIA,
+								mediaType: chatModels.MediaType.VIDEO
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetAddress:
+						return {
+							content: <chatModels.AddressInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.ADDRESS,
+								requiredFields: [
+									"area",
+									"country",
+									"pin",
+									"city",
+									"state",
+									"line1"
+								]
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetAudio:
+						return {
+							content: <chatModels.MediaInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.MEDIA,
+								mediaType: chatModels.MediaType.AUDIO
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetItemFromSource:
+						{
+							//this.http.get(inputButton.Url).subscribe(x => {
+							//	let msg: chatModels.ListInputContent = {
+							//		inputType: chatModels.InputType.LIST,
+							//		multiple: false,
+							//		mandatory: mandatory,
+							//		values: []
+							//	};
+							//	let respData = x.json();
+							//	let keys = Object.keys(respData);
+							//	for (var i = 0; i < keys.length; i++) {
+							//		let key = keys[i];
+							//		let value = <string>respData[key];
+							//		msg.values.push({
+							//			text: value,
+							//			value: key
+							//		});
+							//	}
+							//});
+						}
+					case models.ButtonType.GetFile:
+						return {
+							content: <chatModels.MediaInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.MEDIA,
+								mediaType: chatModels.MediaType.FILE
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetLocation:
+						return {
+							content: <chatModels.LocationInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.LOCATION,
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					default:
+						break;
+				}
 			}
 		}
 

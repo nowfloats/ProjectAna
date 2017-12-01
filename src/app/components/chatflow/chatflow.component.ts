@@ -293,7 +293,6 @@ export class ChatFlowComponent implements OnInit {
 			Buttons: [],
 			Sections: [],
 			NodeType: models.NodeType.Combination,
-			TimeoutInMs: 0
 		});
 
 		newNodeVM._x = (this._viewBoxX + (this._viewBoxWidth / 2)) + (Math.random() * 50);

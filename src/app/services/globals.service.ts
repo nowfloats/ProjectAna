@@ -36,4 +36,14 @@ export class GlobalsService {
 			c => (<any>c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> <any>c / 4).toString(16)
 		)
 	}
+	getVariableType(x) {
+		if (Array.isArray(x)) return VariableType.Array;
+		else if (typeof x == 'string') return VariableType.String;
+		else if (x != null && typeof x == 'object') return VariableType.Object;
+		else return VariableType.Other;
+	}
+}
+
+export enum VariableType {
+	Array, String, Object, Other
 }

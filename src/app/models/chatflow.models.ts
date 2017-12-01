@@ -4,7 +4,7 @@ import { NodeEditorComponent } from '../components/nodeeditor/nodeeditor.compone
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
 import { MdButton } from '@angular/material';
-
+import * as _ from 'underscore';
 //Enum Start
 export enum SectionType {
 	Image = 'Image',
@@ -164,8 +164,8 @@ export enum ButtonType {
 }
 
 export interface Button extends BaseIdEntity {
-	ButtonName?: string;
-	ButtonText: string;
+	ButtonName: string;
+	ButtonText?: string;
 	Emotion?: number;
 	ButtonType: ButtonType;
 	DeepLinkUrl?: string;
@@ -201,7 +201,6 @@ export interface ChatNode {
 	Name: string;
 	Id: string;
 	Emotion?: string;
-	TimeoutInMs: number;
 	NodeType: NodeType;
 	Sections: Section[];
 	Buttons: Button[];
@@ -293,7 +292,7 @@ export class ModelHelpers {
 		ButtonType.DeepLink,
 		//ButtonType.FetchChatFlow,
 		ButtonType.GetAddress,
-		ButtonType.GetAgent,
+		//ButtonType.GetAgent,
 		ButtonType.GetAudio,
 		ButtonType.GetDate,
 		//ButtonType.GetDateTime,
@@ -400,7 +399,7 @@ export class ModelHelpers {
 			case ButtonType.GetDate:
 			case ButtonType.GetDateTime:
 			case ButtonType.GetLocation:
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue', 'PostfixText', 'PrefixText'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'Url', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue', 'PostfixText', 'PrefixText', 'PlaceholderText'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetImage:
 			case ButtonType.GetFile:
@@ -410,7 +409,7 @@ export class ModelHelpers {
 				hidden = ['NextNodeId', 'DeepLinkUrl', 'PlaceholderText', 'Url', 'PostfixText', 'PrefixText', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.GetItemFromSource:
-				hidden = ['NextNodeId', 'DeepLinkUrl', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1;
+				hidden = ['NextNodeId', 'DeepLinkUrl', 'ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue', 'PlaceholderText'].indexOf(fieldName) != -1;
 				break;
 			case ButtonType.NextNode:
 				hidden = ['NextNodeId', 'PostfixText', 'PrefixText', 'DeepLinkUrl', 'Url', 'PlaceholderText'].indexOf(fieldName) != -1;
@@ -460,7 +459,7 @@ export class ModelHelpers {
 				return 'fa-file-o';
 		}
 	}
-	
+
 	addSection(chatNode: ChatNode, sectionType: SectionType) {
 		if (chatNode.NodeType == NodeType.Card) {
 			if (chatNode.Sections && chatNode.Sections.length >= 1) {
@@ -512,11 +511,10 @@ export class ModelHelpers {
 				this.infoDialog.alert('No allowed', 'Card node cannot have more than two buttons');
 				return;
 			}
-		}
-
+		}		
 		chatNode.Buttons.push({
 			_id: new ObjectID().toHexString(),
-			ButtonText: "New Button",
+			ButtonName: "New Button",
 			ButtonType: ButtonType.NextNode
 		});
 

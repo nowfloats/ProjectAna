@@ -93,7 +93,7 @@ export interface TextInputContent extends InputContent {
 export interface ListItem {
 	text: string;
 	value: string;
-	isSelected: boolean;
+	isSelected?: boolean;
 }
 
 export interface OptionItem {
@@ -109,7 +109,7 @@ export interface OptionsInputContent extends InputContent {
 
 export interface ListInputContent extends InputContent {
 	values: ListItem[];
-	input: TextInput;
+	input?: TextInput;
 	multiple: boolean;
 }
 
@@ -160,7 +160,7 @@ export interface DateInput {
 }
 
 export interface DateInputContent extends InputContent {
-	dateRange: ANADateRange;
+	dateRange?: ANADateRange;
 	input: DateInput;
 }
 export interface ANATime {
