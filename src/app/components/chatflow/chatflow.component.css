@@ -40,15 +40,6 @@
     height: 99vh;
 }
 
-.chatflow-loading {
-    padding: 10px 50px;
-}
-
-    .chatflow-loading > img {
-        width: 100px;
-        height: 100px
-    }
-
 .chatflow-designer-wrapper {
     overflow: hidden;
     display: flex;

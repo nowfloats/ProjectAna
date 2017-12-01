@@ -23,7 +23,8 @@ import {
 	MdSnackBarModule,
 	MdCardModule,
 	MdListModule,
-	MdGridListModule
+	MdGridListModule,
+	MdProgressBarModule
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
@@ -42,6 +43,7 @@ import { StartupComponent } from './components/startup/startup.component';
 import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
 import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
 import { SimulatorFrameComponent } from './components/simulator-frame/simulator-frame.component';
+import { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
 
 @NgModule({
 	declarations: [
@@ -53,7 +55,8 @@ import { SimulatorFrameComponent } from './components/simulator-frame/simulator-
 		StartupComponent,
 		PublishDialogComponent,
 		InfoDialogComponent,
-		SimulatorFrameComponent
+		SimulatorFrameComponent,
+		LoadingIndicatorComponent
 	],
 	imports: [
 		BrowserModule,
@@ -74,6 +77,7 @@ import { SimulatorFrameComponent } from './components/simulator-frame/simulator-
 		MdTooltipModule,
 		MdExpansionModule,
 		MdProgressSpinnerModule,
+		MdProgressBarModule,
 		MdSnackBarModule,
 		MdCardModule,
 		MdListModule,

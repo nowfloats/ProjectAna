@@ -5,17 +5,25 @@ const url = require('url')
 let win;
 
 function createWindow() {
-	win = new BrowserWindow({ width: 900, height: 600 })
+	win = new BrowserWindow({ width: 900, height: 600, show: false });
+
+	splash = new BrowserWindow({ width: 810, height: 610, transparent: true, frame: false, alwaysOnTop: true });
+	splash.loadURL(`file://${__dirname}/splash.html`);
 
 	win.loadURL(url.format({
 		pathname: path.join(__dirname, 'index.html'),
 		protocol: 'file:',
 		slashes: true
-	}))
+	}));
+
+	win.once('ready-to-show', () => {
+		splash.destroy();
+		win.show();
+	});
 
 	win.on('closed', () => {
 		win = null
-	})
+	});
 
 	const template = [
 		{

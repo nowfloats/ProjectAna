@@ -5,7 +5,7 @@
 }
 
 .ana-root {
-    z-index: 1000000;
+    z-index: 10;
     position: fixed;
     bottom: 35px;
     right: 20px;
@@ -67,7 +67,7 @@
 }
 
 .ana-minmax-btn {
-    z-index: 1000000;
+    z-index: 15;
     position: fixed;
     right: 20px;
     bottom: 20px;

@@ -79,3 +79,7 @@ input[type=text] {
 .mat-dialog-title {
     margin: 0 !important;
 }
+
+.mat-progress-bar-buffer {
+    background-color: white;
+}

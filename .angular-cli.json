@@ -12,7 +12,8 @@
         "favicon.ico",
         "favicon.icns",
         "package.json",
-        "electron.js"
+        "electron.js",
+        "splash.html"
       ],
       "index": "index.html",
       "main": "main.ts",
