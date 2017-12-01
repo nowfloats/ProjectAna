@@ -32,7 +32,9 @@
     "bson": "^1.0.4",
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
+    "jsonpath": "^1.0.0",
     "rxjs": "^5.4.2",
+    "underscore": "^1.8.3",
     "zone.js": "^0.8.14"
   },
   "devDependencies": {

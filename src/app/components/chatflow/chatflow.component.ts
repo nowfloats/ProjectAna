@@ -14,6 +14,7 @@ import { MdMenuTrigger } from '@angular/material';
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../services/info-dialog.service';
 import { SimulatorFrameComponent } from '../../components/simulator-frame/simulator-frame.component';
+import { SimulatorService } from '../../services/simulator.service';
 
 @Component({
 	selector: 'app-chatflow',
@@ -30,6 +31,7 @@ export class ChatFlowComponent implements OnInit {
 		public router: Router,
 		public snakbar: MdSnackBar,
 		public globalsService: GlobalsService,
+		public simulatorService: SimulatorService,
 		public settings: SettingsService) {
 
 		this.chatFlowNetwork = new ChatFlowNetwork(this);
@@ -393,11 +395,7 @@ export class ChatFlowComponent implements OnInit {
 			return;
 		}
 		let chatNodes = this.chatFlowService.normalizeChatNodes(pack.ChatNodes);
-		let simWindow = this.simulator.frame();
-		simWindow.postMessage({
-			type: 0,
-			data: chatNodes
-		}, '*');
+		this.simulatorService.init(chatNodes, this.simulator);
 		this.simulator.isOpen = true;
 	}
 

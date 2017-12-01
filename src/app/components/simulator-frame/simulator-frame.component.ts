@@ -11,7 +11,6 @@ export class SimulatorFrameComponent implements OnInit {
 
 	constructor(private sanitizer: DomSanitizer) {
 		let param = {
-			debug: true,
 			brandingConfig: {
 				primaryBackgroundColor: '#8cc83c',
 				primaryForegroundColor: 'white',
@@ -20,11 +19,12 @@ export class SimulatorFrameComponent implements OnInit {
 				agentName: "ANA Simulator",
 				frameHeight: '70vh',
 				frameWidth: '360px',
-			}
+			},
+			simulatorMode: true,
 		};
-		let url = `simulator/index.html?sim=${btoa(JSON.stringify(param))}`;
+		let url = `simulator/index.html?s=${btoa(JSON.stringify(param))}`;
 		if (!environment.production)
-			url = `http://localhost:4200/index.html?sim=${btoa(JSON.stringify(param))}`;
+			url = `http://localhost:4200/index.html?s=${btoa(JSON.stringify(param))}`;
 		this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 
