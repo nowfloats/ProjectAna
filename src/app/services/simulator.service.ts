@@ -119,7 +119,7 @@ export class SimulatorService {
 					case chatModels.InputType.DATE://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.DateInput;
-							userData = ip.date;
+							userData = this.globals.anaDateDisplay(ip.date);
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetDate);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -128,7 +128,7 @@ export class SimulatorService {
 					case chatModels.InputType.TIME://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.TimeInput;
-							userData = ip.time;
+							userData = this.globals.anaTimeDisplay(ip.time);
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetTime);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -137,7 +137,7 @@ export class SimulatorService {
 					case chatModels.InputType.ADDRESS://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.AddressInputField;
-							userData = ip.address;
+							userData = this.globals.anaAddressDisplay(ip.address);
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetAddress);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -146,8 +146,12 @@ export class SimulatorService {
 					case chatModels.InputType.MEDIA: //Click, Non Complex
 						{
 							let ip = ipMsgContent.input as chatModels.MediaInput;
-							if (ip.media && ip.media.length > 0) {
-								userData = ip.media[0];
+							if (ip.media && ip.media.length > 0 && ip.media[0]) {
+
+								if (typeof ip.media[0].url == 'object')
+									userData = (<any>ip.media[0].url).changingThisBreaksApplicationSecurity;
+								else
+									userData = ip.media[0].url;
 								let cfmType = models.ButtonType.GetFile;
 								switch (ip.media[0].type) {
 									case chatModels.MediaType.AUDIO:
@@ -311,7 +315,7 @@ export class SimulatorService {
 		if (this.debug)
 			console.log(msg);
 	}
-	
+
 	private processVerbsForChatNode(chatNode: models.ChatNode): models.ChatNode {
 		return JSON.parse(this.processVerbs(JSON.stringify(chatNode))) as models.ChatNode;
 	}
