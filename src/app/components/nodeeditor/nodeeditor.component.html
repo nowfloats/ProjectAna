@@ -150,6 +150,7 @@
                                 </div>
                                 <div class="panel-body">
                                     <div class="carousel-container">
+                                        <span *ngIf="!section.Items || section.Items.length<=0">Add a carousel item using the plus (+) button in this panel's header</span>
                                         <div class="carousel-item" *ngFor="let carItem of section.Items">
                                             <div class="panel panel-default">
                                                 <div class="panel-heading">
