@@ -52,8 +52,8 @@ export enum CardPlacement {
 
 // Sections - Start
 export interface TitleCaptionEntity {
-	Title: string;
-	Caption: string;
+	Title?: string;
+	Caption?: string;
 }
 
 export interface BaseIdEntity {
@@ -72,11 +72,11 @@ export interface Section extends BaseEntity {
 }
 
 export interface RepeatableBaseEntity extends BaseEntity {
-	DoesRepeat: boolean;
-	RepeatOn: string;
-	RepeatAs: string;
-	StartPosition: string;
-	MaxRepeats: number;
+	DoesRepeat?: boolean;
+	RepeatOn?: string;
+	RepeatAs?: string;
+	StartPosition?: string;
+	MaxRepeats?: number;
 }
 
 export interface TextSection extends Section {
@@ -98,19 +98,19 @@ export interface AudioSection extends TitleCaptionUrlSection { }
 export interface EmbeddedHtmlSection extends TitleCaptionUrlSection { }
 
 export interface CarouselButton extends RepeatableBaseEntity {
-	Url: string;
-	Type: CarouselButtonType;
-	VariableValue: string;
-	NextNodeId: string;
-	Text: string;
+	Url?: string;
+	Type?: CarouselButtonType;
+	VariableValue?: string;
+	NextNodeId?: string;
+	Text?: string;
 
-	ContentId: string;
-	ContentEmotion: string;
+	ContentId?: string;
+	ContentEmotion?: string;
 }
 
 export interface CarouselItem extends RepeatableBaseEntity, TitleCaptionEntity {
-	ImageUrl: string;
-	Buttons: CarouselButton[];
+	ImageUrl?: string;
+	Buttons?: CarouselButton[];
 
 	ContentId?: string;
 	ContentEmotion?: string;
@@ -267,12 +267,19 @@ export class ModelHelpers {
 
 	}
 
+	CarouselButtonType = CarouselButtonType;
+
+	carouselButtonTypes: CarouselButtonType[] = [
+		CarouselButtonType.NextNode,
+		CarouselButtonType.OpenUrl,
+	];
+
 	nodeTypes: NodeType[] = [
 		NodeType.ApiCall,
 		NodeType.Combination,
-		NodeType.Card,
+		//NodeType.Card,
 		NodeType.Condition,
-		NodeType.HandoffToAgent
+		//NodeType.HandoffToAgent
 	];
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
@@ -472,15 +479,22 @@ export class ModelHelpers {
 			}
 		}
 		switch (sectionType) {
+			case SectionType.Carousel:
+				chatNode.Sections.push(<CarouselSection>{
+					SectionType: sectionType,
+					_id: new ObjectID().toHexString(),
+					Items: [],
+				});
+				break;
 			default:
 				chatNode.Sections.push({
 					SectionType: sectionType,
 					_id: new ObjectID().toHexString()
 				});
-
-				this.globalsService.chatFlowComponent.updateLayout();
 				break;
 		}
+		this.globalsService.chatFlowComponent.updateLayout();
+
 	}
 
 	sectionMoveUp(chatNode: ChatNode, section: Section) {
@@ -511,7 +525,7 @@ export class ModelHelpers {
 				this.infoDialog.alert('No allowed', 'Card node cannot have more than two buttons');
 				return;
 			}
-		}		
+		}
 		chatNode.Buttons.push({
 			_id: new ObjectID().toHexString(),
 			ButtonName: "New Button",
@@ -595,5 +609,56 @@ export class ModelHelpers {
 			throw 'new index cannot be greater than or equal to array length or less than zero';
 
 		array.splice(new_index, 0, array.splice(old_index, 1)[0]);
+	}
+
+	carouselItemAdd(carSection: CarouselSection) {
+		carSection.Items.push({
+			Buttons: [],
+			Title: 'New Carousel Item',
+			_id: new ObjectID().toHexString(),
+		});
+	}
+	carouselItemMoveUp(carSection: CarouselSection, carItem: CarouselItem) {
+		var current = carSection.Items.indexOf(carItem);
+		if (current != -1)
+			this.arrayMove(carSection.Items, current, current - 1);
+	}
+	carouselItemMoveDown(carSection: CarouselSection, carItem: CarouselItem) {
+		var current = carSection.Items.indexOf(carItem);
+		if (current != -1)
+			this.arrayMove(carSection.Items, current, current + 1);
+	}
+	carouselItemDelete(carSection: CarouselSection, carItem: CarouselItem) {
+		this.infoDialog.confirm('Sure?', `Delete carousel item ${carItem.Title}?`, (ok) => {
+			var current = carSection.Items.indexOf(carItem);
+			if (current != -1)
+				carSection.Items.splice(current, 1);
+		});
+	}
+
+	carouselButtonAdd(carItem: CarouselItem) {
+		carItem.Buttons.push({
+			Text: 'New Button',
+			Type: CarouselButtonType.NextNode,
+			_id: new ObjectID().toHexString()
+		});
+	}
+
+	carouselButtonMoveUp(carItem: CarouselItem, carButton: CarouselButton) {
+		var current = carItem.Buttons.indexOf(carButton);
+		if (current != -1)
+			this.arrayMove(carItem.Buttons, current, current - 1);
+	}
+	carouselButtonMoveDown(carItem: CarouselItem, carButton: CarouselButton) {
+		var current = carItem.Buttons.indexOf(carButton);
+		if (current != -1)
+			this.arrayMove(carItem.Buttons, current, current + 1);
+	}
+	carouselButtonDelete(carItem: CarouselItem, carButton: CarouselButton) {
+		this.infoDialog.confirm('Sure?', `Delete carousel button ${carButton.Text}?`, (ok) => {
+			var current = carItem.Buttons.indexOf(carButton);
+			if (current != -1)
+				carItem.Buttons.splice(current, 1);
+		});
 	}
 }

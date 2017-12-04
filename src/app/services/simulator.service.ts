@@ -496,11 +496,22 @@ export class SimulatorService {
 									url: x.ImageUrl
 								},
 								options: _.map(x.Buttons, y => {
-									return {
-										title: y.Text,
-										value: y._id,
-										type: this.convertCarouselButtonType(y.Type)
-									};
+									if (y.Type == models.CarouselButtonType.NextNode) {
+										return {
+											title: y.Text,
+											value: y._id,
+											type: this.convertCarouselButtonType(y.Type)
+										};
+									} else {
+										return {
+											title: y.Text,
+											value: JSON.stringify({
+												url: y.Url,
+												value: y._id
+											}),
+											type: this.convertCarouselButtonType(y.Type)
+										};
+									}
 								}),
 								url: ''
 							};

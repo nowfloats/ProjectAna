@@ -130,7 +130,100 @@
                             </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'Carousel'">
-                            Carousel support coming soon..
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <i [mdTooltip]="section.SectionType + ' Section'" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Carousel
+                                    <div class="pull-right panel-heading-actions">
+                                        <button mdTooltip="Add Carousel Item" md-icon-button (click)="MH.carouselItemAdd(section)">
+                                            <md-icon>add</md-icon>
+                                        </button>
+                                        <button md-icon-button (click)="MH.sectionMoveUp(chatNode, section)">
+                                            <md-icon>arrow_upward</md-icon>
+                                        </button>
+                                        <button md-icon-button (click)="MH.sectionMoveDown(chatNode, section)">
+                                            <md-icon>arrow_downward</md-icon>
+                                        </button>
+                                        <button md-icon-button (click)="MH.sectionDelete(chatNode, section)">
+                                            <md-icon>delete</md-icon>
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="panel-body">
+                                    <div class="carousel-container">
+                                        <div class="carousel-item" *ngFor="let carItem of section.Items">
+                                            <div class="panel panel-default">
+                                                <div class="panel-heading">
+                                                    <i mdTooltip="Carousel Item" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Carousel Item: {{carItem.Title}}
+                                                    <div class="pull-right panel-heading-actions">
+                                                        <button md-icon-button mdTooltip="Add Carousel Button" (click)="MH.carouselButtonAdd(carItem)">
+                                                            <md-icon>add</md-icon>
+                                                        </button>
+                                                        <button md-icon-button (click)="MH.carouselItemMoveUp(section, carItem)">
+                                                            <md-icon>arrow_upward</md-icon>
+                                                        </button>
+                                                        <button md-icon-button (click)="MH.carouselItemMoveDown(section, carItem)">
+                                                            <md-icon>arrow_downward</md-icon>
+                                                        </button>
+                                                        <button md-icon-button (click)="MH.carouselItemDelete(section, carItem)">
+                                                            <md-icon>delete</md-icon>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="panel-body">
+                                                    <md-form-field>
+                                                        <input mdInput type="text" placeholder="Title" [(ngModel)]="carItem.Title" name="carItemTitle-{{i}}">
+                                                    </md-form-field>
+                                                    <md-form-field>
+                                                        <input mdInput type="url" placeholder="Image Url" [(ngModel)]="carItem.ImageUrl" name="carItemImageUrl-{{i}}">
+                                                    </md-form-field>
+                                                    <md-form-field>
+                                                        <input mdInput type="text" placeholder="Caption" [(ngModel)]="carItem.Caption" name="carItemCaption-{{i}}">
+                                                    </md-form-field>
+                                                    <div class="carousel-buttons" *ngFor="let carBtn of carItem.Buttons">
+                                                        <div class="panel panel-default">
+                                                            <div class="panel-heading">
+                                                                <i mdTooltip="Carousel Button" class="fa panel-header-icon" [ngClass]="MH.sectionIcon(section)"></i> Carousel Button: {{carBtn.Text}}
+                                                                <div class="pull-right panel-heading-actions">
+                                                                    <button md-icon-button (click)="MH.carouselButtonMoveUp(carItem, carBtn)">
+                                                                        <md-icon>arrow_upward</md-icon>
+                                                                    </button>
+                                                                    <button md-icon-button (click)="MH.carouselButtonMoveDown(carItem, carBtn)">
+                                                                        <md-icon>arrow_downward</md-icon>
+                                                                    </button>
+                                                                    <button md-icon-button (click)="MH.carouselButtonDelete(carItem, carBtn)">
+                                                                        <md-icon>delete</md-icon>
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                            <div class="panel-body">
+                                                                <md-form-field>
+                                                                    <input mdInput type="text" placeholder="Text" [(ngModel)]="carBtn.Text" name="carBtnText-{{i}}">
+                                                                </md-form-field>
+                                                                <section class="form-field">
+                                                                    <md-select placeholder="Type" [(ngModel)]="carBtn.Type" name="carBtnType">
+                                                                        <md-option *ngFor="let bType of MH.carouselButtonTypes" [value]="bType">
+                                                                            {{ bType || 'None' }}
+                                                                        </md-option>
+                                                                    </md-select>
+                                                                </section>
+                                                                <md-form-field *ngIf="carBtn.Type==MH.CarouselButtonType.OpenUrl || carBtn.Type==MH.CarouselButtonType.DeepLink">
+                                                                    <input mdInput type="url" placeholder="Url" [(ngModel)]="carBtn.Url" name="carBtnUrl-{{i}}">
+                                                                </md-form-field>
+                                                                <md-form-field>
+                                                                    <input mdInput type="text" placeholder="Next Node Id" [(ngModel)]="carBtn.NextNodeId" name="carBtnNextNodeId-{{i}}">
+                                                                </md-form-field>
+                                                                <md-form-field>
+                                                                    <input mdInput type="text" placeholder="Variable Value" [(ngModel)]="carBtn.VariableValue" name="carBtnVariableValue-{{i}}">
+                                                                </md-form-field>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </ng-container>
                     </div>
                 </div>
@@ -141,7 +234,7 @@
                         <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Gif)">Gif</button>
                         <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Audio)">Audio</button>
                         <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Video)">Video</button>
-                        <!--<button md-menu-item (click)="MH.addSection(chatNode, SectionType.EmbeddedHtml)">Embedded HTML</button>-->
+                        <button md-menu-item (click)="MH.addSection(chatNode, SectionType.Carousel)">Carousel</button>
                     </md-menu>
 
                     <button type="button" mdTooltip="Add Section" [mdMenuTriggerFor]="addSectionMenu" md-fab>
