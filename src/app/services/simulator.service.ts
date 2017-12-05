@@ -539,6 +539,7 @@ export class SimulatorService {
 			models.ButtonType.GetAddress,
 			models.ButtonType.GetAudio,
 			models.ButtonType.GetDateTime,
+			models.ButtonType.GetTime,
 			models.ButtonType.GetItemFromSource,
 			models.ButtonType.GetFile,
 			models.ButtonType.GetLocation,
@@ -584,6 +585,14 @@ export class SimulatorService {
 							content: <chatModels.DateInputContent>{
 								mandatory: mandatory,
 								inputType: chatModels.InputType.DATE,
+							},
+							type: chatModels.MessageType.INPUT
+						}
+					case models.ButtonType.GetTime:
+						return {
+							content: <chatModels.DateInputContent>{
+								mandatory: mandatory,
+								inputType: chatModels.InputType.TIME,
 							},
 							type: chatModels.MessageType.INPUT
 						}
