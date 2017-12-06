@@ -19,9 +19,12 @@ if (shell.cd('../ana-web-chat/').code == 0) {
 	shell.sed('-i', '<base href="./">', '<base href="./simulator">', 'dist/simulator/index.html');
 
 	shell.echo('Packing Ana Studio into an electron app...');
-	shell.rm('-R', 'out');
-	shell.exec('electron-packager dist "Ana Conversation Studio" --out out --icon=dist/favicon.ico --all --overwrite');
-
+	//shell.rm('-R', 'out');
+	//shell.exec('electron-packager dist "Ana Conversation Studio" --out out --icon=dist/favicon.ico --all --overwrite');
+	shell.rm('-R', 'release');
+	shell.cd('dist');
+	shell.exec('electron-builder');
+	shell.cd('../dist');
 	shell.echo('Done');
 } else {
 	shell.echo('Project `ana-web-chat` not found! Make sure it is present adjacent to ana-studio-web. ');

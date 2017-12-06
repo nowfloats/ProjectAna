@@ -1,11 +1,13 @@
 ﻿const { app, BrowserWindow, Menu } = require('electron')
 const path = require('path')
 const url = require('url')
+const { autoUpdater } = require('electron-updater')
 
 let win;
 
 function createWindow() {
 	win = new BrowserWindow({ width: 900, height: 600, show: false });
+	autoUpdater.checkForUpdatesAndNotify();
 
 	splash = new BrowserWindow({ width: 810, height: 610, transparent: true, frame: false, alwaysOnTop: true });
 	splash.loadURL(`file://${__dirname}/splash.html`);

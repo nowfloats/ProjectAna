@@ -25,6 +25,13 @@
       "category": "Graphics"
     },
     "electronVersion": "1.7.9",
-    "buildVersion": "0.0.2"
+    "buildVersion": "0.0.2",
+    "publish": {
+      "provider": "generic",
+      "url": "http://127.0.0.1:8080/releases/anastudio-${os}-${arch}"
+    }
+  },
+  "dependencies": {
+    "electron-updater": "^2.16.3"
   }
 }
