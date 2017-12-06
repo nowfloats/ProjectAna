@@ -1,5 +1,30 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.1.0",
-  "main": "electron.js"
+  "version": "0.0.2",
+  "main": "electron.js",
+  "author": "Team Ana",
+  "description": "Graphical Ana chatbot designer",
+  "homepage": "http://ana.chat",
+  "license": "GNU-GPLv3",
+  "build": {
+    "appId": "com.ana.studio",
+    "productName": "Ana Conversation Studio",
+    "directories": {
+      "output": "../release",
+      "app": ".",
+      "buildResources": "../build"
+    },
+    "mac": {
+      "icon": "favicon.icns",
+      "category": "public.app-category.graphics-design"
+    },
+    "win": {
+      "icon": "favicon.ico"
+    },
+    "linux": {
+      "category": "Graphics"
+    },
+    "electronVersion": "1.7.9",
+    "buildVersion": "0.0.2"
+  }
 }

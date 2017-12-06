@@ -51,6 +51,7 @@
     "@types/underscore": "^1.8.5",
     "codelyzer": "~3.2.0",
     "electron": "^1.7.9",
+    "electron-builder": "^19.48.2",
     "electron-packager": "^10.1.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
