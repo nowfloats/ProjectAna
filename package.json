@@ -11,7 +11,8 @@
     "e2e": "ng e2e",
     "electron": "electron dist",
     "package": "node pack-ana-studio.js",
-    "studio-package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all --overwrite"
+    "studio-package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all --overwrite",
+    "pack-only": "electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --overwrite --all"
   },
   "private": true,
   "dependencies": {

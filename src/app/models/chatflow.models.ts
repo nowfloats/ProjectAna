@@ -279,7 +279,7 @@ export class ModelHelpers {
 		NodeType.Combination,
 		//NodeType.Card,
 		NodeType.Condition,
-		//NodeType.HandoffToAgent
+		NodeType.HandoffToAgent
 	];
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
