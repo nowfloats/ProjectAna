@@ -15,5 +15,8 @@
       "es2017",
       "dom"
     ]
-  }
+  },
+  "exclude": [
+    "src/node_modules"
+  ]
 }

@@ -1,5 +1,7 @@
 ﻿const shell = require('shelljs');
 
+shell.rm('-R', 'src/node_modules'); //This will create problems with typescript compilation of angular 4 app
+
 shell.echo('Building studio project...');
 shell.exec('ng build --prod --aot=false');
 
@@ -19,8 +21,6 @@ if (shell.cd('../ana-web-chat/').code == 0) {
 	shell.sed('-i', '<base href="./">', '<base href="./simulator">', 'dist/simulator/index.html');
 
 	shell.echo('Packing Ana Studio into an electron app...');
-	//shell.rm('-R', 'out');
-	//shell.exec('electron-packager dist "Ana Conversation Studio" --out out --icon=dist/favicon.ico --all --overwrite');
 	shell.rm('-R', 'release');
 	shell.cd('dist');
 	shell.exec('electron-builder');

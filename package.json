@@ -1,7 +1,7 @@
 {
-  "name": "ana-studio-web",
+  "name": "ana-conversation-studio",
   "version": "0.0.0",
-  "license": "MIT",
+  "license": "GNU-GPLv3",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
@@ -10,9 +10,7 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "electron dist",
-    "package": "node pack-ana-studio.js",
-    "studio-package": "ng build --prod --aot=false && electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --all --overwrite",
-    "pack-only": "electron-packager dist \"Ana Conversation Studio\" --out out --icon=dist/favicon.ico --overwrite --all"
+    "package": "node pack-ana-studio.js"
   },
   "private": true,
   "dependencies": {
@@ -32,7 +30,6 @@
     "bootstrap": "^3.3.7",
     "bson": "^1.0.4",
     "core-js": "^2.4.1",
-    "electron-updater": "^2.16.3",
     "font-awesome": "^4.7.0",
     "jsonpath": "^1.0.0",
     "moment": "^2.19.3",
@@ -53,7 +50,6 @@
     "codelyzer": "~3.2.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.48.2",
-    "electron-packager": "^10.1.0",
     "jasmine-core": "~2.8.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~1.7.0",

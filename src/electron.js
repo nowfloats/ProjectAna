@@ -1,4 +1,4 @@
-﻿const { app, BrowserWindow, Menu } = require('electron');
+﻿const { app, BrowserWindow, Menu, dialog, shell } = require('electron');
 const path = require('path');
 const url = require('url');
 const appVersion = require('./package.json').version;
@@ -8,6 +8,18 @@ let win;
 
 function createWindow() {
 	win = new BrowserWindow({ width: 900, height: 600, show: false });
+	if (process.platform === 'darwin') {
+		autoUpdater.on('update-available', (info) => {
+			dialog.showMessageBox(win, {
+				type: 'question',
+				buttons: ['Yes', 'No'],
+				message: `Update ${info.version} Available!\nWould you like to download it?`
+			}, (response) => {
+				if (response === 0)
+					shell.openExternal(`https://studio-release.ana.chat/mac-x64/Ana%20Conversation%20Studio-${info.version}.dmg`);
+			});
+		});
+	}
 	autoUpdater.checkForUpdatesAndNotify();
 
 	splash = new BrowserWindow({ width: 810, height: 610, transparent: true, frame: false, alwaysOnTop: true });
@@ -51,7 +63,7 @@ function createWindow() {
 				{ role: 'zoomout' },
 				{ type: 'separator' },
 				{ role: 'togglefullscreen' },
-				{ role: 'toggledevtools'}
+				{ role: 'toggledevtools' }
 			]
 		},
 		{
@@ -66,10 +78,11 @@ function createWindow() {
 			submenu: [
 				{
 					label: 'About Ana',
-					click() { require('electron').shell.openExternal('http://ana.chat') }
+					click() { shell.openExternal('http://ana.chat') }
 				},
 				{
-					label: 'Version ' + appVersion
+					label: 'Version ' + appVersion,
+					enabled: false
 				}
 			]
 		}
