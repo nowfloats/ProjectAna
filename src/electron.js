@@ -1,7 +1,8 @@
-﻿const { app, BrowserWindow, Menu } = require('electron')
-const path = require('path')
-const url = require('url')
-const { autoUpdater } = require('electron-updater')
+﻿const { app, BrowserWindow, Menu } = require('electron');
+const path = require('path');
+const url = require('url');
+const appVersion = require('./package.json').version;
+const { autoUpdater } = require('electron-updater');
 
 let win;
 
@@ -49,7 +50,8 @@ function createWindow() {
 				{ role: 'zoomin' },
 				{ role: 'zoomout' },
 				{ type: 'separator' },
-				{ role: 'togglefullscreen' }
+				{ role: 'togglefullscreen' },
+				{ role: 'toggledevtools'}
 			]
 		},
 		{
@@ -65,6 +67,9 @@ function createWindow() {
 				{
 					label: 'About Ana',
 					click() { require('electron').shell.openExternal('http://ana.chat') }
+				},
+				{
+					label: 'Version ' + appVersion
 				}
 			]
 		}

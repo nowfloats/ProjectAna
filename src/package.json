@@ -1,6 +1,6 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.0.2",
+  "version": "0.0.4",
   "main": "electron.js",
   "author": "Team Ana",
   "description": "Graphical Ana chatbot designer",
@@ -25,10 +25,10 @@
       "category": "Graphics"
     },
     "electronVersion": "1.7.9",
-    "buildVersion": "0.0.2",
+    "buildVersion": "0.0.4",
     "publish": {
       "provider": "generic",
-      "url": "http://127.0.0.1:8080/releases/anastudio-${os}-${arch}"
+      "url": "https://studio.ana.chat/releases/${os}-${arch}"
     }
   },
   "dependencies": {
