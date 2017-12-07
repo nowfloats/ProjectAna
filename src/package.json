@@ -27,7 +27,7 @@
     "electronVersion": "1.7.9",
     "publish": {
       "provider": "generic",
-      "url": "https://studio-release.ana.chat/${os}-${arch}"
+      "url": "https://studio.ana.chat/${os}-${arch}"
     }
   },
   "dependencies": {
