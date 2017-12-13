@@ -24,6 +24,18 @@
                         <input mdInput type="text" disabled readonly placeholder="Node Id" [(ngModel)]="chatNode.Id" name="nodeId">
                     </md-form-field>
                 </div>
+                <div class="node-api-details" [hidden]="chatNode.NodeType!='Condition'">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Condition Details</div>
+                        <div class="panel-body">
+                            <div>
+                                <md-form-field>
+                                    <input mdInput type="text" placeholder="Fallback Next Node Id" [(ngModel)]="chatNode.NextNodeId" name="NextNodeId-Condition">
+                                </md-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="node-api-details" [hidden]="chatNode.NodeType!='ApiCall'">
                     <div class="panel panel-default">
                         <div class="panel-heading">API Details</div>

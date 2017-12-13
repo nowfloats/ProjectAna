@@ -329,7 +329,7 @@ export class SimulatorService {
 					let firstPart = tokens[0];
 					tokens.shift();
 					let remainingParts = tokens.join('.');
-					return jsonpath.query(this.state.variables[firstPart], remainingParts) as any;
+					return jsonpath.query(JSON.parse(this.state.variables[firstPart]), remainingParts) as any;
 				}
 			} catch (e) {
 				return "";
@@ -387,8 +387,13 @@ export class SimulatorService {
 						this.saveVariable(res.text());
 						this.processConditionNode(chatNode);
 					}, err => {
-						this.logDebug(err);
-						this.gotoNextNode(nextNodeId); //Fallback node
+						if (Math.trunc(err.status / 100) == 5) { //Only 5xx errors are counted as errors
+							this.logDebug(err);
+							this.gotoNextNode(nextNodeId); //Fallback node
+						} else {
+							this.saveVariable(err._body);
+							this.processConditionNode(chatNode);
+						}
 					});
 				}
 				break;
@@ -747,6 +752,7 @@ export class SimulatorService {
 	private processConditionNode(chatNode: models.ChatNode) {
 		try {
 			if (chatNode.Buttons) {
+				let done = false;
 				for (var btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
 					let btn = chatNode.Buttons[btnIdx];
 					let tokens = btn.ConditionMatchKey.split('.');
@@ -758,9 +764,12 @@ export class SimulatorService {
 					if (this.match(jsonpath.query(jResp, remainingParts) as any, btn.ConditionOperator, btn.ConditionMatchValue)) {
 						this.saveVariable(btn.VariableValue);
 						this.gotoNextNode(btn.NextNodeId);
+						done = true;
 						break;
 					}
 				}
+				if (!done) 
+					this.gotoNextNode(chatNode.NextNodeId); //Fallback node id
 			}
 		} catch (e) {
 			if (chatNode.Buttons) {
