@@ -275,8 +275,8 @@
                                 <input mdInput type="text" [placeholder]="['ApiCall', 'Condition'].indexOf(chatNode.NodeType)==-1?'Text on button':'Button Name'" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}">
                             </md-form-field>
                             <!--<md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ButtonText')">
-                                <input mdInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{ {i}}">
-                            </md-form-field>-->
+        <input mdInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{ {i}}">
+    </md-form-field>-->
                             <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionMatchKey')">
                                 <input mdInput type="text" placeholder="Condition Match Key" [(ngModel)]="btn.ConditionMatchKey" name="btnConditionMatchKey-{{i}}">
                             </md-form-field>
@@ -299,6 +299,12 @@
                             <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'Url')">
                                 <input mdInput type="text" placeholder="Url" [(ngModel)]="btn.Url" name="btnUrl-{{i}}">
                             </md-form-field>
+                            <md-form-field class="contains-hint" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ItemsSource')" hintLabel="Format: 'Key1:Value1, Key2:Value2'  Eg: 'Car:1, Bike:2'">
+                                <textarea mdInput type="text" placeholder="Items" [(ngModel)]="btn.ItemsSource" name="btnItemsSource-{{i}}"></textarea>
+                            </md-form-field>
+                            <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'AllowMultiple')">
+                                <md-checkbox [(ngModel)]="btn.AllowMultiple" name="btnAllowMultiple-{{i}}" align="start">Allow Multiple</md-checkbox>
+                            </section>
                             <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'NextNodeId')">
                                 <input mdInput type="text" placeholder="Next Node Id" [(ngModel)]="btn.NextNodeId" name="btnNextNodeId-{{i}}">
                             </md-form-field>
@@ -311,11 +317,11 @@
                                 </md-form-field>
 
                                 <!--<md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PrefixText')">
-                                    <input mdInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
-                                </md-form-field>
-                                <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
-                                    <input mdInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
-                                </md-form-field>-->
+            <input mdInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
+        </md-form-field>
+        <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
+            <input mdInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
+        </md-form-field>-->
                                 <md-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'MinLength')">
                                     <input mdInput type="number" placeholder="Minimum Length" [(ngModel)]="btn.MinLength" name="btnMinLength-{{i}}">
                                 </md-form-field>
@@ -329,26 +335,26 @@
                                     <md-checkbox [(ngModel)]="btn.IsMultiLine" name="btnIsMultiLine-{{i}}" align="start">Multiple line allowed</md-checkbox>
                                 </section>
                                 <!--<section class="form-field">
-                                    <md-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</md-checkbox>
-                                </section>-->
+            <md-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</md-checkbox>
+        </section>-->
                             </div>
                             <!--<section class="form-field">
-                                <md-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</md-checkbox>
-                            </section>
-                            <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
-                                <md-form-field>
-                                    <input mdInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{ {i}}">
-                                </md-form-field>
-                                <md-form-field>
-                                    <input mdInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{ {i}}">
-                                </md-form-field>
-                                <md-form-field>
-                                    <input mdInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{ {i}}">
-                                </md-form-field>
-                                <md-form-field>
-                                    <input mdInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{ {i}}">
-                                </md-form-field>
-                            </div>-->
+        <md-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</md-checkbox>
+    </section>
+    <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
+        <md-form-field>
+            <input mdInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{ {i}}">
+        </md-form-field>
+        <md-form-field>
+            <input mdInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{ {i}}">
+        </md-form-field>
+        <md-form-field>
+            <input mdInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{ {i}}">
+        </md-form-field>
+        <md-form-field>
+            <input mdInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{ {i}}">
+        </md-form-field>
+    </div>-->
                         </div>
                     </div>
                 </div>

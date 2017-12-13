@@ -110,7 +110,7 @@ export class SimulatorService {
 					case chatModels.InputType.LOCATION://Click, Complex
 						{
 							let locIp = ipMsgContent.input as chatModels.LocationInput;
-							userData = locIp.location;
+							userData = this.globals.anaLocationDisplay(locIp.location);
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetLocation);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -191,11 +191,11 @@ export class SimulatorService {
 						break;
 					case chatModels.InputType.LIST://Click, Complex
 						{
-							let ipMsg = ipMsgContent as chatModels.ListInputContent; //Option also has input.val
+							let ipMsg = ipMsgContent as chatModels.ListInputContent;
 							let ip = ipMsg.input;
 							let listSelectedValues = ip.val.split(',');
 							let listSelectedItems = ipMsg.values.filter(x => listSelectedValues.indexOf(x.value) != -1);
-							userData = listSelectedItems.map(x => x.text);
+							userData = ip.val;//listSelectedItems.map(x => x.text);
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetItemFromSource);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -641,23 +641,28 @@ export class SimulatorService {
 						}
 					case models.ButtonType.GetItemFromSource:
 						{
+							if (inputButton.ItemsSource) {
+								let msg: chatModels.ListInputContent = {
+									inputType: chatModels.InputType.LIST,
+									multiple: inputButton.AllowMultiple,
+									mandatory: mandatory,
+									values: []
+								};
+								let itemSrc = inputButton.ItemsSource.split(',').map(x => {
+									let y = x.trim().split(':');
+									return { K: y[0], V: y[1] }
+								});
+								itemSrc.forEach(x => msg.values.push({
+									text: x.K,
+									value: x.V
+								}));
+								return {
+									content: msg,
+									type: chatModels.MessageType.INPUT
+								}
+							}
 							//this.http.get(inputButton.Url).subscribe(x => {
-							//	let msg: chatModels.ListInputContent = {
-							//		inputType: chatModels.InputType.LIST,
-							//		multiple: false,
-							//		mandatory: mandatory,
-							//		values: []
-							//	};
-							//	let respData = x.json();
-							//	let keys = Object.keys(respData);
-							//	for (var i = 0; i < keys.length; i++) {
-							//		let key = keys[i];
-							//		let value = <string>respData[key];
-							//		msg.values.push({
-							//			text: value,
-							//			value: key
-							//		});
-							//	}
+
 							//});
 						}
 					case models.ButtonType.GetFile:

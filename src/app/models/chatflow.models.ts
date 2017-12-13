@@ -170,6 +170,9 @@ export interface Button extends BaseIdEntity {
 	ButtonType: ButtonType;
 	DeepLinkUrl?: string;
 	Url?: string;
+	ItemsSource?: string;
+	AllowMultiple?: boolean;
+
 	BounceTimeout?: number;
 	NextNodeId?: string;
 	DefaultButton?: boolean;
@@ -378,16 +381,19 @@ export class ModelHelpers {
 	chatButtonFieldHidden(chatNode: ChatNode, btn: Button, fieldName: string) {
 		const HIDDEN = true;
 
-		if (['ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1) {
+		if (['ConditionMatchKey', 'ConditionOperator', 'ConditionMatchValue'].indexOf(fieldName) != -1)
 			return [NodeType.ApiCall, NodeType.Condition].indexOf(chatNode.NodeType) != -1 ? !HIDDEN : HIDDEN;
-		}
 
-		if (fieldName == 'ButtonType' || fieldName == 'ButtonText') {
+		if (fieldName == 'ButtonType' || fieldName == 'ButtonText')
 			return [NodeType.ApiCall, NodeType.Condition].indexOf(chatNode.NodeType) != -1 ? HIDDEN : !HIDDEN;
-		}
+
 		//Following fields must only be visible for 'GetText' Buttons
 		if (['MinLength', 'MaxLength', 'IsMultiLine', 'DefaultText'].indexOf(fieldName) != -1)
 			return btn.ButtonType == ButtonType.GetText ? false : true;
+
+		//Following fields must only be visible for 'GetItemFromSource ' Buttons
+		if (['AllowMultiple', 'ItemsSource'].indexOf(fieldName) != -1)
+			return btn.ButtonType == ButtonType.GetItemFromSource ? !HIDDEN : HIDDEN;
 
 		var hidden = false;
 		switch (btn.ButtonType) {
