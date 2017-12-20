@@ -64,7 +64,8 @@ const IMPORT_EXPORT = [
 	MatSnackBarModule,
 	MatCardModule,
 	MatListModule,
-	MatGridListModule
+	MatGridListModule,
+	CommonModule
 ]
 
 @NgModule({
@@ -74,12 +75,10 @@ const IMPORT_EXPORT = [
 		LoadingIndicatorComponent,
 		LoginComponent,
 		PublishDialogComponent,
-		EllipsisPipe,
 	],
 	imports: (<any>[
 		BrowserModule,
 		BrowserAnimationsModule,
-		CommonModule
 	]).concat(IMPORT_EXPORT),
 	exports: (<any>[
 		ChatServerManagerComponent,
@@ -98,6 +97,9 @@ const IMPORT_EXPORT = [
 	],
 	schemas: [
 		NO_ERRORS_SCHEMA
+	],
+	entryComponents: [
+		InfoDialogComponent
 	]
 })
 export class SharedModule { }

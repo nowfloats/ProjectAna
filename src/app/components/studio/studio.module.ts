@@ -1,9 +1,10 @@
-﻿import { NgModule } from '@angular/core';
+﻿import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { ChatFlowComponent } from './chatflow/chatflow.component';
 import { NodeEditorComponent } from './nodeeditor/nodeeditor.component';
 import { SimulatorFrameComponent } from './simulator-frame/simulator-frame.component';
 import { LandingComponent } from './landing/landing.component';
+import { EllipsisPipe } from '../../pipes/ellipsis.pipe';
 
 import { SharedModule } from '../shared/shared.module';
 
@@ -23,13 +24,17 @@ export const STUDIO_ROUTES: Routes = [
 		ChatFlowComponent,
 		NodeEditorComponent,
 		SimulatorFrameComponent,
-		LandingComponent
+		LandingComponent,
+		EllipsisPipe
 	],
 	entryComponents: [
 		NodeEditorComponent
 	],
 	imports: [
 		SharedModule
+	],
+	schemas: [
+		NO_ERRORS_SCHEMA
 	]
 })
 export class StudioModule { }
