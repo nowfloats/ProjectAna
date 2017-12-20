@@ -28,8 +28,8 @@ import {
 } from '@angular/material';
 
 import { AppComponent } from './app.component';
-import { ChatFlowComponent } from './components/chatflow/chatflow.component';
-import { NodeEditorComponent } from './components/nodeeditor/nodeeditor.component';
+import { ChatFlowComponent } from './components/studio/chatflow/chatflow.component';
+import { NodeEditorComponent } from './components/studio/nodeeditor/nodeeditor.component';
 
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
@@ -37,13 +37,16 @@ import { SettingsService } from './services/settings.service';
 import { InfoDialogService } from './services/info-dialog.service';
 import { SimulatorService } from './services/simulator.service';
 
-import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
+import { ChatServerManagerComponent } from './components/common/chat-server-manager/chat-server-manager.component';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
-import { StartupComponent } from './components/startup/startup.component';
-import { PublishDialogComponent } from './components/publish-dialog/publish-dialog.component';
-import { InfoDialogComponent } from './components/info-dialog/info-dialog.component';
-import { SimulatorFrameComponent } from './components/simulator-frame/simulator-frame.component';
-import { LoadingIndicatorComponent } from './components/loading-indicator/loading-indicator.component';
+import { StudioLandingComponent } from './components/studio/studio-landing/studio-landing.component';
+import { PublishDialogComponent } from './components/common/publish-dialog/publish-dialog.component';
+import { InfoDialogComponent } from './components/common/info-dialog/info-dialog.component';
+import { SimulatorFrameComponent } from './components/studio/simulator-frame/simulator-frame.component';
+import { LoadingIndicatorComponent } from './components/common/loading-indicator/loading-indicator.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/common/login/login.component';
+//import { ManageUsersComponent } from './components/manage-users/manage-users.component';
 
 @NgModule({
 	declarations: [
@@ -52,11 +55,13 @@ import { LoadingIndicatorComponent } from './components/loading-indicator/loadin
 		NodeEditorComponent,
 		ChatServerManagerComponent,
 		EllipsisPipe,
-		StartupComponent,
+		StudioLandingComponent,
 		PublishDialogComponent,
 		InfoDialogComponent,
 		SimulatorFrameComponent,
-		LoadingIndicatorComponent
+		LoadingIndicatorComponent,
+		HomeComponent,
+		LoginComponent
 	],
 	imports: [
 		BrowserModule,
@@ -83,10 +88,12 @@ import { LoadingIndicatorComponent } from './components/loading-indicator/loadin
 		MdListModule,
 		MdGridListModule,
 		RouterModule.forRoot([
-			{ path: '', redirectTo: 'startup', pathMatch: 'full' },
+			{ path: '', redirectTo: 'home', pathMatch: 'full' },
 			{ path: 'designer', component: ChatFlowComponent },
-			{ path: 'startup', component: StartupComponent },
-			{ path: '**', redirectTo: 'startup' }
+			{ path: 'studio-landing', component: StudioLandingComponent },
+			//{ path: 'manage-users', component: ManageUsersComponent },
+			{ path: 'home', component: HomeComponent },
+			{ path: '**', redirectTo: 'home' }
 		])
 	],
 	providers: [

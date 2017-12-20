@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MdDialogRef } from '@angular/material';
-import { ChatServerConnection, ChatBotProject } from '../../models/app.models';
-import { SettingsService } from '../../services/settings.service';
-import { ChatFlowService } from '../../services/chatflow.service';
-import { InfoDialogService } from '../../services/info-dialog.service';
-import { GlobalsService } from '../../services/globals.service';
+import { ChatServerConnection, ChatBotProject } from '../../../models/app.models';
+import { SettingsService } from '../../../services/settings.service';
+import { ChatFlowService } from '../../../services/chatflow.service';
+import { InfoDialogService } from '../../../services/info-dialog.service';
+import { GlobalsService } from '../../../services/globals.service';
 import { MdSnackBar } from '@angular/material';
 
 @Component({

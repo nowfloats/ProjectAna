@@ -1,11 +1,11 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
-import { ChatBotProject, ChatBotReferance, ChatServerConnection } from '../../models/app.models';
-import { SettingsService } from '../../services/settings.service';
-import { ChatFlowService } from '../../services/chatflow.service';
-import { InfoDialogService } from '../../services/info-dialog.service';
-import { ChatServerManagerComponent } from '../../components/chat-server-manager/chat-server-manager.component';
-import * as models from '../../models/chatflow.models';
+import { ChatBotProject, ChatBotReferance, ChatServerConnection } from '../../../models/app.models';
+import { SettingsService } from '../../../services/settings.service';
+import { ChatFlowService } from '../../../services/chatflow.service';
+import { InfoDialogService } from '../../../services/info-dialog.service';
+import { ChatServerManagerComponent } from '../../../components/common/chat-server-manager/chat-server-manager.component';
+import * as models from '../../../models/chatflow.models';
 @Component({
 	selector: 'app-publish-dialog',
 	templateUrl: './publish-dialog.component.html',

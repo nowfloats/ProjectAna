@@ -2,19 +2,19 @@ import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener }
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
-import { ChatFlowService } from '../../services/chatflow.service'
-import { SettingsService } from '../../services/settings.service'
-import { GlobalsService } from '../../services/globals.service'
-import * as models from '../../models/chatflow.models';
+import { ChatFlowService } from '../../../services/chatflow.service'
+import { SettingsService } from '../../../services/settings.service'
+import { GlobalsService } from '../../../services/globals.service'
+import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
-import { PublishDialogComponent } from '../publish-dialog/publish-dialog.component';
-import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
+import { PublishDialogComponent } from '../../common/publish-dialog/publish-dialog.component';
+import { ChatServerManagerComponent } from '../../common/chat-server-manager/chat-server-manager.component';
 import { MdMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
-import { InfoDialogService } from '../../services/info-dialog.service';
-import { SimulatorFrameComponent } from '../../components/simulator-frame/simulator-frame.component';
-import { SimulatorService } from '../../services/simulator.service';
+import { InfoDialogService } from '../../../services/info-dialog.service';
+import { SimulatorFrameComponent } from '../simulator-frame/simulator-frame.component';
+import { SimulatorService } from '../../../services/simulator.service';
 
 @Component({
 	selector: 'app-chatflow',

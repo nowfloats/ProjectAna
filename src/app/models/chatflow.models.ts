@@ -1,6 +1,6 @@
 import { ObjectID } from 'bson';
-import { ChatFlowComponent, ChatNodeVM } from '../components/chatflow/chatflow.component';
-import { NodeEditorComponent } from '../components/nodeeditor/nodeeditor.component';
+import { ChatFlowComponent, ChatNodeVM } from '../components/studio/chatflow/chatflow.component';
+import { NodeEditorComponent } from '../components/studio/nodeeditor/nodeeditor.component';
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
 import { MdButton } from '@angular/material';

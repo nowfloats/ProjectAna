@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import * as models from '../models/chatflow.models';
 import { ANADate, ANATime, AddressInput, GeoLoc } from '../models/ana-chat.models';
 import { Title } from '@angular/platform-browser';
-import { ChatFlowComponent } from '../components/chatflow/chatflow.component';
+import { ChatFlowComponent } from '../components/studio/chatflow/chatflow.component';
 
 @Injectable()
 export class GlobalsService {

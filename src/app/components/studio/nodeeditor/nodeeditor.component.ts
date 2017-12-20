@@ -4,11 +4,11 @@ import { ActivatedRoute } from '@angular/router';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
 import 'rxjs/add/operator/filter';
 
-import * as models from '../../models/chatflow.models';
-import * as chatflow from '../../components/chatflow/chatflow.component';
-import { ChatFlowService } from '../../services/chatflow.service';
-import { GlobalsService } from '../../services/globals.service';
-import { InfoDialogService } from '../../services/info-dialog.service';
+import * as models from '../../../models/chatflow.models';
+import * as chatflow from '../../../components/studio/chatflow/chatflow.component';
+import { ChatFlowService } from '../../../services/chatflow.service';
+import { GlobalsService } from '../../../services/globals.service';
+import { InfoDialogService } from '../../../services/info-dialog.service';
 
 @Component({
 	selector: 'app-nodeeditor',

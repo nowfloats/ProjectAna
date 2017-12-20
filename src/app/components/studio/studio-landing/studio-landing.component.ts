@@ -1,17 +1,17 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
 import { Router } from '@angular/router';
-import { InfoDialogService } from '../../services/info-dialog.service';
-import { GlobalsService } from '../../services/globals.service';
-import { SettingsService } from '../../services/settings.service';
-import * as models from '../../models/chatflow.models';
+import { InfoDialogService } from '../../../services/info-dialog.service';
+import { GlobalsService } from '../../../services/globals.service';
+import { SettingsService } from '../../../services/settings.service';
+import * as models from '../../../models/chatflow.models';
 import { ObjectID } from 'bson';
 
 @Component({
-	selector: 'app-startup',
-	templateUrl: './startup.component.html',
-	styleUrls: ['./startup.component.css']
+	selector: 'app-studio-landing',
+	templateUrl: './studio-landing.component.html',
+	styleUrls: ['./studio-landing.component.css']
 })
-export class StartupComponent implements OnInit {
+export class StudioLandingComponent implements OnInit {
 
 	constructor(
 		private router: Router,

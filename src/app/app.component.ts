@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalsService } from './services/globals.service';
 import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
-import { ChatServerManagerComponent } from './components/chat-server-manager/chat-server-manager.component';
+import { ChatServerManagerComponent } from './components/common/chat-server-manager/chat-server-manager.component';
 
 @Component({
 	selector: 'app-root',

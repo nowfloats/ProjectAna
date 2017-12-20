@@ -8,7 +8,7 @@ import * as _ from 'underscore';
 
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
-import { SimulatorFrameComponent } from '../components/simulator-frame/simulator-frame.component';
+import { SimulatorFrameComponent } from '../components/studio/simulator-frame/simulator-frame.component';
 @Injectable()
 export class SimulatorService {
 
