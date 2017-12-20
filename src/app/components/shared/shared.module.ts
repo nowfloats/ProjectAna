@@ -44,15 +44,12 @@ import { SimulatorService } from '../../services/simulator.service';
 import { ManageUsersModule, MANAGE_USERS_ROUTES } from '../../components/manage-users/manage-users.module';
 import { StudioModule, STUDIO_ROUTES } from '../../components/studio/studio.module';
 
-const IMPORT_EXPORT = [
-	HttpModule,
-	FormsModule,
+const MAT_MODULES: any[] = [
 	MatButtonModule,
 	MatMenuModule,
 	MatSidenavModule,
 	MatInputModule,
 	MatDialogModule,
-	HttpClientModule,
 	MatSelectModule,
 	MatCheckboxModule,
 	MatTabsModule,
@@ -64,9 +61,15 @@ const IMPORT_EXPORT = [
 	MatSnackBarModule,
 	MatCardModule,
 	MatListModule,
-	MatGridListModule,
-	CommonModule
-]
+	MatGridListModule
+];
+
+const IMPORT_EXPORT: any[] = [
+	CommonModule,
+	HttpModule,
+	HttpClientModule,
+	FormsModule
+].concat(MAT_MODULES);
 
 @NgModule({
 	declarations: [
@@ -78,15 +81,15 @@ const IMPORT_EXPORT = [
 	],
 	imports: (<any>[
 		BrowserModule,
-		BrowserAnimationsModule,
-	]).concat(IMPORT_EXPORT),
-	exports: (<any>[
+		BrowserAnimationsModule
+	].concat(IMPORT_EXPORT)),
+	exports: IMPORT_EXPORT.concat([
 		ChatServerManagerComponent,
 		InfoDialogComponent,
 		LoadingIndicatorComponent,
 		LoginComponent,
 		PublishDialogComponent
-	]).concat(IMPORT_EXPORT),
+	]),
 	providers: [
 		ChatFlowService,
 		GlobalsService,
@@ -99,7 +102,10 @@ const IMPORT_EXPORT = [
 		NO_ERRORS_SCHEMA
 	],
 	entryComponents: [
-		InfoDialogComponent
+		InfoDialogComponent,
+		PublishDialogComponent,
+		LoginComponent,
+		ChatServerManagerComponent
 	]
 })
 export class SharedModule { }

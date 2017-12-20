@@ -6,7 +6,8 @@ import { ChatFlowComponent } from '../components/studio/chatflow/chatflow.compon
 
 @Injectable()
 export class GlobalsService {
-	constructor(private title: Title) { }
+	constructor(private title: Title) {
+	}
 	appName = 'Ana Conversation Studio';
 
 	chatFlowComponent: ChatFlowComponent;

@@ -7,9 +7,6 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/
 	selector: 'app-root',
 	templateUrl: './app.component.html',
 	styleUrls: ['./app.component.css'],
-	providers: [
-		GlobalsService
-	]
 })
 export class AppComponent {
 	constructor(

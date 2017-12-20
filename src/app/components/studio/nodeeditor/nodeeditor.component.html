@@ -7,13 +7,13 @@
                     <mat-form-field>
                         <input matInput type="text" placeholder="Node Name" [(ngModel)]="chatNode.Name" name="nodeName">
                     </mat-form-field>
-                    <section>
+                    <mat-form-field>
                         <mat-select placeholder="Node Type" [(ngModel)]="chatNode.NodeType" name="nodeType">
                             <mat-option *ngFor="let nType of MH.nodeTypes" [value]="nType">
                                 {{ nType }}
                             </mat-option>
                         </mat-select>
-                    </section>
+                    </mat-form-field>
                     <section class="form-field">
                         <mat-checkbox [(ngModel)]="chatNode.IsStartNode" (click)="MH.resetOtherStartNodes(chatNode)" name="isStartNode" align="start">Mark as start node</mat-checkbox>
                     </section>
@@ -41,11 +41,13 @@
                         <div class="panel-heading">API Details</div>
                         <div class="panel-body">
                             <div>
-                                <mat-select placeholder="API Method" [(ngModel)]="chatNode.ApiMethod" name="ApiMethod">
-                                    <mat-option *ngFor="let apiMethod of MH.apiMethods" [value]="apiMethod">
-                                        {{ apiMethod || 'None' }}
-                                    </mat-option>
-                                </mat-select>
+                                <mat-form-field>
+                                    <mat-select placeholder="API Method" [(ngModel)]="chatNode.ApiMethod" name="ApiMethod">
+                                        <mat-option *ngFor="let apiMethod of MH.apiMethods" [value]="apiMethod">
+                                            {{ apiMethod || 'None' }}
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
                                 <mat-form-field>
                                     <input matInput type="url" placeholder="API Url" [(ngModel)]="chatNode.ApiUrl" name="ApiUrl">
                                 </mat-form-field>
@@ -76,11 +78,13 @@
                             <mat-form-field>
                                 <input matInput type="text" placeholder="Card Footer" [(ngModel)]="chatNode.CardFooter" name="CardFooter">
                             </mat-form-field>
-                            <mat-select placeholder="Card Placement" [(ngModel)]="chatNode.Placement" name="Placement">
-                                <mat-option *ngFor="let cardPlacement of MH.cardPlacements" [value]="cardPlacement">
-                                    {{ cardPlacement || 'None' }}
-                                </mat-option>
-                            </mat-select>
+                            <mat-form-field>
+                                <mat-select placeholder="Card Placement" [(ngModel)]="chatNode.Placement" name="Placement">
+                                    <mat-option *ngFor="let cardPlacement of MH.cardPlacements" [value]="cardPlacement">
+                                        {{ cardPlacement || 'None' }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
                         </div>
                     </div>
                 </div>
@@ -212,13 +216,13 @@
                                                                 <mat-form-field>
                                                                     <input matInput type="text" placeholder="Text" [(ngModel)]="carBtn.Text" name="carBtnText-{{i}}">
                                                                 </mat-form-field>
-                                                                <section class="form-field">
+                                                                <mat-form-field>
                                                                     <mat-select placeholder="Type" [(ngModel)]="carBtn.Type" name="carBtnType">
                                                                         <mat-option *ngFor="let bType of MH.carouselButtonTypes" [value]="bType">
                                                                             {{ bType || 'None' }}
                                                                         </mat-option>
                                                                     </mat-select>
-                                                                </section>
+                                                                </mat-form-field>
                                                                 <mat-form-field *ngIf="carBtn.Type==MH.CarouselButtonType.OpenUrl || carBtn.Type==MH.CarouselButtonType.DeepLink">
                                                                     <input matInput type="url" placeholder="Url" [(ngModel)]="carBtn.Url" name="carBtnUrl-{{i}}">
                                                                 </mat-form-field>

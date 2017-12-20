@@ -24,7 +24,7 @@ const APP_ROUTES: Routes = [
 @NgModule({
 	declarations: [
 		AppComponent,
-		HomeComponent 
+		HomeComponent
 	],
 	imports: [
 		SharedModule,
@@ -34,6 +34,6 @@ const APP_ROUTES: Routes = [
 			useHash: true
 		})
 	],
-	bootstrap: [AppComponent]	
+	bootstrap: [AppComponent]
 })
 export class AppModule { }

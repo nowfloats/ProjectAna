@@ -22,7 +22,6 @@ export class NodeEditorComponent {
 		public dialogRef: MatDialogRef<NodeEditorComponent>,
 		@Inject(MAT_DIALOG_DATA) public chatNode: models.ChatNode,
 		public globalsService: GlobalsService) {
-
 		this.MH = new models.ModelHelpers(globalsService, infoDialog);
 	}
 	SectionType = models.SectionType;

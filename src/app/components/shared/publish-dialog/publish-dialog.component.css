@@ -1,8 +1,4 @@
-section.form-field {
-    padding-bottom: 1.25em;
-}
-
-mat-select {
+mat-form-field {
     width: 100%;
 }
 

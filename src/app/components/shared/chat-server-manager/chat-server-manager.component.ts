@@ -11,7 +11,7 @@ import { MatSnackBar } from '@angular/material';
 @Component({
 	selector: 'app-chat-server-manager',
 	templateUrl: './chat-server-manager.component.html',
-	styleUrls: ['./chat-server-manager.component.css']
+	styleUrls: ['./chat-server-manager.component.css'],
 })
 export class ChatServerManagerComponent implements OnInit {
 	constructor(
