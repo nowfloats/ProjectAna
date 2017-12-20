@@ -279,13 +279,13 @@
                             </div>
                         </div>
                         <div class="panel-body">
-                            <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ButtonType')">
+                            <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ButtonType')">
                                 <mat-select placeholder="Type" [(ngModel)]="btn.ButtonType" name="btnType-{{i}}">
                                     <mat-option *ngFor="let bType of MH.buttonTypes" [value]="bType">
                                         {{ bType }}
                                     </mat-option>
                                 </mat-select>
-                            </section>
+                            </mat-form-field>
 
                             <mat-form-field>
                                 <input matInput type="text" [placeholder]="['ApiCall', 'Condition'].indexOf(chatNode.NodeType)==-1?'Text on button':'Button Name'" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}">
@@ -296,13 +296,13 @@
                             <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionMatchKey')">
                                 <input matInput type="text" placeholder="Condition Match Key" [(ngModel)]="btn.ConditionMatchKey" name="btnConditionMatchKey-{{i}}">
                             </mat-form-field>
-                            <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionOperator')">
+                            <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionOperator')">
                                 <mat-select placeholder="Condition Operator" [(ngModel)]="btn.ConditionOperator" name="btnConditionOperator-{{i}}">
                                     <mat-option *ngFor="let CO of MH.conditionOperators" [value]="CO">
                                         {{ CO }}
                                     </mat-option>
                                 </mat-select>
-                            </section>
+                            </mat-form-field>
                             <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionMatchValue')">
                                 <input matInput type="text" placeholder="Condition Match Value" [(ngModel)]="btn.ConditionMatchValue" name="btnConditionMatchValue-{{i}}">
                             </mat-form-field>

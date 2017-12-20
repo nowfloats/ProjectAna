@@ -1,8 +1,8 @@
-﻿import { ChatServerManagerComponent } from './chat-server-manager/chat-server-manager.component';
-import { InfoDialogComponent } from './info-dialog/info-dialog.component';
-import { LoadingIndicatorComponent } from './loading-indicator/loading-indicator.component';
-import { LoginComponent } from './login/login.component';
-import { PublishDialogComponent } from './publish-dialog/publish-dialog.component';
+﻿import { ChatServerManagerComponent } from './components/shared/chat-server-manager/chat-server-manager.component';
+import { InfoDialogComponent } from './components/shared/info-dialog/info-dialog.component';
+import { LoadingIndicatorComponent } from './components/shared/loading-indicator/loading-indicator.component';
+import { LoginComponent } from './components/shared/login/login.component';
+import { PublishDialogComponent } from './components/shared/publish-dialog/publish-dialog.component';
 
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -31,18 +31,18 @@ import {
 	MatGridListModule,
 	MatProgressBarModule
 } from '@angular/material';
-import { EllipsisPipe } from '../../pipes/ellipsis.pipe';
+import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
-import { AppComponent } from '../../app.component';
+import { AppComponent } from './app.component';
 
-import { ChatFlowService } from '../../services/chatflow.service';
-import { GlobalsService } from '../../services/globals.service';
-import { SettingsService } from '../../services/settings.service';
-import { InfoDialogService } from '../../services/info-dialog.service';
-import { SimulatorService } from '../../services/simulator.service';
+import { ChatFlowService } from './services/chatflow.service';
+import { GlobalsService } from './services/globals.service';
+import { SettingsService } from './services/settings.service';
+import { InfoDialogService } from './services/info-dialog.service';
+import { SimulatorService } from './services/simulator.service';
 
-import { ManageUsersModule, MANAGE_USERS_ROUTES } from '../../components/manage-users/manage-users.module';
-import { StudioModule, STUDIO_ROUTES } from '../../components/studio/studio.module';
+import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
+import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -71,25 +71,22 @@ const IMPORT_EXPORT: any[] = [
 	FormsModule
 ].concat(MAT_MODULES);
 
+const DECLARATIONS: any[] = [
+	ChatServerManagerComponent,
+	InfoDialogComponent,
+	LoadingIndicatorComponent,
+	LoginComponent,
+	PublishDialogComponent,
+	EllipsisPipe
+]
+
 @NgModule({
-	declarations: [
-		ChatServerManagerComponent,
-		InfoDialogComponent,
-		LoadingIndicatorComponent,
-		LoginComponent,
-		PublishDialogComponent,
-	],
+	declarations: DECLARATIONS,
 	imports: (<any>[
 		BrowserModule,
 		BrowserAnimationsModule
 	].concat(IMPORT_EXPORT)),
-	exports: IMPORT_EXPORT.concat([
-		ChatServerManagerComponent,
-		InfoDialogComponent,
-		LoadingIndicatorComponent,
-		LoginComponent,
-		PublishDialogComponent
-	]),
+	exports: IMPORT_EXPORT.concat(DECLARATIONS),
 	providers: [
 		ChatFlowService,
 		GlobalsService,

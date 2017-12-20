@@ -3,7 +3,7 @@ import { Routes, RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { HomeComponent } from './components/home/home.component';
-import { SharedModule } from './components/shared/shared.module';
+import { SharedModule } from './shared.module';
 import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
 import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
 

@@ -83,7 +83,9 @@ input[type=text] {
     background-color: white;
 }
 
-
+.form-field {
+    margin-bottom: 10px;
+}
 /*Dynamic styles*/
 .chat-message-item.incoming {
     border-left-color: #8cc83c;

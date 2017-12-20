@@ -4,9 +4,7 @@ import { ChatFlowComponent } from './chatflow/chatflow.component';
 import { NodeEditorComponent } from './nodeeditor/nodeeditor.component';
 import { SimulatorFrameComponent } from './simulator-frame/simulator-frame.component';
 import { LandingComponent } from './landing/landing.component';
-import { EllipsisPipe } from '../../pipes/ellipsis.pipe';
-
-import { SharedModule } from '../shared/shared.module';
+import { SharedModule } from '../../shared.module';
 
 export const STUDIO_ROUTES: Routes = [
 	{
@@ -25,7 +23,6 @@ export const STUDIO_ROUTES: Routes = [
 		NodeEditorComponent,
 		SimulatorFrameComponent,
 		LandingComponent,
-		EllipsisPipe
 	],
 	entryComponents: [
 		NodeEditorComponent

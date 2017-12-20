@@ -6,14 +6,6 @@ mat-form-field, mat-select {
     font-size: 20px;
 }
 
-.mat-form-field-wrapper {
-    /*padding-bottom: 0px;*/
-}
-
-section.form-field {
-    /*padding-bottom: 1.25em;*/
-}
-
 .tab-content {
     margin: 20px;
 }
@@ -26,10 +18,6 @@ section.form-field {
 .panel-header-icon {
     margin-top: 2px;
     margin-right: 5px;
-}
-
-.node-text-section {
-    /*padding: 0 10px;*/
 }
 
 .spacing {
