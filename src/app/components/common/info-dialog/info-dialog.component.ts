@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 
 @Component({
 	selector: 'app-info-dialog',
@@ -9,8 +9,8 @@ import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/mate
 export class InfoDialogComponent implements OnInit {
 
 	constructor(
-		private dialogRef: MdDialogRef<InfoDialogComponent>,
-		@Inject(MD_DIALOG_DATA) public options: InfoDialogOptions) {
+		private dialogRef: MatDialogRef<InfoDialogComponent>,
+		@Inject(MAT_DIALOG_DATA) public options: InfoDialogOptions) {
 		this.dialogRef.disableClose = true;
 
 		if (!options) {

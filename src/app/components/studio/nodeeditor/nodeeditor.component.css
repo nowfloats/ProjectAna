@@ -1,4 +1,4 @@
-md-form-field, md-select {
+mat-form-field, mat-select {
     width: 100%;
 }
 
@@ -41,6 +41,6 @@ section.form-field {
     margin: 10px;
 }
 
-md-dialog-actions {
+mat-dialog-actions {
     justify-content: center;
 }

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import 'rxjs/add/operator/filter';
 
 import * as models from '../../../models/chatflow.models';
@@ -19,8 +19,8 @@ export class NodeEditorComponent {
 	constructor(
 		private chatFlowService: ChatFlowService,
 		private infoDialog: InfoDialogService,
-		public dialogRef: MdDialogRef<NodeEditorComponent>,
-		@Inject(MD_DIALOG_DATA) public chatNode: models.ChatNode,
+		public dialogRef: MatDialogRef<NodeEditorComponent>,
+		@Inject(MAT_DIALOG_DATA) public chatNode: models.ChatNode,
 		public globalsService: GlobalsService) {
 
 		this.MH = new models.ModelHelpers(globalsService, infoDialog);

@@ -6,32 +6,32 @@
     <div class="chatflow-designer-wrapper">
         <div class="left-sidebar">
             <div class="chatflow-actions" [hidden]="!layoutReady()">
-                <button mdTooltip="Add new node" mdTooltipPosition="right" type="button" md-button (click)="addNewNode()">
-                    <md-icon class="fab-btn-icon">add</md-icon><br />
+                <button matTooltip="Add new node" matTooltipPosition="right" type="button" mat-button (click)="addNewNode()">
+                    <mat-icon class="fab-btn-icon">add</mat-icon><br />
                     ADD
                 </button>
-                <button mdTooltip="Save chatbot project" type="button" md-button mdTooltipPosition="right" (click)="saveChatFlow()">
-                    <md-icon class="fab-btn-icon">save</md-icon><br />
+                <button matTooltip="Save chatbot project" type="button" mat-button matTooltipPosition="right" (click)="saveChatFlow()">
+                    <mat-icon class="fab-btn-icon">save</mat-icon><br />
                     SAVE
                 </button>
-                <button mdTooltip="Download chatbot project" type="button" md-button mdTooltipPosition="right" (click)="exportChatFlow()">
-                    <md-icon class="fab-btn-icon">file_download</md-icon><br />
+                <button matTooltip="Download chatbot project" type="button" mat-button matTooltipPosition="right" (click)="exportChatFlow()">
+                    <mat-icon class="fab-btn-icon">file_download</mat-icon><br />
                     EXPORT
                 </button>
-                <button mdTooltip="Publish to Ana chat server" type="button" md-button mdTooltipPosition="right" (click)="openPublishDialog()">
-                    <md-icon class="fab-btn-icon">publish</md-icon><br />
+                <button matTooltip="Publish to Ana chat server" type="button" mat-button matTooltipPosition="right" (click)="openPublishDialog()">
+                    <mat-icon class="fab-btn-icon">publish</mat-icon><br />
                     PUBLISH
                 </button>
-                <button mdTooltip="Run chat in simulator" type="button" md-button mdTooltipPosition="right" (click)="playChatFlow()">
-                    <md-icon class="fab-btn-icon">play_arrow</md-icon><br />
+                <button matTooltip="Run chat in simulator" type="button" mat-button matTooltipPosition="right" (click)="playChatFlow()">
+                    <mat-icon class="fab-btn-icon">play_arrow</mat-icon><br />
                     RUN CHAT
                 </button>
-                <button mdTooltip="Fit" type="button" md-button mdTooltipPosition="right" (click)="fitViewToAllNodes()">
-                    <md-icon class="fab-btn-icon">zoom_out_map</md-icon><br />
+                <button matTooltip="Fit" type="button" mat-button matTooltipPosition="right" (click)="fitViewToAllNodes()">
+                    <mat-icon class="fab-btn-icon">zoom_out_map</mat-icon><br />
                     FIT
                 </button>
-                <button mdTooltip="Close designer" type="button" md-button mdTooltipPosition="right" (click)="gotoStartup()">
-                    <md-icon class="fab-btn-icon">close</md-icon><br />
+                <button matTooltip="Close designer" type="button" mat-button matTooltipPosition="right" (click)="gotoStartup()">
+                    <mat-icon class="fab-btn-icon">close</mat-icon><br />
                     CLOSE
                 </button>
             </div>

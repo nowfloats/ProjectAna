@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { MdDialog } from '@angular/material';
+import { MatDialog } from '@angular/material';
 import { InfoDialogComponent, InfoDialogOptions, InfoDialogType } from '../components/common/info-dialog/info-dialog.component';
 @Injectable()
 export class InfoDialogService {
-	constructor(private dialog: MdDialog) { }
+	constructor(private dialog: MatDialog) { }
 
 	alert(title: string, message: string, callback?: () => void) {
 		let data: InfoDialogOptions = {

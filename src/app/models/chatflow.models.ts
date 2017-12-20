@@ -3,7 +3,7 @@ import { ChatFlowComponent, ChatNodeVM } from '../components/studio/chatflow/cha
 import { NodeEditorComponent } from '../components/studio/nodeeditor/nodeeditor.component';
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
-import { MdButton } from '@angular/material';
+import { MatButton } from '@angular/material';
 import * as _ from 'underscore';
 //Enum Start
 export enum SectionType {
@@ -581,7 +581,7 @@ export class ModelHelpers {
 
 	}
 
-	nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MdButton) {
+	nodeContentMenu(chatNodeVM: ChatNodeVM, event: MouseEvent, options: MatButton) {
 		event.preventDefault();
 
 		let btn = options._elementRef.nativeElement as HTMLButtonElement;

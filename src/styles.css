@@ -83,3 +83,61 @@ input[type=text] {
 .mat-progress-bar-buffer {
     background-color: white;
 }
+
+
+/*Dynamic styles*/
+.chat-message-item.incoming {
+    border-left-color: #8cc83c;
+}
+
+.incoming > .chat-stub {
+    border-top-color: #8cc83c;
+}
+
+.carousel-item-button:first-child,
+.chat-input button.btn-icon {
+    color: #8cc83c;
+}
+
+.chat-input button.btn-click {
+    background-color: #8cc83c;
+    color: white;
+}
+
+.chat-message-item.outgoing {
+    border-right-color: black;
+}
+
+.outgoing > .chat-stub {
+    border-top-color: black;
+}
+
+.complex-input-btn-done {
+    color: white !important;
+}
+
+.content {
+    width: 100vw;
+}
+
+.ana-title {
+    background-color: #8cc83c;
+    color: white;
+}
+
+.ana-logo > img {
+    background-color: white;
+    border: 2px solid white;
+}
+
+.ana-min .ana-minmax-btn {
+    border: 2px solid white;
+}
+
+.ana-minmax-btn {
+    background-color: white;
+}
+
+.typing-indicator span {
+    background-color: #8cc83c;
+}

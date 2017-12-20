@@ -1,4 +1,4 @@
-md-form-field, md-select {
+mat-form-field, mat-select {
     width: 100%;
 }
 
@@ -10,7 +10,7 @@ button[color="primary"] {
     color: white;
 }
 
-md-action-row > button {
+mat-action-row > button {
     margin: 10px;
 }
 

@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { MdDialogRef } from '@angular/material';
+import { MatDialogRef } from '@angular/material';
 import { ChatServerConnection, ChatBotProject } from '../../../models/app.models';
 import { SettingsService } from '../../../services/settings.service';
 import { ChatFlowService } from '../../../services/chatflow.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { GlobalsService } from '../../../services/globals.service';
-import { MdSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material';
 
 @Component({
 	selector: 'app-chat-server-manager',
@@ -18,10 +18,10 @@ export class ChatServerManagerComponent implements OnInit {
 		public settings: SettingsService,
 		public chatFlowService: ChatFlowService,
 		public global: GlobalsService,
-		public snakbar: MdSnackBar,
+		public snakbar: MatSnackBar,
 		public infoDialog: InfoDialogService,
 		public router: Router,
-		public dialogRef: MdDialogRef<ChatServerManagerComponent>) {
+		public dialogRef: MatDialogRef<ChatServerManagerComponent>) {
 
 		this.global.setPageTitle("Publish Servers Manager");
 		this.savedConnections = this.settings.loadSavedConnections();

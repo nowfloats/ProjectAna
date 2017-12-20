@@ -1,9 +1,9 @@
 <div class="page-content">
     <router-outlet></router-outlet>
     <div class="fullpage-loading-spinner" [hidden]="!loading()">
-        <md-spinner></md-spinner>
-        <button md-button (click)="hideLoading()">
-            <md-icon>close</md-icon>
+        <mat-spinner></mat-spinner>
+        <button mat-button (click)="hideLoading()">
+            <mat-icon>close</mat-icon>
         </button>
     </div>
 </div>

@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener } from '@angular/core';
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { MdDialog, MdDialogRef, MD_DIALOG_DATA, MdSnackBar } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
 import { ChatFlowService } from '../../../services/chatflow.service'
 import { SettingsService } from '../../../services/settings.service'
 import { GlobalsService } from '../../../services/globals.service'
@@ -9,7 +9,7 @@ import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
 import { PublishDialogComponent } from '../../common/publish-dialog/publish-dialog.component';
 import { ChatServerManagerComponent } from '../../common/chat-server-manager/chat-server-manager.component';
-import { MdMenuTrigger } from '@angular/material';
+import { MatMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../../services/info-dialog.service';
@@ -25,11 +25,11 @@ export class ChatFlowComponent implements OnInit {
 
 	constructor(
 		private chatFlowService: ChatFlowService,
-		public dialog: MdDialog,
+		public dialog: MatDialog,
 		public infoDialog: InfoDialogService,
 		public route: ActivatedRoute,
 		public router: Router,
-		public snakbar: MdSnackBar,
+		public snakbar: MatSnackBar,
 		public globalsService: GlobalsService,
 		public simulatorService: SimulatorService,
 		public settings: SettingsService) {

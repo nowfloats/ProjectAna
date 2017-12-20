@@ -1,36 +1,36 @@
-<h2 md-dialog-title>Publish chatbot</h2>
-<md-dialog-content>
-    <md-card *ngIf="!savedConns || savedConns.length <= 0" class="text-center">
+<h2 matDialogTitle>Publish chatbot</h2>
+<mat-dialog-content>
+    <mat-card *ngIf="!savedConns || savedConns.length <= 0" class="text-center">
         <h4>
             Looks like you don't have any saved publish server connections. 
             <br />
             <br />
-            <button md-raised-button color="primary" (click)="managePublishServers()">Add publish server connection</button>
+            <button mat-raised-button color="primary" (click)="managePublishServers()">Add publish server connection</button>
         </h4>
-    </md-card>
+    </mat-card>
 
     <section class="form-field" *ngIf="savedConns && savedConns.length>0">
-        <md-select placeholder="Server" [(ngModel)]="selectedServer" name="PublishServer">
-            <md-option *ngFor="let conn of savedConns" [value]="conn">
+        <mat-select placeholder="Server" [(ngModel)]="selectedServer" name="PublishServer">
+            <mat-option *ngFor="let conn of savedConns" [value]="conn">
                 {{ conn.Name }}
-            </md-option>
-        </md-select>
+            </mat-option>
+        </mat-select>
     </section>
     <section class="form-field" *ngIf="selectedServer">
-        <md-select placeholder="Chat Project" [(ngModel)]="selectedProject" name="Project">
-            <md-option *ngFor="let proj of selectedServer.ChatProjects" [value]="proj">
+        <mat-select placeholder="Chat Project" [(ngModel)]="selectedProject" name="Project">
+            <mat-option *ngFor="let proj of selectedServer.ChatProjects" [value]="proj">
                 {{ proj.Name }}
-            </md-option>
-        </md-select>
+            </mat-option>
+        </mat-select>
     </section>
-</md-dialog-content>
-<md-dialog-actions>
+</mat-dialog-content>
+<mat-dialog-actions>
     <div class="left" *ngIf="savedConns && savedConns.length>0">
-        <button md-raised-button (click)="managePublishServers()">Add/edit publish servers</button>
+        <button mat-raised-button (click)="managePublishServers()">Add/edit publish servers</button>
     </div>
     <div class="spacing"></div>
     <div class="right">
-        <button md-raised-button [disabled]="!selectedServer || !selectedProject" color="primary" (click)="publish()">Publish</button>
-        <button md-raised-button (click)="dismiss()">Dismiss</button>
+        <button mat-raised-button [disabled]="!selectedServer || !selectedProject" color="primary" (click)="publish()">Publish</button>
+        <button mat-raised-button (click)="dismiss()">Dismiss</button>
     </div>
-</md-dialog-actions>
+</mat-dialog-actions>

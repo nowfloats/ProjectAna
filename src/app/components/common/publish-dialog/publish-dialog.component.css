@@ -2,10 +2,10 @@ section.form-field {
     padding-bottom: 1.25em;
 }
 
-md-select {
+mat-select {
     width: 100%;
 }
 
-md-dialog-actions > .spacing {
+mat-dialog-actions > .spacing {
     flex-grow: 1;
 }
