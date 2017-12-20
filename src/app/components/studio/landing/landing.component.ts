@@ -8,10 +8,10 @@ import { ObjectID } from 'bson';
 
 @Component({
 	selector: 'app-studio-landing',
-	templateUrl: './studio-landing.component.html',
-	styleUrls: ['./studio-landing.component.css']
+	templateUrl: './landing.component.html',
+	styleUrls: ['./landing.component.css']
 })
-export class StudioLandingComponent implements OnInit {
+export class LandingComponent implements OnInit {
 
 	constructor(
 		private router: Router,
@@ -92,7 +92,7 @@ export class StudioLandingComponent implements OnInit {
 	}
 
 	openChatBotProject(name: string) {
-		this.router.navigateByUrl('/designer?proj=' + encodeURIComponent(name));
+		this.router.navigateByUrl('/studio/designer?proj=' + encodeURIComponent(name));
 	}
 	renameChatBotProject(name: string) {
 		this.infoDialog.prompt("Rename", 'Enter a new name: ', (newName) => {

@@ -14,7 +14,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	studio() {
-		this.router.navigateByUrl('/studio-landing');
+		this.router.navigateByUrl('/studio');
 	}
 
 	userManagement() {

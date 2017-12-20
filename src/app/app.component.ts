@@ -2,12 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { GlobalsService } from './services/globals.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
-import { ChatServerManagerComponent } from './components/common/chat-server-manager/chat-server-manager.component';
 
 @Component({
 	selector: 'app-root',
 	templateUrl: './app.component.html',
-	styleUrls: ['./app.component.css']
+	styleUrls: ['./app.component.css'],
+	providers: [
+		GlobalsService
+	]
 })
 export class AppComponent {
 	constructor(
@@ -21,7 +23,7 @@ export class AppComponent {
 	hideLoading() {
 		this.global.loading = false;
 	}
-	
+
 	goto(path: string) {
 		this.router.navigateByUrl(path);
 	}

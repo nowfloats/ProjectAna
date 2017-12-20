@@ -1,5 +1,31 @@
 .button-row {
     display: flex;
     align-items: center;
-    justify-content: space-around;
+    justify-content: center;
+    width: 100%;
+}
+
+.container {
+    padding: 30px;
+    width: 100vw;
+}
+
+.button-row > .mat-raised-button {
+    margin-left: 10px;
+    margin-right: 10px;
+    height: 180px;
+    width: 200px;
+    font-size: 18px;
+}
+
+.btn-studio svg {
+    width: 84px;
+    height: 84px;
+    margin-left: 4px;
+}
+
+.btn-user-management svg {
+    width: 84px;
+    height: 84px;
+    margin-left: 4px;
 }

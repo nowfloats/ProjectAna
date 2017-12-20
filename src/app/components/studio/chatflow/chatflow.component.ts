@@ -7,8 +7,7 @@ import { SettingsService } from '../../../services/settings.service'
 import { GlobalsService } from '../../../services/globals.service'
 import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
-import { PublishDialogComponent } from '../../common/publish-dialog/publish-dialog.component';
-import { ChatServerManagerComponent } from '../../common/chat-server-manager/chat-server-manager.component';
+import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
 import { MatMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
