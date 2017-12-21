@@ -5,7 +5,7 @@ import { ChatServerConnection, ChatBotProject } from '../models/app.models';
 
 @Injectable()
 export class DataService {
-
+	 
 	constructor(private http: HttpClient, private infoDialog: InfoDialogService) {
 		let connJSON = localStorage.getItem("conn");
 		if (connJSON)
@@ -36,7 +36,7 @@ export class DataService {
 	}
 
 	getUserAccounts() {
-
+		//this.http.get(this.conn.ServerUrl + "accounts/").map(x=>x as );
 	}
 
 	createUserAccount() {
@@ -54,6 +54,13 @@ export class DataService {
 		return this.http.get(this.conn.ServerUrl + "auth/me", {
 			headers: { "access-token": data.accessToken }
 		}).map(x => x as APIResponse<LoginData>);
+	}
+
+	logout() {
+		localStorage.removeItem("user");
+		return this.http.get(this.conn.ServerUrl + "auth/logout", {
+			headers: this.getHeaders()
+		}).map(x => x);
 	}
 
 	userLoggedinCheck(callback: (loggedin: boolean) => void) {

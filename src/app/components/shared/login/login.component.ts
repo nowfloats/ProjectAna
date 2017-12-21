@@ -7,7 +7,7 @@ import { InfoDialogService } from '../../../services/info-dialog.service';
 import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
 import * as models from '../../../models/chatflow.models';
 import { DataService, LoginData } from "../../../services/data.service";
-
+import { Router } from "@angular/router";
 @Component({
 	selector: 'app-login',
 	templateUrl: './login.component.html',
@@ -21,10 +21,14 @@ export class LoginComponent implements OnInit {
 		private dialog: MatDialog,
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
+		private router: Router,
 		private dialogRef: MatDialogRef<LoginComponent>,
 		@Inject(MAT_DIALOG_DATA) private pack: any) {
 		this.loadSavedConns();
-
+		this.dialogRef.afterClosed().subscribe(x => {
+			if (!this.dataService.loggedInUser)
+				this.router.navigateByUrl('/');
+		});
 	}
 
 	loadSavedConns() {
@@ -45,8 +49,12 @@ export class LoginComponent implements OnInit {
 
 	}
 
+	dismiss() {
+		this.dialogRef.close();
+	}
 
 	login() {
+		this.dataService.loggedInUser = null;
 		this.dataService.setConnection(this.selectedServer);
 		this.dataService.login(this.username, this.password).subscribe(x => {
 			if (x.success) {

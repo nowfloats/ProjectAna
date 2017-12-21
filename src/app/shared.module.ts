@@ -97,9 +97,6 @@ const DECLARATIONS: any[] = [
 		SimulatorService,
 		DataService
 	],
-	schemas: [
-		NO_ERRORS_SCHEMA
-	],
 	entryComponents: [
 		InfoDialogComponent,
 		PublishDialogComponent,

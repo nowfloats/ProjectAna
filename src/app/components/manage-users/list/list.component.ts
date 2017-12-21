@@ -1,4 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Router  } from "@angular/router";
 import { DataService } from '../../../services/data.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
@@ -8,7 +9,7 @@ import { LoginComponent } from '../../shared/login/login.component';
 	styleUrls: ['./list.component.css']
 })
 export class ListComponent implements AfterViewInit {
-	constructor(private dataService: DataService, private dialog: MatDialog) { }
+	constructor(private dataService: DataService, private dialog: MatDialog, private route: Router) { }
 
 	ngAfterViewInit(): void {
 		Promise.resolve(true).then(() => {
@@ -30,5 +31,10 @@ export class ListComponent implements AfterViewInit {
 
 	loadUsers() {
 
+	}
+
+	logout() {
+		this.dataService.logout();
+		this.route.navigateByUrl('/');
 	}
 }
