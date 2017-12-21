@@ -24,6 +24,8 @@ export class LoginComponent implements OnInit {
 		private router: Router,
 		private dialogRef: MatDialogRef<LoginComponent>,
 		@Inject(MAT_DIALOG_DATA) private pack: any) {
+		this.dialogRef.disableClose = true;
+
 		this.loadSavedConns();
 		this.dialogRef.afterClosed().subscribe(x => {
 			if (!this.dataService.loggedInUser)

@@ -11,7 +11,7 @@ import { EditBusinessAccountComponent } from '../../shared/edit-business-account
 	styleUrls: ['./list.component.css']
 })
 export class ListComponent implements AfterViewInit {
-	constructor(private dataService: DataService, private dialog: MatDialog, private route: Router, private infoDialog: InfoDialogService) { }
+	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
 
 	ngAfterViewInit(): void {
 		Promise.resolve(true).then(() => {
@@ -25,6 +25,8 @@ export class ListComponent implements AfterViewInit {
 						if (x == true) {
 							this.loggedInUser = this.dataService.loggedInUser;
 							this.loadAccounts();
+						} else {
+							this.router.navigateByUrl('/');
 						}
 					});
 				} else {
@@ -37,7 +39,10 @@ export class ListComponent implements AfterViewInit {
 
 	logout() {
 		this.dataService.logout();
-		this.route.navigateByUrl('/');
+		this.router.navigateByUrl('/');
+	}
+	close() {
+		this.router.navigateByUrl('/');
 	}
 	loggedInUser: LoginData;
 

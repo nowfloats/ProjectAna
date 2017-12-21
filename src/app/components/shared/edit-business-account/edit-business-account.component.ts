@@ -27,6 +27,8 @@ export class EditBusinessAccountComponent implements OnInit {
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
 		public data: BusinessAccount) {
+		this.dialogRef.disableClose = true;
+
 		if (data) {
 			this.account = data;
 			this.title = "Edit business account";
