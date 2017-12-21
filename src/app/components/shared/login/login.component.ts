@@ -24,12 +24,15 @@ export class LoginComponent implements OnInit {
 		private dialogRef: MatDialogRef<LoginComponent>,
 		@Inject(MAT_DIALOG_DATA) private pack: any) {
 		this.loadSavedConns();
-		
+
 	}
 
 	loadSavedConns() {
 		this.savedConns = this.settings.loadSavedConnections();
-		this.selectedServer = null;
+		if (this.savedConns.length == 1)
+			this.selectedServer = this.savedConns[0];
+		else
+			this.selectedServer = null;
 	}
 
 	savedConns: ChatServerConnection[] = [];
@@ -41,7 +44,7 @@ export class LoginComponent implements OnInit {
 	ngOnInit() {
 
 	}
-	
+
 
 	login() {
 		this.dataService.setConnection(this.selectedServer);

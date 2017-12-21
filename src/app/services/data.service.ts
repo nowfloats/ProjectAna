@@ -78,13 +78,9 @@ export class DataService {
 	}
 
 	handleError(err: any, title: string, message: string) {
-		if (err._body) {
-			try {
-				let respMsg = JSON.parse(err._body) as APIResponse<any>;
-				this.handleTypedError(respMsg.error, title, message);
-			} catch (e) {
-				this.infoDialog.alert(title, err._body || message);
-			}
+		let body = err.error;
+		if (body.error) {
+			this.handleTypedError(body.error, title, message);
 		} else
 			this.infoDialog.alert(title, message);
 	}
