@@ -41,10 +41,19 @@ export class DataService {
 		return this.http.get(this.conn.ServerUrl + "business/accounts", { headers: h })
 			.map(x => x as APIResponse<ListData<BusinessAccount>>);
 	}
-
-	createUserAccount(account: BusinessAccount) {
-		return this.http.post(this.conn.ServerUrl + "business/accounts", account,
-			{ headers: this.getHeaders() }).map(x => x);
+	updateBusinessAccountStatus(account: BusinessAccount, status: BusinessAccountStatus) {
+		let h = this.getHeaders();
+		return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id + "/status/" + BusinessAccountStatus[<number>status], { headers: h })
+			.map(x => x as APIResponse<BusinessAccount>);
+	}
+	saveBusinessAccount(account: BusinessAccount) {
+		if (!account.id) {
+			return this.http.post(this.conn.ServerUrl + "business/accounts", account,
+				{ headers: this.getHeaders() }).map(x => x as APIResponse<BusinessAccount>);
+		} else {
+			return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id, account,
+				{ headers: this.getHeaders() }).map(x => x as APIResponse<BusinessAccount>);
+		}
 	}
 
 	login(username: string, password: string) {
@@ -97,7 +106,13 @@ export class DataService {
 	}
 
 	handleTypedError(err: Error, title: string, message: string) {
-		this.infoDialog.alert(title, err.message || message);
+		let msg = err.message || message;
+		if (err.errors) {
+			err.errors.forEach(x => {
+				msg += ` ${x.message}` 
+			});
+		}
+		this.infoDialog.alert(title, msg);
 	}
 }
 
@@ -163,6 +178,7 @@ export interface BusinessAccount {
 	password?: string;
 	fullName?: string;
 	userEmail?: string;
+	userPhone?: string;
 }
 
 export interface Sort {
@@ -178,4 +194,12 @@ export interface ListData<TItem> {
 	sort: Sort;
 	totalElements: number;
 	totalPages: number;
+}
+
+export enum BusinessAccountStatus {
+	INACTIVE = 0,
+	ACTIVE = 1,
+	EXPIRED = 'EXPIRED',
+	BLOCKED = 'BLOCKED',
+	DELETED = 'DELETED'
 }

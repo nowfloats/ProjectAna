@@ -68,6 +68,26 @@ export class GlobalsService {
 	anaLocationDisplay(anaLoc: GeoLoc) {
 		return `${anaLoc.lat},${anaLoc.lng}`;
 	}
+
+	EMAIL_REGEX = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+	emailValid(val: string) {
+		if (val)
+			return this.EMAIL_REGEX.test(val);
+		return false;
+	}
+
+	PHONE_REGEX = /^\+?\d{6,15}$/;
+	phoneValid(val: string) {
+		if (val)
+			return this.PHONE_REGEX.test(val);
+		return false;
+	}
+
+	pwdMatch(p1: string, p2: string) {
+		if (!p1) return false;
+		if (p1.length < 6) return false;
+		return p1 == p2;
+	}
 }
 
 export enum VariableType {

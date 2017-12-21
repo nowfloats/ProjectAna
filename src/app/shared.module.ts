@@ -3,6 +3,7 @@ import { InfoDialogComponent } from './components/shared/info-dialog/info-dialog
 import { LoadingIndicatorComponent } from './components/shared/loading-indicator/loading-indicator.component';
 import { LoginComponent } from './components/shared/login/login.component';
 import { PublishDialogComponent } from './components/shared/publish-dialog/publish-dialog.component';
+import { EditBusinessAccountComponent } from './components/shared/edit-business-account/edit-business-account.component';
 
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -30,7 +31,10 @@ import {
 	MatListModule,
 	MatGridListModule,
 	MatProgressBarModule,
-	MatToolbarModule
+	MatToolbarModule,
+
+	ErrorStateMatcher,
+	ShowOnDirtyErrorStateMatcher
 } from '@angular/material';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
@@ -80,6 +84,7 @@ const DECLARATIONS: any[] = [
 	LoadingIndicatorComponent,
 	LoginComponent,
 	PublishDialogComponent,
+	EditBusinessAccountComponent,
 	EllipsisPipe
 ]
 
@@ -97,13 +102,16 @@ const DECLARATIONS: any[] = [
 		InfoDialogService,
 		Title,
 		SimulatorService,
-		DataService
+		DataService,
 	],
 	entryComponents: [
 		InfoDialogComponent,
 		PublishDialogComponent,
 		LoginComponent,
-		ChatServerManagerComponent
+		ChatServerManagerComponent,
+		EditBusinessAccountComponent
 	]
 })
 export class SharedModule { }
+
+//	{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }

@@ -1,12 +1,13 @@
-.user-profile-panel {}
+.user-profile-panel {
+}
 
 .app-page-header {
     width: 100%;
 }
 
-.app-page-header>.user-info {
-    float: right;
-}
+    .app-page-header > .user-info {
+        float: right;
+    }
 
 .toolbar-icon {
     padding: 0 14px;
@@ -16,7 +17,38 @@
     flex: 1 1 auto;
 }
 
-.app-content{
-    padding-left: 15px; 
-    padding-right: 15px; 
+.app-content {
+    padding-left: 15px;
+    padding-right: 15px;
+    width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.list-item {
+    background-color: white;
+}
+
+.list-item-text {
+    width: 100%;
+}
+
+.app-content-header {
+    display: flex;
+    flex-direction: row;
+    margin: 11px 0;
+}
+
+.app-content-header-text {
+    flex-grow: 1;
+}
+
+.list-item-hint {
+    font-size: 13px;
+    opacity: 0.5;
+    font-style: italic
+}
+
+mat-list-item {
+    margin-bottom: 10px;
 }
