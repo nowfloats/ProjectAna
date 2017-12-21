@@ -5,7 +5,7 @@ import { ChatServerConnection, ChatBotProject } from '../models/app.models';
 
 @Injectable()
 export class DataService {
-	 
+
 	constructor(private http: HttpClient, private infoDialog: InfoDialogService) {
 		let connJSON = localStorage.getItem("conn");
 		if (connJSON)
@@ -35,8 +35,9 @@ export class DataService {
 		this.conn = conn;
 	}
 
-	getUserAccounts() {
-		//this.http.get(this.conn.ServerUrl + "accounts/").map(x=>x as );
+	getBusinessAccounts() {
+		return this.http.get(this.conn.ServerUrl + "accounts/", { headers: this.getHeaders() })
+			.map(x => x as APIResponse<ListData<BusinessAccount>>);
 	}
 
 	createUserAccount() {
@@ -114,9 +115,14 @@ export interface APIResponse<TData> {
 	data?: TData;
 	error?: Error;
 	success: boolean;
-	links: any[];
+	links: Link[];
 }
 
+export interface Link {
+	href: string;
+	rel: string;
+	templated: boolean;
+}
 export interface Role {
 	id: number;
 	role: string;
@@ -132,4 +138,38 @@ export interface LoginData {
 	name: string;
 	businessId: string;
 	roles: Role[];
+}
+
+export interface Color {
+	id: string;
+	name: string;
+	value: string;
+}
+
+export interface BusinessAccount {
+	colors: Color[];
+	createdAt: number;
+	email: string;
+	id: string;
+	logoUrl: string;
+	modifiedAt: number;
+	name: string;
+	phone: string;
+	registerByUserId: string;
+	status: string;
+}
+
+export interface Sort {
+}
+
+export interface ListData<TItem> {
+	content: TItem[];
+	first: boolean;
+	last: boolean;
+	number: number;
+	numberOfElements: number;
+	size: number;
+	sort: Sort;
+	totalElements: number;
+	totalPages: number;
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { Router  } from "@angular/router";
-import { DataService } from '../../../services/data.service';
+import { Router } from "@angular/router";
+import { DataService, BusinessAccount } from '../../../services/data.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
 @Component({
@@ -21,16 +21,24 @@ export class ListComponent implements AfterViewInit {
 
 					d.afterClosed().subscribe(x => {
 						if (x == true) {
-							this.loadUsers();
+							this.loadAccounts();
 						}
 					});
 				}
 			})
 		});
 	}
+	accounts: BusinessAccount[];
 
-	loadUsers() {
-
+	loadAccounts() {
+		this.dataService.getBusinessAccounts().subscribe(x => {
+			if (x.success) {
+				this.accounts = x.data.content;
+			} else
+				this.dataService.handleTypedError(x.error, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
+		}, err => {
+			this.dataService.handleError(err, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
+		});
 	}
 
 	logout() {
