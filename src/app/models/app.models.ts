@@ -21,3 +21,5 @@ export interface ChatBotReferance {
 	APISecret: string;
 	IsDefault: boolean;
 }
+
+

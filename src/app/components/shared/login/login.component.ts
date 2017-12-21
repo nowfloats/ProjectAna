@@ -1,4 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { ChatBotReferance, ChatServerConnection } from '../../../models/app.models';
+import { SettingsService } from '../../../services/settings.service';
+import { ChatFlowService } from '../../../services/chatflow.service';
+import { InfoDialogService } from '../../../services/info-dialog.service';
+import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
+import * as models from '../../../models/chatflow.models';
+import { DataService, LoginData } from "../../../services/data.service";
 
 @Component({
 	selector: 'app-login',
@@ -7,9 +15,56 @@ import { Component, OnInit } from '@angular/core';
 })
 export class LoginComponent implements OnInit {
 
-	constructor() { }
-
-	ngOnInit() {
+	constructor(
+		private settings: SettingsService,
+		private chatFlowService: ChatFlowService,
+		private dialog: MatDialog,
+		private infoDialog: InfoDialogService,
+		private dataService: DataService,
+		private dialogRef: MatDialogRef<LoginComponent>,
+		@Inject(MAT_DIALOG_DATA) private pack: any) {
+		this.loadSavedConns();
+		
 	}
 
+	loadSavedConns() {
+		this.savedConns = this.settings.loadSavedConnections();
+		this.selectedServer = null;
+	}
+
+	savedConns: ChatServerConnection[] = [];
+	selectedServer: ChatServerConnection;
+
+	username: string;
+	password: string;
+
+	ngOnInit() {
+
+	}
+	
+
+	login() {
+		this.dataService.setConnection(this.selectedServer);
+		this.dataService.login(this.username, this.password).subscribe(x => {
+			if (x.success) {
+				this.dataService.loggedInUser = x.data;
+
+				localStorage.setItem("user", JSON.stringify(x.data));
+				this.dialogRef.close(true);
+			} else
+				this.dataService.handleTypedError(x.error, "Oops! Unable to login.", "Something went wrong while trying to login. Please try again.");
+		}, err => {
+			this.dataService.handleError(err, "Oops! Unable to login.", "Something went wrong while trying to login. Please try again.");
+		});
+	}
+
+	managePublishServers() {
+		let dialogRef = this.dialog.open(ChatServerManagerComponent, {
+			width: '60%',
+		});
+
+		dialogRef.afterClosed().subscribe(x => {
+			this.loadSavedConns();
+		});
+	}
 }

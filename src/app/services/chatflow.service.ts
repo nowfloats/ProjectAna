@@ -3,7 +3,6 @@ import { Http, RequestOptionsArgs, Headers } from '@angular/http';
 import { Observable } from 'rxjs';
 import 'rxjs/add/operator/map';
 import * as models from '../models/chatflow.models'
-import * as ServiceResponseModels from '../models/serviceResponse.models'
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
 
 @Injectable()

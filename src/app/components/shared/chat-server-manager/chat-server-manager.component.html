@@ -1,8 +1,8 @@
-<h2 matDialogTitle>Publish server connections</h2>
+<h2 matDialogTitle>Ana chat server connections</h2>
 <mat-dialog-content>
     <div class="center-block center-content">
         <mat-card [hidden]="savedConnections.length!=0" class="text-center">
-            <h4>Looks like you don't have any saved publish server connections. <br /> Start by adding one.</h4>
+            <h4>Looks like you don't have any saved Ana chat server connections. <br /> Start by adding one.</h4>
         </mat-card>
 
         <mat-accordion [hidden]="savedConnections.length==0">
@@ -41,7 +41,7 @@
                             </mat-form-field>
 
                             <mat-action-row>
-                                <button mat-raised-button (click)="deleteProject(proj)"><span>Delete Project</span></button>
+                                <button mat-raised-button (click)="deleteProject(conn,proj)"><span>Delete Project</span></button>
                             </mat-action-row>
                         </mat-expansion-panel>
                     </mat-accordion>
@@ -56,7 +56,7 @@
     </div>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <button matTooltip="Save Changes" color="primary" [hidden]="savedConnections.length==0" mat-raised-button (click)="saveConnections()">Save changes</button>
+    <button matTooltip="Save Changes" color="primary" [hidden]="savedConnections.length==0" mat-raised-button (click)="saveConnections(true)">Save changes</button>
     <button matTooltip="Add new connection" mat-raised-button (click)="addConnection()">Add new server connection</button>
     <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>

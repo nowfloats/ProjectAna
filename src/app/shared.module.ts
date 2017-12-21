@@ -40,6 +40,7 @@ import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
 import { InfoDialogService } from './services/info-dialog.service';
 import { SimulatorService } from './services/simulator.service';
+import { DataService } from './services/data.service';
 
 import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
 import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
@@ -93,7 +94,8 @@ const DECLARATIONS: any[] = [
 		SettingsService,
 		InfoDialogService,
 		Title,
-		SimulatorService
+		SimulatorService,
+		DataService
 	],
 	schemas: [
 		NO_ERRORS_SCHEMA
