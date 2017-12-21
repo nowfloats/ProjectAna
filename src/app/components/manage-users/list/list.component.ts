@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { Router } from "@angular/router";
-import { DataService, BusinessAccount } from '../../../services/data.service';
+import { DataService, BusinessAccount, LoginData } from '../../../services/data.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
 @Component({
@@ -21,15 +21,26 @@ export class ListComponent implements AfterViewInit {
 
 					d.afterClosed().subscribe(x => {
 						if (x == true) {
+							this.loggedInUser = this.dataService.loggedInUser;
 							this.loadAccounts();
 						}
 					});
+				} else {
+					this.loggedInUser = this.dataService.loggedInUser;
+					this.loadAccounts();
 				}
 			})
 		});
 	}
-	accounts: BusinessAccount[];
 
+	logout() {
+		this.dataService.logout();
+		this.route.navigateByUrl('/');
+	}
+	loggedInUser: LoginData;
+
+
+	accounts: BusinessAccount[];
 	loadAccounts() {
 		this.dataService.getBusinessAccounts().subscribe(x => {
 			if (x.success) {
@@ -41,8 +52,25 @@ export class ListComponent implements AfterViewInit {
 		});
 	}
 
-	logout() {
-		this.dataService.logout();
-		this.route.navigateByUrl('/');
+	createBusinessAccount() {
+		this.dataService.createUserAccount({
+			colors: [
+				{
+					name: "primary",
+					value: "red"
+				}
+			],
+			email: "n1@ana.com",
+			phone: "9700000",
+			name: "Nizam1",
+			logoUrl: "http://ana.chat/favicon.ico",
+			password: "n1@ana.com",
+			fullName: "Nizam Full 1",
+			userEmail: "n1@ana.com"
+		}).subscribe(x => {
+			console.log(x);
+		}, err => {
+			console.log(err);
+		});
 	}
 }

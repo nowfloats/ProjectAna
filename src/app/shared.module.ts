@@ -29,7 +29,8 @@ import {
 	MatCardModule,
 	MatListModule,
 	MatGridListModule,
-	MatProgressBarModule
+	MatProgressBarModule,
+	MatToolbarModule
 } from '@angular/material';
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
@@ -62,6 +63,7 @@ const MAT_MODULES: any[] = [
 	MatSnackBarModule,
 	MatCardModule,
 	MatListModule,
+	MatToolbarModule,
 	MatGridListModule
 ];
 

@@ -1,5 +1,31 @@
-<div style="padding: 20px;">
-    <button mat-raised-button (click)="logout()">
-        Logout
-    </button>
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span>User Management</span>
+        <span class="toolbar-spacer"></span>
+        <span class="user-info" *ngIf="loggedInUser">
+            {{loggedInUser.fullName || loggedInUser.name}}
+        </span>
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="toolbar-icon">
+            <mat-icon>more_vert</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="logout()">
+                <mat-icon>exit_to_app</mat-icon>
+                <span>Logout</span>
+            </button>
+        </mat-menu>
+    </mat-toolbar-row>
+</mat-toolbar>
+<div class="app-content">
+    <h4>Business Accounts</h4>
+    <mat-card>
+        <mat-card-title>
+            Looks like there are no business accounts yet.
+            <br/>
+            <button mat-raised-button color="primary" (click)="createBusinessAccount()">Create new account</button>
+        </mat-card-title>
+    </mat-card>
+    <mat-list *ngIf="accounts">
+        <mat-list-item *ngFor="let acc of accounts"> {{acc.fullName}} </mat-list-item>
+    </mat-list>
 </div>

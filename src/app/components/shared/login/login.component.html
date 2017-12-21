@@ -18,12 +18,15 @@
     </mat-form-field>
 
     <div *ngIf="selectedServer">
-        <mat-form-field>
-            <input type="text" name="username" [(ngModel)]="username" matInput />
-        </mat-form-field>
-        <mat-form-field>
-            <input type="password" name="password" [(ngModel)]="password" matInput />
-        </mat-form-field>
+        <form (ngSubmit)="login()">
+            <mat-form-field>
+                <input type="text" name="username" [(ngModel)]="username" matInput />
+            </mat-form-field>
+            <mat-form-field>
+                <input type="password" name="password" [(ngModel)]="password" matInput />
+            </mat-form-field>
+            <input type="submit" hidden />
+        </form>
     </div>
 
 </mat-dialog-content>

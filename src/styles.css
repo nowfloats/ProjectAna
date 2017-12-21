@@ -142,3 +142,10 @@ input[type=text] {
 .typing-indicator span {
     background-color: #8cc83c;
 }
+
+app-list {
+    width: 100%;
+}
+.mat-toolbar.mat-primary{
+    color: white;
+}

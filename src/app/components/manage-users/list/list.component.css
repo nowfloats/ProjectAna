@@ -1,0 +1,22 @@
+.user-profile-panel {}
+
+.app-page-header {
+    width: 100%;
+}
+
+.app-page-header>.user-info {
+    float: right;
+}
+
+.toolbar-icon {
+    padding: 0 14px;
+}
+
+.toolbar-spacer {
+    flex: 1 1 auto;
+}
+
+.app-content{
+    padding-left: 15px; 
+    padding-right: 15px; 
+}

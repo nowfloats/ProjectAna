@@ -22,10 +22,11 @@ export class DataService {
 	}
 
 	private getHeaders() {
-		let h = new HttpHeaders();
 		if (this.loggedInUser && this.loggedInUser.accessToken)
-			h.set("access-token", this.loggedInUser.accessToken)
-		return h;
+			return new HttpHeaders({
+				"access-token": this.loggedInUser.accessToken
+			});
+		return new HttpHeaders();
 	}
 
 	setConnection(conn: ChatServerConnection) {
@@ -36,12 +37,14 @@ export class DataService {
 	}
 
 	getBusinessAccounts() {
-		return this.http.get(this.conn.ServerUrl + "accounts/", { headers: this.getHeaders() })
+		let h = this.getHeaders();
+		return this.http.get(this.conn.ServerUrl + "business/accounts", { headers: h })
 			.map(x => x as APIResponse<ListData<BusinessAccount>>);
 	}
 
-	createUserAccount() {
-
+	createUserAccount(account: BusinessAccount) {
+		return this.http.post(this.conn.ServerUrl + "business/accounts", account,
+			{ headers: this.getHeaders() }).map(x => x);
 	}
 
 	login(username: string, password: string) {
@@ -141,22 +144,25 @@ export interface LoginData {
 }
 
 export interface Color {
-	id: string;
+	id?: string;
 	name: string;
 	value: string;
 }
 
 export interface BusinessAccount {
 	colors: Color[];
-	createdAt: number;
+	createdAt?: number;
 	email: string;
-	id: string;
+	id?: string;
 	logoUrl: string;
-	modifiedAt: number;
+	modifiedAt?: number;
 	name: string;
 	phone: string;
-	registerByUserId: string;
-	status: string;
+	registerByUserId?: string;
+	status?: string;
+	password?: string;
+	fullName?: string;
+	userEmail?: string;
 }
 
 export interface Sort {
