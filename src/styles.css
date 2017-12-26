@@ -146,6 +146,7 @@ input[type=text] {
 app-list {
     width: 100%;
 }
-.mat-toolbar.mat-primary{
+
+.mat-toolbar.mat-primary {
     color: white;
 }

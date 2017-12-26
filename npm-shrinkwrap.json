@@ -7202,11 +7202,6 @@
       "resolved": "https://registry.npmjs.org/wbuf/-/wbuf-1.7.2.tgz",
       "dev": true
     },
-    "web-animations-js": {
-      "version": "2.3.1",
-      "from": "web-animations-js@latest",
-      "resolved": "https://registry.npmjs.org/web-animations-js/-/web-animations-js-2.3.1.tgz"
-    },
     "webdriver-js-extender": {
       "version": "1.0.0",
       "from": "webdriver-js-extender@>=1.0.0 <2.0.0",

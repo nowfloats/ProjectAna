@@ -24,7 +24,7 @@
     "linux": {
       "category": "Graphics"
     },
-    "electronVersion": "1.7.9",
+    "electronVersion": "1.8.2-beta.3",
     "publish": {
       "provider": "generic",
       "url": "https://studio.ana.chat/${os}-${arch}"

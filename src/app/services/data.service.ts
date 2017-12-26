@@ -99,7 +99,7 @@ export class DataService {
 
 	handleError(err: any, title: string, message: string) {
 		let body = err.error;
-		if (body.error) {
+		if (body && body.error) {
 			this.handleTypedError(body.error, title, message);
 		} else
 			this.infoDialog.alert(title, message);

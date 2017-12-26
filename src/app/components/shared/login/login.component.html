@@ -20,10 +20,10 @@
     <div *ngIf="selectedServer">
         <form (ngSubmit)="login()">
             <mat-form-field>
-                <input type="text" name="username" [(ngModel)]="username" matInput />
+                <input type="text" name="username" placeholder="Username" [(ngModel)]="username" matInput />
             </mat-form-field>
             <mat-form-field>
-                <input type="password" name="password" [(ngModel)]="password" matInput />
+                <input type="password" name="password" placeholder="Password" [(ngModel)]="password" matInput />
             </mat-form-field>
             <input type="submit" hidden />
         </form>
