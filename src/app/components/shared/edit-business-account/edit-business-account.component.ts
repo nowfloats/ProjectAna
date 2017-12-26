@@ -42,13 +42,9 @@ export class EditBusinessAccountComponent implements OnInit {
 	account: BusinessAccount = {
 		colors: [],
 		email: "",
-		fullName: "",
 		logoUrl: "",
 		name: "",
-		password: "",
 		phone: "",
-		userEmail: "",
-		userPhone: ""
 	};
 
 	primaryBGColor: string = "#8cc83c";
@@ -57,7 +53,6 @@ export class EditBusinessAccountComponent implements OnInit {
 
 	emailValid(val: string) {
 		let r = this.global.emailValid(val);
-		console.log(r);
 		return r;
 	}
 	phoneValid(val: string) {
@@ -74,15 +69,13 @@ export class EditBusinessAccountComponent implements OnInit {
 			this.infoDialog.alert("Invalid details", "Please enter valid information in the fields provided");
 			return;
 		}
-		if (this.account.password) {
-			if (!this.global.pwdMatch(this.account.password, this.confirmPassword)) {
-				this.infoDialog.alert("Invalid details", "Password and confirm password should match. Password must be at least 6 charecters");
-				return;
-			}
-		}
-		this.account.fullName = this.account.name;
-		this.account.userEmail = this.account.email;
-		this.account.userPhone = this.account.phone;
+		//if (this.account.password) {
+		//	if (!this.global.pwdMatch(this.account.password, this.confirmPassword)) {
+		//		this.infoDialog.alert("Invalid details", "Password and confirm password should match. Password must be at least 6 characters");
+		//		return;
+		//	}
+		//}
+		
 		this.account.colors = [
 			{
 				name: "PRIMARY_BG",

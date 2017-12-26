@@ -29,7 +29,7 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 	ngAfterViewInit(): void {
 		Promise.resolve(true).then(() => {
 			this.dataService.userLoggedinCheck((loggedin) => {
-				if (!loggedin) {
+				if (!loggedin && this.skipAuth == false) {
 					let d = this.dialog.open(LoginComponent, {
 						width: '600px',
 					});

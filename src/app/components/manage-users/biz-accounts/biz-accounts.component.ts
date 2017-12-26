@@ -7,11 +7,11 @@ import { LoginComponent } from '../../shared/login/login.component';
 import { AppHeaderBarComponent } from '../../shared/app-header-bar/app-header-bar.component';
 import { EditBusinessAccountComponent } from '../../shared/edit-business-account/edit-business-account.component';
 @Component({
-	selector: 'app-list',
-	templateUrl: './list.component.html',
-	styleUrls: ['./list.component.css']
+	selector: 'app-biz-accounts',
+	templateUrl: './biz-accounts.component.html',
+	styleUrls: ['./biz-accounts.component.css']
 })
-export class ListComponent implements AfterViewInit {
+export class BizAccountsComponent implements AfterViewInit {
 
 	@ViewChild('appHeader')
 	appHeader: AppHeaderBarComponent; 

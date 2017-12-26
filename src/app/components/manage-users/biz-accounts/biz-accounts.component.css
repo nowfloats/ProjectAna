@@ -1,6 +1,10 @@
 .user-profile-panel {
 }
 
+:host {
+    width: 100%;
+}
+
 .app-content {
     padding-left: 15px;
     padding-right: 15px;

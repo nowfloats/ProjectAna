@@ -175,10 +175,6 @@ export interface BusinessAccount {
 	phone: string;
 	registerByUserId?: string;
 	status?: string;
-	password?: string;
-	fullName?: string;
-	userEmail?: string;
-	userPhone?: string;
 }
 
 export interface Sort {
