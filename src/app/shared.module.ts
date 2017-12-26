@@ -4,6 +4,7 @@ import { LoadingIndicatorComponent } from './components/shared/loading-indicator
 import { LoginComponent } from './components/shared/login/login.component';
 import { PublishDialogComponent } from './components/shared/publish-dialog/publish-dialog.component';
 import { EditBusinessAccountComponent } from './components/shared/edit-business-account/edit-business-account.component';
+import { AppHeaderBarComponent } from './components/shared/app-header-bar/app-header-bar.component';
 
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
@@ -32,7 +33,6 @@ import {
 	MatGridListModule,
 	MatProgressBarModule,
 	MatToolbarModule,
-
 	ErrorStateMatcher,
 	ShowOnDirtyErrorStateMatcher
 } from '@angular/material';
@@ -85,6 +85,7 @@ const DECLARATIONS: any[] = [
 	LoginComponent,
 	PublishDialogComponent,
 	EditBusinessAccountComponent,
+	AppHeaderBarComponent,
 	EllipsisPipe
 ]
 
@@ -113,5 +114,3 @@ const DECLARATIONS: any[] = [
 	]
 })
 export class SharedModule { }
-
-//	{ provide: ErrorStateMatcher, useClass: ShowOnDirtyErrorStateMatcher }

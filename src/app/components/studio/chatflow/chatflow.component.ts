@@ -63,7 +63,7 @@ export class ChatFlowComponent implements OnInit {
 				if (proj)
 					this.loadChatFlowPack(proj);
 				else
-					this.router.navigateByUrl('/startup');
+					this.router.navigateByUrl('/studio');
 			}
 		});
 	}
@@ -408,7 +408,7 @@ export class ChatFlowComponent implements OnInit {
 		this.infoDialog.confirm('Save?', 'Do you want to save any unsaved changes before you close?', (ok) => {
 			if (ok)
 				this.saveChatFlow();
-			this.router.navigateByUrl('/startup');
+			this.router.navigateByUrl('/studio');
 		});
 	}
 }

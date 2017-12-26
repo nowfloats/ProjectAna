@@ -1,25 +1,4 @@
-<mat-toolbar class="mat-elevation-z2" color="primary">
-    <mat-toolbar-row>
-        <span>User Management</span>
-        <span class="toolbar-spacer"></span>
-        <span class="user-info" *ngIf="loggedInUser">
-            {{loggedInUser.fullName || loggedInUser.name}}
-        </span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" class="toolbar-icon">
-            <mat-icon>more_vert</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="logout()">
-                <mat-icon>exit_to_app</mat-icon>
-                <span>Logout</span>
-            </button>
-            <button mat-menu-item (click)="close()">
-                <mat-icon>close</mat-icon>
-                <span>Close</span>
-            </button>
-        </mat-menu>
-    </mat-toolbar-row>
-</mat-toolbar>
+<app-header-bar [title]="'User Management'" #appHeader></app-header-bar>
 <div class="app-content">
     <div class="app-content-header">
         <h4 class="app-content-header-text">Business Accounts</h4>

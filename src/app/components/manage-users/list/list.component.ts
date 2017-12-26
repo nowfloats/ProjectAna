@@ -1,9 +1,10 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
 import { DataService, BusinessAccount, LoginData, BusinessAccountStatus } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
+import { AppHeaderBarComponent } from '../../shared/app-header-bar/app-header-bar.component';
 import { EditBusinessAccountComponent } from '../../shared/edit-business-account/edit-business-account.component';
 @Component({
 	selector: 'app-list',
@@ -11,42 +12,18 @@ import { EditBusinessAccountComponent } from '../../shared/edit-business-account
 	styleUrls: ['./list.component.css']
 })
 export class ListComponent implements AfterViewInit {
-	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
+
+	@ViewChild('appHeader')
+	appHeader: AppHeaderBarComponent; 
 
 	ngAfterViewInit(): void {
-		Promise.resolve(true).then(() => {
-			this.dataService.userLoggedinCheck((loggedin) => {
-				if (!loggedin) {
-					let d = this.dialog.open(LoginComponent, {
-						width: '600px',
-					});
-
-					d.afterClosed().subscribe(x => {
-						if (x == true) {
-							this.loggedInUser = this.dataService.loggedInUser;
-							this.loadAccounts();
-						} else {
-							this.router.navigateByUrl('/');
-						}
-					});
-				} else {
-					this.loggedInUser = this.dataService.loggedInUser;
-					this.loadAccounts();
-				}
-			})
-		});
+		this.appHeader.afterInit = () => {
+			this.loadAccounts();
+		};
 	}
 
-	logout() {
-		this.dataService.logout();
-		this.router.navigateByUrl('/');
-	}
-	close() {
-		this.router.navigateByUrl('/');
-	}
-	loggedInUser: LoginData;
-
-
+	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
+	
 	accounts: BusinessAccount[];
 	loadAccounts() {
 		this.dataService.getBusinessAccounts().subscribe(x => {
