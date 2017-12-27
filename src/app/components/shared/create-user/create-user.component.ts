@@ -1,5 +1,5 @@
 import { Component, OnInit, Optional, Inject } from '@angular/core';
-import { UserRegisterModel, Role } from '../../../models/data.models';
+import { UserRegisterModel, Role, User } from '../../../models/data.models';
 import { GlobalsService } from '../../../services/globals.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { DataService } from '../../../services/data.service';
@@ -21,22 +21,40 @@ export class CreateUserComponent implements OnInit {
 
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
-		public data: string) {
-
-		this.user = {
-			businessId: data,
-			email: "",
-			name: "",
-			phone: "",
-			password: "",
-			roleIds: []
-		};
+		public param: UserDialogParam) {
+		if (param.mode == UserDialogMode.Create) {
+			this.user = {
+				businessId: param.bizId,
+				email: "",
+				name: "",
+				phone: "",
+				password: "",
+				roleIds: []
+			};
+		} else if (param.mode == UserDialogMode.View) {
+			this.user = {
+				businessId: param.bizId,
+				email: param.user.email,
+				name: param.user.name || param.user.userName,
+				phone: param.user.phone,
+				password: "",
+				roleIds: []
+			};
+		}
 	}
-
+	UserDialogMode = UserDialogMode;
 	ngOnInit() {
 	}
 	confirmPassword: string;
 	selectedRole: Role;
+
+	userRoleDisplay() {
+		if (this.param.user && this.param.user.roles) {
+			return this.param.user.roles.map(x => x.label).join(', ');
+		}
+		return "";
+	}
+
 	user: UserRegisterModel;
 	roles: Role[];
 
@@ -76,4 +94,15 @@ export class CreateUserComponent implements OnInit {
 	close() {
 		this.dialogRef.close();
 	}
+}
+
+export enum UserDialogMode {
+	View,
+	Create
+}
+
+export interface UserDialogParam {
+	mode: UserDialogMode,
+	bizId?: string;
+	user: User;
 }

@@ -67,7 +67,7 @@ export class DataService {
 	getUsers(bizid: string, page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
 		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}`, { headers: h })
-			.map(x => x as APIResponse<ListContent<User>>);
+			.map(x => x as ListContent<User>);
 	}
 
 	createUser(user: UserRegisterModel) {

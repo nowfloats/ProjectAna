@@ -28,8 +28,11 @@
     <mat-list *ngIf="users && users.length>0">
         <mat-list-item class="mat-elevation-z2 list-item" *ngFor="let user of users">
             <div class="list-item-text">
-                {{user.name}} <span class="list-item-hint"> {{userRole(user)}}</span>
+                {{user.name || user.userName }} <span class="list-item-hint"> {{userRole(user)}}</span>
             </div>
+            <button matTooltip="View" mat-icon-button (click)="view(user)">
+                <mat-icon>remove_red_eye</mat-icon>
+            </button>
             <button matTooltip="Update Password" mat-icon-button (click)="updateUserPassword(user)">
                 <mat-icon>border_color</mat-icon>
             </button>

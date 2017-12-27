@@ -1,17 +1,32 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Route, ActivatedRoute } from '@angular/router';
 import { User } from '../../../models/data.models';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
-import { CreateUserComponent } from '../../shared/create-user/create-user.component';
+import { CreateUserComponent, UserDialogParam, UserDialogMode } from '../../shared/create-user/create-user.component';
+import { AppHeaderBarComponent } from '../../shared/app-header-bar/app-header-bar.component';
 
 @Component({
 	selector: 'app-users',
 	templateUrl: './users.component.html',
 	styleUrls: ['./users.component.css']
 })
-export class UsersComponent implements OnInit {
+export class UsersComponent implements OnInit, AfterViewInit {
+	ngAfterViewInit(): void {
+		this.appHeader.afterInit = () => {
+			this.route.queryParamMap.subscribe(x => {
+				let bizId = x.get('bizId');
+				if (bizId) {
+					this.bizId = bizId;
+					this.loadUsers();
+				}
+			});
+		};
+	}
+
+	@ViewChild(AppHeaderBarComponent)
+	appHeader: AppHeaderBarComponent;
 
 	bizId: string;
 	constructor(
@@ -19,13 +34,6 @@ export class UsersComponent implements OnInit {
 		private infoDialog: InfoDialogService,
 		private dialog: MatDialog,
 		private dataService: DataService) {
-		this.route.queryParamMap.subscribe(x => {
-			let bizId = x.get('bizid');
-			if (bizId) {
-				this.bizId = bizId;
-				this.loadUsers();
-			}
-		});
 	}
 
 	ngOnInit() {
@@ -34,7 +42,10 @@ export class UsersComponent implements OnInit {
 	createUserDialog() {
 		this.dialog.open(CreateUserComponent, {
 			width: '60%',
-			data: this.bizId
+			data: <UserDialogParam>{
+				bizId: this.bizId,
+				mode: UserDialogMode.Create,
+			}
 		});
 	}
 
@@ -54,15 +65,24 @@ export class UsersComponent implements OnInit {
 			this.loadUsers();
 		}
 	}
-
+	view(user: User) {
+		this.dialog.open(CreateUserComponent, {
+			width: '60%',
+			data: <UserDialogParam>{
+				mode: UserDialogMode.View,
+				user: user
+			}
+		})
+	}
 	loadUsers() {
 		if (this.bizId) {
 			this.dataService.getUsers(this.bizId, this.page).subscribe(x => {
-				if (x.success) {
-					this.users = x.data.content;
-				} else {
-					this.dataService.handleTypedError(x.error, "Unable to load users", "Something went wrong while loading the users. Please try again.");
-				}
+				//if (x.success) {
+				this.users = x.content.filter(x => x.roles && x.roles.length > 0);
+				//} else {
+				//	debugger;
+				//	this.dataService.handleTypedError(x.error, "Unable to load users", "Something went wrong while loading the users. Please try again.");
+				//}
 			}, err => {
 				this.dataService.handleError(err, "Unable to load users", "Something went wrong while loading the users. Please try again.");
 			});
@@ -72,7 +92,11 @@ export class UsersComponent implements OnInit {
 	updateUserPassword(user: User) {
 		this.infoDialog.alert("Coming soon", "Check back in some time!");
 	}
+
 	userRole(user: User) {
-		return user.roles.map(x => x.label).join(', ');
+		if (user.roles) {
+			return user.roles.map(x => x.label).join(', ');
+		}
+		return "";
 	}
 }
