@@ -1,9 +1,10 @@
 import { Component, OnInit, AfterViewInit, Input } from '@angular/core';
 import { Router } from "@angular/router";
-import { DataService, BusinessAccount, LoginData, BusinessAccountStatus } from '../../../services/data.service';
+import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
+import { LoginData } from '../../../models/data.models';
 
 @Component({
 	selector: 'app-header-bar',

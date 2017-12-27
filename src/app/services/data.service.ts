@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InfoDialogService } from './info-dialog.service';
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
+import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User } from '../models/data.models';
 
 @Injectable()
 export class DataService {
@@ -36,11 +37,18 @@ export class DataService {
 		this.conn = conn;
 	}
 
-	getBusinessAccounts() {
+	getRoles() {
 		let h = this.getHeaders();
-		return this.http.get(this.conn.ServerUrl + "business/accounts", { headers: h })
-			.map(x => x as APIResponse<ListData<BusinessAccount>>);
+		return this.http.get(`${this.conn.ServerUrl}auth/roles`, { headers: h })
+			.map(x => x as APIResponse<Role[]>);
 	}
+
+	getBusinessAccounts(page: number = 0, size: number = 10) {
+		let h = this.getHeaders();
+		return this.http.get(`${this.conn.ServerUrl}business/accounts?page=${page}&size=${size}`, { headers: h })
+			.map(x => x as APIResponse<ListContent<BusinessAccount>>);
+	}
+
 	updateBusinessAccountStatus(account: BusinessAccount, status: BusinessAccountStatus) {
 		let h = this.getHeaders();
 		return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id + "/status/" + BusinessAccountStatus[<number>status], { headers: h })
@@ -54,6 +62,18 @@ export class DataService {
 			return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id, account,
 				{ headers: this.getHeaders() }).map(x => x as APIResponse<BusinessAccount>);
 		}
+	}
+
+	getUsers(bizid: string, page: number = 0, size: number = 10) {
+		let h = this.getHeaders();
+		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}`, { headers: h })
+			.map(x => x as APIResponse<ListContent<User>>);
+	}
+
+	createUser(user: UserRegisterModel) {
+		let h = this.getHeaders();
+		return this.http.get(`${this.conn.ServerUrl}auth/users/accounts/register`, { headers: h })
+			.map(x => x as APIResponse<User>);
 	}
 
 	login(username: string, password: string) {
@@ -105,97 +125,13 @@ export class DataService {
 			this.infoDialog.alert(title, message);
 	}
 
-	handleTypedError(err: Error, title: string, message: string) {
+	handleTypedError(err: ErrorItem, title: string, message: string) {
 		let msg = err.message || message;
 		if (err.errors) {
 			err.errors.forEach(x => {
-				msg += ` ${x.message}` 
+				msg += ` ${x.message}`
 			});
 		}
 		this.infoDialog.alert(title, msg);
 	}
-}
-
-export interface ErrorDetail {
-	field: string;
-	message: string;
-}
-
-export interface Error {
-	code: string;
-	status: number;
-	message: string;
-	timestamp: number;
-	errors: ErrorDetail[];
-}
-
-export interface APIResponse<TData> {
-	data?: TData;
-	error?: Error;
-	success: boolean;
-	links: Link[];
-}
-
-export interface Link {
-	href: string;
-	rel: string;
-	templated: boolean;
-}
-export interface Role {
-	id: number;
-	role: string;
-	description: string;
-	label: string;
-	enabled: boolean;
-}
-
-export interface LoginData {
-	userId: string;
-	username: string;
-	accessToken: string;
-	name: string;
-	businessId: string;
-	roles: Role[];
-}
-
-export interface Color {
-	id?: string;
-	name: string;
-	value: string;
-}
-
-export interface BusinessAccount {
-	colors: Color[];
-	createdAt?: number;
-	email: string;
-	id?: string;
-	logoUrl: string;
-	modifiedAt?: number;
-	name: string;
-	phone: string;
-	registerByUserId?: string;
-	status?: string;
-}
-
-export interface Sort {
-}
-
-export interface ListData<TItem> {
-	content: TItem[];
-	first: boolean;
-	last: boolean;
-	number: number;
-	numberOfElements: number;
-	size: number;
-	sort: Sort;
-	totalElements: number;
-	totalPages: number;
-}
-
-export enum BusinessAccountStatus {
-	INACTIVE = 0,
-	ACTIVE = 1,
-	EXPIRED = 'EXPIRED',
-	BLOCKED = 'BLOCKED',
-	DELETED = 'DELETED'
 }

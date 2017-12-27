@@ -1,11 +1,13 @@
 import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { Router } from "@angular/router";
-import { DataService, BusinessAccount, LoginData, BusinessAccountStatus } from '../../../services/data.service';
+import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
 import { AppHeaderBarComponent } from '../../shared/app-header-bar/app-header-bar.component';
 import { EditBusinessAccountComponent } from '../../shared/edit-business-account/edit-business-account.component';
+import { BusinessAccount, BusinessAccountStatus } from '../../../models/data.models';
+
 @Component({
 	selector: 'app-biz-accounts',
 	templateUrl: './biz-accounts.component.html',
@@ -14,7 +16,7 @@ import { EditBusinessAccountComponent } from '../../shared/edit-business-account
 export class BizAccountsComponent implements AfterViewInit {
 
 	@ViewChild('appHeader')
-	appHeader: AppHeaderBarComponent; 
+	appHeader: AppHeaderBarComponent;
 
 	ngAfterViewInit(): void {
 		this.appHeader.afterInit = () => {
@@ -23,17 +25,37 @@ export class BizAccountsComponent implements AfterViewInit {
 	}
 
 	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
-	
+
 	accounts: BusinessAccount[];
+	page: number = 0;
+	totalPages: number = 0;
+
+	prevPage() {
+		if (this.page > 0) {
+			this.page--;
+			this.loadAccounts();
+		}
+	}
+	nextPage() {
+		if (this.page < this.totalPages) {
+			this.page++;
+			this.loadAccounts();
+		}
+	}
 	loadAccounts() {
-		this.dataService.getBusinessAccounts().subscribe(x => {
+		this.dataService.getBusinessAccounts(this.page).subscribe(x => {
 			if (x.success) {
 				this.accounts = x.data.content;
+				this.totalPages = x.data.totalPages;
 			} else
 				this.dataService.handleTypedError(x.error, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
 		}, err => {
 			this.dataService.handleError(err, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
 		});
+	}
+
+	manageUsers(account: BusinessAccount) {
+		this.router.navigateByUrl(`/manage-users/users?bizId=${account.id}`);
 	}
 
 	editBusinessAccount(data?: BusinessAccount) {

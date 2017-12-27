@@ -6,7 +6,7 @@ import { ChatFlowService } from '../../../services/chatflow.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
 import * as models from '../../../models/chatflow.models';
-import { DataService, LoginData } from "../../../services/data.service";
+import { DataService } from "../../../services/data.service";
 import { Router } from "@angular/router";
 @Component({
 	selector: 'app-login',

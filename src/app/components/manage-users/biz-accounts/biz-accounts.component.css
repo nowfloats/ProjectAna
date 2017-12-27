@@ -1,5 +1,13 @@
-.user-profile-panel {
+.ana-pagination {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
 }
+
+    .ana-pagination .info {
+        flex-grow: 1;
+        line-height: 40px;
+    }
 
 :host {
     width: 100%;
@@ -19,6 +27,14 @@
 
 .list-item-text {
     width: 100%;
+}
+
+.list-item-buttons {
+    display: flex;
+    -ms-flex-direction: row;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .app-content-header {

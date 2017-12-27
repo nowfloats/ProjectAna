@@ -6,10 +6,11 @@ import { ChatFlowService } from '../../../services/chatflow.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-manager.component';
 import * as models from '../../../models/chatflow.models';
-import { DataService, LoginData, BusinessAccount } from "../../../services/data.service";
+import { DataService } from "../../../services/data.service";
 import { GlobalsService } from '../../../services/globals.service';
 import { Router } from "@angular/router";
 import { FormControl, Validators } from '@angular/forms';
+import { BusinessAccount } from '../../../models/data.models';
 
 @Component({
 	selector: 'app-edit-business-account',
@@ -23,7 +24,6 @@ export class EditBusinessAccountComponent implements OnInit {
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
 		private dialogRef: MatDialogRef<EditBusinessAccountComponent>,
-
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
 		public data: BusinessAccount) {
@@ -75,7 +75,7 @@ export class EditBusinessAccountComponent implements OnInit {
 		//		return;
 		//	}
 		//}
-		
+
 		this.account.colors = [
 			{
 				name: "PRIMARY_BG",
