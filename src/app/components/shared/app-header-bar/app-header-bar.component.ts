@@ -56,8 +56,8 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
 	logout() {
 		this.dataService.logout();
+		this.loggedInUser = null;
 		this.router.navigateByUrl('/');
-		this.checkAndUpdate();
 	}
 
 	changePassword() {

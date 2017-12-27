@@ -72,7 +72,9 @@ export class BizAccountsComponent implements AfterViewInit {
 			data: data
 		});
 		d.afterClosed().subscribe(x => {
-			this.loadAccounts();
+			if (x == true) {
+				this.loadAccounts();
+			}
 		});
 	}
 

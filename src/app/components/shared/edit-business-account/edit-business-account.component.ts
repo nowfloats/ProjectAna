@@ -90,7 +90,7 @@ export class EditBusinessAccountComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("Done", "Business account has been saved successfully", () => {
-					this.dialogRef.close();
+					this.dialogRef.close(true);
 				});
 			} else {
 				this.dataService.handleTypedError(x.error, "Unable to save business account", "Something went wrong while trying to save business account details");

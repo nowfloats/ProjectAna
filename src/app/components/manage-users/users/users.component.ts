@@ -71,7 +71,8 @@ export class UsersComponent implements OnInit, AfterViewInit {
 			}
 		});
 		d.afterClosed().subscribe(x => {
-			this.loadUsers();
+			if (x == true)
+				this.loadUsers();
 		});
 	}
 

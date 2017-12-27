@@ -91,7 +91,7 @@ export class CreateUserComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("User created", "The user has been created successfully", () => {
-					this.close();
+					this.dialogRef.close(true);
 				});
 			} else {
 				this.dataService.handleTypedError(x.error, "Unable to create the user", "Something went wrong while trying to create the user. Please try again in some time.");
@@ -100,10 +100,6 @@ export class CreateUserComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to create the user", "Something went wrong while trying to create the user. Please try again in some time.");
 		});
-	}
-
-	close() {
-		this.dialogRef.close();
 	}
 }
 

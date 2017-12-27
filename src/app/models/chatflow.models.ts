@@ -218,6 +218,7 @@ export interface ChatNode {
 	CardFooter?: string;
 	Placement?: CardPlacement;
 	IsStartNode?: boolean;
+	IsGoalNode?: boolean;
 
 	RequestBody?: string;
 	Headers?: string;

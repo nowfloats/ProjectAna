@@ -328,16 +328,19 @@
                                 <mat-checkbox [(ngModel)]="btn.AdvancedOptions" name="btnAdvancedOptions-{{i}}" align="start">Advanced options</mat-checkbox>
                             </section>
                             <div class="btn-advanced-options" [hidden]="!btn.AdvancedOptions">
+                                <section class="form-field">
+                                    <mat-checkbox [(ngModel)]="chatNode.IsGoalNode" name="isGoalNode" align="start">Mark as goal node</mat-checkbox>
+                                </section>
                                 <mat-form-field>
                                     <input matInput type="text" placeholder="Variable Value" [(ngModel)]="btn.VariableValue" name="btnVariableValue-{{i}}">
                                 </mat-form-field>
 
                                 <!--<mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PrefixText')">
-            <input matInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
-        </mat-form-field>
-        <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
-            <input matInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
-        </mat-form-field>-->
+        <input matInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
+    </mat-form-field>
+    <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
+        <input matInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
+    </mat-form-field>-->
                                 <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'MinLength')">
                                     <input matInput type="number" placeholder="Minimum Length" [(ngModel)]="btn.MinLength" name="btnMinLength-{{i}}">
                                 </mat-form-field>
@@ -351,8 +354,8 @@
                                     <mat-checkbox [(ngModel)]="btn.IsMultiLine" name="btnIsMultiLine-{{i}}" align="start">Multiple line allowed</mat-checkbox>
                                 </section>
                                 <!--<section class="form-field">
-            <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
-        </section>-->
+        <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
+    </section>-->
                             </div>
                             <!--<section class="form-field">
         <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</mat-checkbox>

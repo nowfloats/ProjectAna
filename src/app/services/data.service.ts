@@ -140,6 +140,7 @@ export class DataService {
 			if (userJSON) {
 				let user = JSON.parse(userJSON) as LoginData;
 				if (user.accessToken && !hardCheck) {
+					this.loggedInUser = user;
 					callback(true);
 					return;
 				}
