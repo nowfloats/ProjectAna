@@ -12,17 +12,17 @@ import { EditBusinessAccountComponent } from '../edit-business-account/edit-busi
 	styleUrls: ['./create-user.component.css']
 })
 export class CreateUserComponent implements OnInit {
-
+	title: string = "";
 	constructor(
 		private global: GlobalsService,
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
 		private dialogRef: MatDialogRef<EditBusinessAccountComponent>,
-
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
 		public param: UserDialogParam) {
 		if (param.mode == UserDialogMode.Create) {
+			this.title = "Create User";
 			this.user = {
 				businessId: param.bizId,
 				email: "",
@@ -32,15 +32,18 @@ export class CreateUserComponent implements OnInit {
 				roleIds: []
 			};
 		} else if (param.mode == UserDialogMode.View) {
+			this.title = "User Details";
+
 			this.user = {
 				businessId: param.bizId,
-				email: param.user.email,
+				email: param.user.email || param.user.userName,
 				name: param.user.name || param.user.userName,
 				phone: param.user.phone,
 				password: "",
 				roleIds: []
 			};
 		}
+		this.loadRoles();
 	}
 	UserDialogMode = UserDialogMode;
 	ngOnInit() {
@@ -67,15 +70,19 @@ export class CreateUserComponent implements OnInit {
 	save() {
 		if (!this.global.emailValid(this.user.email)) {
 			this.infoDialog.alert("Invalid Email", "Please enter a valid email address");
+			return;
 		}
 		if (!this.global.phoneValid(this.user.phone)) {
 			this.infoDialog.alert("Invalid Phone Number", "Please enter a valid phone number");
+			return;
 		}
 		if (!this.global.pwdMatch(this.user.password, this.confirmPassword)) {
 			this.infoDialog.alert("Passwords do not match or not secure", "Please ensure the password and confirm password is same. Also, a password must be at least 6 characters.");
+			return;
 		}
 		if (!this.selectedRole) {
 			this.infoDialog.alert("Role not selected", "Please select a role for the user");
+			return;
 		}
 		this.user.roleIds = [this.selectedRole.id];
 		this.dataService.createUser(this.user).subscribe(x => {

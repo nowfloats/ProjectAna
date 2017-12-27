@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
 import { Route, ActivatedRoute } from '@angular/router';
-import { User } from '../../../models/data.models';
+import { User, BusinessAccount } from '../../../models/data.models';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
 import { CreateUserComponent, UserDialogParam, UserDialogMode } from '../../shared/create-user/create-user.component';
 import { AppHeaderBarComponent } from '../../shared/app-header-bar/app-header-bar.component';
+import { UpdatePasswordComponent } from '../../shared/update-password/update-password.component';
 
 @Component({
 	selector: 'app-users',
@@ -20,6 +21,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 				if (bizId) {
 					this.bizId = bizId;
 					this.loadUsers();
+					this.loadBusinessDetails();
 				}
 			});
 		};
@@ -28,6 +30,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	@ViewChild(AppHeaderBarComponent)
 	appHeader: AppHeaderBarComponent;
 
+	businessAccount: BusinessAccount;
 	bizId: string;
 	constructor(
 		private route: ActivatedRoute,
@@ -39,13 +42,24 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 	}
 
+	loadBusinessDetails() {
+		this.dataService.getBusinessDetails(this.bizId).subscribe(x => {
+			this.businessAccount = x.data;
+		}, err => {
+			this.dataService.handleError(err, "Unable to load business details", "Something went wrong while trying to load business account details. Please try again.")
+		});
+	}
+
 	createUserDialog() {
-		this.dialog.open(CreateUserComponent, {
+		let d =  this.dialog.open(CreateUserComponent, {
 			width: '60%',
 			data: <UserDialogParam>{
 				bizId: this.bizId,
 				mode: UserDialogMode.Create,
 			}
+		});
+		d.afterClosed().subscribe(x => {
+			this.loadUsers();
 		});
 	}
 
@@ -79,6 +93,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 			this.dataService.getUsers(this.bizId, this.page).subscribe(x => {
 				//if (x.success) {
 				this.users = x.content.filter(x => x.roles && x.roles.length > 0);
+				this.totalPages = x.totalPages;
 				//} else {
 				//	debugger;
 				//	this.dataService.handleTypedError(x.error, "Unable to load users", "Something went wrong while loading the users. Please try again.");
@@ -90,7 +105,10 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	}
 
 	updateUserPassword(user: User) {
-		this.infoDialog.alert("Coming soon", "Check back in some time!");
+		this.dialog.open(UpdatePasswordComponent, {
+			width: '40%',
+			data: user
+		});
 	}
 
 	userRole(user: User) {

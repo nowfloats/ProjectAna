@@ -1,7 +1,7 @@
 <app-header-bar [title]="'User Management'" #appHeader></app-header-bar>
 <div class="app-content">
     <div class="app-content-header">
-        <h4 class="app-content-header-text">Users</h4>
+        <h4 class="app-content-header-text">{{businessAccount ? 'Users of ' + businessAccount.name : 'Users'}}</h4>
         <div class="app-content-header-actions">
             <button mat-raised-button color="primary" (click)="createUserDialog()" [disabled]="!bizId">Create new user</button>
         </div>

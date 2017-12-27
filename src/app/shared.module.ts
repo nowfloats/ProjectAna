@@ -50,6 +50,7 @@ import { DataService } from './services/data.service';
 import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
 import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
 import { CreateUserComponent } from './components/shared/create-user/create-user.component';
+import { UpdatePasswordComponent } from './components/shared/update-password/update-password.component';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -88,6 +89,7 @@ const DECLARATIONS: any[] = [
 	EditBusinessAccountComponent,
 	AppHeaderBarComponent,
 	CreateUserComponent,
+	UpdatePasswordComponent,
 	EllipsisPipe
 ]
 
@@ -113,7 +115,8 @@ const DECLARATIONS: any[] = [
 		LoginComponent,
 		ChatServerManagerComponent,
 		EditBusinessAccountComponent,
-		CreateUserComponent
+		CreateUserComponent,
+		UpdatePasswordComponent
 	]
 })
 export class SharedModule { }

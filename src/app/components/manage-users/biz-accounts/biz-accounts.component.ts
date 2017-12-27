@@ -24,7 +24,11 @@ export class BizAccountsComponent implements AfterViewInit {
 		};
 	}
 
-	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
+	constructor(
+		private dataService: DataService,
+		private dialog: MatDialog,
+		private router: Router,
+		private infoDialog: InfoDialogService) { }
 
 	accounts: BusinessAccount[];
 	page: number = 0;

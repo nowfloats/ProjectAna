@@ -49,6 +49,12 @@ export class DataService {
 			.map(x => x as APIResponse<ListContent<BusinessAccount>>);
 	}
 
+	getBusinessDetails(bizId: string) {
+		let h = this.getHeaders();
+		return this.http.get(`${this.conn.ServerUrl}business/accounts/${bizId}`, { headers: h })
+			.map(x => x as APIResponse<BusinessAccount>);
+	}
+
 	updateBusinessAccountStatus(account: BusinessAccount, status: BusinessAccountStatus) {
 		let h = this.getHeaders();
 		return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id + "/status/" + BusinessAccountStatus[<number>status], { headers: h })
@@ -72,7 +78,7 @@ export class DataService {
 
 	createUser(user: UserRegisterModel) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}auth/users/accounts/register`, { headers: h })
+		return this.http.post(`${this.conn.ServerUrl}auth/users/accounts/register`, user, { headers: h })
 			.map(x => x as APIResponse<User>);
 	}
 
@@ -81,6 +87,21 @@ export class DataService {
 			"username": username,
 			"password": password
 		}).map(x => x as APIResponse<LoginData>);
+	}
+
+	updatePassword(userId: string, password: string) {
+		let h = this.getHeaders();
+		return this.http.put(`${this.conn.ServerUrl}auth/credentials/${userId}`, {
+			"newPassword": password
+		}, { headers: h }).map(x => x as APIResponse<LoginData>);
+	}	
+
+	resetPassword(password: string, newPassword: string) {
+		let h = this.getHeaders();
+		return this.http.put(`${this.conn.ServerUrl}auth/credentials/reset`, {
+			"newPassword": newPassword,
+			"password": password
+		}, { headers: h }).map(x => x as APIResponse<LoginData>);
 	}
 
 	checkLogin(data: LoginData) {
