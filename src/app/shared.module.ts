@@ -51,6 +51,7 @@ import { CreateUserComponent } from './components/shared/create-user/create-user
 import { UpdatePasswordComponent } from './components/shared/update-password/update-password.component';
 import { LoginService } from './services/login.service';
 import { ChangePasswordComponent } from './components/shared/change-password/change-password.component';
+import { LoadingMaskComponent } from './components/shared/loading-mask/loading-mask.component';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -91,6 +92,7 @@ const DECLARATIONS: any[] = [
 	CreateUserComponent,
 	UpdatePasswordComponent,
 	ChangePasswordComponent,
+	LoadingMaskComponent,
 	EllipsisPipe
 ]
 
@@ -119,7 +121,8 @@ const DECLARATIONS: any[] = [
 		EditBusinessAccountComponent,
 		CreateUserComponent,
 		UpdatePasswordComponent,
-		ChangePasswordComponent
+		ChangePasswordComponent,
+		LoadingMaskComponent
 	]
 })
 export class SharedModule { }

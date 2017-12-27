@@ -1,4 +1,4 @@
-<app-header-bar [title]="'User Management'" [backPath]="'/manage-users'" #appHeader></app-header-bar>
+<app-header-bar [title]="'User Management'" #appHeader></app-header-bar>
 <div class="app-content">
     <div class="app-content-header">
         <h4 class="app-content-header-text">{{businessAccount ? 'Users of ' + businessAccount.name : 'Users'}}</h4>
@@ -30,7 +30,7 @@
             <div class="list-item-text">
                 {{user.name || user.userName }} <span class="list-item-hint"> {{userRole(user)}}</span>
             </div>
-            <button matTooltip="View" mat-icon-button (click)="view(user)">
+            <button matTooltip="View Details" mat-icon-button (click)="view(user)">
                 <mat-icon>remove_red_eye</mat-icon>
             </button>
             <button matTooltip="Update Password" mat-icon-button (click)="updateUserPassword(user)">

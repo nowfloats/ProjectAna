@@ -134,11 +134,15 @@ export class DataService {
 		}).map(x => x);
 	}
 
-	userLoggedinCheck(callback: (loggedin: boolean) => void) {
+	userLoggedinCheck(callback: (loggedin: boolean) => void, hardCheck: boolean = false) {
 		if (this.conn && this.conn.ServerUrl) {
 			let userJSON = localStorage.getItem("user");
 			if (userJSON) {
 				let user = JSON.parse(userJSON) as LoginData;
+				if (user.accessToken && !hardCheck) {
+					callback(true);
+					return;
+				}
 				this.checkLogin(user).subscribe(x => {
 					if (x.success) {
 						this.loggedInUser = user;

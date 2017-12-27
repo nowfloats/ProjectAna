@@ -15,8 +15,10 @@ import { ChangePasswordComponent } from '../change-password/change-password.comp
 })
 export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
-	@Input('backPath')
-	backPath: string = "/";
+	@Input('goBack')
+	goBack = () => {
+		this.router.navigateByUrl('/');
+	};
 
 	@Input('skipAuth')
 	skipAuth: boolean = false;
@@ -44,7 +46,7 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
 	checkAndUpdate() {
 		Promise.resolve(true).then(() => {
-			this.loginService.performLogin(this.skipAuth, "/", () => {
+			this.loginService.performLogin(this.skipAuth, "/", false, () => {
 				this.loggedInUser = this.dataService.loggedInUser;
 				if (this.afterInit)
 					this.afterInit();
@@ -62,10 +64,6 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 		this.dialog.open(ChangePasswordComponent, {
 			width: '60%',
 		});
-	}
-
-	back() {
-		this.router.navigateByUrl(this.backPath);
 	}
 
 	loggedInUser: LoginData;

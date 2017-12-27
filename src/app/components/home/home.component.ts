@@ -13,14 +13,15 @@ export class HomeComponent {
 		private router: Router,
 		private loginService: LoginService,
 		private infoDialog: InfoDialogService,
-		private dataService: DataService) { }
+		private dataService: DataService) {
+	}
 
 	studio() {
 		this.router.navigateByUrl('/studio');
 	}
 
 	userManagement() {
-		this.loginService.performLogin(false, "/", () => {
+		this.loginService.performLogin(false, "/", true, () => {
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isSuperAdmin()) {
 					this.router.navigateByUrl('/manage-users');

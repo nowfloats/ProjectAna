@@ -47,13 +47,17 @@ export class BizAccountsComponent implements AfterViewInit {
 		}
 	}
 	loadAccounts() {
+		this.infoDialog.showSpinner();
+
 		this.dataService.getBusinessAccounts(this.page).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.accounts = x.data.content;
 				this.totalPages = x.data.totalPages;
 			} else
 				this.dataService.handleTypedError(x.error, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to load business accounts", "Something went wrong while loading business accounts. Please try again.");
 		});
 	}
@@ -77,7 +81,9 @@ export class BizAccountsComponent implements AfterViewInit {
 		let work = (status == BusinessAccountStatus.ACTIVE ? "activate" : "deactivate");
 		this.infoDialog.confirm("Confirmation", `Are you sure you want to ${work} the business account?`, (ok) => {
 			if (ok) {
+				this.infoDialog.showSpinner();
 				this.dataService.updateBusinessAccountStatus(account, status).subscribe(x => {
+					this.infoDialog.hideSpinner();
 					if (x.success) {
 						this.infoDialog.alert("Done", "Business account status updated");
 						this.loadAccounts();
@@ -85,6 +91,7 @@ export class BizAccountsComponent implements AfterViewInit {
 						this.dataService.handleTypedError(x.error, "Unable to update business account status", "Something went wrong while updating the business account. Please try again.");
 					}
 				}, err => {
+					this.infoDialog.hideSpinner();
 					this.dataService.handleError(err, "Unable to update business account status", "Something went wrong while updating the business account. Please try again.");
 				});
 			}

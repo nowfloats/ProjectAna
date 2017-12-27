@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, AfterViewInit } from '@angular/core';
-import { Route, ActivatedRoute } from '@angular/router';
+import { Route, ActivatedRoute, Router } from '@angular/router';
 import { User, BusinessAccount } from '../../../models/data.models';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
@@ -25,6 +25,13 @@ export class UsersComponent implements OnInit, AfterViewInit {
 				}
 			});
 		};
+		this.appHeader.goBack = () => {
+			if (this.dataService.isSuperAdmin()) {
+				this.router.navigateByUrl('/manage-users');
+			} else {
+				this.router.navigateByUrl('/');
+			}
+		};
 	}
 
 	@ViewChild(AppHeaderBarComponent)
@@ -34,6 +41,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	bizId: string;
 	constructor(
 		private route: ActivatedRoute,
+		private router: Router,
 		private infoDialog: InfoDialogService,
 		private dialog: MatDialog,
 		private dataService: DataService) {
@@ -43,15 +51,19 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	}
 
 	loadBusinessDetails() {
+		this.infoDialog.showSpinner();
+
 		this.dataService.getBusinessDetails(this.bizId).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			this.businessAccount = x.data;
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to load business details", "Something went wrong while trying to load business account details. Please try again.")
 		});
 	}
 
 	createUserDialog() {
-		let d =  this.dialog.open(CreateUserComponent, {
+		let d = this.dialog.open(CreateUserComponent, {
 			width: '60%',
 			data: <UserDialogParam>{
 				bizId: this.bizId,
@@ -90,15 +102,18 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	}
 	loadUsers() {
 		if (this.bizId) {
+			this.infoDialog.showSpinner();
 			this.dataService.getUsers(this.bizId, this.page).subscribe(x => {
+				this.infoDialog.hideSpinner();
 				//if (x.success) {
-				this.users = x.content.filter(x => x.roles && x.roles.length > 0);
+				this.users = x.content;//.filter(x => x.roles && x.roles.length > 0);
 				this.totalPages = x.totalPages;
 				//} else {
 				//	debugger;
 				//	this.dataService.handleTypedError(x.error, "Unable to load users", "Something went wrong while loading the users. Please try again.");
 				//}
 			}, err => {
+				this.infoDialog.hideSpinner();
 				this.dataService.handleError(err, "Unable to load users", "Something went wrong while loading the users. Please try again.");
 			});
 		}

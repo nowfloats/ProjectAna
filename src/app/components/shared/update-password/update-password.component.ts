@@ -34,8 +34,9 @@ export class UpdatePasswordComponent implements OnInit {
 			this.infoDialog.alert("Passwords do not match or not secure", "Please ensure the password and confirm password is same. Also, a password must be at least 6 characters.");
 			return;
 		}
-
+		this.infoDialog.showSpinner();
 		this.dataService.updatePassword(this.user.id, this.password).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("Password updated", "Password has been updated successfully", () => {
 					this.dialogRef.close();
@@ -44,6 +45,7 @@ export class UpdatePasswordComponent implements OnInit {
 				this.dataService.handleTypedError(x.error, "Unable to update password", "Something went wrong while trying to update the password.")
 			}
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to update password", "Something went wrong while trying to update the password.")
 		});
 	}

@@ -85,7 +85,10 @@ export class CreateUserComponent implements OnInit {
 			return;
 		}
 		this.user.roleIds = [this.selectedRole.id];
+		this.infoDialog.showSpinner();
+
 		this.dataService.createUser(this.user).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("User created", "The user has been created successfully", () => {
 					this.close();
@@ -94,6 +97,7 @@ export class CreateUserComponent implements OnInit {
 				this.dataService.handleTypedError(x.error, "Unable to create the user", "Something went wrong while trying to create the user. Please try again in some time.");
 			}
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to create the user", "Something went wrong while trying to create the user. Please try again in some time.");
 		});
 	}

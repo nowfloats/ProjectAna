@@ -38,20 +38,26 @@ export class PublishDialogComponent implements OnInit {
 	}
 
 	publish() {
+		this.infoDialog.showSpinner();
 		this.chatFlowService.chatProjectExists(this.selectedServer, this.selectedProject).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			this.infoDialog.confirm("Sure?", `Chat project with id '${this.selectedProject.Id}' already exists. Publishing this will overwrite it. Do you want to proceed?`, (ok) => {
 				if (ok)
 					this.doPublish();
 			});
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.doPublish();
 		});
 	}
 
 	private doPublish() {
+		this.infoDialog.showSpinner();
 		this.chatFlowService.publishProject(this.selectedServer, this.selectedProject, this.pack).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			this.infoDialog.alert('Done', 'Chatbot published successfully', () => this.dismiss());
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.infoDialog.alert('Done', 'Oops! Something went wrong while publishing the chat project! Please try again.');
 		});
 	}

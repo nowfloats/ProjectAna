@@ -1,6 +1,6 @@
 <mat-toolbar class="mat-elevation-z2" color="primary">
     <mat-toolbar-row>
-        <button mat-icon-button (click)="back()" *ngIf="!hideBackButton" class="back-button">
+        <button mat-icon-button (click)="goBack()" *ngIf="!hideBackButton" class="back-button">
             <mat-icon>arrow_back</mat-icon>
         </button>
         <span>{{title}}</span>
@@ -18,7 +18,7 @@
         </button>
         <mat-menu #menu="matMenu">
             <button mat-menu-item (click)="changePassword()">
-                <mat-icon>exit_to_app</mat-icon>
+                <mat-icon>lock_outline</mat-icon>
                 <span>Change password</span>
             </button>
             <button mat-menu-item (click)="logout()">

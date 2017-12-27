@@ -1,14 +1,14 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "main": "electron.js",
   "author": "Team Ana",
-  "description": "Graphical Ana chatbot designer",
+  "description": "The Ana app, contains Ana studio, user management, analytics and chatbot publishing",
   "homepage": "http://ana.chat",
   "license": "GNU-GPLv3",
   "build": {
     "appId": "com.ana.studio",
-    "productName": "Ana Conversation Studio",
+    "productName": "Ana",
     "directories": {
       "output": "../release",
       "app": ".",

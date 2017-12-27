@@ -146,3 +146,13 @@ input[type=text] {
 .mat-toolbar.mat-primary {
     color: white;
 }
+
+.trans-background .mat-dialog-container {
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    background-color: rgba(0,0,0,0.15);
+    -moz-border-radius: 100%;
+    -webkit-border-radius: 100%;
+    border-radius: 100%;
+}

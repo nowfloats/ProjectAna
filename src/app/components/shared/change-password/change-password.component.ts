@@ -34,8 +34,10 @@ export class ChangePasswordComponent implements OnInit {
 			this.infoDialog.alert("Passwords do not match or not secure", "Please ensure the password and confirm password is same. Also, a password must be at least 6 characters.");
 			return;
 		}
+		this.infoDialog.showSpinner();
 
 		this.dataService.changeCurrentUserPassword(this.password, this.newPassword).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("Password changed", "Password has been changed successfully", () => {
 					this.dialogRef.close();
@@ -44,6 +46,7 @@ export class ChangePasswordComponent implements OnInit {
 				this.dataService.handleTypedError(x.error, "Unable to change password", "Something went wrong while trying to change the password.")
 			}
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to change password", "Something went wrong while trying to change the password.")
 		});
 	}

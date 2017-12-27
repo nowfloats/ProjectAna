@@ -58,15 +58,17 @@ export class LoginComponent implements OnInit {
 	login() {
 		this.dataService.loggedInUser = null;
 		this.dataService.setConnection(this.selectedServer);
+		this.infoDialog.showSpinner();
 		this.dataService.login(this.username, this.password).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.dataService.loggedInUser = x.data;
-
 				localStorage.setItem("user", JSON.stringify(x.data));
 				this.dialogRef.close(true);
 			} else
 				this.dataService.handleTypedError(x.error, "Oops! Unable to login.", "Something went wrong while trying to login. Please try again.");
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Oops! Unable to login.", "Something went wrong while trying to login. Please try again.");
 		});
 	}

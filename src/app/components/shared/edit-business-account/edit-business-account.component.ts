@@ -69,12 +69,6 @@ export class EditBusinessAccountComponent implements OnInit {
 			this.infoDialog.alert("Invalid details", "Please enter valid information in the fields provided");
 			return;
 		}
-		//if (this.account.password) {
-		//	if (!this.global.pwdMatch(this.account.password, this.confirmPassword)) {
-		//		this.infoDialog.alert("Invalid details", "Password and confirm password should match. Password must be at least 6 characters");
-		//		return;
-		//	}
-		//}
 
 		this.account.colors = [
 			{
@@ -90,8 +84,10 @@ export class EditBusinessAccountComponent implements OnInit {
 				value: this.secondaryColor
 			}
 		];
+		this.infoDialog.showSpinner();
 
 		this.dataService.saveBusinessAccount(this.account).subscribe(x => {
+			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("Done", "Business account has been saved successfully", () => {
 					this.dialogRef.close();
@@ -100,6 +96,7 @@ export class EditBusinessAccountComponent implements OnInit {
 				this.dataService.handleTypedError(x.error, "Unable to save business account", "Something went wrong while trying to save business account details");
 			}
 		}, err => {
+			this.infoDialog.hideSpinner();
 			this.dataService.handleError(err, "Unable to save business account", "Something went wrong while trying to save business account details");
 		});
 	}
