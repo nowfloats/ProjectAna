@@ -2,13 +2,12 @@
 <div class="app-content">
     <div class="center-block center-content">
         <mat-card [hidden]="savedProjects.length!=0" class="text-center">
-            <h3>
-                Looks like you don't have any saved chat projects.
-                <br /> Start by adding one.
-            </h3>
+            <mat-card-content>
+                Looks like you don't have any saved chat projects. Start by adding one.
+            </mat-card-content>
         </mat-card>
         <mat-accordion [hidden]="savedProjects.length==0">
-            <h2>Recent chatbot projects</h2>
+            <h4>Recent chatbot projects</h4>
             <mat-expansion-panel *ngFor="let projName of savedProjects; let i = index">
                 <mat-expansion-panel-header>
                     <mat-panel-title>{{projName}}</mat-panel-title>
@@ -36,4 +35,4 @@
         </section>
     </div>
 </div>
-<input type="file" name="f" style="display:none" #fileInput (change)="fileInputChange()"/>
+<input type="file" name="f" style="display:none" #fileInput (change)="fileInputChange()" />

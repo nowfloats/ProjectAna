@@ -13,15 +13,15 @@
                 {{roles()}}
             </span>
         </span>
-        <button mat-icon-button [matMenuTriggerFor]="menu" class="toolbar-icon" *ngIf="loggedInUser || !hideBackButton">
+        <button mat-icon-button [matMenuTriggerFor]="menu" class="toolbar-icon" *ngIf="loggedInUser">
             <mat-icon>more_vert</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="changePassword()" *ngIf="loggedInUser">
+            <button mat-menu-item (click)="changePassword()">
                 <mat-icon>exit_to_app</mat-icon>
                 <span>Change password</span>
             </button>
-            <button mat-menu-item (click)="logout()" *ngIf="loggedInUser">
+            <button mat-menu-item (click)="logout()">
                 <mat-icon>exit_to_app</mat-icon>
                 <span>Logout</span>
             </button>
