@@ -17,7 +17,7 @@ export class CreateUserComponent implements OnInit {
 		private global: GlobalsService,
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
-		private dialogRef: MatDialogRef<EditBusinessAccountComponent>,
+		private dialogRef: MatDialogRef<CreateUserComponent>,
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
 		public param: UserDialogParam) {

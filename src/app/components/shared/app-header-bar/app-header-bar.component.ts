@@ -6,6 +6,7 @@ import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
 import { LoginData } from '../../../models/data.models';
 import { LoginService } from '../../../services/login.service';
+import { ChangePasswordComponent } from '../change-password/change-password.component';
 
 @Component({
 	selector: 'app-header-bar',
@@ -50,9 +51,17 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 			});
 		});
 	}
+
 	logout() {
 		this.dataService.logout();
 		this.router.navigateByUrl('/');
+		this.checkAndUpdate();
+	}
+
+	changePassword() {
+		this.dialog.open(ChangePasswordComponent, {
+			width: '60%',
+		});
 	}
 
 	back() {

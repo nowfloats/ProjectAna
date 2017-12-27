@@ -112,7 +112,7 @@ export class DataService {
 		}, { headers: h }).map(x => x as APIResponse<LoginData>);
 	}
 
-	resetPassword(password: string, newPassword: string) {
+	changeCurrentUserPassword(password: string, newPassword: string) {
 		let h = this.getHeaders();
 		return this.http.put(`${this.conn.ServerUrl}auth/credentials/reset`, {
 			"newPassword": newPassword,

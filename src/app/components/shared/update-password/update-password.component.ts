@@ -2,7 +2,6 @@ import { Component, OnInit, Optional, Inject } from '@angular/core';
 import { GlobalsService } from '../../../services/globals.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { EditBusinessAccountComponent } from '../edit-business-account/edit-business-account.component';
 import { DataService } from '../../../services/data.service';
 import { User } from '../../../models/data.models';
 
@@ -17,7 +16,7 @@ export class UpdatePasswordComponent implements OnInit {
 		private global: GlobalsService,
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
-		private dialogRef: MatDialogRef<EditBusinessAccountComponent>,
+		private dialogRef: MatDialogRef<UpdatePasswordComponent>,
 		@Optional()
 		@Inject(MAT_DIALOG_DATA)
 		public user: User) {
