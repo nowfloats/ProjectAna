@@ -1,5 +1,5 @@
-import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
-import { Router } from "@angular/router";
+import { Component, OnInit, AfterViewInit, ViewChild, Injectable } from '@angular/core';
+import { Router, CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot } from "@angular/router";
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
@@ -71,6 +71,7 @@ export class BizAccountsComponent implements AfterViewInit {
 			this.loadAccounts();
 		});
 	}
+
 	BusinessAccountStatus = BusinessAccountStatus;
 	updateBusinessAccountStatus(account: BusinessAccount, status: BusinessAccountStatus) {
 		let work = (status == BusinessAccountStatus.ACTIVE ? "activate" : "deactivate");
@@ -88,5 +89,17 @@ export class BizAccountsComponent implements AfterViewInit {
 				});
 			}
 		});
+	}
+}
+
+@Injectable()
+export class CanActivateBizAccountComponent implements CanActivate {
+	constructor(
+		private dataService: DataService) { }
+
+	canActivate(
+		route: ActivatedRouteSnapshot,
+		state: RouterStateSnapshot) {
+		return this.dataService.isSuperAdmin();
 	}
 }

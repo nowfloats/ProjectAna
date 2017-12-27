@@ -3,17 +3,33 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InfoDialogService } from './info-dialog.service';
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
 import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User } from '../models/data.models';
+import { MatDialog } from '@angular/material';
+import { Router } from '@angular/router';
 
 @Injectable()
 export class DataService {
 
-	constructor(private http: HttpClient, private infoDialog: InfoDialogService) {
+	constructor(
+		private http: HttpClient,
+		private infoDialog: InfoDialogService,
+		private dialog: MatDialog,
+		private router: Router) {
 		let connJSON = localStorage.getItem("conn");
 		if (connJSON)
 			this.conn = JSON.parse(connJSON);
 	}
 	private conn: ChatServerConnection;
 	loggedInUser: LoginData;
+
+	isSuperAdmin() {
+		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
+		return this.loggedInUser.roles.map(x => x.role).indexOf("SUPER_ADMIN") != -1;
+	}
+
+	isBizAdmin() {
+		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
+		return this.loggedInUser.roles.map(x => x.role).indexOf("BUSINESS_ADMIN") != -1;
+	}
 
 	private normalizeBaseUrl(baseUrl: string) {
 		baseUrl = baseUrl.replace(/\\$/, '');//Remove ending \ char if any
@@ -72,7 +88,7 @@ export class DataService {
 
 	getUsers(bizid: string, page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}`, { headers: h })
+		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}&businessId=${bizid}`, { headers: h })
 			.map(x => x as ListContent<User>);
 	}
 
@@ -94,7 +110,7 @@ export class DataService {
 		return this.http.put(`${this.conn.ServerUrl}auth/credentials/${userId}`, {
 			"newPassword": password
 		}, { headers: h }).map(x => x as APIResponse<LoginData>);
-	}	
+	}
 
 	resetPassword(password: string, newPassword: string) {
 		let h = this.getHeaders();
@@ -112,6 +128,7 @@ export class DataService {
 
 	logout() {
 		localStorage.removeItem("user");
+		delete this.loggedInUser;
 		return this.http.get(this.conn.ServerUrl + "auth/logout", {
 			headers: this.getHeaders()
 		}).map(x => x);
@@ -155,4 +172,6 @@ export class DataService {
 		}
 		this.infoDialog.alert(title, msg);
 	}
+
+	
 }

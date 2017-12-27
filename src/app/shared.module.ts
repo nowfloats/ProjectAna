@@ -47,10 +47,9 @@ import { InfoDialogService } from './services/info-dialog.service';
 import { SimulatorService } from './services/simulator.service';
 import { DataService } from './services/data.service';
 
-import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
-import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
 import { CreateUserComponent } from './components/shared/create-user/create-user.component';
 import { UpdatePasswordComponent } from './components/shared/update-password/update-password.component';
+import { LoginService } from './services/login.service';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -108,6 +107,7 @@ const DECLARATIONS: any[] = [
 		Title,
 		SimulatorService,
 		DataService,
+		LoginService
 	],
 	entryComponents: [
 		InfoDialogComponent,

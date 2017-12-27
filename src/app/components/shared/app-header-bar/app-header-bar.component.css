@@ -6,6 +6,10 @@ app-header-bar {
         float: right;
     }
 
+.back-button {
+    margin-right: 10px;
+}
+
 .toolbar-icon {
     padding: 0 14px;
 }

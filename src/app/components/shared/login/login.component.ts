@@ -22,8 +22,8 @@ export class LoginComponent implements OnInit {
 		private infoDialog: InfoDialogService,
 		private dataService: DataService,
 		private router: Router,
-		private dialogRef: MatDialogRef<LoginComponent>,
-		@Inject(MAT_DIALOG_DATA) private pack: any) {
+		private dialogRef: MatDialogRef<LoginComponent>) {
+
 		this.dialogRef.disableClose = true;
 
 		this.loadSavedConns();

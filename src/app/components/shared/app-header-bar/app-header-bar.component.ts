@@ -5,6 +5,7 @@ import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialog } from '@angular/material';
 import { LoginComponent } from '../../shared/login/login.component';
 import { LoginData } from '../../../models/data.models';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
 	selector: 'app-header-bar',
@@ -13,53 +14,49 @@ import { LoginData } from '../../../models/data.models';
 })
 export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
-	@Input('closePath')
-	closePath: string = "/";
+	@Input('backPath')
+	backPath: string = "/";
 
 	@Input('skipAuth')
 	skipAuth: boolean = false;
 
+	@Input('hideBackButton')
+	hideBackButton: boolean = false;
+
 	@Input('title')
 	title: string = "";
 
-	constructor(private dataService: DataService, private dialog: MatDialog, private router: Router, private infoDialog: InfoDialogService) { }
+	constructor(
+		private dataService: DataService,
+		private dialog: MatDialog,
+		private router: Router,
+		private infoDialog: InfoDialogService,
+		private loginService: LoginService) { }
 
 	ngOnInit() {
+
 	}
 
 	ngAfterViewInit(): void {
-		Promise.resolve(true).then(() => {
-			this.dataService.userLoggedinCheck((loggedin) => {
-				if (!loggedin && this.skipAuth == false) {
-					let d = this.dialog.open(LoginComponent, {
-						width: '600px',
-					});
-
-					d.afterClosed().subscribe(x => {
-						if (x == true) {
-							this.loggedInUser = this.dataService.loggedInUser;
-							if (this.afterInit)
-								this.afterInit();
-						} else {
-							this.router.navigateByUrl('/');
-						}
-					});
-				} else {
-					this.loggedInUser = this.dataService.loggedInUser;
-					if (this.afterInit)
-						this.afterInit();
-				}
-			})
-		});
+		this.checkAndUpdate();
 	}
 
+	checkAndUpdate() {
+		Promise.resolve(true).then(() => {
+			this.loginService.performLogin(this.skipAuth, "/", () => {
+				this.loggedInUser = this.dataService.loggedInUser;
+				if (this.afterInit)
+					this.afterInit();
+			});
+		});
+	}
 	logout() {
 		this.dataService.logout();
 		this.router.navigateByUrl('/');
 	}
 
-	close() {
-		this.router.navigateByUrl(this.closePath);
+	back() {
+		this.router.navigateByUrl(this.backPath);
 	}
 
 	loggedInUser: LoginData;
