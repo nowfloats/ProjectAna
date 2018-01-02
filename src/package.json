@@ -28,7 +28,7 @@
     "electronVersion": "1.8.2-beta.3",
     "publish": {
       "provider": "generic",
-      "url": "https://studio.ana.chat/${os}-${arch}"
+      "url": "https://cdn.ana.chat/dist/ana-app/${os}-${arch}"
     }
   },
   "dependencies": {

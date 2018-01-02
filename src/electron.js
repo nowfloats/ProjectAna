@@ -16,7 +16,7 @@ function createWindow() {
 				message: `Update ${info.version} Available!\nWould you like to download it?`
 			}, (response) => {
 				if (response === 0)
-					shell.openExternal(`https://studio.ana.chat/mac-x64/Ana-${info.version}.dmg`);
+					shell.openExternal(`https://cdn.ana.chat/dist/ana-app/mac-x64/Ana-${info.version}.dmg`);
 			});
 		});
 	}
