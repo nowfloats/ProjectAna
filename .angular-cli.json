@@ -11,6 +11,7 @@
         "assets",
         "favicon.ico",
         "favicon.icns",
+        "favicon",
         "package.json",
         "electron.js",
         "splash.html"

@@ -22,7 +22,8 @@
       "icon": "favicon.ico"
     },
     "linux": {
-      "category": "Graphics"
+      "category": "Graphics",
+      "icon": "favicon"
     },
     "electronVersion": "1.8.2-beta.3",
     "publish": {
