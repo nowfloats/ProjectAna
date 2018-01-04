@@ -32,6 +32,6 @@
     }
   },
   "dependencies": {
-    "electron-updater": "^2.16.3"
+    "electron-updater": "^2.18.2"
   }
 }
