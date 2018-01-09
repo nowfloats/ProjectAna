@@ -17,6 +17,9 @@
                     <section class="form-field">
                         <mat-checkbox [(ngModel)]="chatNode.IsStartNode" (click)="MH.resetOtherStartNodes(chatNode)" name="isStartNode" align="start">Mark as start node</mat-checkbox>
                     </section>
+                    <section class="form-field">
+                        <mat-checkbox [(ngModel)]="chatNode.IsGoalNode" name="isGoalNode" align="start">Mark as goal node</mat-checkbox>
+                    </section>
                     <mat-form-field>
                         <input matInput type="text" placeholder="Variable Name" [(ngModel)]="chatNode.VariableName" name="variableName">
                     </mat-form-field>
@@ -328,9 +331,6 @@
                                 <mat-checkbox [(ngModel)]="btn.AdvancedOptions" name="btnAdvancedOptions-{{i}}" align="start">Advanced options</mat-checkbox>
                             </section>
                             <div class="btn-advanced-options" [hidden]="!btn.AdvancedOptions">
-                                <section class="form-field">
-                                    <mat-checkbox [(ngModel)]="chatNode.IsGoalNode" name="isGoalNode" align="start">Mark as goal node</mat-checkbox>
-                                </section>
                                 <mat-form-field>
                                     <input matInput type="text" placeholder="Variable Value" [(ngModel)]="btn.VariableValue" name="btnVariableValue-{{i}}">
                                 </mat-form-field>
