@@ -57,7 +57,12 @@ export class LandingComponent implements OnInit {
 				this.infoDialog.alert('Oops!', 'Invalid file. Please select a valid Ana project file');
 		}
 	}
-
+	search: string;
+	searchedProjects() {
+		if (this.search && this.search.length > 0)
+			return this.savedProjects.filter(x => x.toLowerCase().indexOf(this.search.toLowerCase()) != -1);
+		return this.savedProjects;
+	}
 	addProject() {
 		this.infoDialog.prompt('Chatbot Project Name', 'Enter a name for your new chatbot project', (name) => {
 			if (!name)

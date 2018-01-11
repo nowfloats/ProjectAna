@@ -41,3 +41,12 @@ mat-action-row > button {
     margin-right: auto;
     margin-top: 40px;
 }
+
+.page-title {
+    display: flex;
+    flex-direction: row;
+}
+
+    .page-title .text {
+        flex-grow: 1;
+    }

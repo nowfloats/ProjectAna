@@ -7,8 +7,15 @@
             </mat-card-content>
         </mat-card>
         <mat-accordion [hidden]="savedProjects.length==0">
-            <h4>Recent chatbot projects</h4>
-            <mat-expansion-panel *ngFor="let projName of savedProjects; let i = index">
+            <div class="page-title">
+                <h4 class="text">Recent chatbot projects</h4>
+                <div class="search">
+                    <mat-form-field>
+                        <input type="text" name="search" value="" matInput [(ngModel)]="search" placeholder="Search"/>
+                    </mat-form-field>
+                </div>
+            </div>
+            <mat-expansion-panel *ngFor="let projName of searchedProjects(); let i = index">
                 <mat-expansion-panel-header>
                     <mat-panel-title>{{projName}}</mat-panel-title>
                 </mat-expansion-panel-header>
