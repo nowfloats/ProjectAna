@@ -21,6 +21,9 @@ export class SimulatorFrameComponent implements OnInit {
 				frameWidth: '360px',
 			},
 			simulatorMode: true,
+			appConfig: {
+				htmlMessages: true
+			}
 		};
 		let url = `simulator/index.html?s=${btoa(JSON.stringify(param))}`;
 		if (!environment.production)

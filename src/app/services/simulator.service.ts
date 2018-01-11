@@ -418,8 +418,9 @@ export class SimulatorService {
 					}
 
 					if (this.state.currentNode && this.state.currentNode.Buttons && this.state.currentNode.Buttons.length > 0) {
-						let inputMsgToSend = this.convertButtons(this.state.currentNode);
-						this.prepareReplyAndSend(inputMsgToSend);
+						this.convertButtons(this.state.currentNode, (inputMsgToSend) => {
+							this.prepareReplyAndSend(inputMsgToSend);
+						});
 					}
 				}
 				break;
@@ -533,7 +534,7 @@ export class SimulatorService {
 		return anaMessageData;
 	}
 
-	private convertButtons(chatNode: models.ChatNode): chatModels.ANAMessageData {
+	private convertButtons(chatNode: models.ChatNode, callback: (resp: chatModels.ANAMessageData) => void): void {
 
 		let clickInputs = _.filter(chatNode.Buttons, x => _.contains([
 			models.ButtonType.DeepLink,
@@ -573,123 +574,146 @@ export class SimulatorService {
 					options: _.map(_.filter(clickInputs, x => _.contains([models.ButtonType.NextNode, models.ButtonType.OpenUrl], x.ButtonType)), y => {
 						return {
 							title: y.ButtonName || y.ButtonText,
-							value: y._id,
+							value: (y.ButtonType == models.ButtonType.OpenUrl ? JSON.stringify({ url: y.Url, value: y._id }) : y._id),
 							type: this.convertButtonType(y.ButtonType)
 						}
 					})
 				};
-				return {
+				return callback({
 					content: optionsInput,
 					type: chatModels.MessageType.INPUT
-				};
-			} else {
-				let inputButton = _.first(clickInputs);
-				switch (inputButton.ButtonType) {
-					case models.ButtonType.GetDate:
-						return {
-							content: <chatModels.DateInputContent>{
+				});
+			}
+
+			let inputButton = _.first(clickInputs);
+			switch (inputButton.ButtonType) {
+				case models.ButtonType.GetDate:
+					return callback({
+						content: <chatModels.DateInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.DATE,
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetTime:
+					return callback({
+						content: <chatModels.DateInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.TIME,
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetVideo:
+					return callback({
+						content: <chatModels.MediaInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.MEDIA,
+							mediaType: chatModels.MediaType.VIDEO
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetImage:
+					return callback({
+						content: <chatModels.MediaInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.MEDIA,
+							mediaType: chatModels.MediaType.IMAGE
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetAddress:
+					return callback({
+						content: <chatModels.AddressInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.ADDRESS,
+							requiredFields: [
+								"area",
+								"country",
+								"pin",
+								"city",
+								"state",
+								"line1"
+							]
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetAudio:
+					return callback({
+						content: <chatModels.MediaInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.MEDIA,
+							mediaType: chatModels.MediaType.AUDIO
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetItemFromSource:
+					{
+						if (inputButton.ItemsSource) {
+							let msg: chatModels.ListInputContent = {
+								inputType: chatModels.InputType.LIST,
+								multiple: inputButton.AllowMultiple,
 								mandatory: mandatory,
-								inputType: chatModels.InputType.DATE,
-							},
-							type: chatModels.MessageType.INPUT
+								values: []
+							};
+							let itemSrc = inputButton.ItemsSource.split(',').map(x => {
+								let y = x.trim().split(':');
+								return { K: y[0], V: y[1] }
+							});
+							itemSrc.forEach(x => msg.values.push({
+								text: x.K,
+								value: x.V
+							}));
+							return callback({
+								content: msg,
+								type: chatModels.MessageType.INPUT
+							});
 						}
-					case models.ButtonType.GetTime:
-						return {
-							content: <chatModels.DateInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.TIME,
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetVideo:
-						return {
-							content: <chatModels.MediaInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.MEDIA,
-								mediaType: chatModels.MediaType.VIDEO
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetImage:
-						return {
-							content: <chatModels.MediaInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.MEDIA,
-								mediaType: chatModels.MediaType.IMAGE
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetAddress:
-						return {
-							content: <chatModels.AddressInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.ADDRESS,
-								requiredFields: [
-									"area",
-									"country",
-									"pin",
-									"city",
-									"state",
-									"line1"
-								]
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetAudio:
-						return {
-							content: <chatModels.MediaInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.MEDIA,
-								mediaType: chatModels.MediaType.AUDIO
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetItemFromSource:
-						{
-							if (inputButton.ItemsSource) {
+						if (inputButton.Url) {
+							this.http.get(inputButton.Url).subscribe(x => {
+								let items = x.json() as {
+									[key: string]: string;
+								};
+								let itemKeys = Object.keys(items);
+
 								let msg: chatModels.ListInputContent = {
 									inputType: chatModels.InputType.LIST,
 									multiple: inputButton.AllowMultiple,
 									mandatory: mandatory,
-									values: []
+									values: itemKeys.map(key => {
+										return {
+											text: key,
+											value: items[key]
+										};
+									})
 								};
-								let itemSrc = inputButton.ItemsSource.split(',').map(x => {
-									let y = x.trim().split(':');
-									return { K: y[0], V: y[1] }
-								});
-								itemSrc.forEach(x => msg.values.push({
-									text: x.K,
-									value: x.V
-								}));
-								return {
+								
+								return callback({
 									content: msg,
 									type: chatModels.MessageType.INPUT
-								}
-							}
-							//this.http.get(inputButton.Url).subscribe(x => {
-
-							//});
+								});
+							});
+							return;
 						}
-					case models.ButtonType.GetFile:
-						return {
-							content: <chatModels.MediaInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.MEDIA,
-								mediaType: chatModels.MediaType.FILE
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					case models.ButtonType.GetLocation:
-						return {
-							content: <chatModels.LocationInputContent>{
-								mandatory: mandatory,
-								inputType: chatModels.InputType.LOCATION,
-							},
-							type: chatModels.MessageType.INPUT
-						}
-					default:
-						break;
-				}
+					}
+				case models.ButtonType.GetFile:
+					return callback({
+						content: <chatModels.MediaInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.MEDIA,
+							mediaType: chatModels.MediaType.FILE
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				case models.ButtonType.GetLocation:
+					return callback({
+						content: <chatModels.LocationInputContent>{
+							mandatory: mandatory,
+							inputType: chatModels.InputType.LOCATION,
+						},
+						type: chatModels.MessageType.INPUT
+					});
+				default:
+					break;
 			}
 		}
 
@@ -706,10 +730,10 @@ export class SimulatorService {
 					placeHolder: textInput.PlaceholderText
 				}
 			}
-			return {
+			return callback({
 				content: inputMsg,
 				type: chatModels.MessageType.INPUT
-			};
+			});
 		}
 	}
 
@@ -768,7 +792,7 @@ export class SimulatorService {
 						break;
 					}
 				}
-				if (!done) 
+				if (!done)
 					this.gotoNextNode(chatNode.NextNodeId); //Fallback node id
 			}
 		} catch (e) {
