@@ -320,16 +320,22 @@ export class SimulatorService {
 		return JSON.parse(this.processVerbs(JSON.stringify(chatNode))) as models.ChatNode;
 	}
 	private processVerbs(txt: string): string {
-		return txt.replace(/\[~(.*?)\]/g, (subStr, key) => {
+		return txt.replace(/\[~(.*?)\]|{{(.*?)}}/g, (subStr, key) => {
+			if (!key)
+				key = subStr.replace('{{', '').replace('}}', '');
+
 			try {
 				if (this.state.variables && this.state.variables[key])
 					return this.state.variables[key];
 				else {
-					let tokens = key.split('.');
-					let firstPart = tokens[0];
-					tokens.shift();
-					let remainingParts = tokens.join('.');
-					return jsonpath.query(JSON.parse(this.state.variables[firstPart]), remainingParts) as any;
+					let rootToken = key.split(/\.|\[/)[0];
+					let wrappedResp = {};
+					wrappedResp[rootToken] = JSON.parse(this.state.variables[rootToken]);
+					let deepValue: any = jsonpath.query(wrappedResp, key);
+					if (deepValue && typeof deepValue == 'object' && deepValue.length == 1) {
+						deepValue = deepValue[0];
+					}
+					return deepValue;
 				}
 			} catch (e) {
 				return "";
@@ -686,7 +692,7 @@ export class SimulatorService {
 										};
 									})
 								};
-								
+
 								return callback({
 									content: msg,
 									type: chatModels.MessageType.INPUT
@@ -774,26 +780,25 @@ export class SimulatorService {
 	}
 
 	private processConditionNode(chatNode: models.ChatNode) {
+		let done = false;
 		try {
 			if (chatNode.Buttons) {
-				let done = false;
 				for (var btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
 					let btn = chatNode.Buttons[btnIdx];
-					let tokens = btn.ConditionMatchKey.split('.');
-					let firstPart = tokens[0];
-					tokens.shift();
-					let remainingParts = tokens.join('.');
-					let jResp = JSON.parse(this.state.variables[firstPart]);
-
-					if (this.match(jsonpath.query(jResp, remainingParts) as any, btn.ConditionOperator, btn.ConditionMatchValue)) {
+					let rootToken = btn.ConditionMatchKey.split(/\.|\[/)[0];
+					let wrappedResp = {};
+					wrappedResp[rootToken] = JSON.parse(this.state.variables[rootToken]);
+					let deepValue: any = jsonpath.query(wrappedResp, btn.ConditionMatchKey);
+					if (deepValue && typeof deepValue == 'object' && deepValue.length == 1) {
+						deepValue = deepValue[0];
+					}
+					if (this.match(deepValue, btn.ConditionOperator, btn.ConditionMatchValue)) {
 						this.saveVariable(btn.VariableValue);
 						this.gotoNextNode(btn.NextNodeId);
 						done = true;
 						break;
 					}
 				}
-				if (!done)
-					this.gotoNextNode(chatNode.NextNodeId); //Fallback node id
 			}
 		} catch (e) {
 			if (chatNode.Buttons) {
@@ -803,11 +808,14 @@ export class SimulatorService {
 					if (this.match(leftOperand, btn.ConditionOperator, btn.ConditionMatchValue)) {
 						this.saveVariable(btn.VariableValue);
 						this.gotoNextNode(btn.NextNodeId);
+						done = true;
 						break;
 					}
 				}
 			}
 		}
+		if (!done)
+			this.gotoNextNode(chatNode.NextNodeId); //Fallback node id
 	}
 
 	private match(left: any, op: models.ConditionOperator, right: any) {
