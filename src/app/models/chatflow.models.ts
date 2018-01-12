@@ -133,7 +133,8 @@ export enum ConditionOperator {
 	StartsWith = 'StartsWith',
 	EndsWith = 'EndsWith',
 	Contains = 'Contains',
-	Between = 'Between'
+	Between = 'Between',
+	IsNull = 'IsNull'
 }
 
 export enum ButtonType {
@@ -334,7 +335,8 @@ export class ModelHelpers {
 		ConditionOperator.StartsWith,
 		ConditionOperator.EndsWith,
 		ConditionOperator.Contains,
-		ConditionOperator.Between
+		ConditionOperator.Between,
+		ConditionOperator.IsNull
 	];
 	sectionAlias(section: Section) {
 		switch (section.SectionType) {

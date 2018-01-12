@@ -338,7 +338,7 @@ export class SimulatorService {
 					return deepValue;
 				}
 			} catch (e) {
-				return "";
+				return subStr;
 			}
 		});
 	}
@@ -393,7 +393,7 @@ export class SimulatorService {
 						this.saveVariable(res.text());
 						this.processConditionNode(chatNode);
 					}, err => {
-						if (Math.trunc(err.status / 100) == 5) { //Only 5xx errors are counted as errors
+						if (Math.trunc(err.status / 100) == 5 || typeof err._body == 'object') { //Only 5xx errors are counted as errors
 							this.logDebug(err);
 							this.gotoNextNode(nextNodeId); //Fallback node
 						} else {
@@ -848,6 +848,8 @@ export class SimulatorService {
 					return left.endsWith(right);
 				case models.ConditionOperator.Contains:
 					return left.indexOf(right) != -1;
+				case models.ConditionOperator.IsNull:
+					return (left == null || left == undefined);
 				case models.ConditionOperator.EqualTo:
 				default:
 					return left == right;
