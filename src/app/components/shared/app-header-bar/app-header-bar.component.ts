@@ -20,6 +20,9 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 		this.router.navigateByUrl('/');
 	};
 
+	@Input('logoutNavigation')
+	logoutNavigation: string = '/';
+
 	@Input('skipAuth')
 	skipAuth: boolean = false;
 
@@ -46,10 +49,12 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
 	checkAndUpdate() {
 		Promise.resolve(true).then(() => {
-			this.loginService.performLogin(this.skipAuth, "/", false, () => {
-				this.loggedInUser = this.dataService.loggedInUser;
-				if (this.afterInit)
-					this.afterInit();
+			this.loginService.performLogin(this.skipAuth, "/", false, (done) => {
+				if (done) {
+					this.loggedInUser = this.dataService.loggedInUser;
+					if (this.afterInit)
+						this.afterInit();
+				}
 			});
 		});
 	}
@@ -57,7 +62,10 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 	logout() {
 		this.dataService.logout();
 		this.loggedInUser = null;
-		this.router.navigateByUrl('/');
+		if (this.logoutNavigation) {
+			this.router.navigateByUrl(this.logoutNavigation);
+		}
+
 	}
 
 	changePassword() {

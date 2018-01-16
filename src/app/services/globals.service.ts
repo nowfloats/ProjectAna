@@ -88,6 +88,13 @@ export class GlobalsService {
 		if (p1.length < 6) return false;
 		return p1 == p2;
 	}
+
+	normalizeChatNodes(chatNodes: models.ChatNode[]) {
+		chatNodes.forEach(x => {
+			x.IsStartNode = x.IsStartNode ? true : false //This field should exist even if it's false
+		});
+		return chatNodes;
+	}
 }
 
 export enum VariableType {

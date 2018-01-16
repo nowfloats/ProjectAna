@@ -21,7 +21,7 @@ export class HomeComponent {
 	}
 
 	userManagement() {
-		this.loginService.performLogin(false, "/", true, () => {
+		this.loginService.performLogin(false, "/", true, (done) => {
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isSuperAdmin()) {
 					this.router.navigateByUrl('/manage-users');

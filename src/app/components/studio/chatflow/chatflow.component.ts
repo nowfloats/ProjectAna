@@ -7,13 +7,13 @@ import { SettingsService } from '../../../services/settings.service'
 import { GlobalsService } from '../../../services/globals.service'
 import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
-import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
 import { MatMenuTrigger } from '@angular/material';
 
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { SimulatorFrameComponent } from '../simulator-frame/simulator-frame.component';
 import { SimulatorService } from '../../../services/simulator.service';
+import { PublishChatbotComponent } from '../../shared/publish-chatbot/publish-chatbot.component';
 
 @Component({
 	selector: 'app-chatflow',
@@ -398,7 +398,7 @@ export class ChatFlowComponent implements OnInit {
 	}
 
 	openPublishDialog() {
-		this.dialog.open(PublishDialogComponent, {
+		this.dialog.open(PublishChatbotComponent, {
 			width: '60%',
 			data: this.saveChatFlow()
 		});

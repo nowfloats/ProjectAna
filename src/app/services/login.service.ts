@@ -12,7 +12,7 @@ export class LoginService {
 		private router: Router) {
 	}
 
-	performLogin(skipAuth: boolean, fallbackUrl: string = "/", hardCheck: boolean = false, next?: () => void) {
+	performLogin(skipAuth: boolean, fallbackUrl: string = "/", hardCheck: boolean = false, next?: (done: boolean) => void) {
 		this.dataService.userLoggedinCheck((loggedin) => {
 			if (!loggedin && skipAuth == false) {
 				let d = this.dialog.open(LoginComponent, {
@@ -22,13 +22,17 @@ export class LoginService {
 				d.afterClosed().subscribe(x => {
 					if (x == true) {
 						if (next)
-							next();
-					} else
+							next(true);
+						return;
+					}
+					if (fallbackUrl)
 						this.router.navigateByUrl(fallbackUrl);
+					if (next)
+						next(true);
 				});
 			} else {
 				if (next)
-					next();
+					next(true);
 			}
 		}, hardCheck);
 	}

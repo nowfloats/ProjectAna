@@ -5,11 +5,12 @@ import { LoginComponent } from './components/shared/login/login.component';
 import { PublishDialogComponent } from './components/shared/publish-dialog/publish-dialog.component';
 import { EditBusinessAccountComponent } from './components/shared/edit-business-account/edit-business-account.component';
 import { AppHeaderBarComponent } from './components/shared/app-header-bar/app-header-bar.component';
+import { GetAnaChatServerComponent } from './components/shared/get-ana-chat-server/get-ana-chat-server.component';
 
 import { BrowserModule, Title } from '@angular/platform-browser';
 import { NgModule, NO_ERRORS_SCHEMA } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpModule } from '@angular/http';
 import { RouterModule, Routes } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -34,8 +35,11 @@ import {
 	MatProgressBarModule,
 	MatToolbarModule,
 	ErrorStateMatcher,
-	ShowOnDirtyErrorStateMatcher
+	ShowOnDirtyErrorStateMatcher,
+	MatAutocompleteModule
 } from '@angular/material';
+import { NgxElectronModule } from 'ngx-electron';
+
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
 import { AppComponent } from './app.component';
@@ -52,6 +56,8 @@ import { UpdatePasswordComponent } from './components/shared/update-password/upd
 import { LoginService } from './services/login.service';
 import { ChangePasswordComponent } from './components/shared/change-password/change-password.component';
 import { LoadingMaskComponent } from './components/shared/loading-mask/loading-mask.component';
+import { CreateChatbotComponent } from './components/shared/create-chatbot/create-chatbot.component';
+import { PublishChatbotComponent } from './components/shared/publish-chatbot/publish-chatbot.component';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -71,14 +77,17 @@ const MAT_MODULES: any[] = [
 	MatCardModule,
 	MatListModule,
 	MatToolbarModule,
-	MatGridListModule
+	MatGridListModule,
+	MatAutocompleteModule
 ];
 
 const IMPORT_EXPORT: any[] = [
 	CommonModule,
 	HttpModule,
 	HttpClientModule,
-	FormsModule
+	FormsModule,
+	ReactiveFormsModule,
+	NgxElectronModule
 ].concat(MAT_MODULES);
 
 const DECLARATIONS: any[] = [
@@ -93,6 +102,9 @@ const DECLARATIONS: any[] = [
 	UpdatePasswordComponent,
 	ChangePasswordComponent,
 	LoadingMaskComponent,
+	GetAnaChatServerComponent,
+	CreateChatbotComponent,
+	PublishChatbotComponent,
 	EllipsisPipe
 ]
 
@@ -122,7 +134,10 @@ const DECLARATIONS: any[] = [
 		CreateUserComponent,
 		UpdatePasswordComponent,
 		ChangePasswordComponent,
-		LoadingMaskComponent
+		LoadingMaskComponent,
+		GetAnaChatServerComponent,
+		CreateChatbotComponent,
+		PublishChatbotComponent
 	]
 })
 export class SharedModule { }

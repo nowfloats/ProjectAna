@@ -83,8 +83,8 @@ input[type=text] {
     background-color: white;
 }
 
-.form-field {
-    margin-bottom: 10px;
+.mat-raised-button.mat-primary {
+    color: white;
 }
 /*Dynamic styles*/
 .chat-message-item.incoming {

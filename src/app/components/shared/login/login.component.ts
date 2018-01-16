@@ -27,10 +27,10 @@ export class LoginComponent implements OnInit {
 		this.dialogRef.disableClose = true;
 
 		this.loadSavedConns();
-		this.dialogRef.afterClosed().subscribe(x => {
-			if (!this.dataService.loggedInUser)
-				this.router.navigateByUrl('/');
-		});
+		//this.dialogRef.afterClosed().subscribe(x => {
+		//	if (!this.dataService.loggedInUser)
+		//		this.router.navigateByUrl('/');
+		//});
 	}
 
 	loadSavedConns() {

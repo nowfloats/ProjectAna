@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InfoDialogService } from './info-dialog.service';
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
-import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User } from '../models/data.models';
+import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User, ChatProject } from '../models/data.models';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
 
@@ -29,6 +29,11 @@ export class DataService {
 	isBizAdmin() {
 		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
 		return this.loggedInUser.roles.map(x => x.role).indexOf("BUSINESS_ADMIN") != -1;
+	}
+
+	isFlowManager() {
+		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
+		return this.loggedInUser.roles.map(x => x.role).indexOf("BUSINESS_FLOW_MANAGER") != -1;
 	}
 
 	private normalizeBaseUrl(baseUrl: string) {
@@ -76,6 +81,7 @@ export class DataService {
 		return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id + "/status/" + BusinessAccountStatus[<number>status], { headers: h })
 			.map(x => x as APIResponse<BusinessAccount>);
 	}
+
 	saveBusinessAccount(account: BusinessAccount) {
 		if (!account.id) {
 			return this.http.post(this.conn.ServerUrl + "business/accounts", account,
@@ -84,6 +90,33 @@ export class DataService {
 			return this.http.put(this.conn.ServerUrl + "business/accounts/" + account.id, account,
 				{ headers: this.getHeaders() }).map(x => x as APIResponse<BusinessAccount>);
 		}
+	}
+
+	getChatProjects(businessId: string, page: number = 0, size: number = 10) {
+		let h = this.getHeaders();
+		return this.http.get(`${this.conn.ServerUrl}business/flows?page=${page}&size=${size}&businessId=${businessId}`, { headers: h })
+			.map(x => x as APIResponse<ListContent<ChatProject>>);
+	}
+
+	createChatProject(chatProject: ChatProject) {
+		let h = this.getHeaders();
+
+		return this.http.post(`${this.conn.ServerUrl}business/flows`, chatProject, { headers: h })
+			.map(x => x as APIResponse<ChatProject>);
+	}
+
+	saveChatProject(chatProject: ChatProject) {
+		let h = this.getHeaders();
+
+		if ((chatProject.flow && Object.keys(chatProject.flow).length <= 0) || chatProject.flow === null) {
+			delete chatProject.flow;
+		}
+		if ((chatProject.source && Object.keys(chatProject.source).length <= 0) || chatProject.source === null) {
+			delete chatProject.source;
+		}
+		return this.http.put(`${this.conn.ServerUrl}business/flows/${chatProject.id}`, chatProject, { headers: h })
+			.map(x => x as APIResponse<ChatProject>);
+
 	}
 
 	getUsers(bizid: string, page: number = 0, size: number = 10) {
@@ -178,5 +211,5 @@ export class DataService {
 		this.infoDialog.alert(title, msg);
 	}
 
-	
+
 }

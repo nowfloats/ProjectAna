@@ -9,7 +9,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "electron": "electron dist",
+    "electron": "ng build --prod --aot=false && cd dist && electron-builder && \"../release/win-unpacked/Ana.exe\"",
     "package": "node pack-ana-studio.js"
   },
   "private": true,
@@ -28,8 +28,10 @@
     "bootstrap": "^3.3.7",
     "bson": "^1.0.4",
     "core-js": "^2.4.1",
+    "electron": "~1.8.2-beta.3",
     "font-awesome": "^4.7.0",
     "jsonpath": "^1.0.0",
+    "ngx-electron": "^1.0.4",
     "rxjs": "^5.5.2",
     "underscore": "^1.8.3",
     "zone.js": "^0.8.14"

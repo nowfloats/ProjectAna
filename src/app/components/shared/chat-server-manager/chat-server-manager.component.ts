@@ -5,7 +5,8 @@ import { ChatServerConnection, ChatBotProject } from '../../../models/app.models
 import { SettingsService } from '../../../services/settings.service';
 import { ChatFlowService } from '../../../services/chatflow.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatDialog } from '@angular/material';
+import { GetAnaChatServerComponent } from '../get-ana-chat-server/get-ana-chat-server.component';
 
 @Component({
 	selector: 'app-chat-server-manager',
@@ -18,6 +19,7 @@ export class ChatServerManagerComponent implements OnInit {
 		public chatFlowService: ChatFlowService,
 		public snakbar: MatSnackBar,
 		public infoDialog: InfoDialogService,
+		public dialog: MatDialog,
 		public router: Router,
 		public dialogRef: MatDialogRef<ChatServerManagerComponent>) {
 
@@ -114,5 +116,12 @@ export class ChatServerManagerComponent implements OnInit {
 			ChatProjects: []
 		};
 		this.savedConnections.push(newConn);
+	}
+
+	getAnaChatServer() {
+		this.dialog.open(GetAnaChatServerComponent, {
+			width: 'auto',
+			disableClose: true
+		});
 	}
 }

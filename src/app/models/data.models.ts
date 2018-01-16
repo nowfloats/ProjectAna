@@ -128,3 +128,16 @@ export interface UserRegisterModel {
 	phone: string,
 	roleIds: number[]
 }
+
+export interface ChatProject {
+	businessId: string;
+	businessName?: string;
+	createdAt?: number;
+	flow?: any;
+	id: string;
+	name: string;
+	source?: any;
+	status?: string;
+	updatedAt?: number;
+	userId?: string;
+}
