@@ -161,9 +161,10 @@ export class DataService {
 
 	logout() {
 		localStorage.removeItem("user");
+		let h = this.getHeaders();
 		delete this.loggedInUser;
 		return this.http.get(this.conn.ServerUrl + "auth/logout", {
-			headers: this.getHeaders()
+			headers: h
 		}).map(x => x);
 	}
 
