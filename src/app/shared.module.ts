@@ -58,6 +58,8 @@ import { ChangePasswordComponent } from './components/shared/change-password/cha
 import { LoadingMaskComponent } from './components/shared/loading-mask/loading-mask.component';
 import { CreateChatbotComponent } from './components/shared/create-chatbot/create-chatbot.component';
 import { PublishChatbotComponent } from './components/shared/publish-chatbot/publish-chatbot.component';
+import { AnalyticsPickerComponent } from './components/shared/analytics-picker/analytics-picker.component';
+import { AnalyticsWindowService } from './services/analytics-window.service';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -105,6 +107,7 @@ const DECLARATIONS: any[] = [
 	GetAnaChatServerComponent,
 	CreateChatbotComponent,
 	PublishChatbotComponent,
+	AnalyticsPickerComponent,
 	EllipsisPipe
 ]
 
@@ -123,7 +126,8 @@ const DECLARATIONS: any[] = [
 		Title,
 		SimulatorService,
 		DataService,
-		LoginService
+		LoginService,
+		AnalyticsWindowService
 	],
 	entryComponents: [
 		InfoDialogComponent,
@@ -137,7 +141,8 @@ const DECLARATIONS: any[] = [
 		LoadingMaskComponent,
 		GetAnaChatServerComponent,
 		CreateChatbotComponent,
-		PublishChatbotComponent
+		PublishChatbotComponent,
+		AnalyticsPickerComponent
 	]
 })
 export class SharedModule { }

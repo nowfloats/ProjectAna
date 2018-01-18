@@ -18,7 +18,7 @@ export class DataService {
 		if (connJSON)
 			this.conn = JSON.parse(connJSON);
 	}
-	private conn: ChatServerConnection;
+	conn: ChatServerConnection;
 	loggedInUser: LoginData;
 
 	isSuperAdmin() {

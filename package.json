@@ -10,7 +10,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "ng build --prod --aot=false && cd dist && electron-builder && \"../release/win-unpacked/Ana.exe\"",
-    "package": "node pack-ana-studio.js"
+    "package": "node pack-ana-studio.js",
+    "pack-dev": "node pack-ana-studio.js --dev"
   },
   "private": true,
   "dependencies": {

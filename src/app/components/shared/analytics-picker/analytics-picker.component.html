@@ -1,0 +1,14 @@
+<h2 matDialogTitle>Choose a business account</h2>
+<mat-dialog-content>
+    <mat-form-field class="full-width">
+        <mat-select [disabled]="businessAccountReadonly" placeholder="Business Account" [(ngModel)]="selectedBusinessAccount" name="BusinessAccount">
+            <mat-option *ngFor="let acc of businessAccounts" [value]="acc">
+                {{ acc.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions class="actions">
+    <button mat-raised-button (click)="openAnalytics()" color="primary">Open Analytics</button>
+    <button mat-raised-button matDialogClose>Dismiss</button>
+</mat-dialog-actions>

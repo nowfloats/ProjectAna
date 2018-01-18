@@ -14,6 +14,7 @@ import { InfoDialogService } from '../../../services/info-dialog.service';
 import { SimulatorFrameComponent } from '../simulator-frame/simulator-frame.component';
 import { SimulatorService } from '../../../services/simulator.service';
 import { PublishChatbotComponent } from '../../shared/publish-chatbot/publish-chatbot.component';
+import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
 
 @Component({
 	selector: 'app-chatflow',
@@ -398,7 +399,7 @@ export class ChatFlowComponent implements OnInit {
 	}
 
 	openPublishDialog() {
-		this.dialog.open(PublishChatbotComponent, {
+		this.dialog.open(PublishDialogComponent, {
 			width: '60%',
 			data: this.saveChatFlow()
 		});
