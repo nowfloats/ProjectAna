@@ -50,7 +50,7 @@ export class AnalyticsPickerComponent implements OnInit {
 
 	openAnalytics() {
 		this.dialogRef.close();
-		this.analyticsWindow.open(this.dataService.conn.ServerUrl, this.selectedBusinessAccount.id, this.selectedBusinessAccount.name);
+		this.analyticsWindow.open(this.dataService.getAnalyticsApiBase(), this.selectedBusinessAccount.id, this.selectedBusinessAccount.name);
 	}
 }
 

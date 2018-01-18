@@ -18,8 +18,14 @@ export class DataService {
 		if (connJSON)
 			this.conn = JSON.parse(connJSON);
 	}
-	conn: ChatServerConnection;
+	private conn: ChatServerConnection;
 	loggedInUser: LoginData;
+
+	getAnalyticsApiBase() {
+		if (!this.conn || !this.conn.ServerUrl)
+			return "";
+		return this.conn.ServerUrl + "analytics";
+	}
 
 	isSuperAdmin() {
 		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
