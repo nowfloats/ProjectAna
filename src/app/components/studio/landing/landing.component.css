@@ -50,3 +50,8 @@ mat-action-row > button {
     .page-title .text {
         flex-grow: 1;
     }
+
+.page-title-actions button:first-child {
+    margin-left: 10px;
+    margin-right: 10px;
+}
