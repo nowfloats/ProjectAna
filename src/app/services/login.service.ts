@@ -32,7 +32,7 @@ export class LoginService {
 				});
 			} else {
 				if (next)
-					next(true);
+					next(loggedin);
 			}
 		}, hardCheck);
 	}

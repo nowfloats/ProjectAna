@@ -86,7 +86,7 @@ export class CreateUserComponent implements OnInit {
 		}
 		this.user.roleIds = [this.selectedRole.id];
 		this.infoDialog.showSpinner();
-
+		debugger;
 		this.dataService.createUser(this.user).subscribe(x => {
 			this.infoDialog.hideSpinner();
 			if (x.success) {

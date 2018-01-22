@@ -49,7 +49,7 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 
 	checkAndUpdate() {
 		Promise.resolve(true).then(() => {
-			this.loginService.performLogin(this.skipAuth, "/", false, (done) => {
+			this.loginService.performLogin(this.skipAuth, "/", true, (done) => {
 				if (done) {
 					this.loggedInUser = this.dataService.loggedInUser;
 					if (this.afterInit)
@@ -59,13 +59,20 @@ export class AppHeaderBarComponent implements OnInit, AfterViewInit {
 		});
 	}
 
+	loginDialog() {
+		this.loginService.performLogin(false, null, true, (done) => {
+			if (this.dataService.loggedInUser) {
+				this.loggedInUser = this.dataService.loggedInUser;
+			}
+		});
+	}
+
 	logout() {
 		this.dataService.logout();
 		this.loggedInUser = null;
 		if (this.logoutNavigation) {
 			this.router.navigateByUrl(this.logoutNavigation);
 		}
-
 	}
 
 	changePassword() {

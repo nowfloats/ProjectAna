@@ -86,6 +86,12 @@ input[type=text] {
 .mat-raised-button.mat-primary {
     color: white;
 }
+
+    .mat-raised-button.mat-primary.inverse {
+        background-color: white;
+        color: #8cc83c;
+    }
+
 /*Dynamic styles*/
 .chat-message-item.incoming {
     border-left-color: #8cc83c;

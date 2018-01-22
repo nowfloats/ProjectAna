@@ -35,6 +35,11 @@ export class AnalyticsPickerComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.businessAccounts = x.data.content;
+				if (this.param && this.param.businessId && this.businessAccounts) {
+					let x = this.businessAccounts.filter(x => x.id == this.param.businessId);
+					if (x && x.length > 0) 
+						this.selectedBusinessAccount = x[0];
+				}
 			} else {
 				this.dataService.handleTypedError(x.error, "Unable to load business accounts", "Something went wrong while loading business account. Please try again.");
 			}
@@ -50,7 +55,12 @@ export class AnalyticsPickerComponent implements OnInit {
 
 	openAnalytics() {
 		this.dialogRef.close();
-		this.analyticsWindow.open(this.dataService.getAnalyticsApiBase(), this.selectedBusinessAccount.id, this.selectedBusinessAccount.name);
+		this.infoDialog.prompt("Analytics Server Url", "Please enter the analytics server url", (result) => {
+			if (result) {
+				localStorage.setItem('analyticsApiBase', result);
+				this.analyticsWindow.open(result, this.selectedBusinessAccount.id, this.selectedBusinessAccount.name);
+			}
+		}, localStorage.getItem('analyticsApiBase'));
 	}
 }
 

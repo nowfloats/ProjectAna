@@ -29,3 +29,12 @@
     height: 84px;
     margin-left: 4px;
 }
+
+.feature-button {
+    color: #8cc83c !important;
+    background-color: white !important;
+}
+
+    .feature-button svg path {
+        fill: #8cc83c !important;
+    }

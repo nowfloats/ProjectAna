@@ -12,12 +12,13 @@ export class AnalyticsWindowService {
 	) { }
 
 	open(apiBase: string, businessId: string, businessName: string) {
-		let url = `file://${this.electron.remote.app.getAppPath()}/analytics-dashboard/index.html#/?apiBase=${encodeURIComponent(apiBase)}&businessId=${businessId}&businessName=${encodeURIComponent(businessName)}&chatFlowId=${businessId}`;
-		console.log(url);
 		if (!this.electron.isElectronApp) {
-			this.infoDialog.alert("Oops!", 'Works only in electron app!');
+			let url = `/analytics-dashboard/index.html#/?apiBase=${encodeURIComponent(apiBase)}&businessId=${businessId}&businessName=${encodeURIComponent(businessName)}&chatFlowId=${businessId}`;
+			window.open(url);
 			return;
 		}
+		let url = `file://${this.electron.remote.app.getAppPath()}/analytics-dashboard/index.html#/?apiBase=${encodeURIComponent(apiBase)}&businessId=${businessId}&businessName=${encodeURIComponent(businessName)}&chatFlowId=${businessId}`;
+		console.log(url);
 		let win = new this.electron.remote.BrowserWindow({
 			width: 900,
 			height: 600,

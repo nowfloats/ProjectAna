@@ -25,7 +25,11 @@ export class HomeComponent {
 	}
 
 	userManagement() {
-		this.loginService.performLogin(false, "/", true, (done) => {
+		this.loginService.performLogin(true, "/", true, (done) => {
+			if (!done) {
+				this.infoDialog.alert("Login Required", "You must be logged in to your Ana chat server to manage users");
+				return;
+			}
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isSuperAdmin()) {
 					this.router.navigateByUrl('/manage-users');
@@ -39,7 +43,11 @@ export class HomeComponent {
 	}
 
 	analytics() {
-		this.loginService.performLogin(false, null, true, (done) => {
+		this.loginService.performLogin(true, null, true, (done) => {
+			if (!done) {
+				this.infoDialog.alert("Login Required", "You must be logged in to your Ana chat server to view analytics");
+				return;
+			}
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isSuperAdmin()) {
 					this.openAnalyticsPicker();
@@ -60,5 +68,4 @@ export class HomeComponent {
 			data: params
 		});
 	}
-
 }
