@@ -3,6 +3,9 @@
     <div class="center-block center-content">
         <form (ngSubmit)="save()" class="form">
             <mat-form-field>
+                <input type="text" placeholder="Id" name="Id" matInput [(ngModel)]="account.id" required [readonly]="!isCreate"/>
+            </mat-form-field>
+            <mat-form-field>
                 <input type="text" placeholder="Name" name="name" matInput [(ngModel)]="account.name" required />
             </mat-form-field>
             <mat-form-field>
@@ -12,7 +15,7 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field>
-                <input type="tel" placeholder="Business Phone" name="phone" matInput [(ngModel)]="account.phone" pattern="^\+?\d{6,15}$" #phone="ngModel" />
+                <input type="tel" placeholder="Business Phone" name="phone" matInput [(ngModel)]="account.phone" pattern="^\+?\d{6,15}$" #phone="ngModel" required/>
                 <mat-error align="start" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
                     Please enter a valid phone number
                 </mat-error>

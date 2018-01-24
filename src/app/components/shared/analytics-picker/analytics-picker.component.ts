@@ -4,6 +4,7 @@ import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { BusinessAccount } from '../../../models/data.models';
 import { AnalyticsWindowService } from '../../../services/analytics-window.service';
+import { Router } from '@angular/router';
 
 @Component({
 	selector: 'app-analytics-picker',
@@ -15,7 +16,8 @@ export class AnalyticsPickerComponent implements OnInit {
 	constructor(
 		private dataService: DataService,
 		private infoDialog: InfoDialogService,
-		private analyticsWindow: AnalyticsWindowService, 
+		private router: Router,
+		private analyticsWindow: AnalyticsWindowService,
 		private dialogRef: MatDialogRef<AnalyticsPickerComponent>,
 		@Optional() @Inject(MAT_DIALOG_DATA) private param: AnalyticsPickerParams) {
 		if (param && param.businessId) {
@@ -37,7 +39,7 @@ export class AnalyticsPickerComponent implements OnInit {
 				this.businessAccounts = x.data.content;
 				if (this.param && this.param.businessId && this.businessAccounts) {
 					let x = this.businessAccounts.filter(x => x.id == this.param.businessId);
-					if (x && x.length > 0) 
+					if (x && x.length > 0)
 						this.selectedBusinessAccount = x[0];
 				}
 			} else {
@@ -58,7 +60,8 @@ export class AnalyticsPickerComponent implements OnInit {
 		this.infoDialog.prompt("Analytics Server Url", "Please enter the analytics server url", (result) => {
 			if (result) {
 				localStorage.setItem('analyticsApiBase', result);
-				this.analyticsWindow.open(result, this.selectedBusinessAccount.id, this.selectedBusinessAccount.name);
+				let url = `/analytics?apiBase=${result}&businessId=${this.selectedBusinessAccount.id}&businessName=${this.selectedBusinessAccount.name}&chatFlowId=${this.selectedBusinessAccount.id}`;
+				this.router.navigateByUrl(url);
 			}
 		}, localStorage.getItem('analyticsApiBase'));
 	}

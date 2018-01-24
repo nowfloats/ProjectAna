@@ -6,7 +6,7 @@ if (devBuild) {
 	shell.echo('Building in dev mode...');
 }
 
-shell.rm('-R', 'src/node_modules'); //This will create problems with typescript compilation of angular 4 app
+shell.rm('-R', 'src/node_modules'); //This will create problems with typescript compilation of angular app
 
 shell.echo('Building studio project...');
 shell.exec(`ng build ${devBuild ? '' : '--prod'} --aot=false`);
@@ -50,6 +50,6 @@ if (shell.cd('../ana-web-chat/').code == 0) {
 	shell.cd('../dist');
 	shell.echo('Done');
 } else {
-	shell.echo('Project `ana-web-chat` not found! Make sure it is present adjacent to ana-studio-web. ');
+	shell.echo('Project `ana-web-chat` not found! Make sure it is present adjacent to ana-studio-web.');
 	shell.echo('Aborted');
 }

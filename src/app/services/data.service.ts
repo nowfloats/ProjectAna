@@ -88,8 +88,8 @@ export class DataService {
 			.map(x => x as APIResponse<BusinessAccount>);
 	}
 
-	saveBusinessAccount(account: BusinessAccount) {
-		if (!account.id) {
+	saveBusinessAccount(account: BusinessAccount, create: boolean) {
+		if (create) {
 			return this.http.post(this.conn.ServerUrl + "business/accounts", account,
 				{ headers: this.getHeaders() }).map(x => x as APIResponse<BusinessAccount>);
 		} else {

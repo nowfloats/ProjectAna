@@ -8,7 +8,7 @@ import { ChatFlowComponent } from '../components/studio/chatflow/chatflow.compon
 export class GlobalsService {
 	constructor(private title: Title) {
 	}
-	appName = 'Ana Conversation Studio';
+	appName = 'Ana';
 
 	chatFlowComponent: ChatFlowComponent;
 	loading: boolean = false;

@@ -19,6 +19,7 @@ import { BusinessAccount } from '../../../models/data.models';
 })
 export class EditBusinessAccountComponent implements OnInit {
 	title: string = "Create business account";
+	isCreate: boolean = false;
 	constructor(
 		private global: GlobalsService,
 		private infoDialog: InfoDialogService,
@@ -32,6 +33,10 @@ export class EditBusinessAccountComponent implements OnInit {
 		if (data) {
 			this.account = data;
 			this.title = "Edit business account";
+		}
+		if (!this.account.id) {
+			this.account.id = this.global.uuidv4();
+			this.isCreate = true;
 		}
 	}
 
@@ -86,7 +91,7 @@ export class EditBusinessAccountComponent implements OnInit {
 		];
 		this.infoDialog.showSpinner();
 
-		this.dataService.saveBusinessAccount(this.account).subscribe(x => {
+		this.dataService.saveBusinessAccount(this.account, this.isCreate).subscribe(x => {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.infoDialog.alert("Done", "Business account has been saved successfully", () => {
