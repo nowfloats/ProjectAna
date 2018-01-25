@@ -319,28 +319,49 @@ export class SimulatorService {
 	private processVerbsForChatNode(chatNode: models.ChatNode): models.ChatNode {
 		return JSON.parse(this.processVerbs(JSON.stringify(chatNode))) as models.ChatNode;
 	}
-	private processVerbs(txt: string): string {
-		return txt.replace(/\[~(.*?)\]|{{(.*?)}}/g, (subStr, key) => {
-			if (!key)
-				key = subStr.replace('{{', '').replace('}}', '');
 
-			try {
-				if (this.state.variables && this.state.variables[key])
-					return this.state.variables[key];
-				else {
-					let rootToken = key.split(/\.|\[/)[0];
-					let wrappedResp = {};
-					wrappedResp[rootToken] = JSON.parse(this.state.variables[rootToken]);
-					let deepValue: any = jsonpath.query(wrappedResp, key);
-					if (deepValue && typeof deepValue == 'object' && deepValue.length == 1) {
-						deepValue = deepValue[0];
-					}
-					return deepValue;
+	private replaceTxt(subStr, key) {
+		if (!key)
+			key = subStr.replace('{{', '').replace('}}', '');
+
+		try {
+			if (this.state.variables && this.state.variables[key])
+				return this.state.variables[key];
+			else {
+				let rootToken = key.split(/\.|\[/)[0];
+				let wrappedResp = {};
+				wrappedResp[rootToken] = JSON.parse(this.state.variables[rootToken]);
+				let deepValue: any = jsonpath.query(wrappedResp, key);
+				if (deepValue && typeof deepValue == 'object' && deepValue.length == 1) {
+					deepValue = deepValue[0];
 				}
-			} catch (e) {
-				return subStr;
+				return deepValue;
 			}
+		} catch (e) {
+			return subStr;
+		}
+	}
+
+	private jsonEscape(value: any) {
+		if (value && (typeof value == "string") && value.replace) {
+			let rTxt = value
+				.replace(/\n/g, "\\n")
+				.replace(/\'/g, "\\'")
+				.replace(/\"/g, '\\"')
+				.replace(/\&/g, "\\&")
+				.replace(/\r/g, "\\r")
+				.replace(/\t/g, "\\t")
+				.replace(/\f/g, "\\f");
+			return rTxt;
+		}
+		return value;
+	}
+
+	private processVerbs(txt: string): string {
+		let processedText = txt.replace(/\[~(.*?)\]|{{(.*?)}}/g, (subStr, key) => {
+			return this.jsonEscape(this.replaceTxt(subStr, key));
 		});
+		return processedText;
 	}
 
 	private processNode(chatNode: models.ChatNode, section?: models.Section) {

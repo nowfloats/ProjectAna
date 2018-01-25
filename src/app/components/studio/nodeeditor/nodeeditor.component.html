@@ -91,6 +91,21 @@
                         </div>
                     </div>
                 </div>
+                <div class="node-jumptobot-details" [hidden]="chatNode.NodeType!='JumpToBot'">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">Jump To Bot Details</div>
+                        <div class="panel-body">
+                            <div>
+                                <mat-form-field>
+                                    <input matInput type="text" placeholder="Target Bot Id" [(ngModel)]="chatNode.TargetBotId" name="TargetBotId">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="text" placeholder="Target Node Id" [(ngModel)]="chatNode.TargetNodeId" name="TargetNodeId">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </mat-tab>
         <mat-tab label="Content" *ngIf="['Card', 'Combination'].indexOf(chatNode.NodeType)!=-1">

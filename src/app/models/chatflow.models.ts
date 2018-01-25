@@ -29,6 +29,7 @@ export enum NodeType {
 	ApiCall = 'ApiCall',
 	Combination = 'Combination',
 	Card = 'Card',
+	JumpToBot = 'JumpToBot',
 	Condition = 'Condition',
 	HandoffToAgent = 'HandoffToAgent'
 }
@@ -220,6 +221,8 @@ export interface ChatNode {
 	Placement?: CardPlacement;
 	IsStartNode?: boolean;
 	IsGoalNode?: boolean;
+	TargetBotId?: string;
+	TargetNodeId?: string;
 
 	RequestBody?: string;
 	Headers?: string;
@@ -284,7 +287,8 @@ export class ModelHelpers {
 		NodeType.Combination,
 		//NodeType.Card,
 		NodeType.Condition,
-		NodeType.HandoffToAgent
+		NodeType.HandoffToAgent,
+		NodeType.JumpToBot
 	];
 	apiMethods: APIMethod[] = [
 		APIMethod.GET,
