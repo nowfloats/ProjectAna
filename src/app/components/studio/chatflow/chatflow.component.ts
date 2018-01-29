@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, ViewChild, HostListener, OnDestroy } from '@angular/core';
 import { Http } from '@angular/http';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatSnackBar } from '@angular/material';
@@ -15,14 +15,14 @@ import { SimulatorFrameComponent } from '../simulator-frame/simulator-frame.comp
 import { SimulatorService } from '../../../services/simulator.service';
 import { PublishChatbotComponent } from '../../shared/publish-chatbot/publish-chatbot.component';
 import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
+import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 
 @Component({
 	selector: 'app-chatflow',
 	templateUrl: './chatflow.component.html',
 	styleUrls: ['./chatflow.component.css'],
 })
-export class ChatFlowComponent implements OnInit {
-
+export class ChatFlowComponent implements OnInit, OnDestroy {
 	constructor(
 		private chatFlowService: ChatFlowService,
 		public dialog: MatDialog,
@@ -30,6 +30,7 @@ export class ChatFlowComponent implements OnInit {
 		public route: ActivatedRoute,
 		public router: Router,
 		public snakbar: MatSnackBar,
+		private hotkeys: HotkeysService,
 		public globalsService: GlobalsService,
 		public simulatorService: SimulatorService,
 		public settings: SettingsService) {
@@ -67,10 +68,44 @@ export class ChatFlowComponent implements OnInit {
 					this.router.navigateByUrl('/studio');
 			}
 		});
+		this.bindShortcuts();
+	}
+
+	ngOnDestroy(): void {
+		this.unbindShortcuts();
 	}
 
 	chatFlowRootSVG() {
 		return this.chatflowRoot.nativeElement as SVGSVGElement;
+	}
+
+	keymap: Hotkey[] = [
+		new Hotkey(["command+s", "ctrl+s"], (e, s) => {
+			this.saveChatFlow();
+			return false;
+		}, [], "Save the chat flow"),
+		new Hotkey(["command+r", "ctrl+r"], (e, s) => {
+			this.playChatFlow();
+			return false;
+		}, [], "Run the chat"),
+		new Hotkey(["command+n", "ctrl+n"], (e, s) => {
+			this.addNewNode();
+			return false;
+		}, [], "Add a new node"),
+		new Hotkey("alt+f", (e, s) => {
+			this.fitViewToAllNodes();
+			return false;
+		}, [], "Fit to screen"),
+		new Hotkey("alt+w", (e, s) => {
+			this.gotoStartup();
+			return false;
+		}, [], "Close the designer")
+	];
+	bindShortcuts() {
+		this.keymap.forEach(x => this.hotkeys.add(x));
+	}
+	unbindShortcuts() {
+		this.keymap.forEach(x => this.hotkeys.remove(x));
 	}
 
 	updateLayout() {

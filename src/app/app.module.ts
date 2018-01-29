@@ -7,6 +7,7 @@ import { SharedModule } from './shared.module';
 import { ManageUsersModule, MANAGE_USERS_ROUTES } from './components/manage-users/manage-users.module';
 import { StudioModule, STUDIO_ROUTES } from './components/studio/studio.module';
 import { AnalyticsModule, ANALYTICS_ROUTES } from './components/analytics/analytics.module';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 const APP_ROUTES: Routes = [
 	{ path: '', redirectTo: 'home', pathMatch: "full" },
@@ -38,6 +39,9 @@ const APP_ROUTES: Routes = [
 		AnalyticsModule,
 		RouterModule.forRoot(APP_ROUTES, {
 			useHash: true
+		}),
+		HotkeyModule.forRoot({
+			cheatSheetCloseEsc: true,
 		})
 	],
 	bootstrap: [AppComponent]

@@ -60,6 +60,7 @@ import { CreateChatbotComponent } from './components/shared/create-chatbot/creat
 import { PublishChatbotComponent } from './components/shared/publish-chatbot/publish-chatbot.component';
 import { AnalyticsPickerComponent } from './components/shared/analytics-picker/analytics-picker.component';
 import { AnalyticsWindowService } from './services/analytics-window.service';
+import { HotkeyModule } from 'angular2-hotkeys';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -89,7 +90,8 @@ const IMPORT_EXPORT: any[] = [
 	HttpClientModule,
 	FormsModule,
 	ReactiveFormsModule,
-	NgxElectronModule
+	NgxElectronModule,
+	HotkeyModule
 ].concat(MAT_MODULES);
 
 const DECLARATIONS: any[] = [

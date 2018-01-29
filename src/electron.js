@@ -118,7 +118,6 @@ function createWindow() {
 
 		// Window menu
 		template[3].submenu = [
-			{ role: 'close' },
 			{ role: 'minimize' },
 			{ role: 'zoom' },
 			{ type: 'separator' },

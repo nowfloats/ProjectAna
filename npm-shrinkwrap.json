@@ -189,6 +189,11 @@
       "resolved": "https://registry.npmjs.org/@types/minimatch/-/minimatch-3.0.2.tgz",
       "dev": true
     },
+    "@types/mousetrap": {
+      "version": "1.6.0",
+      "from": "@types/mousetrap@latest",
+      "resolved": "https://registry.npmjs.org/@types/mousetrap/-/mousetrap-1.6.0.tgz"
+    },
     "@types/node": {
       "version": "6.0.95",
       "from": "@types/node@>=6.0.60 <6.1.0",
@@ -319,6 +324,11 @@
       "from": "amdefine@>=0.0.4",
       "resolved": "https://registry.npmjs.org/amdefine/-/amdefine-1.0.1.tgz",
       "dev": true
+    },
+    "angular2-hotkeys": {
+      "version": "2.0.3",
+      "from": "angular2-hotkeys@latest",
+      "resolved": "https://registry.npmjs.org/angular2-hotkeys/-/angular2-hotkeys-2.0.3.tgz"
     },
     "ansi-align": {
       "version": "2.0.0",
@@ -4259,6 +4269,11 @@
           "dev": true
         }
       }
+    },
+    "mousetrap": {
+      "version": "1.6.1",
+      "from": "mousetrap@latest",
+      "resolved": "https://registry.npmjs.org/mousetrap/-/mousetrap-1.6.1.tgz"
     },
     "move-concurrently": {
       "version": "1.0.1",
