@@ -191,7 +191,7 @@
     },
     "@types/mousetrap": {
       "version": "1.6.0",
-      "from": "@types/mousetrap@latest",
+      "from": "@types/mousetrap@>=1.6.0 <2.0.0",
       "resolved": "https://registry.npmjs.org/@types/mousetrap/-/mousetrap-1.6.0.tgz"
     },
     "@types/node": {
