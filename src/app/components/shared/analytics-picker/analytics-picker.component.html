@@ -9,6 +9,6 @@
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="actions">
-    <button mat-raised-button (click)="openAnalytics()" color="primary">Open Analytics</button>
+    <button mat-raised-button (click)="openAnalytics()" color="primary" [disabled]="!selectedBusinessAccount">Open Analytics</button>
     <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>

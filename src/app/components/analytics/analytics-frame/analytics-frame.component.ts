@@ -47,12 +47,12 @@ export class AnalyticsFrameComponent implements OnInit {
 			console.log('Params of analytics frame');
 			console.log(x);
 			if (x['apiBase'] && x['businessId'] && x['businessName'] && x['chatFlowId']) {
-				let url = `/index.html#/?apiBase=${encodeURIComponent(x['apiBase'])}&businessId=${x['businessId']}&businessName=${encodeURIComponent(x['businessName'])}&chatFlowId=${x['chatFlowId']}`;
-				if (environment.production) {
-					url = "analytics-dashboard" + url;
-				} else {
-					url = "http://localhost:4202" + url;
-				}
+				let initialUrl = `/index.html#/?apiBase=${encodeURIComponent(x['apiBase'])}&businessId=${x['businessId']}&businessName=${encodeURIComponent(x['businessName'])}&chatFlowId=${x['chatFlowId']}`;
+				let url = "analytics-dashboard" + initialUrl;
+
+				if (environment.local)
+					url = "http://localhost:4202" + initialUrl;
+
 				console.log('Analytics Frame Url');
 				console.log(url);
 				this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);

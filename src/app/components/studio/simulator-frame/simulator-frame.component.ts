@@ -26,7 +26,7 @@ export class SimulatorFrameComponent implements OnInit {
 			}
 		};
 		let url = `simulator/index.html?s=${btoa(JSON.stringify(param))}`;
-		if (!environment.production)
+		if (environment.local)
 			url = `http://localhost:4200/index.html?s=${btoa(JSON.stringify(param))}`;
 		this.iframeUrl = this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}

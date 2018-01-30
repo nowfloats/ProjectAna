@@ -4,14 +4,15 @@
   "license": "GNU-GPLv3",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port=4201 -o",
+    "start": "ng serve --port=4201 -o --env=local",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
     "electron": "ng build --prod --aot=false && cd dist && electron-builder && \"../release/win-unpacked/Ana.exe\"",
     "pack": "node pack-ana-studio.js",
-    "pack-dev": "node pack-ana-studio.js --dev"
+    "pack-dev": "node pack-ana-studio.js --dev",
+    "pack-local": "node pack-ana-studio.js --local"
   },
   "private": true,
   "dependencies": {

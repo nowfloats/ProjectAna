@@ -1,22 +1,25 @@
 ﻿const shell = require('shelljs');
 let skipSimulator = (process.argv.indexOf('--skip-sim') != -1);
-let devBuild = (process.argv.indexOf('--dev') != -1);
-
-if (devBuild) {
-	shell.echo('Building in dev mode...');
+let env = 'prod';
+if ((process.argv.indexOf('--dev') != -1)) {
+	env = 'dev';
+} else if ((process.argv.indexOf('--local') != -1)) {
+	env = 'local';
 }
+
+shell.echo(`Building for env: ${env} ...`);
 
 shell.rm('-R', 'src/node_modules'); //This will create problems with typescript compilation of angular app
 
 shell.echo('Building studio project...');
-shell.exec(`ng build ${devBuild ? '' : '--prod'} --aot=false`);
+shell.exec(`ng build --env=${env} --aot=false`);
 
 shell.echo('Changing to simulator project...');
 if (shell.cd('../ana-web-chat/').code == 0) {
 
 	if (!skipSimulator) {
 		shell.echo('Building simulator project...');
-		shell.exec(`ng build ${devBuild ? '' : '--prod'}`);
+		shell.exec(`ng build ${env == 'prod' ? '--prod' : ''}`);
 	}
 
 	shell.echo('Changing back to studio project...');
@@ -32,7 +35,7 @@ if (shell.cd('../ana-web-chat/').code == 0) {
 
 	if (shell.cd('../ana-analytics-dashboard/').code == 0) {
 		shell.echo('Building analytics dashboard project...');
-		shell.exec(`ng build ${devBuild ? '' : '--prod'} --aot=false`);
+		shell.exec(`ng build ${env == 'prod' ? '--prod' : ''} --aot=false`);
 
 		shell.echo('Changing back to studio project...');
 		shell.cd('../ana-studio-web/');
