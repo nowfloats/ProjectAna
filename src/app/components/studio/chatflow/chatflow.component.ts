@@ -434,7 +434,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 	}
 
 	openPublishDialog() {
-		this.dialog.open(PublishDialogComponent, {
+		this.dialog.open(PublishChatbotComponent, {
 			width: '60%',
 			data: this.saveChatFlow()
 		});

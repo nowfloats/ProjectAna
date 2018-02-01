@@ -47,7 +47,7 @@
                     </mat-accordion>
                 </section>
                 <mat-action-row>
-                    <button mat-raised-button (click)="addChatProjectToConn(conn)"><span>Add chat project</span></button>
+                    <!--<button mat-raised-button (click)="addChatProjectToConn(conn)"><span>Add chat project</span></button>-->
                     <button mat-raised-button (click)="deleteConnection(conn)"><span>Delete server connection</span></button>
                 </mat-action-row>
 
@@ -58,6 +58,6 @@
 <mat-dialog-actions>
     <button matTooltip="Save Changes" color="primary" [hidden]="savedConnections.length==0" mat-raised-button (click)="saveConnections(true)">Save changes</button>
     <button matTooltip="Add new connection" mat-raised-button (click)="addConnection()">Add new server connection</button>
-    <!--<button matTooltip="Get an Ana chat server" mat-raised-button (click)="getAnaChatServer()">Get an Ana chat server</button>-->
+    <button matTooltip="Get an Ana chat server" mat-raised-button (click)="getAnaChatServer()">Get an Ana chat server</button>
     <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>
