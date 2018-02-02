@@ -12,7 +12,7 @@ shell.echo(`Building for env: ${env} ...`);
 shell.rm('-R', 'src/node_modules'); //This will create problems with typescript compilation of angular app
 
 shell.echo('Building studio project...');
-shell.exec(`ng build --env=${env} --aot=false`);
+shell.exec(`ng build ${env == 'prod' ? '--prod' : '--env=' + env} --aot=false`);
 
 shell.echo('Changing to simulator project...');
 if (shell.cd('../ana-web-chat/').code == 0) {
