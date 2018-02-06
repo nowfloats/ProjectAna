@@ -68,18 +68,18 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 					this.router.navigateByUrl('/studio');
 			}
 		});
-		this.bindShortcuts();
+		this.bindDesignerShortcuts();
 	}
 
 	ngOnDestroy(): void {
-		this.unbindShortcuts();
+		this.unbindDesignerShortcuts();
 	}
 
 	chatFlowRootSVG() {
 		return this.chatflowRoot.nativeElement as SVGSVGElement;
 	}
 
-	keymap: Hotkey[] = [
+	keymapOnDesigner: Hotkey[] = [
 		new Hotkey(["command+s", "ctrl+s"], (e, s) => {
 			this.saveChatFlow();
 			return false;
@@ -88,7 +88,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this.playChatFlow();
 			return false;
 		}, [], "Run the chat"),
-		new Hotkey(["command+n", "ctrl+n"], (e, s) => {
+		new Hotkey("n", (e, s) => {
 			this.addNewNode();
 			return false;
 		}, [], "Add a new node"),
@@ -101,11 +101,13 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			return false;
 		}, [], "Close the designer")
 	];
-	bindShortcuts() {
-		this.keymap.forEach(x => this.hotkeys.add(x));
+
+	bindDesignerShortcuts() {
+		this.unbindDesignerShortcuts();
+		this.keymapOnDesigner.forEach(x => this.hotkeys.add(x));
 	}
-	unbindShortcuts() {
-		this.keymap.forEach(x => this.hotkeys.remove(x));
+	unbindDesignerShortcuts() {
+		this.keymapOnDesigner.forEach(x => this.hotkeys.remove(x));
 	}
 
 	updateLayout() {
@@ -318,6 +320,12 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		let dialogRef = this.dialog.open(NodeEditorComponent, {
 			width: '80%',
 			data: chatNodeVM.chatNode
+		});
+		dialogRef.afterOpen().subscribe(x => {
+			this.unbindDesignerShortcuts();
+		});
+		dialogRef.afterClosed().subscribe(x => {
+			this.bindDesignerShortcuts();
 		});
 	}
 

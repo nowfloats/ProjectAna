@@ -63,6 +63,7 @@ import { AnalyticsWindowService } from './services/analytics-window.service';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { BusinessPickerComponent } from './components/shared/business-picker/business-picker.component';
 import { AnaCloudSignupComponent } from './components/shared/ana-cloud-signup/ana-cloud-signup.component';
+import { AutofocusDirective } from './directives/autofocus.directive';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -115,6 +116,7 @@ const DECLARATIONS: any[] = [
 	AnalyticsPickerComponent,
 	BusinessPickerComponent,
 	AnaCloudSignupComponent,
+	AutofocusDirective,
 	EllipsisPipe
 ]
 

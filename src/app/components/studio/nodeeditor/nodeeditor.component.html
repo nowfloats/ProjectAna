@@ -1,7 +1,7 @@
 <h2 mat-dialog-title>Edit chat node information</h2>
 <mat-dialog-content>
-    <mat-tab-group>
-        <mat-tab label="Node Info">
+    <mat-tab-group #tabGroup>
+        <mat-tab label="Node Info" #nodeInfoTab>
             <div class="node-details tab-content">
                 <div class="node-basic-info">
                     <mat-form-field>
@@ -27,7 +27,7 @@
                         <input matInput type="text" disabled readonly placeholder="Node Id" [(ngModel)]="chatNode.Id" name="nodeId">
                     </mat-form-field>
                 </div>
-                <div class="node-api-details" [hidden]="chatNode.NodeType!='Condition'">
+                <div class="node-condition" [hidden]="chatNode.NodeType!='Condition'">
                     <div class="panel panel-default">
                         <div class="panel-heading">Condition Details</div>
                         <div class="panel-body">
@@ -108,7 +108,7 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="Content" *ngIf="['Card', 'Combination'].indexOf(chatNode.NodeType)!=-1">
+        <mat-tab label="Content" *ngIf="['Card', 'Combination'].indexOf(chatNode.NodeType)!=-1" #contentTab>
             <div class="node-section-details tab-content">
                 <div class="node-section" *ngFor="let section of chatNode.Sections; let i = index">
                     <div [ngSwitch]="MH.editorTypeFromSectionType(section.SectionType)">
@@ -119,7 +119,7 @@
                                         <i class="fa fa-file-text-o text-section-icon"></i>
                                         &nbsp;
                                     </span>
-                                    <input matInput type="text" placeholder="Section text" [(ngModel)]="section.Text" name="sectionText-{{i}}">
+                                    <input [autofocus] matInput type="text" placeholder="Section text" [(ngModel)]="section.Text" name="sectionText-{{i}}">
                                     <span matSuffix style="font-size: 24px">
                                         <button mat-icon-button (click)="MH.sectionMoveUp(chatNode, section)">
                                             <mat-icon>arrow_upward</mat-icon>
@@ -278,7 +278,7 @@
                 </section>
             </div>
         </mat-tab>
-        <mat-tab label="Buttons">
+        <mat-tab label="Buttons" #buttonsTab>
             <div class="tab-content">
                 <div class="node-buttons" *ngFor="let btn of chatNode.Buttons; let i = index">
                     <div class="panel panel-default">
@@ -306,7 +306,7 @@
                             </mat-form-field>
 
                             <mat-form-field>
-                                <input matInput type="text" [placeholder]="['ApiCall', 'Condition'].indexOf(chatNode.NodeType)==-1?'Text on button':'Button Name'" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}">
+                                <input matInput [autofocus] type="text" [placeholder]="['ApiCall', 'Condition'].indexOf(chatNode.NodeType)==-1?'Text on button':'Button Name'" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}">
                             </mat-form-field>
                             <!--<mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ButtonText')">
         <input matInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{ {i}}">
