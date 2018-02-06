@@ -36,7 +36,7 @@ import {
 	MatToolbarModule,
 	ErrorStateMatcher,
 	ShowOnDirtyErrorStateMatcher,
-	MatAutocompleteModule
+	MatAutocompleteModule,	MatChipsModule
 } from '@angular/material';
 import { NgxElectronModule } from 'ngx-electron';
 
@@ -61,6 +61,8 @@ import { PublishChatbotComponent } from './components/shared/publish-chatbot/pub
 import { AnalyticsPickerComponent } from './components/shared/analytics-picker/analytics-picker.component';
 import { AnalyticsWindowService } from './services/analytics-window.service';
 import { HotkeyModule } from 'angular2-hotkeys';
+import { BusinessPickerComponent } from './components/shared/business-picker/business-picker.component';
+import { AnaCloudSignupComponent } from './components/shared/ana-cloud-signup/ana-cloud-signup.component';
 
 const MAT_MODULES: any[] = [
 	MatButtonModule,
@@ -81,7 +83,8 @@ const MAT_MODULES: any[] = [
 	MatListModule,
 	MatToolbarModule,
 	MatGridListModule,
-	MatAutocompleteModule
+	MatAutocompleteModule,
+	MatChipsModule
 ];
 
 const IMPORT_EXPORT: any[] = [
@@ -110,6 +113,8 @@ const DECLARATIONS: any[] = [
 	CreateChatbotComponent,
 	PublishChatbotComponent,
 	AnalyticsPickerComponent,
+	BusinessPickerComponent,
+	AnaCloudSignupComponent,
 	EllipsisPipe
 ]
 
@@ -144,7 +149,9 @@ const DECLARATIONS: any[] = [
 		GetAnaChatServerComponent,
 		CreateChatbotComponent,
 		PublishChatbotComponent,
-		AnalyticsPickerComponent
+		AnalyticsPickerComponent,
+		BusinessPickerComponent,
+		AnaCloudSignupComponent
 	]
 })
 export class SharedModule { }

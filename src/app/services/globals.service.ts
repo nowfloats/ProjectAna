@@ -69,7 +69,7 @@ export class GlobalsService {
 		return `${anaLoc.lat},${anaLoc.lng}`;
 	}
 
-	EMAIL_REGEX = /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/;
+	EMAIL_REGEX = /^[a-z0-9!#$%&'*+/=?^_`{|}~.-]+@[a-z0-9-]+(\.[a-z0-9-]+)*$/;
 	emailValid(val: string) {
 		if (val)
 			return this.EMAIL_REGEX.test(val);

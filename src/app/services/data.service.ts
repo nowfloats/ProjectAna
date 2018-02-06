@@ -2,9 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { InfoDialogService } from './info-dialog.service';
 import { ChatServerConnection, ChatBotProject } from '../models/app.models';
-import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User, ChatProject } from '../models/data.models';
+import { LoginData, APIResponse, ListContent, BusinessAccount, BusinessAccountStatus, ErrorItem, Role, ListData, UserRegisterModel, User, ChatProject, RegisterOnAnaCloudDetails } from '../models/data.models';
 import { MatDialog } from '@angular/material';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class DataService {
@@ -109,6 +110,16 @@ export class DataService {
 
 		return this.http.post(`${this.conn.ServerUrl}business/flows`, chatProject, { headers: h })
 			.map(x => x as APIResponse<ChatProject>);
+	}
+
+	registerOnAnaCloud(request: RegisterOnAnaCloudDetails) {
+		let h = this.getHeaders();
+		let serverUrl = "http://gateway.api.dev.ana.chat/";
+		if (environment.production) {
+			serverUrl = "http://gateway.api.ana.chat/";
+		}
+		return this.http.post(`${serverUrl}business/accounts/publicRegister`, request, { headers: h })
+			.map(x => x as APIResponse<RegisterOnAnaCloudDetails>);
 	}
 
 	saveChatProject(chatProject: ChatProject) {
@@ -217,6 +228,4 @@ export class DataService {
 		}
 		this.infoDialog.alert(title, msg);
 	}
-
-
 }

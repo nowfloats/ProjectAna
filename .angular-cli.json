@@ -63,6 +63,8 @@
   },
   "defaults": {
     "styleExt": "css",
-    "component": {}
+    "component": {
+      "spec": false
+    }
   }
 }

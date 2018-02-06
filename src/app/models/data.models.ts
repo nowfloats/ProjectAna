@@ -47,11 +47,11 @@ export interface Color {
 }
 
 export interface BusinessAccount {
-	colors: Color[];
+	colors?: Color[];
 	createdAt?: number;
 	email: string;
 	id?: string;
-	logoUrl: string;
+	logoUrl?: string;
 	modifiedAt?: number;
 	name: string;
 	phone: string;
@@ -121,7 +121,7 @@ export interface User {
 }
 
 export interface UserRegisterModel {
-	businessId: string,
+	businessId?: string,
 	email: string,
 	name: string,
 	password: string,
@@ -140,4 +140,9 @@ export interface ChatProject {
 	status?: string;
 	updatedAt?: number;
 	userId?: string;
+}
+
+export interface RegisterOnAnaCloudDetails {
+	business: BusinessAccount;
+	user: UserRegisterModel;
 }

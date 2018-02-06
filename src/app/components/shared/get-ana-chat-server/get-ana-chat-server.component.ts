@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
+import { MatDialog } from '@angular/material';
+import { AnaCloudSignupComponent } from '../ana-cloud-signup/ana-cloud-signup.component';
 @Component({
 	selector: 'app-get-ana-chat-server',
 	templateUrl: './get-ana-chat-server.component.html',
@@ -7,7 +9,10 @@ import { ElectronService } from 'ngx-electron';
 })
 export class GetAnaChatServerComponent implements OnInit {
 
-	constructor(private electron: ElectronService) { }
+	constructor(
+		private electron: ElectronService,
+		private dialog: MatDialog,
+	) { }
 
 	ngOnInit() {
 	}
@@ -17,15 +22,18 @@ export class GetAnaChatServerComponent implements OnInit {
 	}
 
 	anaCloud() {
-		let win = new this.electron.remote.BrowserWindow({
-			width: 360,
-			height: 700,
-			center: true,
-			resizable: false
+		let d = this.dialog.open(AnaCloudSignupComponent, {
+			width: 'auto'
 		});
-		win.on('closed', () => {
-			win = null
-		});
-		win.loadURL('https://with.ana.chat/ana-cloud-signup/');
+		//let win = new this.electron.remote.BrowserWindow({
+		//	width: 360,
+		//	height: 700,
+		//	center: true,
+		//	resizable: false
+		//});
+		//win.on('closed', () => {
+		//	win = null
+		//});
+		//win.loadURL('https://with.ana.chat/ana-cloud-signup/');
 	}
 }

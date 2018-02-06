@@ -8,7 +8,7 @@ import { ChatServerManagerComponent } from '../chat-server-manager/chat-server-m
 import * as models from '../../../models/chatflow.models';
 import { DataService } from '../../../services/data.service';
 import { LoginService } from '../../../services/login.service';
-import { ChatProject } from '../../../models/data.models';
+import { ChatProject, BusinessAccount } from '../../../models/data.models';
 import { GlobalsService } from '../../../services/globals.service';
 import { CreateChatbotComponent, BusinessDetails } from '../create-chatbot/create-chatbot.component';
 
@@ -16,6 +16,7 @@ import { Observable } from 'rxjs/Observable';
 import { startWith } from 'rxjs/operators/startWith';
 import { map } from 'rxjs/operators/map';
 import { FormControl } from '@angular/forms';
+import { BusinessPickerComponent } from '../business-picker/business-picker.component';
 
 @Component({
 	selector: 'app-publish-chatbot',
@@ -49,11 +50,23 @@ export class PublishChatbotComponent implements OnInit {
 
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isBizAdmin() || this.dataService.isFlowManager()) {
-					this.loadChatProjects();
+					this.loadChatProjects(this.dataService.loggedInUser.businessId);
 				} else {
-					this.infoDialog.alert("Unauthorized!", "Only a business admin or a flow manager can publish a flow", () => {
-						this.dialogRef.close();
+					let d = this.dialog.open(BusinessPickerComponent, {
+						width: "auto",
+						data: null
 					});
+					d.afterClosed().subscribe(x => {
+						if (x) {
+							let ba = x as BusinessAccount;
+							this.loadChatProjects(ba.id);
+						} else {
+							this.dialogRef.close();
+						}
+					});
+					//this.infoDialog.alert("Unauthorized!", "Only a business admin or a flow manager can publish a flow", () => {
+					//	this.dialogRef.close();
+					//});
 				}
 			} else {
 				this.dialogRef.close();
@@ -61,24 +74,24 @@ export class PublishChatbotComponent implements OnInit {
 		});
 	}
 
-	createNewChatProject() {
+	createNewChatProject(bizId: string) {
 		let d = this.dialog.open(CreateChatbotComponent, {
 			width: 'auto',
 			disableClose: true,
 			data: <BusinessDetails>{
-				id: this.dataService.loggedInUser.businessId
+				id: bizId
 			}
 		});
 		d.afterClosed().subscribe(x => {
 			if (x) {
-				this.loadChatProjects();
+				this.loadChatProjects(bizId);
 			}
 		});
 	}
 
-	loadChatProjects() {
+	loadChatProjects(bizId: string) {
 		this.infoDialog.showSpinner();
-		this.dataService.getChatProjects(this.dataService.loggedInUser.businessId, 0, 10000).subscribe(x => {
+		this.dataService.getChatProjects(bizId, 0, 10000).subscribe(x => {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.chatProjects = x.data.content;
@@ -132,5 +145,5 @@ export class PublishChatbotComponent implements OnInit {
 			return this.chatProjects;
 		}
 	}
-	
+
 }
