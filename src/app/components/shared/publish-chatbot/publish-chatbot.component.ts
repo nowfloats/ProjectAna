@@ -1,5 +1,5 @@
-import { Component, OnInit, Inject } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAutocompleteSelectedEvent } from '@angular/material';
+import { Component, OnInit, Inject, ViewChild, ElementRef } from '@angular/core';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatAutocompleteSelectedEvent, MatFormField } from '@angular/material';
 import { ChatBotReferance, ChatServerConnection } from '../../../models/app.models';
 import { SettingsService } from '../../../services/settings.service';
 import { ChatFlowService } from '../../../services/chatflow.service';
@@ -34,6 +34,9 @@ export class PublishChatbotComponent implements OnInit {
 		private dialogRef: MatDialogRef<PublishChatbotComponent>,
 		@Inject(MAT_DIALOG_DATA) private pack: models.ChatFlowPack) {
 	}
+
+	@ViewChild("chatProjectFormField")
+	chatProjectFormField: MatFormField;
 
 	chatProjects: ChatProject[] = [];
 	businessId: string;
@@ -75,7 +78,7 @@ export class PublishChatbotComponent implements OnInit {
 			}
 		});
 	}
-
+	added = "";
 	createNewChatProject() {
 		let d = this.dialog.open(CreateChatbotComponent, {
 			width: 'auto',
@@ -86,6 +89,8 @@ export class PublishChatbotComponent implements OnInit {
 		});
 		d.afterClosed().subscribe(x => {
 			if (x) {
+				this.added = "New chat bot project created";
+				setTimeout(() => this.added = null, 3000);	
 				this.loadChatProjects();
 			}
 		});
@@ -111,19 +116,24 @@ export class PublishChatbotComponent implements OnInit {
 		if (!this.selectedProject) {
 			return;
 		}
-		this.infoDialog.showSpinner();
-		this.selectedProject.source = this.pack;
-		this.selectedProject.flow = this.globals.normalizeChatNodes(this.pack.ChatNodes);
-		this.dataService.saveChatProject(this.selectedProject).subscribe(x => {
-			this.infoDialog.hideSpinner();
-			if (x.success) {
-				this.infoDialog.alert('Done', 'Chatbot published successfully', () => this.dismiss());
-			} else {
-				this.dataService.handleTypedError(x.error, "Oops!", "Something went wrong while publishing the chat project! Please try again.");
+
+		this.infoDialog.confirm(`Publish chatbot to '${this.selectedProject.name}'?`, `Are you sure you want to publish this chatbot to ${this.selectedProject.name}?`, (ok) => {
+			if (ok) {
+				this.infoDialog.showSpinner();
+				this.selectedProject.source = this.pack;
+				this.selectedProject.flow = this.globals.normalizeChatNodes(this.pack.ChatNodes);
+				this.dataService.saveChatProject(this.selectedProject).subscribe(x => {
+					this.infoDialog.hideSpinner();
+					if (x.success) {
+						this.infoDialog.alert('Done', 'Chatbot published successfully', () => this.dismiss());
+					} else {
+						this.dataService.handleTypedError(x.error, "Oops!", "Something went wrong while publishing the chat project! Please try again.");
+					}
+				}, err => {
+					this.infoDialog.hideSpinner();
+					this.dataService.handleError(err, "Oops!", "Something went wrong while publishing the chat project! Please try again.");
+				});
 			}
-		}, err => {
-			this.infoDialog.hideSpinner();
-			this.dataService.handleError(err, "Oops!", "Something went wrong while publishing the chat project! Please try again.");
 		});
 	}
 

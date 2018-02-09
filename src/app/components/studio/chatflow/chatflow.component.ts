@@ -443,7 +443,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 
 	openPublishDialog() {
 		this.dialog.open(PublishChatbotComponent, {
-			width: '60%',
+			width: 'auto',
 			data: this.saveChatFlow()
 		});
 	}

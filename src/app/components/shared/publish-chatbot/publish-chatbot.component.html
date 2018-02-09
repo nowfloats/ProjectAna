@@ -8,22 +8,20 @@
             <button mat-raised-button color="primary" (click)="createNewChatProject()">Add Ana chatbot project</button>
         </h4>
     </mat-card>
-    <mat-form-field *ngIf="chatProjects && chatProjects.length>0">
-        <input type="text" placeholder="Chatbot Project" aria-label="Chatbot Project" matInput [(ngModel)]="filter" [matAutocomplete]="auto" name="chatProject">
+    <mat-form-field *ngIf="chatProjects && chatProjects.length>0" #chatProjectFormField>
+        <input type="text" placeholder="Chatbot Project" aria-label="Chatbot Project" matInput [(ngModel)]="filter" [matAutocomplete]="auto" name="chatProject" >
         <mat-autocomplete #auto="matAutocomplete" (optionSelected)="optionSelected($event)" [displayWith]="displayWith">
             <mat-option *ngFor="let option of filteredOptions()" [value]="option">
                 {{ option.name }} <span class="desc">Last updated at {{option.updatedAt | date:'hh:mm a on dd-MM-yyyy'}} -- Id: {{ option.id }}</span>
             </mat-option>
         </mat-autocomplete>
+        <mat-hint *ngIf="added">
+            {{added}}
+        </mat-hint>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <div class="left" *ngIf="chatProjects && chatProjects.length>0">
-        <button mat-raised-button (click)="createNewChatProject()">Add new Ana chatbot project</button>
-    </div>
-    <div class="spacing"></div>
-    <div class="right">
-        <button mat-raised-button [disabled]="!selectedProject" color="primary" (click)="doPublish()">Publish</button>
-        <button mat-raised-button matDialogClose>Dismiss</button>
-    </div>
+    <button mat-raised-button *ngIf="chatProjects && chatProjects.length > 0" (click)="createNewChatProject()">Add new Ana chatbot project</button>
+    <button mat-raised-button [disabled]="!selectedProject" color="primary" (click)="doPublish()">Publish</button>
+    <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>
