@@ -36,7 +36,7 @@ export class PublishChatbotComponent implements OnInit {
 	}
 
 	chatProjects: ChatProject[] = [];
-
+	businessId: string;
 	ngOnInit() {
 		Promise.resolve(null).then(() => {
 			this.init();
@@ -50,7 +50,8 @@ export class PublishChatbotComponent implements OnInit {
 
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isBizAdmin() || this.dataService.isFlowManager()) {
-					this.loadChatProjects(this.dataService.loggedInUser.businessId);
+					this.businessId = this.dataService.loggedInUser.businessId;
+					this.loadChatProjects();
 				} else {
 					let d = this.dialog.open(BusinessPickerComponent, {
 						width: "auto",
@@ -59,7 +60,8 @@ export class PublishChatbotComponent implements OnInit {
 					d.afterClosed().subscribe(x => {
 						if (x) {
 							let ba = x as BusinessAccount;
-							this.loadChatProjects(ba.id);
+							this.businessId = ba.id;
+							this.loadChatProjects();
 						} else {
 							this.dialogRef.close();
 						}
@@ -74,22 +76,23 @@ export class PublishChatbotComponent implements OnInit {
 		});
 	}
 
-	createNewChatProject(bizId: string) {
+	createNewChatProject() {
 		let d = this.dialog.open(CreateChatbotComponent, {
 			width: 'auto',
 			disableClose: true,
 			data: <BusinessDetails>{
-				id: bizId
+				id: this.businessId
 			}
 		});
 		d.afterClosed().subscribe(x => {
 			if (x) {
-				this.loadChatProjects(bizId);
+				this.loadChatProjects();
 			}
 		});
 	}
 
-	loadChatProjects(bizId: string) {
+	loadChatProjects() {
+		let bizId = this.businessId;
 		this.infoDialog.showSpinner();
 		this.dataService.getChatProjects(bizId, 0, 10000).subscribe(x => {
 			this.infoDialog.hideSpinner();
