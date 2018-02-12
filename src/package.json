@@ -25,13 +25,13 @@
       "category": "Graphics",
       "icon": "favicon"
     },
-    "electronVersion": "1.8.2-beta.3",
+    "electronVersion": "1.8.2",
     "publish": {
       "provider": "generic",
       "url": "https://cdn.ana.chat/dist/ana-app/${os}-${arch}"
     }
   },
   "dependencies": {
-    "electron-updater": "^2.18.2"
+    "electron-updater": "^2.20.1"
   }
 }
