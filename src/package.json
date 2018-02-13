@@ -16,14 +16,41 @@
     },
     "mac": {
       "icon": "favicon.icns",
-      "category": "public.app-category.graphics-design"
+      "category": "public.app-category.graphics-design",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "win": {
-      "icon": "favicon.ico"
+      "icon": "favicon.ico",
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "linux": {
       "category": "Graphics",
-      "icon": "favicon"
+      "icon": "favicon",
+      "target": [
+        {
+          "target": "AppImage",
+          "arch": [
+            "x64",
+            "ia32"
+          ]
+        }
+      ]
     },
     "electronVersion": "1.8.2",
     "publish": {
