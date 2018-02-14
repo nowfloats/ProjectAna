@@ -36,7 +36,8 @@ import {
 	MatToolbarModule,
 	ErrorStateMatcher,
 	ShowOnDirtyErrorStateMatcher,
-	MatAutocompleteModule,	MatChipsModule
+	MatAutocompleteModule,
+	MatChipsModule
 } from '@angular/material';
 import { NgxElectronModule } from 'ngx-electron';
 
