@@ -16,6 +16,10 @@ import { SimulatorService } from '../../../services/simulator.service';
 import { PublishChatbotComponent } from '../../shared/publish-chatbot/publish-chatbot.component';
 import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dialog.component';
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
+import { LoginService } from '../../../services/login.service';
+import { DataService } from '../../../services/data.service';
+import { BusinessPickerComponent } from '../../shared/business-picker/business-picker.component';
+import { BusinessAccount } from '../../../models/data.models';
 
 @Component({
 	selector: 'app-chatflow',
@@ -29,6 +33,8 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		public infoDialog: InfoDialogService,
 		public route: ActivatedRoute,
 		public router: Router,
+		public dataService: DataService,
+		private loginService: LoginService,
 		public snakbar: MatSnackBar,
 		private hotkeys: HotkeysService,
 		public globalsService: GlobalsService,
@@ -442,9 +448,39 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 	}
 
 	openPublishDialog() {
-		this.dialog.open(PublishChatbotComponent, {
-			width: 'auto',
-			data: this.saveChatFlow()
+
+		this.infoDialog.showSpinner();
+		this.loginService.performLogin(false, null, true, (done) => {
+			this.infoDialog.hideSpinner();
+
+			if (this.dataService.loggedInUser) {
+				if (this.dataService.isBizAdmin() || this.dataService.isFlowManager()) {
+					this.dialog.open(PublishChatbotComponent, {
+						width: 'auto',
+						data: {
+							pack: this.saveChatFlow(),
+							bizId: this.dataService.loggedInUser.businessId
+						}
+					});
+				} else {
+					let d = this.dialog.open(BusinessPickerComponent, {
+						width: "auto",
+						data: null
+					});
+					d.afterClosed().subscribe(x => {
+						if (x) {
+							let ba = x as BusinessAccount;
+							this.dialog.open(PublishChatbotComponent, {
+								width: 'auto',
+								data: {
+									pack: this.saveChatFlow(),
+									bizId: ba.id
+								}
+							});
+						}
+					});
+				}
+			}
 		});
 	}
 

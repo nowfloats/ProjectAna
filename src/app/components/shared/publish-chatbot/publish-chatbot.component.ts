@@ -32,52 +32,60 @@ export class PublishChatbotComponent implements OnInit {
 		private dialog: MatDialog,
 		private infoDialog: InfoDialogService,
 		private dialogRef: MatDialogRef<PublishChatbotComponent>,
-		@Inject(MAT_DIALOG_DATA) private pack: models.ChatFlowPack) {
+		@Inject(MAT_DIALOG_DATA) private params: PublishChatbotParams) {
+
+		this.pack = params.pack;
+		this.businessId = params.bizId;
+		this.loadChatProjects();
 	}
 
 	@ViewChild("chatProjectFormField")
 	chatProjectFormField: MatFormField;
 
 	chatProjects: ChatProject[] = [];
+	pack: models.ChatFlowPack;
 	businessId: string;
+
 	ngOnInit() {
-		Promise.resolve(null).then(() => {
-			this.init();
-		});
 	}
 
-	init() {
+	newChatProject: ChatProject = {
+		businessId: "",
+		id: null,
+		name: null
+	};
+
+	canPublish() {
+		if (this.selectedProject) {
+			return true;
+		}
+		if (this.newChatProject && this.newChatProject.id && this.newChatProject.name) {
+			return true;
+		}
+		return false;
+	}
+
+	createAndPublish() {
+		if (!this.newChatProject || !this.newChatProject.id || !this.newChatProject.name) {
+			return;
+		}
+
 		this.infoDialog.showSpinner();
-		this.loginService.performLogin(false, null, true, (done) => {
+		this.newChatProject.businessId = this.businessId;
+		this.dataService.createChatProject(this.newChatProject).subscribe(x => {
 			this.infoDialog.hideSpinner();
-
-			if (this.dataService.loggedInUser) {
-				if (this.dataService.isBizAdmin() || this.dataService.isFlowManager()) {
-					this.businessId = this.dataService.loggedInUser.businessId;
-					this.loadChatProjects();
-				} else {
-					let d = this.dialog.open(BusinessPickerComponent, {
-						width: "auto",
-						data: null
-					});
-					d.afterClosed().subscribe(x => {
-						if (x) {
-							let ba = x as BusinessAccount;
-							this.businessId = ba.id;
-							this.loadChatProjects();
-						} else {
-							this.dialogRef.close();
-						}
-					});
-					//this.infoDialog.alert("Unauthorized!", "Only a business admin or a flow manager can publish a flow", () => {
-					//	this.dialogRef.close();
-					//});
-				}
+			if (x.success) {
+				this.selectedProject = this.newChatProject;
+				this.doPublish();
 			} else {
-				this.dialogRef.close();
+				this.dataService.handleTypedError(x.error, "Unable to create chatbot project", "Something went wrong while creating the chatbot project. Please try again.");
 			}
+		}, err => {
+			this.infoDialog.hideSpinner();
+			this.dataService.handleError(err, "Unable to create chatbot project", "Something went wrong while creating the chatbot project. Please try again.");
 		});
 	}
+	/*
 	added = "";
 	createNewChatProject() {
 		let d = this.dialog.open(CreateChatbotComponent, {
@@ -90,12 +98,12 @@ export class PublishChatbotComponent implements OnInit {
 		d.afterClosed().subscribe(x => {
 			if (x) {
 				this.added = "New chat bot project created";
-				setTimeout(() => this.added = null, 3000);	
+				setTimeout(() => this.added = null, 3000);
 				this.loadChatProjects();
 			}
 		});
 	}
-
+	*/
 	loadChatProjects() {
 		let bizId = this.businessId;
 		this.infoDialog.showSpinner();
@@ -114,6 +122,9 @@ export class PublishChatbotComponent implements OnInit {
 
 	doPublish() {
 		if (!this.selectedProject) {
+			if (this.newChatProject.id && this.newChatProject.name) {
+				this.createAndPublish();
+			}
 			return;
 		}
 
@@ -159,4 +170,9 @@ export class PublishChatbotComponent implements OnInit {
 		}
 	}
 
+}
+
+export interface PublishChatbotParams {
+	pack: models.ChatFlowPack;
+	bizId: string;
 }
