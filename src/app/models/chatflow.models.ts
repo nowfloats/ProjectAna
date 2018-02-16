@@ -364,6 +364,11 @@ export class ModelHelpers {
 				return section.SectionType;
 		}
 	}
+
+	chatNodeAlias(chatNode: ChatNode) {
+		return chatNode.Name || chatNode.NodeType;
+	}
+
 	chatButtonAlias(btn: Button) {
 		return btn.ButtonName || btn.ButtonText || btn.ButtonType;
 	}
@@ -572,17 +577,21 @@ export class ModelHelpers {
 		}
 	}
 
-	nodeDelete(chatNode: ChatNode, nodeEditor: NodeEditorComponent) {
+	nodeDeleteDirect(chatNode: ChatNode) {
+		let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
+		var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
+		network.chatNodeVMs.splice(elementIdxToDel, 1);
+
+		network.updateChatNodeConnections();
+		network.parent.updateLayout();
+	}
+
+	nodeDelete(chatNode: ChatNode, nodeEditor?: NodeEditorComponent) {
 		this.infoDialog.confirm('Sure?', `Are you sure you want to delete '${chatNode.Name || chatNode.NodeType}' chat node?`, (ok) => {
 			if (ok) {
-				let network = this.globalsService.chatFlowComponent.chatFlowNetwork;
-				var elementIdxToDel = network.chatNodeVMs.findIndex(x => x.chatNode.Id == chatNode.Id);
-				network.chatNodeVMs.splice(elementIdxToDel, 1);
-
-				network.updateChatNodeConnections();
-				network.parent.updateLayout();
-
-				nodeEditor.dialogRef.close();
+				this.nodeDeleteDirect(chatNode);
+				if (nodeEditor)
+					nodeEditor.dialogRef.close();
 			}
 		});
 

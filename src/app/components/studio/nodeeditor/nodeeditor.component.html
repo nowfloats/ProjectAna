@@ -108,7 +108,7 @@
                 </div>
             </div>
         </mat-tab>
-        <mat-tab label="Content" *ngIf="['Card', 'Combination'].indexOf(chatNode.NodeType)!=-1" #contentTab>
+        <mat-tab label="Content" *ngIf="contentTabVisible()" #contentTab>
             <div class="node-section-details tab-content">
                 <div class="node-section" *ngFor="let section of chatNode.Sections; let i = index">
                     <div [ngSwitch]="MH.editorTypeFromSectionType(section.SectionType)">
@@ -309,8 +309,8 @@
                                 <input matInput [autofocus] type="text" [placeholder]="['ApiCall', 'Condition'].indexOf(chatNode.NodeType)==-1?'Text on button':'Button Name'" [(ngModel)]="btn.ButtonName" name="btnName-{{i}}">
                             </mat-form-field>
                             <!--<mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ButtonText')">
-        <input matInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{ {i}}">
-    </mat-form-field>-->
+                                <input matInput type="text" placeholder="Text in chat" [(ngModel)]="btn.ButtonText" name="btnText-{ {i}}">
+                            </mat-form-field>-->
                             <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'ConditionMatchKey')">
                                 <input matInput type="text" placeholder="Condition Match Key" [(ngModel)]="btn.ConditionMatchKey" name="btnConditionMatchKey-{{i}}">
                             </mat-form-field>
@@ -351,11 +351,11 @@
                                 </mat-form-field>
 
                                 <!--<mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PrefixText')">
-        <input matInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
-    </mat-form-field>
-    <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
-        <input matInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
-    </mat-form-field>-->
+                                    <input matInput type="text" placeholder="Prefix" [(ngModel)]="btn.PrefixText" name="btnPrefixText-{ {i}}">
+                                </mat-form-field>
+                                <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'PostfixText')">
+                                    <input matInput type="text" placeholder="Postfix" [(ngModel)]="btn.PostfixText" name="btnPostfixText-{ {i}}">
+                                </mat-form-field>-->
                                 <mat-form-field [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'MinLength')">
                                     <input matInput type="number" placeholder="Minimum Length" [(ngModel)]="btn.MinLength" name="btnMinLength-{{i}}">
                                 </mat-form-field>
@@ -369,26 +369,26 @@
                                     <mat-checkbox [(ngModel)]="btn.IsMultiLine" name="btnIsMultiLine-{{i}}" align="start">Multiple line allowed</mat-checkbox>
                                 </section>
                                 <!--<section class="form-field">
-        <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
-    </section>-->
+                                    <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
+                                </section>-->
                             </div>
                             <!--<section class="form-field">
-        <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</mat-checkbox>
-    </section>
-    <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
-        <mat-form-field>
-            <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{ {i}}">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{ {i}}">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{ {i}}">
-        </mat-form-field>
-        <mat-form-field>
-            <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{ {i}}">
-        </mat-form-field>
-    </div>-->
+                                <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</mat-checkbox>
+                            </section>
+                            <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
+                                <mat-form-field>
+                                    <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{ {i}}">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{ {i}}">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{ {i}}">
+                                </mat-form-field>
+                                <mat-form-field>
+                                    <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{ {i}}">
+                                </mat-form-field>
+                            </div>-->
                         </div>
                     </div>
                 </div>

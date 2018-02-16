@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild, OnDestroy, AfterViewInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { ActivatedRoute } from '@angular/router';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTab, MatTabGroup } from '@angular/material';
@@ -17,7 +17,6 @@ import { Hotkey, HotkeysService } from 'angular2-hotkeys';
 	styleUrls: ['./nodeeditor.component.css']
 })
 export class NodeEditorComponent implements OnInit, OnDestroy {
-
 	constructor(
 		private chatFlowService: ChatFlowService,
 		private hotkeys: HotkeysService,
@@ -33,6 +32,7 @@ export class NodeEditorComponent implements OnInit, OnDestroy {
 
 	@ViewChild("contentTab")
 	contentTab: MatTab;
+	contentTabIndex = 1;
 
 	@ViewChild("buttonsTab")
 	buttonsTab: MatTab;
@@ -55,6 +55,7 @@ export class NodeEditorComponent implements OnInit, OnDestroy {
 		this.unbindNodeEditorShortcuts();
 		this.keymapOnNodeEditor.forEach(x => this.hotkeys.add(x));
 	}
+
 	unbindNodeEditorShortcuts() {
 		this.keymapOnNodeEditor.forEach(x => this.hotkeys.remove(x));
 	}
@@ -65,6 +66,13 @@ export class NodeEditorComponent implements OnInit, OnDestroy {
 
 	ngOnInit(): void {
 		this.bindNodeEditorShortcuts();
+		if (this.chatNode && this.contentTabVisible() && this.chatNode.Sections.length > 0) {
+			this.tabGroup.selectedIndex = this.contentTabIndex;
+		}
+	}
+
+	contentTabVisible() {
+		return ['Card', 'Combination'].indexOf(this.chatNode.NodeType) != -1;
 	}
 
 	addNewSectionText() {

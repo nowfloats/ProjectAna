@@ -98,6 +98,10 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this.addNewNode();
 			return false;
 		}, [], "Add a new node"),
+		new Hotkey("del", (e, s) => {
+			this.deleteSelectedNodes();
+			return false;
+		}, [], "Add a new node"),
 		new Hotkey("alt+f", (e, s) => {
 			this.fitViewToAllNodes();
 			return false;
@@ -115,6 +119,38 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 	unbindDesignerShortcuts() {
 		this.keymapOnDesigner.forEach(x => this.hotkeys.remove(x));
 	}
+
+	deleteSelectedNodes() {
+		let selectedNodes = this.chatFlowNetwork.selectedNodes();
+		if (!selectedNodes || selectedNodes.length <= 0) {
+			return;
+		}
+		let title = `Delete ${selectedNodes.length} nodes?`;
+		let message = `Are you sure, you want to delete ${selectedNodes.length} selected nodes?`;
+		if (selectedNodes.length == 1) {
+			let selectedNode = selectedNodes[0];
+			let name = this.MH.chatNodeAlias(selectedNode.chatNode);
+			title = `Delete '${name}' node?`;
+			message = `Are you sure, you want to delete ${name} nodes?`;
+		}
+		this.infoDialog.confirm(title, message, (ok) => {
+			if (ok) {
+				this.deleteMultipleNodes(selectedNodes);
+			}
+		});
+	}
+
+	deleteMultipleNodes(nodesVMs: ChatNodeVM[]) {
+		for (let i = 0; i < nodesVMs.length; i++) {
+			let nodeVM = nodesVMs[i];
+			var elementIdxToDel = this.chatFlowNetwork.chatNodeVMs.findIndex(x => x.chatNode.Id == nodeVM.chatNode.Id);
+			this.chatFlowNetwork.chatNodeVMs.splice(elementIdxToDel, 1);
+		}
+
+		this.chatFlowNetwork.updateChatNodeConnections();
+		this.chatFlowNetwork.parent.updateLayout();
+	}
+
 
 	updateLayout() {
 		if (this.chatFlowNetwork &&
@@ -324,7 +360,8 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 
 	openEditor(chatNodeVM: ChatNodeVM) {
 		let dialogRef = this.dialog.open(NodeEditorComponent, {
-			width: '80%',
+			width: '60%',
+			backdropClass: 'dark-overlay',
 			data: chatNodeVM.chatNode
 		});
 		dialogRef.afterOpen().subscribe(x => {
@@ -516,6 +553,10 @@ class ChatFlowNetwork {
 	chatNodeConnections: ChatNodeConnection[] = [];
 	chatNodeVMs: ChatNodeVM[] = [];
 	chatFlowPack: models.ChatFlowPack;
+
+	selectedNodes() {
+		return this.chatNodeVMs.filter(x => x.isSelected);
+	}
 
 	newChatNodeConnection: ChatNodeNewConnection = new ChatNodeNewConnection();
 	draggingChatNode: ChatNodeVM;
@@ -783,6 +824,18 @@ export class ChatNodeVM {
 	}
 
 	circleRadius = Config.buttonCircleRadius;
+
+	isSelected: boolean = false;
+	toggleSelection() {
+		this.isSelected = !this.isSelected;
+	}
+	isNodeEmpty() {
+		if ((!this.chatNode.Sections || this.chatNode.Sections.length <= 0) && (!this.chatNode.Buttons || this.chatNode.Buttons.length <= 0)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 }
 
 class Point {

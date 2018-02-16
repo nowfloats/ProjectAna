@@ -162,3 +162,12 @@ input[type=text] {
     -webkit-border-radius: 100%;
     border-radius: 100%;
 }
+
+.dark-overlay {
+    background-color: black;
+    opacity: 0.8 !important;
+}
+
+app-nodeeditor .mat-tab-body-wrapper {
+    height: 50vh;
+}

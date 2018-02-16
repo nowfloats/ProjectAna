@@ -56,12 +56,12 @@
                 </defs>
 
                 <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
-                    <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)">
+                    <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)" (click)="chatNodeVM.toggleSelection()">
                         <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id">
-                            <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect chatnode">
+                            <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect chatnode" [class.selected]="chatNodeVM.isSelected">
                                 <xhtml:div [ngClass]="{'startnode':chatNodeVM.chatNode.IsStartNode}" class="chatnode-header">
                                     <xhtml:p>
-                                        {{chatNodeVM.chatNode.Name || chatNodeVM.chatNode.NodeType}}
+                                        {{MH.chatNodeAlias(chatNodeVM.chatNode)}}
                                     </xhtml:p>
                                 </xhtml:div>
                                 <xhtml:div class="chatnode-body">
@@ -89,6 +89,11 @@
                                                 </xhtml:td>
                                             </xhtml:tr>
                                         </xhtml:table>
+                                    </xhtml:div>
+                                    <xhtml:div *ngIf="chatNodeVM.isNodeEmpty()" class="chatnode-empty">
+                                        <xhtml:span>
+                                            Double click to edit node
+                                        </xhtml:span>
                                     </xhtml:div>
                                 </xhtml:div>
                             </xhtml:div>
