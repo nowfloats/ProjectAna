@@ -32,3 +32,16 @@ mat-form-field, mat-select {
 mat-dialog-actions {
     justify-content: center;
 }
+
+.section-type-icon {
+    width: 80px;
+    height: 80px;
+}
+
+    .section-type-icon.text {
+        background: url("../../../../assets/img/node-editor/text@2x.png") no-repeat;
+    }
+
+        .section-type-icon.text:hover {
+            background: url("../../../../assets/img/node-editor/text-hover@2x.png") no-repeat;
+        }
