@@ -346,7 +346,7 @@ export class SimulatorService {
 		if (value && (typeof value == "string") && value.replace) {
 			let rTxt = value
 				.replace(/\n/g, "\\n")
-				.replace(/\'/g, "\\'")
+				//.replace(/\'/g, "\\'")
 				.replace(/\"/g, '\\"')
 				.replace(/\&/g, "\\&")
 				.replace(/\r/g, "\\r")
