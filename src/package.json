@@ -21,8 +21,7 @@
         {
           "target": "dmg",
           "arch": [
-            "x64",
-            "ia32"
+            "x64"
           ]
         }
       ]
@@ -46,8 +45,7 @@
         {
           "target": "AppImage",
           "arch": [
-            "x64",
-            "ia32"
+            "x64"
           ]
         }
       ]
