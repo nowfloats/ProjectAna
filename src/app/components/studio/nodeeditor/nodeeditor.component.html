@@ -263,12 +263,12 @@
                     </div>
                 </div>
                 <section class="text-center">
-                    <img src="assets/img/node-editor/text@2x.png" class="section-type-button text" (click)="MH.addSection(chatNode, SectionType.Text)" />
-                    <img src="assets/img/node-editor/image@2x.png" class="section-type-button image" (click)="MH.addSection(chatNode, SectionType.Image)" />
-                    <img src="assets/img/node-editor/gif@2x.png" class="section-type-button gif" (click)="MH.addSection(chatNode, SectionType.Gif)" />
-                    <!--<img src="assets/img/node-editor/audio@2x.png" class="section-type-button audio" (click)="MH.addSection(chatNode, SectionType.Audio)" />-->
-                    <img src="assets/img/node-editor/video@2x.png" class="section-type-button video" (click)="MH.addSection(chatNode, SectionType.Video)" />
-                    <img src="assets/img/node-editor/carousel@2x.png" class="section-type-button carousel" (click)="MH.addSection(chatNode, SectionType.Carousel)" />
+                    <img matTooltip="Add a text content" class="section-type-button text" (click)="MH.addSection(chatNode, SectionType.Text)" />
+                    <img matTooltip="Add an image content" class="section-type-button image" (click)="MH.addSection(chatNode, SectionType.Image)" />
+                    <img matTooltip="Add a gif content" class="section-type-button gif" (click)="MH.addSection(chatNode, SectionType.Gif)" />
+                    <!--<img matTooltip="Add an audio content" class="section-type-button audio" (click)="MH.addSection(chatNode, SectionType.Audio)" />-->
+                    <img matTooltip="Add a video content" class="section-type-button video" (click)="MH.addSection(chatNode, SectionType.Video)" />
+                    <img matTooltip="Add a carousel content" class="section-type-button carousel" (click)="MH.addSection(chatNode, SectionType.Carousel)" />
                     <!--<mat-menu #addSectionMenu="matMenu">
         <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Text)">Text</button>
         <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Image)">Image</button>

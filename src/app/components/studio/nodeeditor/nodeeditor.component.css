@@ -34,53 +34,53 @@ mat-dialog-actions {
 }
 
 .section-type-button {
-    width: 80px;
-    height: 80px;
-    padding: 8px;
+    width: 110px;
+    height: 110px;
+    padding: 11px;
     cursor: pointer;
 }
 
     .section-type-button.text {
-        content: url("../../../../assets/img/node-editor/text@2x.png");
+        content: url("../../../../assets/img/node-editor/text.png");
     }
 
         .section-type-button.text:hover {
-            content: url("../../../../assets/img/node-editor/text-hover@2x.png");
+            content: url("../../../../assets/img/node-editor/text-hover.png");
             padding: 0;
         }
 
     .section-type-button.image {
-        content: url("../../../../assets/img/node-editor/image@2x.png");
+        content: url("../../../../assets/img/node-editor/image.png");
     }
 
         .section-type-button.image:hover {
-            content: url("../../../../assets/img/node-editor/image-hover@2x.png");
+            content: url("../../../../assets/img/node-editor/image-hover.png");
             padding: 0;
         }
 
     .section-type-button.video {
-        content: url("../../../../assets/img/node-editor/video@2x.png");
+        content: url("../../../../assets/img/node-editor/video.png");
     }
 
         .section-type-button.video:hover {
-            content: url("../../../../assets/img/node-editor/video-hover@2x.png");
+            content: url("../../../../assets/img/node-editor/video-hover.png");
             padding: 0;
         }
 
     .section-type-button.gif {
-        content: url("../../../../assets/img/node-editor/gif@2x.png");
+        content: url("../../../../assets/img/node-editor/gif.png");
     }
 
         .section-type-button.gif:hover {
-            content: url("../../../../assets/img/node-editor/gif-hover@2x.png");
+            content: url("../../../../assets/img/node-editor/gif-hover.png");
             padding: 0;
         }
 
     .section-type-button.carousel {
-        content: url("../../../../assets/img/node-editor/carousel@2x.png");
+        content: url("../../../../assets/img/node-editor/carousel.png");
     }
 
         .section-type-button.carousel:hover {
-            content: url("../../../../assets/img/node-editor/carousel-hover@2x.png");
+            content: url("../../../../assets/img/node-editor/carousel-hover.png");
             padding: 0;
         }
