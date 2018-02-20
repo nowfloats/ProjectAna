@@ -33,15 +33,54 @@ mat-dialog-actions {
     justify-content: center;
 }
 
-.section-type-icon {
+.section-type-button {
     width: 80px;
     height: 80px;
+    padding: 8px;
+    cursor: pointer;
 }
 
-    .section-type-icon.text {
-        background: url("../../../../assets/img/node-editor/text@2x.png") no-repeat;
+    .section-type-button.text {
+        content: url("../../../../assets/img/node-editor/text@2x.png");
     }
 
-        .section-type-icon.text:hover {
-            background: url("../../../../assets/img/node-editor/text-hover@2x.png") no-repeat;
+        .section-type-button.text:hover {
+            content: url("../../../../assets/img/node-editor/text-hover@2x.png");
+            padding: 0;
+        }
+
+    .section-type-button.image {
+        content: url("../../../../assets/img/node-editor/image@2x.png");
+    }
+
+        .section-type-button.image:hover {
+            content: url("../../../../assets/img/node-editor/image-hover@2x.png");
+            padding: 0;
+        }
+
+    .section-type-button.video {
+        content: url("../../../../assets/img/node-editor/video@2x.png");
+    }
+
+        .section-type-button.video:hover {
+            content: url("../../../../assets/img/node-editor/video-hover@2x.png");
+            padding: 0;
+        }
+
+    .section-type-button.gif {
+        content: url("../../../../assets/img/node-editor/gif@2x.png");
+    }
+
+        .section-type-button.gif:hover {
+            content: url("../../../../assets/img/node-editor/gif-hover@2x.png");
+            padding: 0;
+        }
+
+    .section-type-button.carousel {
+        content: url("../../../../assets/img/node-editor/carousel@2x.png");
+    }
+
+        .section-type-button.carousel:hover {
+            content: url("../../../../assets/img/node-editor/carousel-hover@2x.png");
+            padding: 0;
         }
