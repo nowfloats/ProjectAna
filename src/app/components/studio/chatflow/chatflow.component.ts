@@ -7,7 +7,7 @@ import { SettingsService } from '../../../services/settings.service'
 import { GlobalsService } from '../../../services/globals.service'
 import * as models from '../../../models/chatflow.models';
 import { NodeEditorComponent } from '../nodeeditor/nodeeditor.component';
-import { MatMenuTrigger } from '@angular/material';
+import { MatMenuTrigger, MatSnackBarRef, SimpleSnackBar } from '@angular/material';
 
 import { ObjectID } from 'bson';
 import { InfoDialogService } from '../../../services/info-dialog.service';
@@ -41,7 +41,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		public simulatorService: SimulatorService,
 		public settings: SettingsService) {
 
-		this.chatFlowNetwork = new ChatFlowNetwork(this, this.infoDialog);
+		this.chatFlowNetwork = new ChatFlowNetwork(this, this.infoDialog, this.snakbar);
 		this.chatFlowNetwork.newChatNodeConnection.isHidden = true;
 		this._viewBoxX = 0;
 		this._viewBoxY = 0;
@@ -150,7 +150,6 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		this.chatFlowNetwork.updateChatNodeConnections();
 		this.chatFlowNetwork.parent.updateLayout();
 	}
-
 
 	updateLayout() {
 		if (this.chatFlowNetwork &&
@@ -379,7 +378,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			Buttons: [],
 			Sections: [],
 			NodeType: models.NodeType.Combination,
-		});
+		}, this.snakbar);
 
 		newNodeVM._x = (this._viewBoxX + (this._viewBoxWidth / 2)) + (Math.random() * 50);
 		newNodeVM._y = (this._viewBoxY + (this._viewBoxHeight / 2)) + (Math.random() * 50);
@@ -403,7 +402,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this.chatFlowNetwork.chatNodeVMs = [];
 
 			pack.ChatNodes.forEach(cn => {
-				new ChatNodeVM(this.chatFlowNetwork, cn);
+				new ChatNodeVM(this.chatFlowNetwork, cn, this.snakbar);
 
 				cn.Buttons.forEach(btn => {
 					btn.AdvancedOptions = ((btn.VariableValue || btn.ConditionMatchKey || btn.ConditionMatchValue || btn.ConditionOperator) ? true : false);
@@ -533,7 +532,8 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 class ChatFlowNetwork {
 	constructor(
 		public parent: ChatFlowComponent,
-		public infoDialog: InfoDialogService) {
+		public infoDialog: InfoDialogService,
+		public snackbar: MatSnackBar) {
 	}
 
 	updateChatNodeConnections(): void {
@@ -544,7 +544,7 @@ class ChatFlowNetwork {
 				if (srcBtn.NextNodeId != null || srcBtn.NextNodeId != "") {
 					let destNode = this.chatNodeVMs.filter(x => x.chatNode.Id == srcBtn.NextNodeId);
 					if (destNode && destNode.length > 0)
-						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn), destNode[0], this.infoDialog));
+						this.chatNodeConnections.push(new ChatNodeConnection(new ChatButtonConnector(chatNodeVM, srcBtn, this.snackbar), destNode[0], this.infoDialog));
 				}
 			});
 		});
@@ -561,6 +561,9 @@ class ChatFlowNetwork {
 	newChatNodeConnection: ChatNodeNewConnection = new ChatNodeNewConnection();
 	draggingChatNode: ChatNodeVM;
 	draggingChatNodeOffset: Point;
+
+	clickConnectionStartButton: ChatButtonConnector;
+	clickConnectionStartSnackbar: MatSnackBarRef<SimpleSnackBar>;
 }
 
 class ChatNodeConnection {
@@ -697,7 +700,8 @@ class ChatNodeNewConnection {
 class ChatButtonConnector {
 	constructor(
 		public chatNodeVM: ChatNodeVM,
-		public button: models.Button) {
+		public button: models.Button,
+		public snackbar: MatSnackBar) {
 	}
 
 	x() {
@@ -740,6 +744,20 @@ class ChatButtonConnector {
 		this.chatNodeVM.network.updateChatNodeConnections();
 	}
 
+	startDirectConnection(event: MouseEvent) {
+		this.chatNodeVM.network.clickConnectionStartButton = this;
+
+		if (this.chatNodeVM.network.clickConnectionStartSnackbar) {
+			this.chatNodeVM.network.clickConnectionStartSnackbar.dismiss();
+			this.chatNodeVM.network.clickConnectionStartSnackbar = null;
+		}
+
+		this.chatNodeVM.network.clickConnectionStartSnackbar = this.snackbar.open(`Connection started at button '${this.button.ButtonName}' of node '${this.chatNodeVM.chatNode.Name}'. Click on the target node to connect.`, 'Abort');
+		this.chatNodeVM.network.clickConnectionStartSnackbar.onAction().subscribe(() => {
+			this.chatNodeVM.network.clickConnectionStartButton = null;
+		});
+	}
+
 	isConnected() {
 		return this.button.NextNodeId && (this.chatNodeVM.network.chatNodeVMs.filter(x => x.chatNode.Id == this.button.NextNodeId).length > 0);
 	}
@@ -748,7 +766,8 @@ class ChatButtonConnector {
 export class ChatNodeVM {
 	constructor(
 		public network: ChatFlowNetwork,
-		public chatNode: models.ChatNode) {
+		public chatNode: models.ChatNode,
+		public snackbar: MatSnackBar) {
 		this.network.chatNodeVMs.push(this);
 
 		this._x = (this.network.chatNodeVMs.indexOf(this)) * Config.defaultNodeWidth;
@@ -812,7 +831,7 @@ export class ChatNodeVM {
 	}
 
 	chatButtonConnectors() {
-		return this.chatNode.Buttons.map(btn => new ChatButtonConnector(this, btn));
+		return this.chatNode.Buttons.map(btn => new ChatButtonConnector(this, btn, this.snackbar));
 	}
 
 	nodeConnectorY() {
@@ -821,6 +840,19 @@ export class ChatNodeVM {
 
 	nodeConnectorX() {
 		return (this.x()) + (this.width() / 2) - this.circleRadius;
+	}
+
+	clickConnectionActive() {
+		return (this.network.clickConnectionStartButton && this.network.clickConnectionStartButton.chatNodeVM.chatNode.Id != this.chatNode.Id);
+	}
+
+	nodeClick() {
+		if (this.clickConnectionActive()) {
+			this.network.clickConnectionStartButton.setButtonNextNodeId(this.chatNode.Id);
+			this.network.clickConnectionStartButton = null;
+			this.network.clickConnectionStartSnackbar.dismiss();
+		} else
+			this.toggleSelection();
 	}
 
 	circleRadius = Config.buttonCircleRadius;

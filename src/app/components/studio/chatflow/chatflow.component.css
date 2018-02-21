@@ -10,6 +10,10 @@
     cursor: pointer;
 }
 
+.not-allowed-cursor {
+    cursor: not-allowed;
+}
+
 .moving-cursor {
     cursor: grab;
 }
@@ -71,6 +75,10 @@
 
     .chatnode.selected {
         border: 2px solid #8cc83c;
+    }
+
+    .chatnode.click-connect {
+        cursor: alias;
     }
 
 .chatnode-header {

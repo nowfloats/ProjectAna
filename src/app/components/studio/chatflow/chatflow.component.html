@@ -56,9 +56,9 @@
                 </defs>
 
                 <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
-                    <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)" (click)="chatNodeVM.toggleSelection()">
+                    <foreignObject [attr.transform]="ngTr(chatNodeVM.x(), chatNodeVM.y())" (mousedown)="chatNodeVM.mouseDown($event)" (mouseup)="chatNodeVM.mouseUp($event)" (mouseleave)="chatNodeVM.mouseLeave($event)" (mouseenter)="chatNodeVM.mouseEnter($event)" fill="url(#NodeFG)" class="node-section-title noselect" x="0" y="0" [attr.width]="chatNodeVM.width()-30" [attr.height]="chatNodeVM.height()" height="0" width="0" (dblclick)="openEditor(chatNodeVM)" (click)="chatNodeVM.nodeClick()">
                         <xhtml:div xmlns="http://www.w3.org/1999/xhtml" [attr.node-id]="chatNodeVM.chatNode.Id">
-                            <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect chatnode" [class.selected]="chatNodeVM.isSelected">
+                            <xhtml:div onmousedown="return false;//to avoid text selection, creates issue with node drag" class="noselect chatnode" [class.selected]="chatNodeVM.isSelected" [class.click-connect]="chatNodeVM.clickConnectionActive()">
                                 <xhtml:div [ngClass]="{'startnode':chatNodeVM.chatNode.IsStartNode}" class="chatnode-header">
                                     <xhtml:p>
                                         {{MH.chatNodeAlias(chatNodeVM.chatNode)}}
@@ -102,12 +102,12 @@
                 </g>
 
                 <g *ngFor="let connection of chatFlowNetwork.chatNodeConnections" transform="translate(15,20)">
-                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0" (click)="connection.remove($event)" class="pointer-cursor"></path>
+                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0" (click)="connection.remove($event)" class="not-allowed-cursor"></path>
                 </g>
 
                 <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
                     <g *ngFor="let connector of chatNodeVM.chatButtonConnectors()" transform="translate(-7,0)">
-                        <circle r="0" [attr.r]="connector.circleRadius-3" [attr.cx]="connector.x()" [attr.cy]="connector.y()" [attr.fill]="connector.isConnected()?'darkgray':'#F0F0F0'" stroke="#F0F0F0" stroke-width="3" (mousedown)="connector.mouseDown($event)" (mouseup)="connector.mouseUp($event)" style="cursor: crosshair; padding: 20px"></circle>
+                        <circle r="0" [attr.r]="connector.circleRadius-3" [attr.cx]="connector.x()" [attr.cy]="connector.y()" [attr.fill]="connector.isConnected()?'darkgray':'#F0F0F0'" stroke="#F0F0F0" stroke-width="3" (mousedown)="connector.mouseDown($event)" (mouseup)="connector.startDirectConnection($event)" style="cursor: crosshair; padding: 20px"></circle>
                     </g>
                     <circle r="0" [attr.r]="chatNodeVM.circleRadius-3" [attr.cx]="chatNodeVM.nodeConnectorX()" [attr.cy]="chatNodeVM.nodeConnectorY()" fill="darkgray" stroke="#F0F0F0" stroke-width="3" transform="translate(-7,0)"></circle>
                 </g>
