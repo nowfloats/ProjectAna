@@ -5,7 +5,9 @@ import { DataService } from '../../services/data.service';
 import { InfoDialogService } from '../../services/info-dialog.service';
 import { AnalyticsWindowService } from '../../services/analytics-window.service';
 import { AnalyticsPickerParams, AnalyticsPickerComponent } from '../shared/analytics-picker/analytics-picker.component';
+
 import { MatDialog } from '@angular/material';
+import { BusinessPickerComponent, BusinessPickerParam, ChoosenBizAccChatProj } from '../shared/business-picker/business-picker.component';
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
@@ -50,9 +52,10 @@ export class HomeComponent {
 			}
 			if (this.dataService.loggedInUser) {
 				if (this.dataService.isSuperAdmin()) {
-					this.openAnalyticsPicker();
+					this.openAnalyticsPicker({ askFlowId: true });
 				} else if ((this.dataService.isBizAdmin() || this.dataService.isFlowManager()) && this.dataService.loggedInUser.businessId) {
 					this.openAnalyticsPicker({
+						askFlowId: true,
 						businessId: this.dataService.loggedInUser.businessId
 					});
 				} else {
@@ -62,10 +65,22 @@ export class HomeComponent {
 		});
 	}
 
-	openAnalyticsPicker(params?: AnalyticsPickerParams) {
-		let d = this.dialog.open(AnalyticsPickerComponent, {
+	openAnalyticsPicker(params: BusinessPickerParam) {
+		let d = this.dialog.open(BusinessPickerComponent, {
 			width: 'auto',
 			data: params
+		});
+
+		d.afterClosed().subscribe((x: ChoosenBizAccChatProj) => {
+			if (x && x.bizAccount && x.chatProj) {
+				this.infoDialog.prompt("Analytics Server Url", "Please enter the analytics server url", (result) => {
+					if (result) {
+						localStorage.setItem('analyticsApiBase', result);
+						let url = `/analytics?apiBase=${result}&businessId=${x.bizAccount.id}&businessName=${x.bizAccount.name}&chatFlowId=${x.chatProj.id}`;
+						this.router.navigateByUrl(url);
+					}
+				}, localStorage.getItem('analyticsApiBase'));
+			}
 		});
 	}
 }

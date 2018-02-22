@@ -18,7 +18,7 @@ import { PublishDialogComponent } from '../../shared/publish-dialog/publish-dial
 import { HotkeysService, Hotkey } from 'angular2-hotkeys';
 import { LoginService } from '../../../services/login.service';
 import { DataService } from '../../../services/data.service';
-import { BusinessPickerComponent } from '../../shared/business-picker/business-picker.component';
+import { BusinessPickerComponent, BusinessPickerParam, ChoosenBizAccChatProj } from '../../shared/business-picker/business-picker.component';
 import { BusinessAccount } from '../../../models/data.models';
 
 @Component({
@@ -501,11 +501,13 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 				} else {
 					let d = this.dialog.open(BusinessPickerComponent, {
 						width: "auto",
-						data: null
+						data: <BusinessPickerParam>{
+							askFlowId: false
+						}
 					});
-					d.afterClosed().subscribe(x => {
-						if (x) {
-							let ba = x as BusinessAccount;
+					d.afterClosed().subscribe((x: ChoosenBizAccChatProj) => {
+						if (x && x.bizAccount) {
+							let ba = x.bizAccount;
 							this.dialog.open(PublishChatbotComponent, {
 								width: 'auto',
 								data: {

@@ -59,7 +59,6 @@ import { ChangePasswordComponent } from './components/shared/change-password/cha
 import { LoadingMaskComponent } from './components/shared/loading-mask/loading-mask.component';
 import { CreateChatbotComponent } from './components/shared/create-chatbot/create-chatbot.component';
 import { PublishChatbotComponent } from './components/shared/publish-chatbot/publish-chatbot.component';
-import { AnalyticsPickerComponent } from './components/shared/analytics-picker/analytics-picker.component';
 import { AnalyticsWindowService } from './services/analytics-window.service';
 import { HotkeyModule } from 'angular2-hotkeys';
 import { BusinessPickerComponent } from './components/shared/business-picker/business-picker.component';
@@ -114,7 +113,6 @@ const DECLARATIONS: any[] = [
 	GetAnaChatServerComponent,
 	CreateChatbotComponent,
 	PublishChatbotComponent,
-	AnalyticsPickerComponent,
 	BusinessPickerComponent,
 	AnaCloudSignupComponent,
 	AutofocusDirective,
@@ -152,7 +150,6 @@ const DECLARATIONS: any[] = [
 		GetAnaChatServerComponent,
 		CreateChatbotComponent,
 		PublishChatbotComponent,
-		AnalyticsPickerComponent,
 		BusinessPickerComponent,
 		AnaCloudSignupComponent
 	]

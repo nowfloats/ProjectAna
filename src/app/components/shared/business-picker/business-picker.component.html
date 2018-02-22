@@ -1,14 +1,22 @@
-<h2 matDialogTitle>Choose a business account</h2>
+<h2 matDialogTitle>{{ title }}</h2>
 <mat-dialog-content>
     <mat-form-field class="full-width">
-        <mat-select [disabled]="businessAccountReadonly" placeholder="Business Account" [(ngModel)]="selectedBusinessAccount" name="BusinessAccount">
+        <mat-select [disabled]="param.businessId" placeholder="Business Account" [(ngModel)]="selectedBusinessAccount" name="BusinessAccount" (selectionChange)="loadChatProjects()">
             <mat-option *ngFor="let acc of businessAccounts" [value]="acc">
+                {{ acc.name }}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="full-width" *ngIf="param.askFlowId && chatProjects && chatProjects.length > 0">
+        <mat-select [disabled]="param.businessId && param.flowId" placeholder="Chat Project" [(ngModel)]="selectedChatProject" name="ChatProject">
+            <mat-option *ngFor="let acc of chatProjects" [value]="acc">
                 {{ acc.name }}
             </mat-option>
         </mat-select>
     </mat-form-field>
 </mat-dialog-content>
 <mat-dialog-actions class="actions">
-    <button mat-raised-button (click)="submit()" color="primary" [disabled]="!selectedBusinessAccount">Submit</button>
+    <button mat-raised-button (click)="submit()" color="primary" [disabled]="!valid()">Submit</button>
     <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>

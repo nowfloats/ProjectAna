@@ -2,7 +2,7 @@ import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { BusinessAccount } from '../../../models/data.models';
+import { BusinessAccount, ChatProject } from '../../../models/data.models';
 import { AnalyticsWindowService } from '../../../services/analytics-window.service';
 import { Router } from '@angular/router';
 
@@ -19,11 +19,15 @@ export class BusinessPickerComponent implements OnInit {
 		private router: Router,
 		private analyticsWindow: AnalyticsWindowService,
 		private dialogRef: MatDialogRef<BusinessPickerComponent>,
-		@Optional() @Inject(MAT_DIALOG_DATA) private businessId: string) {
-		if (businessId) {
-			this.businessAccountReadonly = true;
+		@Inject(MAT_DIALOG_DATA) private param: BusinessPickerParam) {
+		if (this.param.askFlowId) {
+			this.title = "Choose business account and chat project";
+		} else {
+			this.title = "Choose business account";
 		}
 	}
+
+	title = "";
 
 	ngOnInit() {
 		Promise.resolve(null).then(() => {
@@ -37,8 +41,8 @@ export class BusinessPickerComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.businessAccounts = x.data.content;
-				if (this.businessId && this.businessAccounts) {
-					let x = this.businessAccounts.filter(x => x.id == this.businessId);
+				if (this.param && this.param.businessId && this.businessAccounts) {
+					let x = this.businessAccounts.filter(x => x.id == this.param.businessId);
 					if (x && x.length > 0)
 						this.selectedBusinessAccount = x[0];
 				}
@@ -51,11 +55,56 @@ export class BusinessPickerComponent implements OnInit {
 		});
 	}
 
-	businessAccountReadonly: boolean = false;
 	selectedBusinessAccount: BusinessAccount;
 	businessAccounts: BusinessAccount[] = [];
 
-	submit() {
-		this.dialogRef.close(this.selectedBusinessAccount);
+	chatProjects: ChatProject[] = [];
+	selectedChatProject: ChatProject;
+
+	loadChatProjects() {
+		if (!this.param.askFlowId)
+			return false;
+		if (!this.selectedBusinessAccount)
+			return false;
+
+		this.infoDialog.showSpinner();
+		this.dataService.getChatProjects(this.selectedBusinessAccount.id, 0, 10000).subscribe(x => {
+			this.infoDialog.hideSpinner();
+			if (x.success) {
+				this.chatProjects = x.data.content;
+			}
+			else {
+				this.dataService.handleTypedError(x.error, "Unable to fetch chat projects", "Something went wrong while trying to fetch chat projects. Please try again.");
+			}
+		}, err => {
+			this.infoDialog.hideSpinner();
+			this.dataService.handleError(err, "Unable to fetch chat projects", "Something went wrong while trying to fetch chat projects. Please try again.");
+		});
 	}
+
+	submit() {
+		this.dialogRef.close(<ChoosenBizAccChatProj>{
+			bizAccount: this.selectedBusinessAccount,
+			chatProj: this.selectedChatProject
+		});
+	}
+
+	valid() {
+		if (this.param.askFlowId) {
+			return this.selectedBusinessAccount && this.selectedChatProject;
+		} else {
+			return this.selectedBusinessAccount;
+		}
+	}
+}
+
+export interface ChoosenBizAccChatProj {
+	bizAccount: BusinessAccount;
+	chatProj: ChatProject;
+}
+
+export interface BusinessPickerParam {
+	askFlowId: boolean;
+	businessId?: string;
+	flowId?: string;
 }
