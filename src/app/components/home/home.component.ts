@@ -4,10 +4,10 @@ import { LoginService } from '../../services/login.service';
 import { DataService } from '../../services/data.service';
 import { InfoDialogService } from '../../services/info-dialog.service';
 import { AnalyticsWindowService } from '../../services/analytics-window.service';
-import { AnalyticsPickerParams, AnalyticsPickerComponent } from '../shared/analytics-picker/analytics-picker.component';
+import { BusinessPickerComponent, BusinessPickerParam, ChoosenBizAccChatProj } from '../shared/business-picker/business-picker.component';
 
 import { MatDialog } from '@angular/material';
-import { BusinessPickerComponent, BusinessPickerParam, ChoosenBizAccChatProj } from '../shared/business-picker/business-picker.component';
+
 @Component({
 	selector: 'app-home',
 	templateUrl: './home.component.html',
