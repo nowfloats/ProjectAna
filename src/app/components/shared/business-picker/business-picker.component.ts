@@ -43,8 +43,10 @@ export class BusinessPickerComponent implements OnInit {
 				this.businessAccounts = x.data.content;
 				if (this.param && this.param.businessId && this.businessAccounts) {
 					let x = this.businessAccounts.filter(x => x.id == this.param.businessId);
-					if (x && x.length > 0)
+					if (x && x.length > 0) {
 						this.selectedBusinessAccount = x[0];
+						this.loadChatProjects();
+					}
 				}
 			} else {
 				this.dataService.handleTypedError(x.error, "Unable to load business accounts", "Something went wrong while loading business account. Please try again.");

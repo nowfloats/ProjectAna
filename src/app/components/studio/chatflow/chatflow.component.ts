@@ -812,16 +812,14 @@ export class ChatNodeVM {
 	mouseUp(event: MouseEvent) {
 		let nw = this.network;
 		if (!nw.newChatNodeConnection.isHidden) {
-			if (nw.newChatNodeConnection.srcButtonConnector.chatNodeVM != this)
-				nw.newChatNodeConnection.srcButtonConnector.setButtonNextNodeId(this.chatNode.Id);
+			nw.newChatNodeConnection.srcButtonConnector.setButtonNextNodeId(this.chatNode.Id);
 		}
 	}
 
 	mouseEnter(event: MouseEvent) {
 		let nw = this.network;
 		if (!nw.newChatNodeConnection.isHidden) {
-			if (nw.newChatNodeConnection.srcButtonConnector.chatNodeVM != this)
-				nw.newChatNodeConnection.canConnect = true;
+			nw.newChatNodeConnection.canConnect = true;
 		}
 	}
 
@@ -845,7 +843,7 @@ export class ChatNodeVM {
 	}
 
 	clickConnectionActive() {
-		return (this.network.clickConnectionStartButton && this.network.clickConnectionStartButton.chatNodeVM.chatNode.Id != this.chatNode.Id);
+		return this.network.clickConnectionStartButton;
 	}
 
 	nodeClick() {
