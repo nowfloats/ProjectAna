@@ -1,6 +1,6 @@
 {
   "name": "ana-conversation-studio",
-  "version": "0.1.6-alpha.12",
+  "version": "0.1.7",
   "main": "electron.js",
   "author": "Team Ana",
   "description": "The Ana app, contains Ana studio, user management, analytics and chatbot publishing.",
