@@ -280,6 +280,7 @@ export class ModelHelpers {
 	carouselButtonTypes: CarouselButtonType[] = [
 		CarouselButtonType.NextNode,
 		CarouselButtonType.OpenUrl,
+		CarouselButtonType.DeepLink
 	];
 
 	nodeTypes: NodeType[] = [
