@@ -98,10 +98,14 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this.addNewNode();
 			return false;
 		}, [], "Add a new node"),
+		new Hotkey("c", (e, s) => {
+			this.cloneSelectedNodes();
+			return false;
+		}, [], "Clone selected nodes"),
 		new Hotkey("del", (e, s) => {
 			this.deleteSelectedNodes();
 			return false;
-		}, [], "Add a new node"),
+		}, [], "Delete selected nodes"),
 		new Hotkey("alt+f", (e, s) => {
 			this.fitViewToAllNodes();
 			return false;
@@ -138,6 +142,26 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 				this.deleteMultipleNodes(selectedNodes);
 			}
 		});
+	}
+
+	cloneSelectedNodes() {
+		let selectedNodes = this.chatFlowNetwork.selectedNodes();
+		if (!selectedNodes || selectedNodes.length <= 0) {
+			return;
+		}
+
+		selectedNodes.forEach(node => {
+			let cloneNode = this.globalsService.cloneNode(node.chatNode);
+			if (!cloneNode)
+				return;
+			let newNodeVM = new ChatNodeVM(this.chatFlowNetwork, cloneNode, this.snakbar);
+			newNodeVM._x = node._x + 100;
+			newNodeVM._y = node._y + 100;
+			newNodeVM._layoutUpdated = true; //To skip the loading indicator
+		});
+
+		this.chatFlowNetwork.updateChatNodeConnections();
+		this.updateLayout();
 	}
 
 	deleteMultipleNodes(nodesVMs: ChatNodeVM[]) {
