@@ -3,6 +3,8 @@ import * as models from '../models/chatflow.models';
 import { ANADate, ANATime, AddressInput, GeoLoc } from '../models/ana-chat.models';
 import { Title } from '@angular/platform-browser';
 import { ChatFlowComponent } from '../components/studio/chatflow/chatflow.component';
+import { ObjectID } from 'bson';
+import { SectionType, CarouselSection } from '../models/chatflow.models';
 
 @Injectable()
 export class GlobalsService {
@@ -94,6 +96,38 @@ export class GlobalsService {
 			x.IsStartNode = x.IsStartNode ? true : false //This field should exist even if it's false
 		});
 		return chatNodes;
+	}
+
+	cloneNode(srcNode: models.ChatNode) {
+		if (!srcNode) {
+			return false;
+		}
+		let targetNode = JSON.parse(JSON.stringify(srcNode)) as models.ChatNode;
+		targetNode.Id = new ObjectID().toHexString();
+		targetNode.Name += " Copy";
+		targetNode.NextNodeId = null;
+		if (targetNode.Buttons) {
+			targetNode.Buttons.forEach(btn => {
+				btn._id = new ObjectID().toHexString();
+				btn.NextNodeId = null;
+			});
+		}
+		if (targetNode.Sections) {
+			targetNode.Sections.forEach(section => {
+				section._id = new ObjectID().toHexString();
+				if (section.SectionType == SectionType.Carousel) {
+					let car = section as CarouselSection;
+					car.Items.forEach(carItem => {
+						carItem._id = new ObjectID().toHexString();
+						carItem.Buttons.forEach(carBtn => {
+							carBtn._id = new ObjectID().toHexString();
+							carBtn.NextNodeId = null;
+						});
+					});
+				}
+			});
+		}
+		return targetNode;
 	}
 }
 
