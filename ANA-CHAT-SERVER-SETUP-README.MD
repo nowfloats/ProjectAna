@@ -10,7 +10,7 @@
 
 **Software Requirements**
 
- 1. Docker with docker compose installed.
+ 1. Docker and docker compose installed.
    - Click [here](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/) for docker installation guidelines
    - Click [here](https://docs.docker.com/compose/install/) for docker-compose installation guidelines  
  2. MySQL Database Server
