@@ -102,7 +102,7 @@
                 </g>
 
                 <g *ngFor="let connection of chatFlowNetwork.chatNodeConnections" transform="translate(15,20)">
-                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0" (click)="connection.remove($event)" class="not-allowed-cursor"></path>
+                    <path [attr.d]="connection.path()" (mouseenter)="connection.mouseEnter($event)" fill="transparent" stroke="darkgray" stroke-opacity="0.5" stroke-width="3" d="M 0,0" (click)="connection.remove($event)" class="not-allowed-cursor" fill-rule="evenodd"></path>
                 </g>
 
                 <g *ngFor="let chatNodeVM of chatFlowNetwork.chatNodeVMs" transform="translate(20,20)">
@@ -113,7 +113,7 @@
                 </g>
 
                 <g transform="translate(15,20)" [attr.visibility]="chatFlowNetwork.newChatNodeConnection.isHidden?'collapse':'visible'" class="pointer-events-none">
-                    <path [attr.d]="chatFlowNetwork.newChatNodeConnection.path()" fill="transparent" [attr.stroke]="chatFlowNetwork.newChatNodeConnection.canConnect?'darkgray':'crimson'" stroke="crimson" stroke-width="3" d="M 0,0" class="pointer-events-none"></path>
+                    <path [attr.d]="chatFlowNetwork.newChatNodeConnection.path()" fill="transparent" [attr.stroke]="chatFlowNetwork.newChatNodeConnection.canConnect?'darkgray':'crimson'" stroke="crimson" stroke-width="3" d="M 0,0" class="pointer-events-none" fill-rule="evenodd"></path>
                     <circle r="3" [attr.cx]="chatFlowNetwork.newChatNodeConnection.destX" [attr.cy]="chatFlowNetwork.newChatNodeConnection.destY" fill="darkgray" [attr.fill]="chatFlowNetwork.newChatNodeConnection.canConnect?'darkgray':'crimson'" class="pointer-events-none"></circle>
                 </g>
             </svg>

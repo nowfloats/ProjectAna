@@ -9,6 +9,7 @@ import * as _ from 'underscore';
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
 import { SimulatorFrameComponent } from '../components/studio/simulator-frame/simulator-frame.component';
+import { CarouselButton } from '../models/chatflow.models';
 @Injectable()
 export class SimulatorService {
 
@@ -110,7 +111,7 @@ export class SimulatorService {
 					case chatModels.InputType.LOCATION://Click, Complex
 						{
 							let locIp = ipMsgContent.input as chatModels.LocationInput;
-							userData = this.globals.anaLocationDisplay(locIp.location);
+							userData = locIp.location;
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetLocation);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -119,7 +120,7 @@ export class SimulatorService {
 					case chatModels.InputType.DATE://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.DateInput;
-							userData = this.globals.anaDateDisplay(ip.date);
+							userData = ip.date;
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetDate);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -128,7 +129,7 @@ export class SimulatorService {
 					case chatModels.InputType.TIME://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.TimeInput;
-							userData = this.globals.anaTimeDisplay(ip.time);
+							userData = ip.time;
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetTime);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -137,7 +138,7 @@ export class SimulatorService {
 					case chatModels.InputType.ADDRESS://Click, Complex
 						{
 							let ip = ipMsgContent.input as chatModels.AddressInputField;
-							userData = this.globals.anaAddressDisplay(ip.address);
+							userData = ip.address;
 							let clickedBtn = this.getNodeButtonByType(models.ButtonType.GetAddress);
 							if (clickedBtn)
 								nextNodeId = clickedBtn.NextNodeId;
@@ -240,7 +241,9 @@ export class SimulatorService {
 					default:
 						break;
 				}
-
+				if (typeof userData == 'object') {
+					userData = JSON.stringify(userData);
+				}
 				this.saveVariable(userData);
 				this.gotoNextNode(nextNodeId);
 			}
@@ -300,8 +303,21 @@ export class SimulatorService {
 	private getCarouselButtonById(carItemBtnId: string) {
 		let carSection = this.state.currentSection as models.CarouselSection;
 		if (carSection && carSection.SectionType == models.SectionType.Carousel) {
-			let carBtn = carSection.Items.map(x => x.Buttons).reduce((a, b) => (a && a.length > 0 && b && b.length > 0) ? a.concat(b) : []).filter(x => x._id == carItemBtnId);
-			return (carBtn && carBtn.length > 0) ? carBtn[0] : null;
+			let selectedCarBtn: CarouselButton = null;
+			for (var i = 0; i < carSection.Items.length; i++) {
+				let carItem = carSection.Items[i];
+				for (var j = 0; j < carItem.Buttons.length; j++) {
+					let carBtn = carItem.Buttons[j];
+					if (carBtn._id == carItemBtnId) {
+						selectedCarBtn = carBtn;
+						break;
+					}
+				}
+				if (selectedCarBtn) {
+					break;
+				}
+			}
+			return selectedCarBtn;
 		}
 		return null;
 	}

@@ -102,6 +102,10 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this.cloneSelectedNodes();
 			return false;
 		}, [], "Clone selected nodes"),
+		new Hotkey("esc", (e, s) => {
+			this.clearSelection();
+			return false;
+		}, [], "Clear selection"),
 		new Hotkey("del", (e, s) => {
 			this.deleteSelectedNodes();
 			return false;
@@ -116,10 +120,26 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		}, [], "Close the designer")
 	];
 
+	@HostListener('document:keydown', ['$event'])
+	documentKeyDown(event: KeyboardEvent) {
+		if (event.keyCode == 17) {
+			this.ctrlDown = true;
+		}
+	}
+
+	@HostListener('document:keyup', ['$event'])
+	documentKeyUp(event: KeyboardEvent) {
+		if (event.keyCode == 17) {
+			this.ctrlDown = false;
+		}
+	}
+	ctrlDown: boolean;
+
 	bindDesignerShortcuts() {
 		this.unbindDesignerShortcuts();
 		this.keymapOnDesigner.forEach(x => this.hotkeys.add(x));
 	}
+
 	unbindDesignerShortcuts() {
 		this.keymapOnDesigner.forEach(x => this.hotkeys.remove(x));
 	}
@@ -141,6 +161,12 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			if (ok) {
 				this.deleteMultipleNodes(selectedNodes);
 			}
+		});
+	}
+
+	clearSelection() {
+		this.chatFlowNetwork.chatNodeVMs.forEach(x => {
+			x.isSelected = false;
 		});
 	}
 
@@ -234,6 +260,18 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 				let offset = this.chatFlowNetwork.draggingChatNodeOffset;
 				this.chatFlowNetwork.draggingChatNode._x = targetXY.x - offset.x;
 				this.chatFlowNetwork.draggingChatNode._y = targetXY.y - offset.y;
+
+				let selectedNodes = this.chatFlowNetwork.selectedNodes();
+				if (selectedNodes && selectedNodes.length > 0) {
+					for (var i = 0; i < selectedNodes.length; i++) {
+						let thisNode = selectedNodes[i];
+						let thisOffset = this.chatFlowNetwork.selectedNodeOffsets[thisNode.chatNode.Id];
+						if (thisOffset) {
+							thisNode._x = targetXY.x - thisOffset.x;
+							thisNode._y = targetXY.y - thisOffset.y;
+						}
+					}
+				}
 			} catch (e) {
 				this.chatFlowNetwork.draggingChatNode._x += event.movementX;
 				this.chatFlowNetwork.draggingChatNode._y += event.movementY;
@@ -376,9 +414,6 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			this._viewBoxWidth = Config.maxZoomWidth;
 		if (this._viewBoxHeight < Config.maxZoomHeight)
 			this._viewBoxHeight = Config.maxZoomHeight;
-
-		//console.log('designerWheel: ');
-		//console.log(this._viewBoxWidth + "," + this._viewBoxHeight);
 	}
 
 	openEditor(chatNodeVM: ChatNodeVM) {
@@ -588,6 +623,10 @@ class ChatFlowNetwork {
 	draggingChatNode: ChatNodeVM;
 	draggingChatNodeOffset: Point;
 
+	selectedNodeOffsets: {
+		[nodeId: string]: Point;
+	} = {};
+
 	clickConnectionStartButton: ChatButtonConnector;
 	clickConnectionStartSnackbar: MatSnackBarRef<SimpleSnackBar>;
 }
@@ -639,7 +678,10 @@ class ChatNodeConnection {
 		return `M${this.srcConnectorX()},${this.srcConnectorY()} 
                 C${this.calcSrcTangentX()},${this.calcSrcTangentY()} 
                   ${this.calcDestTangentX()},${this.calcDestTangentY()} 
-                ${this.destConnectorX()},${this.destConnectorY()}`;
+                ${this.destConnectorX()},${this.destConnectorY()} M${this.srcConnectorX()},${this.srcConnectorY()} 
+                C${this.calcSrcTangentX()},${this.calcSrcTangentY()} 
+                  ${this.calcDestTangentX()},${this.calcDestTangentY()} 
+                ${this.destConnectorX()},${this.destConnectorY()}`; //double path to render connections with hollow shapes
 	}
 
 	closeButtonVisible = false;
@@ -650,7 +692,7 @@ class ChatNodeConnection {
 		this.closeButtonPointX = xy.x; //some offset from the cursor
 		this.closeButtonPointY = xy.y; //some offset from the cursor
 		this.closeButtonVisible = true;
-		//alert(`${this.closeButtonPoint.x},${this.closeButtonPoint.y}`);
+
 		setTimeout(() => {
 			this.closeButtonVisible = false;
 		}, 50000); //Hide the close button after 5secs
@@ -825,12 +867,30 @@ export class ChatNodeVM {
 	headerHeight: number = Config.defaultNodeHeaderHeight;
 
 	mouseDown(event: MouseEvent) {
+		if (!this.network.parent.ctrlDown && this.network.selectedNodes().length <= 1) {
+			this.network.parent.clearSelection();
+		}
+		this.toggleSelection();
+
 		this.network.draggingChatNode = this;
 
 		let targetXY = this.network.parent.transformCoordinates(event.pageX, event.pageY, event);
 		let mouseOffsetX = targetXY.x - this._x;
 		let mouseOffsetY = targetXY.y - this._y;
 		this.network.draggingChatNodeOffset = new Point(mouseOffsetX, mouseOffsetY);
+
+		this.network.selectedNodeOffsets = {}; //clearing
+		let selectedNodes = this.network.selectedNodes();
+		if (selectedNodes && selectedNodes.length > 0) {
+			selectedNodes.forEach(n => {
+				let mouseOffset = {
+					x: targetXY.x - n._x,
+					y: targetXY.y - n._y,
+				};
+
+				this.network.selectedNodeOffsets[n.chatNode.Id] = new Point(mouseOffset.x, mouseOffset.y);
+			});
+		}
 	}
 
 	mouseUp(event: MouseEvent) {
@@ -875,8 +935,11 @@ export class ChatNodeVM {
 			this.network.clickConnectionStartButton.setButtonNextNodeId(this.chatNode.Id);
 			this.network.clickConnectionStartButton = null;
 			this.network.clickConnectionStartSnackbar.dismiss();
-		} else
-			this.toggleSelection();
+		} else {
+			if (!this.network.parent.ctrlDown && this.network.selectedNodes().length > 1) {
+				this.network.parent.clearSelection();
+			}
+		}
 	}
 
 	circleRadius = Config.buttonCircleRadius;
