@@ -1,44 +1,63 @@
 # ANA Chat Server Setup Guide
 
-## Prerequisites
+ANA Server is required to publish chat flows and serve published content across differant channels including Web, Android, iOS and Facebook (and many more to come soon). ANA server is decomposed into microservices, organized around certain business domains.
+
+Following are the required microservices to run ANA server
+
+1) service-registry
+2) config-server
+3) api-gateway
+4) ws-customers
+5) business-service
+6) user-service
+7) core
+8) history service (optional)
+9) fcm-plugin (optional)
+10) agents-service (optional)
+11) file-service (optional)
+12) analytics (optional)
+
+## Installation
+
+### Development mode
 
 **System Requirements**
 
- 1. Ubuntu Machine. (Will be windows desktop/server and mac  compatible very soon)
- 2. 4GB+ RAM.
- 3. 2+ CPU Cores.
+ 1. Ubuntu Machine (Will be windows desktop/server and mac compatible very soon)
+ 2. 8GB+ RAM
+ 3. 2+ CPU Cores
+ 4. 10 GB+ free disk space
 
 **Software Requirements**
 
  1. Docker and docker compose installed.
    - Click [here](https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/) for docker installation guidelines
-   - Click [here](https://docs.docker.com/compose/install/) for docker-compose installation guidelines  
- 2. MySQL Database Server
-   - You can install MySQL Database Server locally on the Ubuntu Machine you are about to use. Click [here](https://www.digitalocean.com/community/tutorials/how-to-install-mysql-on-ubuntu-16-04) for instructions on that. 
+   - Click [here](https://docs.docker.com/compose/install/) for docker-compose installation guidelines
 
-## Setup Steps
- 1. Login into MySQL Server as root and create a user
-    ```bash
-    mysql -uroot -p<your_root_password>
-
-    mysql> CREATE USER 'anabot'@'%' IDENTIFIED by 'anabot';
-    mysql> GRANT ALL PRIVILEGES ON *.* TO 'anabot'@'%';
-    ```
-    
- 2. Download the docker-compose.yml file using the following command.
+#### Setup Steps
+ 1. Download the docker-compose.yml file using the following command
      ```bash
-     wget https://gist.github.com/NizamLZ/4903f0894c390acdfda3a29bd004b38e/raw/ -O docker-compose.yml
+     wget https://gist.githubusercontent.com/menneni/70ea1a174961f653cd62c2ae3b22ec1b/raw/docker-compose.yml
      ```
- 3. Pull and fire up the dockers using following commands.
+ 3. Pull and fire up the dockers using following commands
     ```bash
-    sudo docker-compose pull
-    sudo docker-compose up
-    ```
-    - You should now see fast random logs being dumped onto the console, once every service is up and running the logs will slow down.  
-    - To make sure things are running as they should, head over to `http://<public-ip-of-ubuntu-machine>:8761/`. 
-        - This should open the Spring Eureka.
-        - It should have three applications under 'Instances currently registered with Eureka', namely, API-GATEWAY, CONFIG-SERVER, WS-CUSTOMERS. This means the ANA Chat Server is up and running. 
-  4. ANA Chat Server URL is the http URL of the **public IP address** of the machine (`eg: http://10.1.2.3`). Additionally, you can map a domain to this IP and use that as well.
-  
-Now, since you have got the ANA Chat Server URL, return to the process you were doing before and continue with it.
-
+    docker-compose pull
+    docker-compose build
+    docker-compose up -d
+#### Important endpoints
+ - http://localhost:80   - eureka dashboard/service-registry
+ - http://localhost:8080 - api-gateway
+ - http://localhost:8888 - config-server
+ - http://localhost:9500 - core
+ - http://localhost:8088 - ws-customers
+ - http://localhost:8087 - business-service
+ - http://localhost:8089 - user-service
+    
+ #### Notes
+ 
+ Services running with spring boot requires already running service-registry and config-server for startup. dockerc-compose starts all microservices simultaniously but ensures dependencies using `depends_on` and `health check` option.
+ 
+ Health check for core service - http://localhost:9500/bot/health
+ 
+ Also service discovery mechanism needs some time after all applications startup. To ensure all required microservices for ANA server are up and running, check eureka dashboard (http://localhost:80), it should show all the required microservices instances in the eureka dashboard.  
+    
