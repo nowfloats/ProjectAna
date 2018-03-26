@@ -55,7 +55,7 @@ Following are the required microservices to run ANA server
     
  #### Notes
  
- Services running with spring boot requires already running service-registry and config-server for startup. dockerc-compose starts all microservices simultaniously but ensures dependencies using `depends_on` and `health check` option.
+ Services running with spring boot requires already running service-registry and config-server for startup. docker-compose starts all microservices simultaniously but ensures dependencies using `depends_on` and `health check` option.
  
  Health check for core service - http://localhost:9500/bot/health
  
