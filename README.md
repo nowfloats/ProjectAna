@@ -24,3 +24,16 @@ Download ANA studio sdk from https://www.ana.chat/downloads.html
     5. Click on login, select recently added ANA server connection and enter username as 'Admin' and password as 'ana123' an submit
     6. Now we have integrated ANA studio with ANA server successfully. Next we need to create a business and submit flow to ANA server
  3. Now open the studio from home page and create a new project and publish chat flow or import an existing chatflow
+ 
+## Deploying your ANA chat bot
+
+The following channels are supported for deploying your ana chat bot. Follow the links for instructions.
+   1. [Web Chat](https://github.com/Kitsune-tools/ANAChat-Web)
+   2. [Android](https://github.com/Kitsune-tools/ANAChat-Android)
+   3. [iOS](https://github.com/Kitsune-tools/ANAChat-iOS)
+   4. Facebook Messenger (Coming soon...)
+
+## Note
+
+This is just the setup documentation. ANA Conversation Suite has much more scope than predefined flows. You can call your own APIs from the chat, capture and save information from the user. You can take different types of inputs like button clicks, text, image, video etc. For now, explore the code to get to know all the possibilities.
+
