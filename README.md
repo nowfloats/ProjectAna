@@ -8,8 +8,6 @@ A single cross-platform app where you can design and publish ANA chatbots, manag
 
 ANA Conversation Suite is available under the [GNU GPLv3 license](https://www.gnu.org/licenses/gpl-3.0.en.html).
 
-
-
 ## Installation
 
 Download ANA studio sdk from https://www.ana.chat/downloads.html
@@ -25,3 +23,4 @@ Download ANA studio sdk from https://www.ana.chat/downloads.html
     4. Save changes
     5. Click on login, select recently added ANA server connection and enter username as 'Admin' and password as 'ana123' an submit
     6. Now we have integrated ANA studio with ANA server successfully. Next we need to create a business and submit flow to ANA server
+ 3. Now open the studio from home page and create a new project and publish chat flow or import an existing chatflow
