@@ -12,7 +12,17 @@ Ana Conversation Suite is available under the [GNU GPLv3 license](https://www.gn
 
 Download Ana studio sdk from https://www.ana.chat/downloads.html
 
-## Creating a bot
+## Creating a bot and testing using simulator
+
+Goal of Ana app is to make it easier to build chatflows without much technical knowledge, it even allows to create and test bot within studio itself using simulator.
+
+1. Open Ana app and Click on `Studio`
+2. Click on `Add new chatbot` to create a new project or 'Import chatbot' to import an existing project
+3. Enter name of the new project and submit
+4. Create desired chatflow and save it
+5. Click on `RUN  CHAT` option to test chatflow locally using simulator
+
+## Publishing bot to Ana server
 
 1. Ensure Ana server is up and running (Instructions for [Ana server](https://github.com/Kitsune-tools/ProjectANA/blob/master/ANA-CHAT-SERVER-SETUP-README.MD) setup)
 2. Open Ana studio and configure Ana server url
