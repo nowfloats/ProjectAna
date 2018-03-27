@@ -16,7 +16,7 @@ Download Ana studio sdk from https://www.ana.chat/downloads.html
 
 Goal of Ana app is to make it easier to build chatflows without much technical knowledge, it even allows to create and test bot within studio itself using simulator. 
 
-First create bot using studio and test it locally using simulator. After finalizing desired chatflow, you can publish it to Ana server. Ana server is responsible for serving published content across different channels including Web, Android, iOS and Facebook (and many more to come soon). 
+First create bot using studio and test it locally using simulator. After finalizing desired chatflow, you can publish it to Ana server and integrate it with various channnels like Web, Android, iOS and Facebook. Ana server is responsible for serving published content across different channels. 
 
 ## Creating a bot and testing using simulator
 
