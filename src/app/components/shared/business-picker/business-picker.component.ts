@@ -77,7 +77,7 @@ export class BusinessPickerComponent implements OnInit {
 			if (this.bizFilter) {
 				list = this.businessAccounts.filter(x => (x.name.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1);
 			}
-			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 0));
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 1));
 		}
 	}
 
@@ -98,7 +98,7 @@ export class BusinessPickerComponent implements OnInit {
 			if (this.projFilter) {
 				list = this.chatProjects.filter(x => (x.name.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1);
 			}
-			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 0));
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 1));
 		}
 	}
 
