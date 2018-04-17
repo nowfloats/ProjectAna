@@ -18,7 +18,7 @@ export class AnalyticsWindowService {
 			return;
 		}
 		let url = `file://${this.electron.remote.app.getAppPath()}/analytics-dashboard/index.html#/?apiBase=${encodeURIComponent(apiBase)}&businessId=${businessId}&businessName=${encodeURIComponent(businessName)}&chatFlowId=${businessId}`;
-		console.log(url);
+		
 		let win = new this.electron.remote.BrowserWindow({
 			width: 900,
 			height: 600,
