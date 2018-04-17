@@ -27,7 +27,7 @@
                 <section class="control radio-grp">
                     <label>Chat window placement</label>
                     <mat-radio-group [(ngModel)]="webOptions.isFullPage">
-                        <mat-radio-button [value]="true">Center - Full page</mat-radio-button>
+                        <mat-radio-button [value]="true">Center - full page</mat-radio-button>
                         <mat-radio-button [value]="false">Right bottom - minimized</mat-radio-button>
                     </mat-radio-group>
                 </section>
@@ -70,7 +70,7 @@
                             <p>
                                 Please use the following HTML code snippet to enable Ana web chat on your web page:
                             </p>
-                            <div highlight-js-content=".highlight">
+                            <div highlight-js-content=".highlight" class="highlight-container">
                                 <div class="html highlight" [innerText]="webSnippet"></div>
                             </div>
                             <button mat-raised-button color="primary" ngxClipboard [cbContent]="webSnippet" (cbOnSuccess)="copied()"> Copy </button>

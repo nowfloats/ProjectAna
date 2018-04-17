@@ -24,7 +24,7 @@
       "testTsconfig": "tsconfig.spec.json",
       "prefix": "app",
       "styles": [
-        "../node_modules/highlightjs/styles/github.css",
+        "../node_modules/highlightjs/styles/atom-one-dark.css",
         "theme.scss",
         "styles.css"
       ],

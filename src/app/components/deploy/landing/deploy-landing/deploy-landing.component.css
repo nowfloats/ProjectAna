@@ -82,3 +82,11 @@ label {
     font-size: small;
     opacity: 0.9;
 }
+
+.highlight-container {
+    margin-bottom: 10px;
+}
+
+.highlight {
+    border-radius: 3px;
+}

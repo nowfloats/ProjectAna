@@ -145,7 +145,8 @@ ana-frame-width="${this.n(this.webOptions.width)}"
 ana-primary-fg="${this.n(this.webOptions.foregroundColor)}"
 ana-secondary-bg="${this.n(this.webOptions.secondaryColor)}"
 ana-gmaps-key="${this.n(this.webOptions.gmapsKey)}"
-${this.webOptions.isFullPage ? '\nana-fullpage="true"' : ''} ${this.webOptions.allowChatReset ? '\nana-allow-chat-reset="true"' : ''} ${this.webOptions.enableHtmlMessages ? '\nana-html-messages="true"' : ''} ${this.webOptions.showPoweredByAna ? '\nana-show-branding="true"' : ''}>
+
+${this.webOptions.isFullPage ? '\nana-fullpage="true"' : ''} ${this.webOptions.allowChatReset ? '\nana-allow-chat-reset="true"' : ''} ${this.webOptions.enableHtmlMessages ? '\nana-html-messages="true"' : ''} ${this.webOptions.showPoweredByAna ? '\nana-show-branding="true"' : ''} ${this.webOptions.autoOpenSecs ? '\nana-auto-open="' + this.webOptions.autoOpenSecs + '"' : ''}>
 </script>`;
 	}
 }
