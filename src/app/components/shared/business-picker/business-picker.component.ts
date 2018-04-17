@@ -137,6 +137,10 @@ export class BusinessPickerComponent implements OnInit {
 			return this.selectedBusinessAccount;
 		}
 	}
+
+	get chatConnName() {
+		return this.dataService.chatServer.Name;
+	}
 }
 
 export interface ChoosenBizAccChatProj {

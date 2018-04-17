@@ -170,6 +170,9 @@ export class PublishChatbotComponent implements OnInit {
 		}
 	}
 
+	get chatConnName() {
+		return this.dataService.chatServer.Name;
+	}
 }
 
 export interface PublishChatbotParams {
