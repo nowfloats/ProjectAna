@@ -59,7 +59,7 @@ export class SettingsService {
 				savedProjs.push(name);
 			}
 		}
-		return savedProjs;
+		return savedProjs.sort((x, y) => ((x && y) ? x.localeCompare(y) : 0));
 	}
 
 	renameChatProject(oldName: string, newName: string) {

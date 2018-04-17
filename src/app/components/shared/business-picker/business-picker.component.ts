@@ -73,10 +73,11 @@ export class BusinessPickerComponent implements OnInit {
 	bizFilter: string | BusinessAccount = "";
 	bizFilteredOptions() {
 		if (typeof this.bizFilter === 'string') {
+			let list = this.businessAccounts;
 			if (this.bizFilter) {
-				return this.businessAccounts.filter(x => (x.name.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1);
+				list = this.businessAccounts.filter(x => (x.name.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1);
 			}
-			return this.businessAccounts;
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 0));
 		}
 	}
 
@@ -93,10 +94,11 @@ export class BusinessPickerComponent implements OnInit {
 	projFilter: string | ChatProject = "";
 	projFilteredOptions() {
 		if (typeof this.projFilter === 'string') {
+			let list = this.chatProjects;
 			if (this.projFilter) {
-				return this.chatProjects.filter(x => (x.name.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1);
+				list = this.chatProjects.filter(x => (x.name.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1);
 			}
-			return this.chatProjects;
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 0));
 		}
 	}
 
@@ -111,7 +113,6 @@ export class BusinessPickerComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.chatProjects = x.data.content;
-				debugger;
 			}
 			else {
 				this.dataService.handleTypedError(x.error, "Unable to fetch chat projects", "Something went wrong while trying to fetch chat projects. Please try again.");
