@@ -4,6 +4,8 @@ import { AfterViewInit } from '@angular/core';
 import { ElectronService } from 'ngx-electron';
 import { DataService } from '../../../../services/data.service';
 import { ActivatedRoute } from '@angular/router';
+import { MatSnackBar } from '@angular/material';
+import { Md5 } from 'ts-md5/dist/md5';
 
 @Component({
 	selector: 'app-deploy-landing',
@@ -16,6 +18,7 @@ export class DeployLandingComponent implements OnInit, AfterViewInit {
 		private el: ElementRef,
 		private highlight: HighlightJsService,
 		private electron: ElectronService,
+		private snakbar: MatSnackBar,
 		private route: ActivatedRoute,
 		private dataService: DataService) {
 		this.route.queryParams.subscribe(x => {
@@ -25,6 +28,10 @@ export class DeployLandingComponent implements OnInit, AfterViewInit {
 			if (x && x['chatFlowId']) {
 				this.webOptions.flowId = x['chatFlowId'];
 			}
+
+			if (this.webOptions.businessId && this.webOptions.flowId) {
+				this.loadSavedOptions();
+			}
 		});
 	}
 
@@ -32,40 +39,114 @@ export class DeployLandingComponent implements OnInit, AfterViewInit {
 
 	}
 
-	webOptions: AnaChatWebOptions = {};
+	webOptions: AnaChatWebOptions = {
+		accentColor: 'red',
+		allowChatReset: true,
+		autoOpenSecs: 0,
+		businessId: '',
+		flowId: '',
+		desc: '',
+		enableHtmlMessages: true,
+		foregroundColor: 'white',
+		secondaryColor: 'black',
+		gmapsKey: '',
+		height: '70%',
+		width: '360px',
+		isFullPage: false,
+		logoUrl: 'https://www.ana.chat/favicon.ico',
+		showPoweredByAna: false,
+		title: 'Ana chatbot',
+		websdkUrl: '',
+		webSocketsUrl: '',
+	};
 
+	ele: HTMLElement;
 	ngAfterViewInit() {
-		this.highlight.highlight(this.el.nativeElement.querySelector('.code'));
+		this.ele = this.el.nativeElement.querySelector('.highlight');
+		this.highlight.highlight(this.ele);
 	}
 
 	open(url: string) {
-		this.electron.shell.openExternal(url);
+		if (this.electron.isElectronApp) {
+			this.electron.shell.openExternal(url);
+		} else {
+			window.open(url, '_blank');
+		}
 	}
 
-	webSnippet() {
+	copied() {
+		this.snakbar.open("Code copied", "dismiss", {
+			duration: 1500
+		});
+	}
+	enableAutoOpen: boolean;
+
+	loadSavedOptions() {
+		let key = Md5.hashStr(`${JSON.stringify(this.dataService.chatServer.ServerUrl)}|${this.webOptions.businessId}|${this.webOptions.flowId}`) as string;
+		let savedVal = localStorage.getItem(key);
+		if (savedVal) {
+			this.webOptions = JSON.parse(savedVal);
+		}
+	}
+
+	saveOptions() {
+		let key = Md5.hashStr(`${JSON.stringify(this.dataService.chatServer.ServerUrl)}|${this.webOptions.businessId}|${this.webOptions.flowId}`) as string;
+		localStorage.setItem(key, JSON.stringify(this.webOptions));
+	}
+
+	n(v) {
+		return (v ? v : '');
+	}
+	count = 0;
+
+	preview() {
+		let src = `<!DOCTYPE html>
+<html>
+<head>
+	<title>Ana web chat preview</title>
+</head>
+<body>
+${this.webSnippet}
+</body>
+</html>`;
+		var blob = new Blob([src], { type: "text/html" });
+		var url = window.URL.createObjectURL(blob);
+		this.open(url);
+	}
+
+	_oldVal;
+	get webSnippet() {
+		try {
+			let newVal = JSON.stringify(this.webOptions);
+			if (!this._oldVal || this._oldVal != newVal) {
+				setTimeout(() => {
+					this.highlight.highlight(this.ele);
+					this.saveOptions();
+				}, 0);
+				this._oldVal = newVal;
+			}
+		} catch (e) { }
 		return `<script type="text/javascript" id="ana-web-chat-script"
 
-src="${this.webOptions.websdkUrl}/assets/embed/ana-web-chat-plugin.js" 
-ana-endpoint="${this.webOptions.webSocketsUrl}/wscustomers/chatcustomers-websocket"
-ana-businessid="${this.webOptions.businessId}"
-ana-primary-bg="${this.webOptions.accentColor}"
-ana-flowid="${this.webOptions.flowId}"
+src="${this.n(this.webOptions.websdkUrl)}assets/embed/ana-web-chat-plugin.js" 
+ana-api-endpoint="${this.n(this.dataService.chatServer).ServerUrl}"
+ana-endpoint="${this.n(this.webOptions.webSocketsUrl)}/wscustomers/chatcustomers-websocket"
+ana-iframe-src="${this.n(this.webOptions.websdkUrl)}index.html"
+ana-businessid="${this.n(this.webOptions.businessId)}"
+ana-flowid="${this.n(this.webOptions.flowId)}"
 
-ana-logo-url="${this.webOptions.logoUrl}"
-ana-agent-name="${this.webOptions.title}"
-ana-agent-desc="${this.webOptions.desc}"
+ana-logo-url="${this.n(this.webOptions.logoUrl)}"
+ana-primary-bg="${this.n(this.webOptions.accentColor)}"
+ana-agent-name="${this.n(this.webOptions.title)}"
+ana-agent-desc="${this.n(this.webOptions.desc)}"
+ana-frame-height="${this.n(this.webOptions.height)}"
+ana-frame-width="${this.n(this.webOptions.width)}"
 
-ana-iframe-src="${this.webOptions.websdkUrl}"
-ana-api-endpoint="${this.dataService.chatServer.ServerUrl}"
-ana-gmaps-key="${this.webOptions.gmapsKey}"
-
-ana-primary-fg="${this.webOptions.foregroundColor}"
-ana-secondary-bg="${this.webOptions.secondaryColor}"
-ana-frame-height="${this.webOptions.height}"
-ana-frame-width="${this.webOptions.width}"
-
-ana-fullpage="${this.webOptions.isFullPage}"
-></script>`;
+ana-primary-fg="${this.n(this.webOptions.foregroundColor)}"
+ana-secondary-bg="${this.n(this.webOptions.secondaryColor)}"
+ana-gmaps-key="${this.n(this.webOptions.gmapsKey)}"
+${this.webOptions.isFullPage ? '\nana-fullpage="true"' : ''} ${this.webOptions.allowChatReset ? '\nana-allow-chat-reset="true"' : ''} ${this.webOptions.enableHtmlMessages ? '\nana-html-messages="true"' : ''} ${this.webOptions.showPoweredByAna ? '\nana-show-branding="true"' : ''}>
+</script>`;
 	}
 }
 

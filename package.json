@@ -37,8 +37,10 @@
     "highlightjs": "^9.10.0",
     "jsonpath": "^1.0.0",
     "mousetrap": "^1.6.1",
+    "ngx-clipboard": "^10.0.0",
     "ngx-electron": "^1.0.4",
     "rxjs": "^5.5.2",
+    "ts-md5": "^1.2.4",
     "underscore": "^1.8.3",
     "zone.js": "^0.8.14"
   },

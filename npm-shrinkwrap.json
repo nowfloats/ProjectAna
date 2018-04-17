@@ -7217,10 +7217,23 @@
       "integrity": "sha1-KzJxhOiZIQEXeyhWP7XnECrNDKk=",
       "dev": true
     },
+    "ngx-clipboard": {
+      "version": "10.0.0",
+      "resolved": "https://registry.npmjs.org/ngx-clipboard/-/ngx-clipboard-10.0.0.tgz",
+      "integrity": "sha1-H6y6SNsv/nLw95daUK1qvhQpNzo=",
+      "requires": {
+        "ngx-window-token": "0.0.4"
+      }
+    },
     "ngx-electron": {
       "version": "1.0.4",
       "resolved": "https://registry.npmjs.org/ngx-electron/-/ngx-electron-1.0.4.tgz",
       "integrity": "sha1-LYCyXXSuTWImrYs7xOz6YR5I/co="
+    },
+    "ngx-window-token": {
+      "version": "0.0.4",
+      "resolved": "https://registry.npmjs.org/ngx-window-token/-/ngx-window-token-0.0.4.tgz",
+      "integrity": "sha1-R+eqpGVBHEq197oXYBvFk8lWxzY="
     },
     "no-case": {
       "version": "2.3.2",
@@ -10632,6 +10645,11 @@
       "requires": {
         "utf8-byte-length": "1.0.4"
       }
+    },
+    "ts-md5": {
+      "version": "1.2.4",
+      "resolved": "https://registry.npmjs.org/ts-md5/-/ts-md5-1.2.4.tgz",
+      "integrity": "sha512-oW+rNjc9CAhalPFzbPWsLqPLzdNcJ8iSm+OXO+Uv+99r3PzCJuM5sVc0bO1eS+4LD2xv+nfU7ylBdwoemUV9Yw=="
     },
     "ts-node": {
       "version": "3.3.0",

@@ -39,13 +39,13 @@ import {
 	MatAutocompleteModule,
 	MatChipsModule,
 	MatSlideToggleModule,
+	MatRadioModule
 } from '@angular/material';
 import { NgxElectronModule } from 'ngx-electron';
 
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
 import { AppComponent } from './app.component';
-
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
@@ -66,6 +66,7 @@ import { BusinessPickerComponent } from './components/shared/business-picker/bus
 import { AnaCloudSignupComponent } from './components/shared/ana-cloud-signup/ana-cloud-signup.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
 import { HighlightJsModule } from 'angular2-highlight-js';
+import { ClipboardModule } from 'ngx-clipboard';
 const MAT_MODULES: any[] = [
 	MatButtonModule,
 	MatMenuModule,
@@ -87,7 +88,8 @@ const MAT_MODULES: any[] = [
 	MatGridListModule,
 	MatAutocompleteModule,
 	MatChipsModule,
-	MatSlideToggleModule
+	MatSlideToggleModule,
+	MatRadioModule
 ];
 
 const IMPORT_EXPORT: any[] = [
@@ -98,7 +100,8 @@ const IMPORT_EXPORT: any[] = [
 	ReactiveFormsModule,
 	NgxElectronModule,
 	HotkeyModule,
-	HighlightJsModule
+	HighlightJsModule,
+	ClipboardModule,
 ].concat(MAT_MODULES);
 
 const DECLARATIONS: any[] = [

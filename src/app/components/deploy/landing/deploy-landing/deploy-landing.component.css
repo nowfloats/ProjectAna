@@ -60,3 +60,25 @@ mat-action-row > button {
 .table-body {
     padding: 10px 0;
 }
+
+section.control {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
+.radio-grp {
+    margin-top: 0 !important;
+    margin-bottom: 20px !important;
+}
+
+.left-header {
+    margin-bottom: 19px;
+    margin-top: 19px;
+    margin-left: -2px;
+}
+
+label {
+    font-weight: normal;
+    font-size: small;
+    opacity: 0.9;
+}
