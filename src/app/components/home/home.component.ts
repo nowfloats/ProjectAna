@@ -65,9 +65,30 @@ export class HomeComponent {
 		});
 	}
 
+	deploy() {
+		this.loginService.performLogin(true, null, true, (done) => {
+			if (!done) {
+				this.infoDialog.alert("Login Required", "You must be logged in to your Ana chat server to deploy your chatbot");
+				return;
+			}
+			if (this.dataService.loggedInUser) {
+				if (this.dataService.isSuperAdmin()) {
+					this.openDeployPage({ askFlowId: true });
+				} else if ((this.dataService.isBizAdmin() || this.dataService.isFlowManager()) && this.dataService.loggedInUser.businessId) {
+					this.openDeployPage({
+						askFlowId: true,
+						businessId: this.dataService.loggedInUser.businessId
+					});
+				} else {
+					this.infoDialog.alert("Unauthorized!", "Only a super admin, a business admin or a flow manager can login into user management");
+				}
+			}
+		});
+	}
+
 	openAnalyticsPicker(params: BusinessPickerParam) {
 		let d = this.dialog.open(BusinessPickerComponent, {
-			width: 'auto',
+			width: '30%',
 			data: params
 		});
 
@@ -80,6 +101,20 @@ export class HomeComponent {
 						this.router.navigateByUrl(url);
 					}
 				}, localStorage.getItem('analyticsApiBase'));
+			}
+		});
+	}
+
+	openDeployPage(params: BusinessPickerParam) {
+		let d = this.dialog.open(BusinessPickerComponent, {
+			width: '30%',
+			data: params
+		});
+
+		d.afterClosed().subscribe((x: ChoosenBizAccChatProj) => {
+			if (x && x.bizAccount && x.chatProj) {
+				let url = `/deploy?businessId=${x.bizAccount.id}&chatFlowId=${x.chatProj.id}`;
+				this.router.navigateByUrl(url);
 			}
 		});
 	}

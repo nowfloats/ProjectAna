@@ -15,7 +15,7 @@
                 </mat-error>
             </mat-form-field>
             <mat-form-field>
-                <input type="tel" placeholder="Business Phone" name="phone" matInput [(ngModel)]="account.phone" pattern="^\+?\d{6,15}$" #phone="ngModel" required/>
+                <input type="tel" placeholder="Business Phone" name="phone" matInput [(ngModel)]="account.phone" pattern="^\+?\d{6,15}$" #phone="ngModel"/>
                 <mat-error align="start" *ngIf="phone.invalid && (phone.dirty || phone.touched)">
                     Please enter a valid phone number
                 </mat-error>

@@ -171,3 +171,7 @@ input[type=text] {
 app-nodeeditor .mat-tab-body-wrapper {
     height: 50vh;
 }
+
+.mat-radio-label-content {
+    font-weight: normal;
+}

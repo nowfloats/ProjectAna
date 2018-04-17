@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatAutocompleteSelectedEvent } from '@angular/material';
 import { BusinessAccount, ChatProject } from '../../../models/data.models';
 import { AnalyticsWindowService } from '../../../services/analytics-window.service';
 import { Router } from '@angular/router';
@@ -59,9 +59,48 @@ export class BusinessPickerComponent implements OnInit {
 
 	selectedBusinessAccount: BusinessAccount;
 	businessAccounts: BusinessAccount[] = [];
+	bizOptionSelected(event: MatAutocompleteSelectedEvent) {
+		if (event.option && event.option.value) {
+			this.selectedBusinessAccount = event.option.value;
+			if (this.selectedBusinessAccount) {
+				this.loadChatProjects();
+			}
+		}
+	}
+	bizDisplayWith(value: any) {
+		return value ? value.name : null;
+	}
+	bizFilter: string | BusinessAccount = "";
+	bizFilteredOptions() {
+		if (typeof this.bizFilter === 'string') {
+			let list = this.businessAccounts;
+			if (this.bizFilter) {
+				list = this.businessAccounts.filter(x => (x.name.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1);
+			}
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 1));
+		}
+	}
 
 	chatProjects: ChatProject[] = [];
 	selectedChatProject: ChatProject;
+	projOptionSelected(event: MatAutocompleteSelectedEvent) {
+		if (event.option && event.option.value) {
+			this.selectedChatProject = event.option.value;
+		}
+	}
+	projDisplayWith(value: any) {
+		return value ? value.name : null;
+	}
+	projFilter: string | ChatProject = "";
+	projFilteredOptions() {
+		if (typeof this.projFilter === 'string') {
+			let list = this.chatProjects;
+			if (this.projFilter) {
+				list = this.chatProjects.filter(x => (x.name.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1);
+			}
+			return list.sort((x, y) => ((x.name && y.name) ? x.name.localeCompare(y.name) : 1));
+		}
+	}
 
 	loadChatProjects() {
 		if (!this.param.askFlowId)
@@ -97,6 +136,10 @@ export class BusinessPickerComponent implements OnInit {
 		} else {
 			return this.selectedBusinessAccount;
 		}
+	}
+
+	get chatConnName() {
+		return this.dataService.chatServer.Name;
 	}
 }
 

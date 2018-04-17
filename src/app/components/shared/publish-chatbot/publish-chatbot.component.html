@@ -1,12 +1,7 @@
 <h2 matDialogTitle>Publish chatbot</h2>
 <mat-dialog-content>
     <mat-card *ngIf="!chatProjects || chatProjects.length <= 0" class="text-center">
-        <h4>
-            Looks like you don't have any Ana chatbot projects yet.
-            <!--<br />-->
-            <!--<br />-->
-            <!--<button mat-raised-button color="primary" (click)="createNewChatProject()">Add Ana chatbot project</button>-->
-        </h4>
+        <h4> Looks like you don't have any Ana chatbot projects yet. </h4>
     </mat-card>
     <mat-form-field *ngIf="chatProjects && chatProjects.length>0" #chatProjectFormField tabindex="-1">
         <input tabindex="-1" type="text" placeholder="Choose a chatbot project" aria-label="Chatbot Project" matInput [(ngModel)]="filter" [matAutocomplete]="auto" name="chatProject">
@@ -21,7 +16,7 @@
     </mat-form-field>
     <section *ngIf="chatProjects && chatProjects.length>0" class="text-center">
         <h3>Or</h3>
-        <br/>
+        <br />
     </section>
     <div>
         <h5>Create new chatbot project</h5>
@@ -37,9 +32,10 @@
             <input type="submit" name="submit" hidden />
         </form>
     </div>
+
+    <label class="desc">You are logged into '{{chatConnName}}' Ana chat server</label>
 </mat-dialog-content>
 <mat-dialog-actions>
-    <!--<button mat-raised-button *ngIf="chatProjects && chatProjects.length > 0" (click)="createNewChatProject()">Add new Ana chatbot project</button>-->
     <button mat-raised-button [disabled]="!canPublish()" color="primary" (click)="doPublish()">Publish</button>
     <button mat-raised-button matDialogClose>Dismiss</button>
 </mat-dialog-actions>

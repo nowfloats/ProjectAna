@@ -10,3 +10,7 @@ mat-dialog-actions > .spacing {
     font-size: 11px;
     opacity: 0.6;
 }
+
+label.desc {
+    margin-top: 10px;
+}

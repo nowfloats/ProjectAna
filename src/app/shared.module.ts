@@ -37,14 +37,15 @@ import {
 	ErrorStateMatcher,
 	ShowOnDirtyErrorStateMatcher,
 	MatAutocompleteModule,
-	MatChipsModule
+	MatChipsModule,
+	MatSlideToggleModule,
+	MatRadioModule
 } from '@angular/material';
 import { NgxElectronModule } from 'ngx-electron';
 
 import { EllipsisPipe } from './pipes/ellipsis.pipe';
 
 import { AppComponent } from './app.component';
-
 import { ChatFlowService } from './services/chatflow.service';
 import { GlobalsService } from './services/globals.service';
 import { SettingsService } from './services/settings.service';
@@ -64,7 +65,8 @@ import { HotkeyModule } from 'angular2-hotkeys';
 import { BusinessPickerComponent } from './components/shared/business-picker/business-picker.component';
 import { AnaCloudSignupComponent } from './components/shared/ana-cloud-signup/ana-cloud-signup.component';
 import { AutofocusDirective } from './directives/autofocus.directive';
-
+import { HighlightJsModule } from 'angular2-highlight-js';
+import { ClipboardModule } from 'ngx-clipboard';
 const MAT_MODULES: any[] = [
 	MatButtonModule,
 	MatMenuModule,
@@ -85,7 +87,9 @@ const MAT_MODULES: any[] = [
 	MatToolbarModule,
 	MatGridListModule,
 	MatAutocompleteModule,
-	MatChipsModule
+	MatChipsModule,
+	MatSlideToggleModule,
+	MatRadioModule
 ];
 
 const IMPORT_EXPORT: any[] = [
@@ -95,7 +99,9 @@ const IMPORT_EXPORT: any[] = [
 	FormsModule,
 	ReactiveFormsModule,
 	NgxElectronModule,
-	HotkeyModule
+	HotkeyModule,
+	HighlightJsModule,
+	ClipboardModule,
 ].concat(MAT_MODULES);
 
 const DECLARATIONS: any[] = [

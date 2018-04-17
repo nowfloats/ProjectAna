@@ -13,6 +13,8 @@
 .button-row > .mat-raised-button {
     margin-left: 10px;
     margin-right: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
     height: 180px;
     width: 200px;
     font-size: 18px;
