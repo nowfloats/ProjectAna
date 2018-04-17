@@ -74,6 +74,18 @@ export class DeployLandingComponent implements OnInit, AfterViewInit {
 		}
 	}
 
+	openElectronWindow(url: string) {
+		if (!this.electron.isElectronApp) {
+			window.open(url);
+			return;
+		}
+		let win = new this.electron.remote.BrowserWindow();
+		win.on('closed', () => {
+			win = null
+		});
+		win.loadURL(url);
+	}
+
 	copied() {
 		this.snakbar.open("Code copied", "dismiss", {
 			duration: 1500
@@ -104,14 +116,15 @@ export class DeployLandingComponent implements OnInit, AfterViewInit {
 <html>
 <head>
 	<title>Ana web chat preview</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 </head>
 <body>
 ${this.webSnippet}
 </body>
 </html>`;
-		var blob = new Blob([src], { type: "text/html" });
-		var url = window.URL.createObjectURL(blob);
-		this.open(url);
+
+		var url = "data:text/html;base64," + btoa(src);
+		this.openElectronWindow(url);
 	}
 
 	_oldVal;
