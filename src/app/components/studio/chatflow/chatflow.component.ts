@@ -559,7 +559,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 					});
 				} else {
 					let d = this.dialog.open(BusinessPickerComponent, {
-						width: "auto",
+						width: "30%",
 						data: <BusinessPickerParam>{
 							askFlowId: false
 						}

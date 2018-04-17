@@ -66,13 +66,21 @@ export class EditBusinessAccountComponent implements OnInit {
 	pwdMatch(p1, p2) {
 		return this.global.pwdMatch(p1, p2);
 	}
-
+	
 	confirmPassword: string;
 	save() {
-		if (!this.global.emailValid(this.account.email) ||
-			!this.global.phoneValid(this.account.phone)) {
-			this.infoDialog.alert("Invalid details", "Please enter valid information in the fields provided");
-			return;
+		if (this.account.email) {
+			if (!this.global.emailValid(this.account.email)) {
+				this.infoDialog.alert("Invalid email address", "Please enter a valid email address");
+				return;
+			}
+		}
+
+		if (this.account.phone) {
+			if (!this.global.phoneValid(this.account.phone)) {
+				this.infoDialog.alert("Invalid phone number", "Please enter a valid phone number");
+				return;
+			}
 		}
 
 		this.account.colors = [

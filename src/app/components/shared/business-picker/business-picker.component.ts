@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject, Optional } from '@angular/core';
 import { DataService } from '../../../services/data.service';
 import { InfoDialogService } from '../../../services/info-dialog.service';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA, MatAutocompleteSelectedEvent } from '@angular/material';
 import { BusinessAccount, ChatProject } from '../../../models/data.models';
 import { AnalyticsWindowService } from '../../../services/analytics-window.service';
 import { Router } from '@angular/router';
@@ -59,9 +59,46 @@ export class BusinessPickerComponent implements OnInit {
 
 	selectedBusinessAccount: BusinessAccount;
 	businessAccounts: BusinessAccount[] = [];
+	bizOptionSelected(event: MatAutocompleteSelectedEvent) {
+		if (event.option && event.option.value) {
+			this.selectedBusinessAccount = event.option.value;
+			if (this.selectedBusinessAccount) {
+				this.loadChatProjects();
+			}
+		}
+	}
+	bizDisplayWith(value: any) {
+		return value ? value.name : null;
+	}
+	bizFilter: string | BusinessAccount = "";
+	bizFilteredOptions() {
+		if (typeof this.bizFilter === 'string') {
+			if (this.bizFilter) {
+				return this.businessAccounts.filter(x => (x.name.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.bizFilter).toLowerCase()) != -1);
+			}
+			return this.businessAccounts;
+		}
+	}
 
 	chatProjects: ChatProject[] = [];
 	selectedChatProject: ChatProject;
+	projOptionSelected(event: MatAutocompleteSelectedEvent) {
+		if (event.option && event.option.value) {
+			this.selectedChatProject = event.option.value;
+		}
+	}
+	projDisplayWith(value: any) {
+		return value ? value.name : null;
+	}
+	projFilter: string | ChatProject = "";
+	projFilteredOptions() {
+		if (typeof this.projFilter === 'string') {
+			if (this.projFilter) {
+				return this.chatProjects.filter(x => (x.name.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1) || x.id.toLowerCase().indexOf((<string>this.projFilter).toLowerCase()) != -1);
+			}
+			return this.chatProjects;
+		}
+	}
 
 	loadChatProjects() {
 		if (!this.param.askFlowId)
@@ -74,6 +111,7 @@ export class BusinessPickerComponent implements OnInit {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.chatProjects = x.data.content;
+				debugger;
 			}
 			else {
 				this.dataService.handleTypedError(x.error, "Unable to fetch chat projects", "Something went wrong while trying to fetch chat projects. Please try again.");

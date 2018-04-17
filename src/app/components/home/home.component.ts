@@ -67,7 +67,7 @@ export class HomeComponent {
 
 	openAnalyticsPicker(params: BusinessPickerParam) {
 		let d = this.dialog.open(BusinessPickerComponent, {
-			width: 'auto',
+			width: '30%',
 			data: params
 		});
 

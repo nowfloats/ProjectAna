@@ -84,7 +84,7 @@ export class GlobalsService {
 			return this.PHONE_REGEX.test(val);
 		return false;
 	}
-
+	
 	pwdMatch(p1: string, p2: string) {
 		if (!p1) return false;
 		if (p1.length < 6) return false;
