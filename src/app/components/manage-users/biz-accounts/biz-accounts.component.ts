@@ -40,6 +40,7 @@ export class BizAccountsComponent implements AfterViewInit {
 			this.loadAccounts();
 		}
 	}
+
 	nextPage() {
 		if (this.page < this.totalPages) {
 			this.page++;

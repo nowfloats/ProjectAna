@@ -28,6 +28,10 @@ export class DataService {
 		return this.conn.ServerUrl + "analytics";
 	}
 
+	get chatServer() {
+		return this.conn;
+	}
+
 	isSuperAdmin() {
 		if (!this.loggedInUser || !this.loggedInUser.roles) return false;
 		return this.loggedInUser.roles.map(x => x.role).indexOf("SUPER_ADMIN") != -1;
