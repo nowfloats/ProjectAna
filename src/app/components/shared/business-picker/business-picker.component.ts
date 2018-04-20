@@ -45,6 +45,7 @@ export class BusinessPickerComponent implements OnInit {
 					let x = this.businessAccounts.filter(x => x.id == this.param.businessId);
 					if (x && x.length > 0) {
 						this.selectedBusinessAccount = x[0];
+						this.bizFilter = this.selectedBusinessAccount;
 						this.loadChatProjects();
 					}
 				}
