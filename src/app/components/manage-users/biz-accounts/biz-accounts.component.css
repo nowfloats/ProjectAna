@@ -45,6 +45,7 @@
 
 .app-content-header-text {
     flex-grow: 1;
+    margin-top: 14px;
 }
 
 .list-item-hint {
@@ -55,4 +56,8 @@
 
 mat-list-item {
     margin-bottom: 10px;
+}
+
+.search-text {
+    margin-right: 10px;
 }

@@ -81,9 +81,9 @@ export interface ListData<TItem> {
 export enum BusinessAccountStatus {
 	INACTIVE = 0,
 	ACTIVE = 1,
-	EXPIRED = 'EXPIRED',
-	BLOCKED = 'BLOCKED',
-	DELETED = 'DELETED'
+	EXPIRED = 2,
+	BLOCKED = 3,
+	DELETED = 4
 }
 
 export enum DevicePlatform {

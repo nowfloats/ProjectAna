@@ -47,10 +47,17 @@ export class BizAccountsComponent implements AfterViewInit {
 			this.loadAccounts();
 		}
 	}
+	search: string = "";
+
+	searchStart() {
+		this.page = 0;
+		this.loadAccounts();
+	}
+
 	loadAccounts() {
 		this.infoDialog.showSpinner();
 
-		this.dataService.getBusinessAccounts(this.page).subscribe(x => {
+		this.dataService.getBusinessAccounts(this.search, this.page).subscribe(x => {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.accounts = x.data.content;

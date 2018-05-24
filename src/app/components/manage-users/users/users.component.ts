@@ -50,6 +50,12 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	ngOnInit() {
 	}
 
+	search: string = "";
+	searchStart() {
+		this.page = 0;
+		this.loadUsers();
+	}
+
 	loadBusinessDetails() {
 		this.infoDialog.showSpinner();
 
@@ -104,7 +110,7 @@ export class UsersComponent implements OnInit, AfterViewInit {
 	loadUsers() {
 		if (this.bizId) {
 			this.infoDialog.showSpinner();
-			this.dataService.getUsers(this.bizId, this.page).subscribe(x => {
+			this.dataService.getUsers(this.bizId, this.search, this.page).subscribe(x => {
 				this.infoDialog.hideSpinner();
 				//if (x.success) {
 				this.users = x.content;//.filter(x => x.roles && x.roles.length > 0);

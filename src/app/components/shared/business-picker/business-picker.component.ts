@@ -37,7 +37,7 @@ export class BusinessPickerComponent implements OnInit {
 
 	init() {
 		this.infoDialog.showSpinner();
-		this.dataService.getBusinessAccounts(0, 10000).subscribe(x => {
+		this.dataService.getBusinessAccounts("", 0, 10000).subscribe(x => {
 			this.infoDialog.hideSpinner();
 			if (x.success) {
 				this.businessAccounts = x.data.content;
