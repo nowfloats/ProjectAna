@@ -75,9 +75,9 @@ export class DataService {
 			.map(x => x as APIResponse<Role[]>);
 	}
 
-	getBusinessAccounts(page: number = 0, size: number = 10) {
+	getBusinessAccounts(searchText: string = "", page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}business/accounts?page=${page}&size=${size}`, { headers: h })
+		return this.http.get(`${this.conn.ServerUrl}business/accounts?searchText=${encodeURIComponent(searchText)}&page=${page}&size=${size}`, { headers: h })
 			.map(x => x as APIResponse<ListContent<BusinessAccount>>);
 	}
 
@@ -140,9 +140,9 @@ export class DataService {
 
 	}
 
-	getUsers(bizid: string, page: number = 0, size: number = 10) {
+	getUsers(bizid: string, searchText: string = "", page: number = 0, size: number = 10) {
 		let h = this.getHeaders();
-		return this.http.get(`${this.conn.ServerUrl}auth/users?page=${page}&size=${size}&businessId=${bizid}`, { headers: h })
+		return this.http.get(`${this.conn.ServerUrl}auth/users?searchText=${encodeURIComponent(searchText)}&page=${page}&size=${size}&businessId=${bizid}`, { headers: h })
 			.map(x => x as ListContent<User>);
 	}
 

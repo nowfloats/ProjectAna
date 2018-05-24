@@ -3,6 +3,13 @@
     <div class="app-content-header">
         <h4 class="app-content-header-text">{{businessAccount ? 'Users of ' + businessAccount.name : 'Users'}}</h4>
         <div class="app-content-header-actions">
+            <mat-form-field floatLabel="never" class="search-text">
+                <mat-label>Search</mat-label>
+                <input type="text" matInput name="search" [(ngModel)]="search" (keyup.enter)="searchStart()" />
+                <button mat-icon-button matSuffix (click)="searchStart()">
+                    <mat-icon>search</mat-icon>
+                </button>
+            </mat-form-field>
             <button mat-raised-button color="primary" (click)="createUserDialog()" [disabled]="!bizId">Create new user</button>
         </div>
     </div>
