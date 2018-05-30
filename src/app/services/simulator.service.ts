@@ -333,7 +333,12 @@ export class SimulatorService {
 	}
 
 	private processVerbsForChatNode(chatNode: models.ChatNode): models.ChatNode {
-		return JSON.parse(this.processVerbs(JSON.stringify(chatNode))) as models.ChatNode;
+		try {
+			let nodeJson = this.processVerbs(JSON.stringify(chatNode));
+			return JSON.parse(nodeJson) as models.ChatNode;
+		} catch (e) {
+			this.logDebug(e);
+		}
 	}
 
 	private replaceTxt(subStr, key) {
@@ -364,7 +369,7 @@ export class SimulatorService {
 				.replace(/\n/g, "\\n")
 				//.replace(/\'/g, "\\'")
 				.replace(/\"/g, '\\"')
-				.replace(/\&/g, "\\&")
+				//.replace(/\&/g, "\\&")
 				.replace(/\r/g, "\\r")
 				.replace(/\t/g, "\\t")
 				.replace(/\f/g, "\\f");
