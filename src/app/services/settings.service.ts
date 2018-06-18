@@ -63,6 +63,9 @@ export class SettingsService {
 	}
 
 	renameChatProject(oldName: string, newName: string) {
+		if (oldName == newName)
+			return;
+
 		oldName += ".anaproj";
 		newName += ".anaproj";
 

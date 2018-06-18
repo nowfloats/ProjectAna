@@ -101,7 +101,7 @@ export class LandingComponent implements OnInit {
 	}
 	renameChatBotProject(name: string) {
 		this.infoDialog.prompt("Rename", 'Enter a new name: ', (newName) => {
-			if (newName) {
+			if (newName && name != newName) {
 				this.settings.renameChatProject(name, newName);
 				this.loadSavedProjects();
 			}
