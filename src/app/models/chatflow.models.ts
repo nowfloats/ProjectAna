@@ -165,7 +165,7 @@ export enum ButtonType {
 	GetLocation = 'GetLocation'
 }
 
-export interface Button extends BaseIdEntity {
+export interface Button extends RepeatableBaseEntity {
 	ButtonName: string;
 	ButtonText?: string;
 	Emotion?: number;
@@ -187,11 +187,7 @@ export interface Button extends BaseIdEntity {
 	ConditionOperator?: ConditionOperator;
 	ConditionMatchValue?: string;
 	PostToChat?: boolean;
-	DoesRepeat?: boolean;
-	RepeatOn?: string;
-	RepeatAs?: string;
-	StartPosition?: number;
-	MaxRepeats?: number;
+
 	AdvancedOptions?: boolean;
 	MinLength?: number;
 	MaxLength?: number;
