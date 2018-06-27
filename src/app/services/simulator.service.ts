@@ -9,7 +9,7 @@ import * as _ from 'underscore';
 import { GlobalsService } from '../services/globals.service';
 import { InfoDialogService } from '../services/info-dialog.service';
 import { SimulatorFrameComponent } from '../components/studio/simulator-frame/simulator-frame.component';
-import { CarouselButton } from '../models/chatflow.models';
+import { CarouselButton, RepeatableBaseEntity, CarouselItem } from '../models/chatflow.models';
 @Injectable()
 export class SimulatorService {
 
@@ -280,7 +280,8 @@ export class SimulatorService {
 	}
 
 	private getNodeButtonById(buttonId: string) {
-		let btn = this.state.currentNode.Buttons.filter(x => x._id == buttonId);
+		let btns = this.state.currentNode.Buttons;
+		let btn = btns.filter(x => x._id == buttonId);
 		return (btn && btn.length > 0) ? btn[0] : null;
 	}
 
@@ -304,10 +305,12 @@ export class SimulatorService {
 		let carSection = this.state.currentSection as models.CarouselSection;
 		if (carSection && carSection.SectionType == models.SectionType.Carousel) {
 			let selectedCarBtn: CarouselButton = null;
-			for (var i = 0; i < carSection.Items.length; i++) {
-				let carItem = carSection.Items[i];
-				for (var j = 0; j < carItem.Buttons.length; j++) {
-					let carBtn = carItem.Buttons[j];
+			let carItems = carSection.Items;
+			for (let i = 0; i < carItems.length; i++) {
+				let carItem = carItems[i];
+				let carBtns = carItem.Buttons;
+				for (let j = 0; j < carBtns.length; j++) {
+					let carBtn = carBtns[j];
 					if (carBtn._id == carItemBtnId) {
 						selectedCarBtn = carBtn;
 						break;
@@ -398,7 +401,7 @@ export class SimulatorService {
 
 					if (chatNode.Headers) {
 						let splits = chatNode.Headers.split(/\n|,/);
-						for (var si = 0; si < splits.length; si++) {
+						for (let si = 0; si < splits.length; si++) {
 							try {
 								let split = splits[si];
 								if (split.indexOf(':') != -1) {
@@ -419,7 +422,7 @@ export class SimulatorService {
 
 					let reqParams = new URLSearchParams();
 					if (chatNode.RequiredVariables) {
-						for (var i = 0; i < chatNode.RequiredVariables.length; i++) {
+						for (let i = 0; i < chatNode.RequiredVariables.length; i++) {
 							if (chatNode.RequiredVariables[i] && Object.keys(this.state.variables).indexOf(chatNode.RequiredVariables[i]) != -1)
 								reqParams.append(chatNode.RequiredVariables[i], this.state.variables[chatNode.RequiredVariables[i]]);
 						}
@@ -540,36 +543,39 @@ export class SimulatorService {
 				break;
 			case models.SectionType.Carousel:
 				{
+					(section as models.CarouselSection).Items = this.processRepeatable((section as models.CarouselSection).Items, true);
+					let carItems = _.map((section as models.CarouselSection).Items, x => {
+						x.Buttons = this.processRepeatable(x.Buttons, false);
+						return {
+							title: x.Title,
+							desc: x.Caption,
+							media: {
+								type: chatModels.MediaType.IMAGE,
+								url: x.ImageUrl
+							},
+							options: _.map(x.Buttons, y => {
+								if (y.Type == models.CarouselButtonType.NextNode) {
+									return {
+										title: y.Text,
+										value: y._id,
+										type: this.convertCarouselButtonType(y.Type)
+									};
+								} else {
+									return {
+										title: y.Text,
+										value: JSON.stringify({
+											url: y.Url,
+											value: y._id
+										}),
+										type: this.convertCarouselButtonType(y.Type)
+									};
+								}
+							}),
+							url: ''
+						};
+					});
 					let carContent: chatModels.CarouselContent = {
-						items: _.map((section as models.CarouselSection).Items, x => {
-							return {
-								title: x.Title,
-								desc: x.Caption,
-								media: {
-									type: chatModels.MediaType.IMAGE,
-									url: x.ImageUrl
-								},
-								options: _.map(x.Buttons, y => {
-									if (y.Type == models.CarouselButtonType.NextNode) {
-										return {
-											title: y.Text,
-											value: y._id,
-											type: this.convertCarouselButtonType(y.Type)
-										};
-									} else {
-										return {
-											title: y.Text,
-											value: JSON.stringify({
-												url: y.Url,
-												value: y._id
-											}),
-											type: this.convertCarouselButtonType(y.Type)
-										};
-									}
-								}),
-								url: ''
-							};
-						}),
+						items: carItems,
 						mandatory: 1
 					};
 					anaMessageData = {
@@ -583,6 +589,8 @@ export class SimulatorService {
 	}
 
 	private convertButtons(chatNode: models.ChatNode, callback: (resp: chatModels.ANAMessageData) => void): void {
+
+		chatNode.Buttons = this.processRepeatable(chatNode.Buttons, false);
 
 		let clickInputs = _.filter(chatNode.Buttons, x => _.contains([
 			models.ButtonType.DeepLink,
@@ -825,7 +833,7 @@ export class SimulatorService {
 		let done = false;
 		try {
 			if (chatNode.Buttons) {
-				for (var btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
+				for (let btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
 					let btn = chatNode.Buttons[btnIdx];
 					let rootToken = btn.ConditionMatchKey.split(/\.|\[/)[0];
 					let wrappedResp = {};
@@ -844,7 +852,7 @@ export class SimulatorService {
 			}
 		} catch (e) {
 			if (chatNode.Buttons) {
-				for (var btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
+				for (let btnIdx = 0; btnIdx < chatNode.Buttons.length; btnIdx++) {
 					let btn = chatNode.Buttons[btnIdx];
 					let leftOperand = this.state.variables[btn.ConditionMatchKey];
 					if (this.match(leftOperand, btn.ConditionOperator, btn.ConditionMatchValue)) {
@@ -858,6 +866,56 @@ export class SimulatorService {
 		}
 		if (!done)
 			this.gotoNextNode(chatNode.NextNodeId); //Fallback node id
+	}
+
+	private processRepeatableItem(repeatableItem: RepeatableBaseEntity, isCarousel: boolean) {
+		let repeatOnVarName = repeatableItem.RepeatOn;
+		let repeatOn = this.replaceTxt(null, repeatOnVarName);
+		let resultingItems = [];
+		if (repeatOn && Array.isArray(repeatOn)) {
+			let start = repeatableItem.StartPosition || 0;
+			let max = repeatableItem.MaxRepeats || repeatOn.length;
+			let repeatAs = repeatableItem.RepeatAs;
+
+			for (let repeatAsItem of repeatOn.slice(start, start + max)) {
+				this.state.variables[repeatAs] = JSON.stringify(repeatAsItem);
+				let item_json = JSON.stringify(repeatableItem);
+				let replacedItemJson = this.processVerbs(item_json);
+				let replacedItem = JSON.parse(replacedItemJson) as RepeatableBaseEntity;
+				if (isCarousel) {
+					let carBtns = (replacedItem as CarouselItem).Buttons;
+					carBtns = this.processRepeatable(carBtns, false);
+					for (let carBtn of carBtns)
+						carBtn.DoesRepeat = false;
+					(replacedItem as CarouselItem).Buttons = carBtns;
+				}
+				delete this.state.variables[repeatAs];
+				replacedItem._id = replacedItem._id + "--" + repeatOn.indexOf(repeatAsItem);
+				resultingItems.push(replacedItem);
+			}
+		}
+		return resultingItems;
+	}
+
+	private processRepeatable(repeatables: RepeatableBaseEntity[], isCarousel: boolean) {
+		let result = [];
+		for (let item of repeatables) {
+			if (item.DoesRepeat) {
+				let processed_item = this.processRepeatableItem(item, isCarousel)
+				result.push(...processed_item)
+			} else {
+				result.push(item)
+			}
+		}
+		if (isCarousel) {
+			for (let resultItem of result) {
+				let btns = (resultItem as CarouselItem).Buttons;
+				for (let btn of btns) {
+					btn._id = btn._id + "--" + result.indexOf(resultItem);
+				}
+			}
+		}
+		return result;
 	}
 
 	private match(left: any, op: models.ConditionOperator, right: any) {

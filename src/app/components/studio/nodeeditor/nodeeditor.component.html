@@ -214,6 +214,23 @@
                                                     <mat-form-field>
                                                         <input matInput type="text" placeholder="Caption" [(ngModel)]="carItem.Caption" name="carItemCaption-{{i}}">
                                                     </mat-form-field>
+                                                    <section class="form-field">
+                                                        <mat-checkbox [(ngModel)]="carItem.DoesRepeat" name="carItemDoesRepeat-{{i}}" align="start">Does repeat</mat-checkbox>
+                                                    </section>
+                                                    <div class="carousel-item-repeat-options" [hidden]="!carItem.DoesRepeat">
+                                                        <mat-form-field>
+                                                            <input matInput type="text" placeholder="Repeat On" [(ngModel)]="carItem.RepeatOn" name="carItemRepeatOn-{{i}}">
+                                                        </mat-form-field>
+                                                        <mat-form-field>
+                                                            <input matInput type="text" placeholder="Repeat As" [(ngModel)]="carItem.RepeatAs" name="carItemRepeatAs-{{i}}">
+                                                        </mat-form-field>
+                                                        <mat-form-field>
+                                                            <input matInput type="number" placeholder="Start Position" [(ngModel)]="carItem.StartPosition" name="carItemStartPosition-{{i}}">
+                                                        </mat-form-field>
+                                                        <mat-form-field>
+                                                            <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="carItem.MaxRepeats" name="carItemMaxRepeats-{{i}}">
+                                                        </mat-form-field>
+                                                    </div>
                                                     <div class="carousel-buttons" *ngFor="let carBtn of carItem.Buttons">
                                                         <div class="panel panel-default">
                                                             <div class="panel-heading">
@@ -250,6 +267,23 @@
                                                                 <mat-form-field>
                                                                     <input matInput type="text" placeholder="Variable Value" [(ngModel)]="carBtn.VariableValue" name="carBtnVariableValue-{{i}}">
                                                                 </mat-form-field>
+                                                                <section class="form-field">
+                                                                    <mat-checkbox [(ngModel)]="carBtn.DoesRepeat" name="carBtnDoesRepeat-{{i}}" align="start">Does repeat</mat-checkbox>
+                                                                </section>
+                                                                <div class="carousel-button-repeat-options" [hidden]="!carBtn.DoesRepeat">
+                                                                    <mat-form-field>
+                                                                        <input matInput type="text" placeholder="Repeat On" [(ngModel)]="carBtn.RepeatOn" name="carBtnRepeatOn-{{i}}">
+                                                                    </mat-form-field>
+                                                                    <mat-form-field>
+                                                                        <input matInput type="text" placeholder="Repeat As" [(ngModel)]="carBtn.RepeatAs" name="carBtnRepeatAs-{{i}}">
+                                                                    </mat-form-field>
+                                                                    <mat-form-field>
+                                                                        <input matInput type="number" placeholder="Start Position" [(ngModel)]="carBtn.StartPosition" name="carBtnStartPosition-{{i}}">
+                                                                    </mat-form-field>
+                                                                    <mat-form-field>
+                                                                        <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="carBtn.MaxRepeats" name="carBtnMaxRepeats-{{i}}">
+                                                                    </mat-form-field>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -269,17 +303,6 @@
                     <!--<img matTooltip="Add an audio content" class="section-type-button audio" (click)="MH.addSection(chatNode, SectionType.Audio)" />-->
                     <img matTooltip="Add a video content" class="section-type-button video" (click)="MH.addSection(chatNode, SectionType.Video)" />
                     <img matTooltip="Add a carousel content" class="section-type-button carousel" (click)="MH.addSection(chatNode, SectionType.Carousel)" />
-                    <!--<mat-menu #addSectionMenu="matMenu">
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Text)">Text</button>
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Image)">Image</button>
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Gif)">Gif</button>
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Audio)">Audio</button>
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Video)">Video</button>
-        <button mat-menu-item (click)="MH.addSection(chatNode, SectionType.Carousel)">Carousel</button>
-    </mat-menu>
-                    <button type="button" matTooltip="Add Section" [matMenuTriggerFor]="addSectionMenu" mat-fab>
-                        <mat-icon class="fab-btn-icon">add</mat-icon>
-                    </button>-->
                 </section>
             </div>
         </mat-tab>
@@ -373,27 +396,25 @@
                                 <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'IsMultiLine')">
                                     <mat-checkbox [(ngModel)]="btn.IsMultiLine" name="btnIsMultiLine-{{i}}" align="start">Multiple line allowed</mat-checkbox>
                                 </section>
-                                <!--<section class="form-field">
-                                    <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
-                                </section>-->
+
+                                <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'DoesRepeat')">
+                                    <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{{i}}" align="start">Does repeat</mat-checkbox>
+                                </section>
+                                <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat || MH.chatButtonFieldHidden(chatNode, btn, 'DoesRepeat')">
+                                    <mat-form-field>
+                                        <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{{i}}">
+                                    </mat-form-field>
+                                </div>
                             </div>
-                            <!--<section class="form-field">
-                                <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{ {i}}" align="start">Does repeat</mat-checkbox>
-                            </section>
-                            <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
-                                <mat-form-field>
-                                    <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{ {i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{ {i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{ {i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{ {i}}">
-                                </mat-form-field>
-                            </div>-->
                         </div>
                     </div>
                 </div>

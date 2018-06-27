@@ -76,7 +76,7 @@ export interface RepeatableBaseEntity extends BaseEntity {
 	DoesRepeat?: boolean;
 	RepeatOn?: string;
 	RepeatAs?: string;
-	StartPosition?: string;
+	StartPosition?: number;
 	MaxRepeats?: number;
 }
 
@@ -165,7 +165,7 @@ export enum ButtonType {
 	GetLocation = 'GetLocation'
 }
 
-export interface Button extends BaseIdEntity {
+export interface Button extends RepeatableBaseEntity {
 	ButtonName: string;
 	ButtonText?: string;
 	Emotion?: number;
@@ -187,11 +187,7 @@ export interface Button extends BaseIdEntity {
 	ConditionOperator?: ConditionOperator;
 	ConditionMatchValue?: string;
 	PostToChat?: boolean;
-	DoesRepeat?: boolean;
-	RepeatOn?: string;
-	RepeatAs?: string;
-	StartPosition?: number;
-	MaxRepeats?: number;
+
 	AdvancedOptions?: boolean;
 	MinLength?: number;
 	MaxLength?: number;
@@ -407,6 +403,9 @@ export class ModelHelpers {
 		//Following fields must only be visible for 'GetItemFromSource ' Buttons
 		if (['AllowMultiple', 'ItemsSource'].indexOf(fieldName) != -1)
 			return btn.ButtonType == ButtonType.GetItemFromSource ? !HIDDEN : HIDDEN;
+
+		if (fieldName == "DoesRepeat")
+			return [ButtonType.DeepLink, ButtonType.OpenUrl, ButtonType.NextNode].includes(btn.ButtonType) ? !HIDDEN : HIDDEN;
 
 		var hidden = false;
 		switch (btn.ButtonType) {
