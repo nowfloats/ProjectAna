@@ -396,26 +396,24 @@
                                 <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'IsMultiLine')">
                                     <mat-checkbox [(ngModel)]="btn.IsMultiLine" name="btnIsMultiLine-{{i}}" align="start">Multiple line allowed</mat-checkbox>
                                 </section>
-                                <!--<section class="form-field">
-                                    <mat-checkbox [(ngModel)]="btn.PostToChat" name="btnPostToChat-{ {i}}" align="start">Post to chat</mat-checkbox>
-                                </section>-->
-                            </div>
-                            <section class="form-field">
-                                <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{{i}}" align="start">Does repeat</mat-checkbox>
-                            </section>
-                            <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat">
-                                <mat-form-field>
-                                    <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{{i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{{i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{{i}}">
-                                </mat-form-field>
-                                <mat-form-field>
-                                    <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{{i}}">
-                                </mat-form-field>
+
+                                <section class="form-field" [hidden]="MH.chatButtonFieldHidden(chatNode, btn, 'DoesRepeat')">
+                                    <mat-checkbox [(ngModel)]="btn.DoesRepeat" name="btnDoesRepeat-{{i}}" align="start">Does repeat</mat-checkbox>
+                                </section>
+                                <div class="btn-repeat-options" [hidden]="!btn.DoesRepeat || MH.chatButtonFieldHidden(chatNode, btn, 'DoesRepeat')">
+                                    <mat-form-field>
+                                        <input matInput type="text" placeholder="Repeat On" [(ngModel)]="btn.RepeatOn" name="btnRepeatOn-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="text" placeholder="Repeat As" [(ngModel)]="btn.RepeatAs" name="btnRepeatAs-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="number" placeholder="Start Position" [(ngModel)]="btn.StartPosition" name="btnStartPosition-{{i}}">
+                                    </mat-form-field>
+                                    <mat-form-field>
+                                        <input matInput type="number" placeholder="Max Repeats" [(ngModel)]="btn.MaxRepeats" name="btnMaxRepeats-{{i}}">
+                                    </mat-form-field>
+                                </div>
                             </div>
                         </div>
                     </div>

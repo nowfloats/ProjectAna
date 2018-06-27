@@ -76,7 +76,7 @@ export interface RepeatableBaseEntity extends BaseEntity {
 	DoesRepeat?: boolean;
 	RepeatOn?: string;
 	RepeatAs?: string;
-	StartPosition?: string;
+	StartPosition?: number;
 	MaxRepeats?: number;
 }
 
@@ -403,6 +403,9 @@ export class ModelHelpers {
 		//Following fields must only be visible for 'GetItemFromSource ' Buttons
 		if (['AllowMultiple', 'ItemsSource'].indexOf(fieldName) != -1)
 			return btn.ButtonType == ButtonType.GetItemFromSource ? !HIDDEN : HIDDEN;
+
+		if (fieldName == "DoesRepeat")
+			return [ButtonType.DeepLink, ButtonType.OpenUrl, ButtonType.NextNode].includes(btn.ButtonType) ? !HIDDEN : HIDDEN;
 
 		var hidden = false;
 		switch (btn.ButtonType) {
