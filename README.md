@@ -24,7 +24,7 @@ First, you need to create your bot using the studio in The Ana app. After finali
 
 ## Publishing bot to Ana server
 
-1. Ensure Ana server is up and running (Instructions for [Ana server](https://github.com/Kitsune-tools/ProjectANA/blob/master/ANA-CHAT-SERVER-SETUP-README.MD) setup)
+1. Ensure Ana server is up and running (Instructions for [Ana server](https://github.com/Kitsune-tools/ProjectANA/blob/master/ANA-CHAT-SERVER-SETUP-README.md) setup)
 2. Open Ana studio and configure Ana server URL
     1. Click on `login` 
     2. Click on `Add Ana chat server connection`
