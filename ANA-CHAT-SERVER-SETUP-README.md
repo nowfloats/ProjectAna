@@ -1,8 +1,8 @@
-﻿# ANA Chat Server Setup Guide
+﻿# Ana Chat Server Setup Guide
 
-ANA Server is required to publish chat flows and serve published content across differant channels including Web, Android, iOS and Facebook (and many more to come soon). ANA server is decomposed into microservices, organized around certain business domains.
+Ana Server is required to publish chat flows and serve published content across differant channels including Web, Android, iOS and Facebook (and many more to come soon). Ana server is decomposed into microservices, organized around certain business domains.
 
-Following are the required microservices to run ANA server
+Following are the required microservices to run Ana server
 
 1) service-registry
 2) config-server
@@ -59,5 +59,5 @@ Following are the required microservices to run ANA server
  
  Health check for core service - http://localhost:9500/bot/health
  
- Also service discovery mechanism needs some time after all applications startup. To ensure all required microservices for ANA server are up and running, check eureka dashboard (http://localhost:80), it should show all the required microservices instances in the eureka dashboard.  
+ Also service discovery mechanism needs some time after all applications startup. To ensure all required microservices for Ana server are up and running, check eureka dashboard (http://localhost:80), it should show all the required microservices instances in the eureka dashboard.  
     

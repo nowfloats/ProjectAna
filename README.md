@@ -1,6 +1,10 @@
-# The Ana App
+# Project ANA - Open Source Conversation Suite
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
+
+World's first Open Source Conversation Platform which comes with a Graphical Chat Flow Designer and Chat Simulator. Supported channels are Web Chat, Android, iOS and Facebook Messenger.
+
+## The Ana app
 
 A single cross-platform app where you can design and publish Ana chatbots, manage users and check the chatbot analytics.
 
