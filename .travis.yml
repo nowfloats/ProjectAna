@@ -32,6 +32,7 @@ before_install:
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update; fi
 
 install:
+  - bash <(curl -s https://codecov.io/bash)
   - npm i -g npm@5.6.0 # this should be deleted once 5.7.X is out of "pre-release"
   - npm install          # instead of default npm install 
   - npm i @angular-devkit/core
