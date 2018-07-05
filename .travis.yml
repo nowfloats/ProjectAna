@@ -86,7 +86,7 @@ script:
   - npm install -g jquery
   - npm install --dev
   - electron-builder
-  - cd release
+  - cd .. && cd release
   - ls -l
 
 notifications:
