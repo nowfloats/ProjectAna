@@ -86,8 +86,10 @@ script:
   - npm install -g jquery
   - npm install --dev
   - electron-builder
+  - cd release
+  - ls -l
 
 notifications:
   email:
-    - soumyajit.dutta@nowfloats.com
-    - khaja.nizamuddin@nowfloats.com
+    # - soumyajit.dutta@nowfloats.com
+    # - khaja.nizamuddin@nowfloats.com

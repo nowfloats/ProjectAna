@@ -3,7 +3,7 @@
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/d21b873f8f1440e99d1851ab40a8fd77)](https://app.codacy.com/app/sanudatta11/ProjectAna?utm_source=github.com&utm_medium=referral&utm_content=Kitsune-tools/ProjectAna&utm_campaign=badger)
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/Kitsune-tools/Ana-App.svg?branch=travisci)](https://travis-ci.org/Kitsune-tools/Ana-App)
-[![N|Solid](https://ci.appveyor.com/api/projects/status/github/Kitsune-tools/ProjectAna?branch=master&svg=true)](https://github.com/Kitsune-tools/ProjectAna)
+[![N|Solid](https://ci.appveyor.com/api/projects/status/github/Kitsune-tools/ProjectAna?branch=master&svg=true)](https://ci.appveyor.com/project/sanudatta11/projectana)
 
 
 World's first Open Source Conversation Platform which comes with a Graphical Chat Flow Designer and Chat Simulator. Supported channels are Web Chat, Android, iOS and Facebook Messenger.
