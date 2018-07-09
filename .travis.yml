@@ -87,7 +87,6 @@ script:
   - npm install -g jquery
   - npm install --dev
   - electron-builder && cd ..
-  - cp deploy.sh release/
   - cd release
   - ls -l
 after_success:
