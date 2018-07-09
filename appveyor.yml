@@ -1,0 +1,104 @@
+environment:
+  nodejs_version: "9.5.0"
+
+platform:
+  - x86
+  - x64
+
+image: Visual Studio 2015
+
+build:
+    parallel: true
+# Post-install test scripts.
+install:
+  # Get the latest stable version of Node 0.STABLE.latest
+  - ps: Install-Product node $env:nodejs_version
+  - IF %nodejs_version% EQU 0.8 npm config set strict-ssl false
+  - IF %nodejs_version% LSS 4 npm -g install npm@2
+  - IF %nodejs_version% EQU 5 npm -g install npm@3
+  - set PATH=%APPDATA%\npm;%PATH%
+  - npm install
+  - npm i @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
+  - mkdir dist2
+  - ng build --prod --aot=false
+  #Cloning other repos
+  - git clone https://github.com/Kitsune-tools/Ana-Analytics-Dashboard.git
+  - git clone https://github.com/Kitsune-tools/ANAChat-Web.git
+  - rm -rf node_modules\
+  #For analytics-dash
+  - cd Ana-Analytics-Dashboard
+  - npm install typings -g
+  - npm i @angular-devkit/core
+  - npm install -g @angular/cli@1.6.1
+  - npm i node-sass
+  - npm install
+  - ng build --prod --aot=false
+  - cd ..
+  - mkdir dist2\analytics-dashboard
+  - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
+  - ls -l
+  - ls -l Ana-Analytics-Dashboard\
+  #For Chat-Web
+  - cd ANAChat-Web
+  - npm i node-sass
+  - npm install
+  - ng build --prod --aot=false
+  - cd ..
+  - mkdir dist2\simulator  # For web chat
+  - ls -l ANAChat-Web\
+  - cp -R ANAChat-Web/dist/* dist2/simulator/
+  # For ana APP
+  - npm cache verify
+  - npm install -g npm@5.6.0
+  - ls -l
+  - ls -l
+  - mkdir dist\simulator
+  - mkdir dist\analytics-dashboard
+  - cp -R dist2/simulator/* dist/simulator/
+  - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
+  - cd dist
+  - yarn add electron-builder@19.56.0 --dev
+  # - npm install -g electron-builder
+  - npm install -g popper.js
+  - npm install -g jquery
+  - npm install --dev
+  - node_modules/.bin/electron-builder
+  - cd release
+  - 'aws s3 cp latest.yml s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
+  - 'aws s3 cp "Ana Agent Panel Setup 0.1.8.exe" s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
+  - 'aws s3 cp "Ana Agent Panel Setup 0.1.8.exe.blockmap" s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
+  - 'ECHO "File upload to S3 Successfull"'
+build_script:
+    - 'ng build --prod --aot=false'
+    - cd dist
+    - npm i
+    - npm i -g electron-builder@19.56.0
+    - npm install -g electron-rebuild
+    - electron-rebuild -v 1.8.2
+    # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
+    - electron-builder && cd ..
+    - cd release
+    # - 'aws s3 cp latest.yml s3://ana-content/cdn/dist/agent-panel/win-x64/ --acl public-read'
+    - cd ..
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read'
+    - 'ECHO "File upload to S3 Successfull"'
+
+cache:
+  - 'node_modules -> package.json'
+  - "%LOCALAPPDATA%\\Yarn"
+
+
+notifications:
+  - provider: Email
+    to:
+      - soumyajit.dutta@nowfloats.com
+      - khaja.nizamuddin@nowfloats.com
+    subject: 'Build {{status}}'                  # optional
+    message: "{{template_variable_1}}, {{template_variable_2}}, ..."    # optional
+    on_build_success: true|false
+    on_build_failure: true|false
+    on_build_status_changed: true|false
