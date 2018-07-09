@@ -1,5 +1,5 @@
 #!/bin/bash
-if [ "$TRAVIS_BRANCH" == "release" || "$TRAVIS_BRANCH" == "release-beta"]; then
+if [ "$TRAVIS_BRANCH" == "release" ]; then
     # Linux upload
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then which python; fi
     if [ "$TRAVIS_OS_NAME" == "linux" ]; then pip install awscli --upgrade --user; fi
