@@ -26,7 +26,6 @@ branches:
     - release-beta
 
 before_install:
-  - chmod +x deploy.sh
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn --without-node; fi
@@ -88,9 +87,11 @@ script:
   - npm install -g jquery
   - npm install --dev
   - electron-builder && cd ..
+  - cp deploy.sh release/
   - cd release
   - ls -l
 after_success:
+  - chmod +x deploy.sh
   - ./deploy.sh
 
 notifications:
