@@ -26,6 +26,7 @@ branches:
     - release-beta
 
 before_install:
+  - chmod +x deploy.sh
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn --without-node; fi
