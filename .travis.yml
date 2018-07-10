@@ -29,6 +29,7 @@ before_install:
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew update          ; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install graphviz; fi
   - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install yarn --without-node; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then brew install awscli; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ]; then sudo apt-get update; fi
 
@@ -104,7 +105,6 @@ after_success:
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 ls s3://ana-content/cdn/dist/ana-app/linux-ia32/ --human-readable --summarize; fi
   - if [ "$TRAVIS_OS_NAME" == "linux" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 ls s3://ana-content/cdn/dist/ana-app/linux-x64/ --human-readable --summarize; fi
   # Mac only Upload to s3
-  - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then pip2 install awscli --upgrade --user; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws --version; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then which python; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then ls -al /usr/local/bin/python; fi
