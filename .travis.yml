@@ -110,13 +110,14 @@ after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then ls -al /usr/local/bin/python; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then export PATH=~/.local/bin:$PATH; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then source ~/.bash_profile; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then ls -l; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp *.dmg s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp *.dmg.blockmap s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp *.zip s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp latest-mac.json s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp latest-mac.yml s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp beta-mac.json s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
-  - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp beta-mac.ymls3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
+  - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 cp beta-mac.yml s3://ana-content/cdn/dist/ana-app/mac-x64/ --acl public-read; fi
   - if [ "$TRAVIS_OS_NAME" == "osx" ] && ( [ "$TRAVIS_BRANCH" == "release" ] || [ "$TRAVIS_BRANCH" == "release-beta" ] ); then aws s3 ls s3://ana-content/cdn/dist/ana-app/mac-x64/ --human-readable --summarize; fi
 notifications:
   email:
