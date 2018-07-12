@@ -17,7 +17,7 @@ install:
   - IF %nodejs_version% EQU 5 npm -g install npm@3
   - set PATH=%APPDATA%\npm;%PATH%
   - npm install
-  - npm i @angular-devkit/core
+  - npm i -g @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
   - npm i node-sass
   - mkdir dist2
@@ -58,7 +58,8 @@ install:
   - cp -R dist2/simulator/* dist/simulator/
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
 build_script:
-    - 'ng build --prod --aot=false'
+    - npm i @angular-devkit/core
+    - ng build --prod --aot=false
     - cd dist
     - npm i
     - npm i -g electron-builder@19.56.0
