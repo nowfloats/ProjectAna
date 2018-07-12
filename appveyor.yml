@@ -1,14 +1,23 @@
+version: 1.0.{build}
+
 environment:
   nodejs_version: "9.5.0"
   s3-bucket-path:
     secure: LYtUdyCOp3BE/HnR4JrMNGF8xbDDY+5h1qK7GCXgQBUC9cnkGtHU4apkryIc4d/j
   s3-bucket-name:
     secure: u4qHUlDVT5jyK3hIqNno4w==
+  s3-folder-path:
+    secure: weEMNt0NE85Ek4EFUmUnElnTcsKgA0qTnCOQIbpSb14=
 
 platform:
   - x64
 
 image: Visual Studio 2015
+
+cache:
+  - packages -> **\packages.config  # preserve "packages" directory in the root of build folder but will reset it if packages.config is modified
+  - node_modules                      # local npm modules
+  - "%APPDATA%\npm-cache"             # npm cache
 
 build:
     parallel: true
@@ -73,18 +82,48 @@ build_script:
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
     - electron-builder && cd ..
     # - aws s3api get-bucket-location --bucket %s3-bucket-name%
-    - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
-    - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read
-    - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
-    - ECHO "File upload to S3 Successfull 32 bit"
-    - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
-    - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read
-    - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
-    - ECHO "File upload to S3 Successfull 64 bit"
+    - mkdir deploy-folder
+    - cp release/Ana*.exe deploy-folder
+    - cp release/Ana*.exe.blockmap deploy-folder
+    - cp release/*.yml deploy-folder
+    # CLI Upload to s3
+    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
+    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read
+    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
+    # - ECHO "File upload to S3 Successfull 32 bit"
+    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
+    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read
+    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
+    # - ECHO "File upload to S3 Successfull 64 bit"
+  
+deploy:
+    # FTP deployment provider settings
+  - provider: S3
+    access_key_id: "%AWS_ACCESS_KEY_ID%"
+    secret_access_key: "%AWS_SECRET_ACCESS_KEY%"
+    bucket: "%s3-bucket-name%"
+    region: ap-south-1
+    set_public: true
+    folder: s3-folder-path/win-x64
+    artifact: deploy-folder
+    on:
+      branch:
+        - release
+        - release-beta
 
-cache:
-  - 'node_modules -> package.json'
-  - "%LOCALAPPDATA%\\Yarn"
+    # Amazon S3 deployment provider settings
+  - provider: S3
+    access_key_id: "%AWS_ACCESS_KEY_ID%"
+    secret_access_key: "%AWS_SECRET_ACCESS_KEY%"
+    bucket: "%s3-bucket-name%"
+    region: ap-south-1
+    set_public: true
+    folder: s3-folder-path/win-ia32
+    artifact: deploy-folder
+    on:
+      branch:
+        - release
+        - release-beta
 
 
 notifications:
@@ -92,6 +131,6 @@ notifications:
     to:
       - soumyajit.dutta@nowfloats.com
       - khaja.nizamuddin@nowfloats.com
-    on_build_success: true|false
-    on_build_failure: true|false
-    on_build_status_changed: true|false
+    on_build_success: false
+    on_build_failure: false
+    on_build_status_changed: true
