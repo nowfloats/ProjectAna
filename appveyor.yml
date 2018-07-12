@@ -69,14 +69,14 @@ build_script:
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
     - electron-builder && cd ..
     - cd release
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read'
-    - 'ECHO "File upload to S3 Successfull 32 bit"'
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
-    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read'
-    - 'ECHO "File upload to S3 Successfull 64 bit"'
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
+    - ECHO "File upload to S3 Successfull 32 bit"
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read
+    - aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
+    - ECHO "File upload to S3 Successfull 64 bit"
 
 cache:
   - 'node_modules -> package.json'
