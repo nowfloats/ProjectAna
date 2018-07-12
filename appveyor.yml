@@ -57,19 +57,6 @@ install:
   - mkdir dist\analytics-dashboard
   - cp -R dist2/simulator/* dist/simulator/
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
-  - cd dist
-  - yarn add electron-builder@19.56.0 --dev
-  # - npm install -g electron-builder
-  - npm install -g popper.js
-  - npm install -g jquery
-  - npm install --dev
-  - node_modules/.bin/electron-builder
-  - cd ..
-  - cd release
-  - 'aws s3 cp latest.yml s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
-  - 'aws s3 cp "Ana Agent Panel Setup 0.1.8.exe" s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
-  - 'aws s3 cp "Ana Agent Panel Setup 0.1.8.exe.blockmap" s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
-  - 'ECHO "File upload to S3 Successfull"'
 build_script:
     - 'ng build --prod --aot=false'
     - cd dist
@@ -78,14 +65,16 @@ build_script:
     - npm install -g electron-rebuild
     - electron-rebuild -v 1.8.2
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
-    - electron-builder && cd ..
+    - node_modules/.bin/electron-builder && cd ..
     - cd release
-    # - 'aws s3 cp latest.yml s3://ana-content/cdn/dist/agent-panel/win-x64/ --acl public-read'
-    - cd ..
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
+    - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read'
+    - 'ECHO "File upload to S3 Successfull 32 bit"'
     - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
     - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
     - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read'
-    - 'ECHO "File upload to S3 Successfull"'
+    - 'ECHO "File upload to S3 Successfull 64 bit"'
 
 cache:
   - 'node_modules -> package.json'
