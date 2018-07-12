@@ -67,7 +67,7 @@ build_script:
     - npm install -g electron-rebuild
     - electron-rebuild -v 1.8.2
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
-    - node_modules/.bin/electron-builder && cd ..
+    - electron-builder && cd ..
     - cd release
     - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read'
     - 'aws s3 cp release s3://ana-content/cdn/dist/agent-panel/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read'
