@@ -72,7 +72,7 @@ build_script:
     - electron-rebuild -v 1.8.2
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
     - electron-builder && cd ..
-    - aws s3api get-bucket-location --bucket %s3-bucket-name%
+    # - aws s3api get-bucket-location --bucket %s3-bucket-name%
     - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
     - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read
     - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
@@ -92,8 +92,6 @@ notifications:
     to:
       - soumyajit.dutta@nowfloats.com
       - khaja.nizamuddin@nowfloats.com
-    subject: 'Build {{status}}'                  # optional
-    message: "{{template_variable_1}}, {{template_variable_2}}, ..."    # optional
     on_build_success: true|false
     on_build_failure: true|false
     on_build_status_changed: true|false
