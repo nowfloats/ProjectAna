@@ -2,7 +2,7 @@
 
 [![License: GPL v3](https://img.shields.io/badge/License-GPL%20v3-blue.svg)](http://www.gnu.org/licenses/gpl-3.0)
 [![Build Status](https://travis-ci.org/Kitsune-tools/ProjectAna.svg?branch=master)](https://travis-ci.org/Kitsune-tools/ProjectAna)
-[![N|Solid](https://ci.appveyor.com/api/projects/status/github/Kitsune-tools/ProjectAna?branch=master&svg=true)](https://ci.appveyor.com/project/ana-developers/projectana)
+[![Build status](https://ci.appveyor.com/api/projects/status/4966l91ch95wichg?svg=true)](https://ci.appveyor.com/project/ana-developers/projectana)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/04de4af5e92c4664ac476aa4014366e3)](https://www.codacy.com/app/ana-developers/ProjectAna?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Kitsune-tools/ProjectAna&amp;utm_campaign=Badge_Grade)
 
 
