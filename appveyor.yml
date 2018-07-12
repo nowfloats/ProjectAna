@@ -2,7 +2,6 @@ environment:
   nodejs_version: "9.5.0"
 
 platform:
-  - x86
   - x64
 
 image: Visual Studio 2015
@@ -65,6 +64,7 @@ install:
   - npm install -g jquery
   - npm install --dev
   - node_modules/.bin/electron-builder
+  - cd ..
   - cd release
   - 'aws s3 cp latest.yml s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
   - 'aws s3 cp "Ana Agent Panel Setup 0.1.8.exe" s3://ana-content/cdn/dist/ana-app/win-x64/ --acl public-read'
