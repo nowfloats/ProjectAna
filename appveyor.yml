@@ -52,7 +52,7 @@ install:
   - cp -R Ana-Analytics-Dashboard/dist/* dist2/analytics-dashboard/
   - ls -l
   - ls -l Ana-Analytics-Dashboard\
-  #For Chat-Web
+  #For Chat-Web 
   - cd ANAChat-Web
   - npm i node-sass
   - npm install
