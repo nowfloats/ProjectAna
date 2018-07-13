@@ -71,9 +71,10 @@ install:
   - cp -R dist2/simulator/* dist/simulator/
   - cp -R dist2/analytics-dashboard/* dist/analytics-dashboard/
 build_script:
-    - npm i @angular-devkit/core
-    - ng build --prod --aot=false
+    # - npm i @angular-devkit/core
+    # - ng build --prod --aot=false
     - cd dist
+    - ls -l
     - npm i
     - npm i -g electron-builder@19.56.0
     - npm i -g @angular-devkit/core
