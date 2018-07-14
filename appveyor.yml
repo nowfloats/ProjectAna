@@ -24,11 +24,6 @@ build:
 # Post-install test scripts.
 install:
   # Get the latest stable version of Node 0.STABLE.latest
-  - ps: Install-Product node $env:nodejs_version
-  - IF %nodejs_version% EQU 0.8 npm config set strict-ssl false
-  - IF %nodejs_version% LSS 4 npm -g install npm@2
-  - IF %nodejs_version% EQU 5 npm -g install npm@3
-  - set PATH=%APPDATA%\npm;%PATH%
   - npm install
   - npm i -g @angular-devkit/core
   - npm install -g @angular/cli@1.6.1
@@ -86,7 +81,12 @@ build_script:
     - cp release/Ana*.exe deploy-folder
     - cp release/Ana*.exe.blockmap deploy-folder
     - cp release/*.yml deploy-folder
-  
+    - ls -l deploy-folder
+
+artifacts:
+  - path: deploy-folder\*
+    name: deployS3
+
 deploy:
     # FTP deployment provider settings
   - provider: S3
@@ -96,7 +96,7 @@ deploy:
     region: ap-south-1
     set_public: true
     folder: "%S3-FOLDER-PATH%/win-x64"
-    artifact: deploy-folder
+    artifact: deployS3
     on:
       branch:
         - release
