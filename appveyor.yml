@@ -82,30 +82,20 @@ build_script:
     - electron-rebuild -v 1.8.2
     # - node_modules/.bin/electron-rebuild.cmd -v 1.8.2
     - electron-builder && cd ..
-    # - aws s3api get-bucket-location --bucket %s3-bucket-name%
     - mkdir deploy-folder
     - cp release/Ana*.exe deploy-folder
     - cp release/Ana*.exe.blockmap deploy-folder
     - cp release/*.yml deploy-folder
-    # CLI Upload to s3
-    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
-    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "*.yml" --recursive --acl public-read
-    # - aws s3 cp release %s3-bucket-path%/win-ia32/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
-    # - ECHO "File upload to S3 Successfull 32 bit"
-    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe.blockmap" --recursive --acl public-read
-    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "*.yml" --recursive --acl public-read
-    # - aws s3 cp release %s3-bucket-path%/win-x64/ --exclude "win*" --include "Ana*.exe" --recursive --acl public-read
-    # - ECHO "File upload to S3 Successfull 64 bit"
   
 deploy:
     # FTP deployment provider settings
   - provider: S3
     access_key_id: "%AWS_ACCESS_KEY_ID%"
     secret_access_key: "%AWS_SECRET_ACCESS_KEY%"
-    bucket: "%s3-bucket-name%"
+    bucket: "%S3-BUCKET-NAME%"
     region: ap-south-1
     set_public: true
-    folder: s3-folder-path/win-x64
+    folder: "%S3-FOLDER-PATH%/win-x64"
     artifact: deploy-folder
     on:
       branch:
@@ -116,10 +106,10 @@ deploy:
   - provider: S3
     access_key_id: "%AWS_ACCESS_KEY_ID%"
     secret_access_key: "%AWS_SECRET_ACCESS_KEY%"
-    bucket: "%s3-bucket-name%"
+    bucket: "%S3-BUCKET-NAME%"
     region: ap-south-1
     set_public: true
-    folder: s3-folder-path/win-ia32
+    folder: "%S3-FOLDER-PATH%/win-ia32"
     artifact: deploy-folder
     on:
       branch:
@@ -131,7 +121,7 @@ notifications:
   - provider: Email
     to:
       - soumyajit.dutta@nowfloats.com
-      - khaja.nizamuddin@nowfloats.com
+      - nizam@ana.chat
     on_build_success: false
     on_build_failure: false
     on_build_status_changed: true
