@@ -8,7 +8,7 @@
 
 World's first Open Source Conversation Platform which comes with a Graphical Chat Flow Designer and Chat Simulator. Supported channels are Web Chat, Android, iOS and Facebook Messenger.
 
-## The Ana app
+## The Ana app 
 
 A single cross-platform app where you can design and publish Ana chatbots, manage users and check the chatbot analytics.
 
