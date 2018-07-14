@@ -82,6 +82,7 @@ build_script:
     - cp release/Ana*.exe.blockmap deploy-folder
     - cp release/*.yml deploy-folder
     - ls -l deploy-folder
+    - ps: Get-ChildItem .\deploy-folder\* | % { Push-AppveyorArtifact $_.FullName -FileName $_.Name -DeploymentName s3-deployment }
 
 artifacts:
   - path: deploy-folder\*
@@ -96,7 +97,7 @@ deploy:
     region: ap-south-1
     set_public: true
     folder: "%S3-FOLDER-PATH%/win-x64"
-    artifact: "deploy-folder/*"
+    artifact: "s3-deployment"
     on:
       branch:
         - release
@@ -110,7 +111,7 @@ deploy:
     region: ap-south-1
     set_public: true
     folder: "%S3-FOLDER-PATH%/win-ia32"
-    artifact: "deploy-folder/*"
+    artifact: "s3-deployment"
     on:
       branch:
         - release
