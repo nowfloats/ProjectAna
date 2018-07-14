@@ -110,7 +110,7 @@ deploy:
     region: ap-south-1
     set_public: true
     folder: "%S3-FOLDER-PATH%/win-ia32"
-    artifact: deploy-folder
+    artifact: deployS3
     on:
       branch:
         - release
