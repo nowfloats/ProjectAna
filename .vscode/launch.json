@@ -11,7 +11,7 @@
             "url": "http://localhost:4200/",
             "port": 9223,
             "sourceMaps": true,
-            "trace": true,
+            "trace": true,  
             "webRoot": "${workspaceRoot}",
             "runtimeArgs": [
                 "--disable-session-crashed-bubble",

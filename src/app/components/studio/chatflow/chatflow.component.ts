@@ -87,7 +87,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 
 	keymapOnDesigner: Hotkey[] = [
 		new Hotkey(["command+s", "ctrl+s"], (e, s) => {
-			this.saveChatFlow();
+			this.saveChatFlow(true);
 			return false;
 		}, [], "Save the chat flow"),
 		new Hotkey(["command+r", "ctrl+r"], (e, s) => {
@@ -160,6 +160,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		this.infoDialog.confirm(title, message, (ok) => {
 			if (ok) {
 				this.deleteMultipleNodes(selectedNodes);
+				this.saveChatFlow();
 			}
 		});
 	}
@@ -188,6 +189,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 
 		this.chatFlowNetwork.updateChatNodeConnections();
 		this.updateLayout();
+		this.saveChatFlow();
 	}
 
 	deleteMultipleNodes(nodesVMs: ChatNodeVM[]) {
@@ -427,6 +429,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 		});
 		dialogRef.afterClosed().subscribe(x => {
 			this.bindDesignerShortcuts();
+			this.saveChatFlow(true);
 		});
 	}
 
@@ -498,7 +501,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			setTimeout(() => this.initialZoom(), 500);
 	}
 
-	saveChatFlow() {
+	saveChatFlow(showDialog?: boolean) {
 		var nodeLocs: models.NodeLocations = {};
 
 		for (let i = 0; i < this.chatFlowNetwork.chatNodeVMs.length; i++) {
@@ -519,20 +522,22 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 			UpdatedOn: this.chatFlowNetwork.chatFlowPack.UpdatedOn
 		};
 		this.settings.saveChatProject(this.projName, pack, true);
-		this.snakbar.open(`Chatbot project '${this.projName}' saved`, 'Dismiss', {
-			duration: 2000
-		});
+		if(showDialog) {
+			this.snakbar.open(`Chatbot project '${this.projName}' saved`, 'Dismiss', {
+				duration: 2000
+			});
+		}
 		return pack;
 	}
 
 	exportChatFlow() {
-		let pack = this.saveChatFlow();
+		let pack = this.saveChatFlow(true);
 		this.globalsService.downloadTextAsFile(this.projName + ".anaproj", JSON.stringify(pack));
 	}
 
 	playChatFlow() {
 		//this.infoDialog.alert('Alert', 'Coming soon');
-		let pack = this.saveChatFlow();
+		let pack = this.saveChatFlow(true);
 		if (pack.ChatNodes.filter(x => x.IsStartNode).length <= 0) {
 			this.infoDialog.alert('Start node not set!', `Tick 'Mark as start node' for the initial node of your chatbot.`);
 			return;
@@ -553,7 +558,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 					this.dialog.open(PublishChatbotComponent, {
 						width: 'auto',
 						data: {
-							pack: this.saveChatFlow(),
+							pack: this.saveChatFlow(true),
 							bizId: this.dataService.loggedInUser.businessId
 						}
 					});
@@ -570,7 +575,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 							this.dialog.open(PublishChatbotComponent, {
 								width: 'auto',
 								data: {
-									pack: this.saveChatFlow(),
+									pack: this.saveChatFlow(true),
 									bizId: ba.id
 								}
 							});
@@ -584,7 +589,7 @@ export class ChatFlowComponent implements OnInit, OnDestroy {
 	gotoStartup() {
 		this.infoDialog.confirm('Save?', 'Do you want to save any unsaved changes before you close?', (ok) => {
 			if (ok)
-				this.saveChatFlow();
+				this.saveChatFlow(true);
 			this.router.navigateByUrl('/studio');
 		});
 	}
@@ -706,6 +711,7 @@ class ChatNodeConnection {
 			if (ok) {
 				this.srcButtonConnector.setButtonNextNodeId(null);
 				this.destChatNodeVM.network.updateChatNodeConnections();
+				this.destChatNodeVM.network.parent.saveChatFlow();
 			}
 		});
 	}
@@ -800,6 +806,7 @@ class ChatButtonConnector {
 		nw.newChatNodeConnection.srcButtonConnector = this;
 		nw.newChatNodeConnection.destX = this.x();
 		nw.newChatNodeConnection.destY = this.y();
+
 	}
 
 	btnIndex() {
@@ -810,6 +817,7 @@ class ChatButtonConnector {
 	setButtonNextNodeId(nextNodeId: string) {
 		this.button.NextNodeId = nextNodeId;
 		this.chatNodeVM.network.updateChatNodeConnections();
+		this.chatNodeVM.network.parent.saveChatFlow();
 	}
 
 	startDirectConnection(event: MouseEvent) {
