@@ -1,6 +1,6 @@
 ﻿# Ana Chat Server Setup Guide
 
-Ana Server is required to publish chat flows and serve published content across differant channels including Web, Android, iOS and Facebook (and many more to come soon). Ana server is decomposed into microservices, organized around certain business domains.
+Ana Server is required to publish chat flows and serve published content across different channels including Web, Android, iOS and Facebook (and many more to come soon). Ana server is decomposed into microservices, organized around certain business domains.
 
 Following are the required microservices to run Ana server
 
